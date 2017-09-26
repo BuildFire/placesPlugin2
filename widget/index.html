@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta charset="utf-8">
+    <style>
+        /* Always set the map height explicitly to define the size of the div
+         * element that contains the map. */
+        #map {
+            height: 100%;
+        }
+        /* Optional: Makes the sample page fill the window. */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Hide Google Stuff */
+        a[href^="http://maps.google.com/maps"]{display:none !important}
+        a[href^="https://maps.google.com/maps"]{display:none !important}
+
+        .gmnoprint a, .gmnoprint span, .gm-style-cc {
+            display:none;
+        }
+        .gmnoprint div {
+            background:none !important;
+        }
+
+        /* Center map button */
+        .holder .bottom .extra-links a{
+            position:absolute;
+            top:-45px;
+            left:10px;
+            border-radius:100%;
+            font-size:21px;
+            padding:7px;
+            text-align:center;
+            height:35px;
+            width:35px;
+            color:#fff;
+            /*z-index:13;*/
+            opacity:0.8;
+        }
+        .holder .bottom .extra-links a.view-type{
+            top:-95px;
+
+            top:-45px;
+            left:inherit;
+            right:10px;
+            padding-top:6px;
+            font-size:22px;
+        }
+    </style>
+    <script src="../../../scripts/buildfire.js"></script>
+</head>
+<body>
+<div id="map"></div>
+<script>
+    let map,
+        usa = {lat: 37.09024, lng: -95.712891},
+        zoomLevel = {city: 14, county: 3},
+        defaultLocation = usa,
+        lastKnownLocation = defaultLocation;
+
+    let filter = () => {console.error('filter goes here');};
+    let sort = () => {console.error('sort goes here');};
+    let centerMap = () => {map.setCenter(lastKnownLocation);};
+
+    function createControl(controlDiv, buttons){
+        // Set CSS for the control border.
+        let controlContainer = document.createElement('div');
+        controlContainer.style.backgroundColor = '#fff';
+        controlContainer.style.opacity = '0.5';
+        controlContainer.style.border = '2px solid #fff';
+        controlContainer.style.borderRadius = '25px';
+        controlContainer.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
+        controlContainer.style.cursor = 'pointer';
+        controlContainer.style.marginBottom = '12px';
+        controlContainer.style.textAlign = 'center';
+        controlContainer.title = 'Center';
+        controlDiv.appendChild(controlContainer);
+
+        // Set CSS for the control interior.
+        buttons.forEach((button) =>{
+            let controlButton = document.createElement('div');
+            controlButton.style.color = 'blue';
+            controlButton.style.fontFamily = 'Roboto,Arial,sans-serif';
+            controlButton.style.display = 'inline-block';
+            controlButton.style.fontSize = '16px';
+            controlButton.style.lineHeight = '38px';
+            controlButton.style.paddingLeft = '5px';
+            controlButton.style.paddingRight = '5px';
+            controlButton.innerHTML = `<span>${button.text}</span>`;
+            if(button.action)
+                controlButton.onclick = button.action;
+            controlContainer.appendChild(controlButton);
+        });
+
+        return controlContainer;
+    }
+
+    function CenterControl(controlDiv, map) {
+        createControl(controlDiv, [{text:'C', action: centerMap}]);
+    }
+
+    function FilterControl (controlDiv){
+        createControl(controlDiv, [{text:'Filter', action: filter}, {text:'Sort', action: sort}]);
+    }
+
+    function drawMap(latitude, longitude){
+        let locationBottomLeft = google.maps.ControlPosition.BOTTOM_LEFT,
+            locationBottomRight = google.maps.ControlPosition.BOTTOM_RIGHT,
+            mapTypeId = google.maps.MapTypeId.ROADMAP,
+            zoomPosition = google.maps.ControlPosition.RIGHT_TOP;
+
+        let options = {
+            streetViewControl: false,
+            mapTypeControl: false,
+            fullscreenControl: false,
+            zoom: zoomLevel.Country,
+            center: {lat: latitude, lng: longitude},
+            mapTypeId: mapTypeId,
+            zoomControlOptions: {
+                position: zoomPosition
+            }
+        };
+
+        map = new google.maps.Map(document.getElementById('map'), options);
+
+        // Create the DIV to hold the control and call the CenterControl()
+        // constructor passing in this DIV.
+        let centerControlDiv = document.createElement('div'),
+            filterMapDiv = document.createElement('div');
+
+        new CenterControl(centerControlDiv, map);
+        new FilterControl(filterMapDiv);
+
+        centerControlDiv.index = 1;
+
+        map.controls[locationBottomLeft].push(centerControlDiv);
+        map.controls[locationBottomRight].push(filterMapDiv);
+    }
+
+    function initMap() {
+        //Create the map first (Don't wait for location
+        drawMap(defaultLocation.lat, defaultLocation.lng);
+
+        //Center map once location is obtained
+        buildfire.geo.getCurrentPosition({}, (err, position) => {
+            if(!err && position && position.coords){
+                lastKnownLocation = {lat: position.coords.latitude, lng: position.coords.longitude};
+
+                map.setCenter(lastKnownLocation);
+                map.setZoom(zoomLevel.city);
+            }
+        });
+    }
+</script>
+<!-- ?libraries=places&sensor=true& -->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC4Dw4EzKeyVBXWBsbO9-UgyEARL6WLrlU&callback=initMap"
+        async defer></script>
+</body>
+</html>
