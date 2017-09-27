@@ -21,21 +21,13 @@
 
     function createControl(controlDiv, buttons){
         let container = document.createElement('div');
-        container.style.backgroundColor = '#000000';
-        container.style.opacity = '0.8';
-        container.style.borderRadius = '25px';
-        container.style.boxShadow = '0 1px 1.5px 0 rgba(0, 0, 0, 0.5)';
-        container.style.cursor = 'pointer';
-        container.style.marginBottom = '20px';
-        container.style.textAlign = 'center';
-        container.title = 'Center';
+        container.className = 'buttonContainer';
         controlDiv.appendChild(container);
 
         buttons.forEach((button) =>{
             let controlButton = document.createElement('div');
             controlButton.style.display = 'inline-block';
             controlButton.style.padding = button.padding;
-            controlButton['object-fit'] = 'contain';
             controlButton.innerHTML = `<img id="${button.name}" src="./images/${button.name}.svg"></img>`;
             if(button.action)
                 controlButton.onclick = button.action;
