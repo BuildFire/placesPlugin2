@@ -10,13 +10,18 @@
 <div id="map"></div>
 <script>
     let map,
+        mode = 'list',
         usa = {lat: 37.09024, lng: -95.712891},
         zoomLevel = {city: 14, country: 3},
         defaultLocation = usa,
         lastKnownLocation = defaultLocation;
 
     let filter = () => {console.error('filter goes here');};
-    let changeView = () => {console.error('changeView');};
+    let changeView = () => {
+        let image= document.getElementById('list');
+        image.src  = (mode == 'list')? './images/map.svg' : './images/list.svg';
+        mode = (mode == 'list')? 'map' : 'list';
+    };
     let centerMap = () => {map.setCenter(lastKnownLocation);};
 
     function createControl(controlDiv, buttons){
@@ -51,7 +56,6 @@
             locationBottomRight = google.maps.ControlPosition.BOTTOM_RIGHT,
             mapTypeId = google.maps.MapTypeId.ROADMAP,
             zoomPosition = google.maps.ControlPosition.RIGHT_TOP;
-
 
         let options = {
             streetViewControl: false,
