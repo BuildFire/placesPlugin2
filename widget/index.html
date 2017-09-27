@@ -3,55 +3,7 @@
 <head>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta charset="utf-8">
-    <style>
-        /* Always set the map height explicitly to define the size of the div
-         * element that contains the map. */
-        #map {
-            height: 100%;
-        }
-        /* Optional: Makes the sample page fill the window. */
-        html, body {
-            height: 100%;
-            margin: 0;
-            padding: 0;
-        }
-
-        /* Hide Google Stuff */
-        a[href^="http://maps.google.com/maps"]{display:none !important}
-        a[href^="https://maps.google.com/maps"]{display:none !important}
-
-        .gmnoprint a, .gmnoprint span, .gm-style-cc {
-            display:none;
-        }
-        .gmnoprint div {
-            background:none !important;
-        }
-
-        /* Center map button */
-        .holder .bottom .extra-links a{
-            position:absolute;
-            top:-45px;
-            left:10px;
-            border-radius:100%;
-            font-size:21px;
-            padding:7px;
-            text-align:center;
-            height:35px;
-            width:35px;
-            color:#fff;
-            /*z-index:13;*/
-            opacity:0.8;
-        }
-        .holder .bottom .extra-links a.view-type{
-            top:-95px;
-
-            top:-45px;
-            left:inherit;
-            right:10px;
-            padding-top:6px;
-            font-size:22px;
-        }
-    </style>
+    <link href="./css/general.css" rel="stylesheet">
     <script src="../../../scripts/buildfire.js"></script>
 </head>
 <body>
@@ -59,7 +11,7 @@
 <script>
     let map,
         usa = {lat: 37.09024, lng: -95.712891},
-        zoomLevel = {city: 14, county: 3},
+        zoomLevel = {city: 14, country: 3},
         defaultLocation = usa,
         lastKnownLocation = defaultLocation;
 
@@ -103,18 +55,20 @@
         createControl(controlDiv, [{name:'filter', action: filter}, {name:'list', action: changeView}]);
     }
 
-    function drawMap(latitude, longitude){
+    function createMap(latitude, longitude){
         let locationBottomLeft = google.maps.ControlPosition.BOTTOM_LEFT,
             locationBottomRight = google.maps.ControlPosition.BOTTOM_RIGHT,
             mapTypeId = google.maps.MapTypeId.ROADMAP,
             zoomPosition = google.maps.ControlPosition.RIGHT_TOP;
 
+        console.error('defaultLocation', defaultLocation);
+
         let options = {
             streetViewControl: false,
             mapTypeControl: false,
             fullscreenControl: false,
-            zoom: zoomLevel.Country,
-            center: {lat: latitude, lng: longitude},
+            zoom: zoomLevel.country,
+            center: defaultLocation,
             mapTypeId: mapTypeId,
             zoomControlOptions: {
                 position: zoomPosition
@@ -139,7 +93,7 @@
 
     function initMap() {
         //Create the map first (Don't wait for location)
-        drawMap(defaultLocation.lat, defaultLocation.lng);
+        createMap(defaultLocation.lat, defaultLocation.lng);
 
         //Center map once location is obtained
         buildfire.geo.getCurrentPosition({}, (err, position) => {
