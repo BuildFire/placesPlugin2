@@ -24,9 +24,9 @@
         container.style.backgroundColor = '#000000';
         container.style.opacity = '0.8';
         container.style.borderRadius = '25px';
-        container.style.boxShadow = ' 0 1px 1.5px 0 rgba(0, 0, 0, 0.5)';
+        container.style.boxShadow = '0 1px 1.5px 0 rgba(0, 0, 0, 0.5)';
         container.style.cursor = 'pointer';
-        container.style.marginBottom = '12px';
+        container.style.marginBottom = '20px';
         container.style.textAlign = 'center';
         container.title = 'Center';
         controlDiv.appendChild(container);
@@ -34,11 +34,9 @@
         buttons.forEach((button) =>{
             let controlButton = document.createElement('div');
             controlButton.style.display = 'inline-block';
-            controlButton.style.padding = '5px';
-            controlButton.width = '11.9px';
-            controlButton.height = '11.9px';
+            controlButton.style.padding = button.padding;
             controlButton['object-fit'] = 'contain';
-            controlButton.innerHTML = `<img src="./images/${button.name}.svg"></img>`;
+            controlButton.innerHTML = `<img id="${button.name}" src="./images/${button.name}.svg"></img>`;
             if(button.action)
                 controlButton.onclick = button.action;
             container.appendChild(controlButton);
@@ -48,11 +46,12 @@
     }
 
     function CenterControl(controlDiv) {
-        createControl(controlDiv, [{name:'center', action: centerMap}]);
+        createControl(controlDiv, [{name:'center', action: centerMap, padding: '8px'}]);
     }
 
     function FilterControl (controlDiv){
-        createControl(controlDiv, [{name:'filter', action: filter}, {name:'list', action: changeView}]);
+        createControl(controlDiv, [{name:'list', action: changeView, padding: '12px'},
+            {name:'filter', action: filter, padding: '12px'}]);
     }
 
     function createMap(latitude, longitude){
@@ -61,7 +60,6 @@
             mapTypeId = google.maps.MapTypeId.ROADMAP,
             zoomPosition = google.maps.ControlPosition.RIGHT_TOP;
 
-        console.error('defaultLocation', defaultLocation);
 
         let options = {
             streetViewControl: false,
@@ -77,12 +75,10 @@
 
         map = new google.maps.Map(document.getElementById('map'), options);
 
-        // Create the DIV to hold the control and call the CenterControl()
-        // constructor passing in this DIV.
         let centerControlDiv = document.createElement('div'),
             filterMapDiv = document.createElement('div');
 
-        new CenterControl(centerControlDiv, map);
+        new CenterControl(centerControlDiv);
         new FilterControl(filterMapDiv);
 
         centerControlDiv.index = 1;
