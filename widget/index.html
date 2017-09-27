@@ -64,48 +64,43 @@
         lastKnownLocation = defaultLocation;
 
     let filter = () => {console.error('filter goes here');};
-    let sort = () => {console.error('sort goes here');};
+    let changeView = () => {console.error('changeView');};
     let centerMap = () => {map.setCenter(lastKnownLocation);};
 
     function createControl(controlDiv, buttons){
-        // Set CSS for the control border.
-        let controlContainer = document.createElement('div');
-        controlContainer.style.backgroundColor = '#fff';
-        controlContainer.style.opacity = '0.5';
-        controlContainer.style.border = '2px solid #fff';
-        controlContainer.style.borderRadius = '25px';
-        controlContainer.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
-        controlContainer.style.cursor = 'pointer';
-        controlContainer.style.marginBottom = '12px';
-        controlContainer.style.textAlign = 'center';
-        controlContainer.title = 'Center';
-        controlDiv.appendChild(controlContainer);
+        let container = document.createElement('div');
+        container.style.backgroundColor = '#000000';
+        container.style.opacity = '0.8';
+        container.style.borderRadius = '25px';
+        container.style.boxShadow = ' 0 1px 1.5px 0 rgba(0, 0, 0, 0.5)';
+        container.style.cursor = 'pointer';
+        container.style.marginBottom = '12px';
+        container.style.textAlign = 'center';
+        container.title = 'Center';
+        controlDiv.appendChild(container);
 
-        // Set CSS for the control interior.
         buttons.forEach((button) =>{
             let controlButton = document.createElement('div');
-            controlButton.style.color = 'blue';
-            controlButton.style.fontFamily = 'Roboto,Arial,sans-serif';
             controlButton.style.display = 'inline-block';
-            controlButton.style.fontSize = '16px';
-            controlButton.style.lineHeight = '38px';
-            controlButton.style.paddingLeft = '5px';
-            controlButton.style.paddingRight = '5px';
-            controlButton.innerHTML = `<span>${button.text}</span>`;
+            controlButton.style.padding = '5px';
+            controlButton.width = '11.9px';
+            controlButton.height = '11.9px';
+            controlButton['object-fit'] = 'contain';
+            controlButton.innerHTML = `<img src="./images/${button.name}.svg"></img>`;
             if(button.action)
                 controlButton.onclick = button.action;
-            controlContainer.appendChild(controlButton);
+            container.appendChild(controlButton);
         });
 
-        return controlContainer;
+        return container;
     }
 
-    function CenterControl(controlDiv, map) {
-        createControl(controlDiv, [{text:'C', action: centerMap}]);
+    function CenterControl(controlDiv) {
+        createControl(controlDiv, [{name:'center', action: centerMap}]);
     }
 
     function FilterControl (controlDiv){
-        createControl(controlDiv, [{text:'Filter', action: filter}, {text:'Sort', action: sort}]);
+        createControl(controlDiv, [{name:'filter', action: filter}, {name:'list', action: changeView}]);
     }
 
     function drawMap(latitude, longitude){
@@ -143,7 +138,7 @@
     }
 
     function initMap() {
-        //Create the map first (Don't wait for location
+        //Create the map first (Don't wait for location)
         drawMap(defaultLocation.lat, defaultLocation.lng);
 
         //Center map once location is obtained
