@@ -1,8 +1,6 @@
 function initList() {
     var defaultImage = 'https://czi3m2qn.cloudimg.io/s/crop/342x193/https://pluginserver.buildfire.com/styles/media/holder-16x9.png';
 
-    console.error('places', places);
-
     let filterDiv = document.getElementById('filter');
     new FilterControl(filterDiv);
 

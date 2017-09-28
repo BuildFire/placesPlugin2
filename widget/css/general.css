@@ -63,6 +63,14 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
     margin-left: 50px;
 }
 
+.listViewFilter{
+    width: 100px;
+    position: fixed;
+    right: 10px;
+    text-align: center;
+    margin-top: 137%;
+}
+
 @media screen and (max-height: 450px) {
     .sidenav {padding-top: 15px;}
     .sidenav a {font-size: 18px;}

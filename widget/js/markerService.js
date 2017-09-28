@@ -1,4 +1,5 @@
 let filter = () => {document.getElementById("mySidenav").style.height = "100%";};
+let closeNav = () => document.getElementById("mySidenav").style.height = "0";
 let changeView = () => {
     mode = (mode == 'list') ? 'map' : 'list';
     router.navigate(`/${mode}`);
