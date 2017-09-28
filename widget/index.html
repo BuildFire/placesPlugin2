@@ -4,20 +4,14 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta charset="utf-8">
     <link href="./css/general.css?v=3" rel="stylesheet">
+    <!-- ?libraries=places&sensor=true& -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC4Dw4EzKeyVBXWBsbO9-UgyEARL6WLrlU"></script>
     <script src="../../../scripts/buildfire.js"></script>
-    <script src="./js/map.js"></script>
+    <script src="./js/lib/navigo.min.js"></script>
 </head>
 <body>
-
-<div id="map"></div>
-<div id="mySidenav" class="sidenav">
-    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-    <a href="#">About</a>
-    <a href="#">Services</a>
-    <a href="#">Clients</a>
-</div>
-<!-- ?libraries=places&sensor=true& -->
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC4Dw4EzKeyVBXWBsbO9-UgyEARL6WLrlU&callback=initMap"
-        async defer></script>
+    <div id="view"></div>
 </body>
+    <script src="./js/map.js"></script>
+    <script src="./js/router.js"></script>
 </html>

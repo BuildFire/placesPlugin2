@@ -7,9 +7,10 @@ let map,
 
 let filter = () => {document.getElementById("mySidenav").style.height = "100%";};
 let changeView = () => {
-    let image= document.getElementById('list');
-    image.src  = (mode == 'list')? './images/map.svg' : './images/list.svg';
-    mode = (mode == 'list')? 'map' : 'list';
+    //let image= document.getElementById('list');
+    //image.src  = (mode == 'list')? './images/map.svg' : './images/list.svg';
+    //mode = (mode == 'list')? 'map' : 'list';
+    router.navigate('/list');
 };
 let centerMap = () => {map.setCenter(lastKnownLocation);};
 

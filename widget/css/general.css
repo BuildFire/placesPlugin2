@@ -10,6 +10,12 @@ html, body {
     padding: 0;
 }
 
+#view {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
 /* Hide Google Stuff */
 a[href^="http://maps.google.com/maps"]{display:none !important}
 a[href^="https://maps.google.com/maps"]{display:none !important}
