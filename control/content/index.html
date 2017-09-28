@@ -2,30 +2,36 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!--
-		NOTE:
-		1. You can reference the file in SDK via relative path
-		2. The Control and Widget Should NOT share resources. They will be separated in production.
-		3. You may include any JS framework you want with your Widget and Control folders. However, keep in mind
-		    to keep you plugin as light weight as possible for performance and transport reasons
-	-->
-
-    <!-- You can load helper.css to use our helper classes.
-    <link href="../../../../styles/helper.css" rel="stylesheet">
-    -->
-	
-	<!-- JS -->
 	<script src="../../../../scripts/buildfire.js"></script>
-   
- 	<!--
-    <script src="../../../../scripts/angular/angular.min.js"></script>
-    <script src="../../../../scripts/angular/ui-bootstrap.min.js"></script>
+    <script>
+        let placesTag = 'places';
 
-   <script src="../../../../scripts/jquery/jquery-1.11.2.min.js"></script>
-   -->
+        buildfire.datastore.get (placesTag, function(err, results){
+            if(err){
+                console.error('datastore.get error', err);
+                return;
+            }
+        });
+
+        function addData(){
+            console.error('add data');
+            var mockData = [
+                {title: 'Extra-ordinary desserts', address: '1430 Union St, San Diego, CA 92101'},
+                {title: 'Ballast Point Brewing', address: '2215 India St, San Diego, CA 92101'},
+                {title: 'Cafe Italia', address: '1704 India St, San Diego, CA 92101'}
+            ];
+
+            buildfire.datastore.save(mockData, placesTag, function(err){
+                if(err){
+                    console.error('datastore.save error', err);
+                }
+            });
+        }
+    </script>
 </head>
 <body>
-<span>Content - Hello world!</span>
+<!--
+<button onclick="addData()">Add Places</button>
+-->
 </body>
 </html>

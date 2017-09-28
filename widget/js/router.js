@@ -16,12 +16,17 @@ function loadHTML(url, id) {
     }
 }
 
+//Provide a delay to let the template load
+function loadView(initFunction){
+    setTimeout( function(){ initFunction()}, 200)
+}
+
 // use #! to hash
 router = new Navigo(null, true);
 router.on({
     // 'view' is the id of the div element inside which we render the HTML
-    'map': () => { loadHTML('./map.html', 'view');  setTimeout( function(){ initMap()}, 200) },
-    'list': () => { loadHTML('./list.html', 'view'); console.error('list view'); },
+    'map': () => { loadHTML('./map.html', 'view');  loadView(initMap) },
+    'list': () => { loadHTML('./list.html', 'view'); loadView(initList) },
 });
 
 // set the default route

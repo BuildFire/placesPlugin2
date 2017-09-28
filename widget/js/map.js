@@ -66,7 +66,7 @@ function createMap(latitude, longitude){
         }
     };
 
-    map = new google.maps.Map(document.getElementById('map'), options);
+    map = new google.maps.Map(document.getElementById('mapView'), options);
 
     let centerControlDiv = document.createElement('div'),
         filterMapDiv = document.createElement('div');
