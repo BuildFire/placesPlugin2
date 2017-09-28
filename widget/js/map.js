@@ -1,21 +1,22 @@
 let map,
-    mode = 'list',
     usa = {lat: 37.09024, lng: -95.712891},
     zoomLevel = {city: 14, country: 3},
     defaultLocation = usa,
     lastKnownLocation = defaultLocation;
 
-let filter = () => {document.getElementById("mySidenav").style.height = "100%";};
-let changeView = () => {
-    //let image= document.getElementById('list');
-    //image.src  = (mode == 'list')? './images/map.svg' : './images/list.svg';
-    //mode = (mode == 'list')? 'map' : 'list';
-    router.navigate('/list');
+//let filter = () => {document.getElementById("mySidenav").style.height = "100%";};
+/*let changeView = () => {
+    let image= document.getElementById('list');
+    image.src  = (mode == 'list')? './images/map.svg' : './images/list.svg';
+    mode = (mode == 'list')? 'map' : 'list';
+    router.navigate(`/${mode}`);
 };
+*/
 let centerMap = () => {map.setCenter(lastKnownLocation);};
 
 closeNav = () => document.getElementById("mySidenav").style.height = "0";
 
+/*
 function createControl(controlDiv, buttons){
     let container = document.createElement('div');
     container.className = 'buttonContainer';
@@ -47,6 +48,7 @@ function FilterControl (controlDiv){
         {name:'filter', action: filter, padding: '12px'}
     ]);
 }
+*/
 
 function createMap(latitude, longitude){
     let locationBottomLeft = google.maps.ControlPosition.BOTTOM_LEFT,

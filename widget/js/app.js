@@ -1,5 +1,6 @@
-let placesTag = 'places';
-let places;
+let placesTag = 'places',
+    mode = 'map',
+    places;
 
 buildfire.datastore.get (placesTag, function(err, results){
     if(err){
@@ -8,5 +9,8 @@ buildfire.datastore.get (placesTag, function(err, results){
     }
 
     places = results.data;
+
+    //TODO: Trigger event to indicate ready state
+
     console.error('Places ', results.data);
 });
