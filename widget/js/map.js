@@ -2,7 +2,12 @@ let map,
     usa = {lat: 37.09024, lng: -95.712891},
     zoomLevel = {city: 14, country: 3},
     defaultLocation = usa,
-    lastKnownLocation = defaultLocation;
+    lastKnownLocation = defaultLocation,
+    images = {
+        currentLocation: 'google_marker_blue_icon.png',
+        place : 'google_marker_red_icon.png',
+        selected : 'google_marker_green_icon.png'
+    };
 
 let centerMap = () => {map.setCenter(lastKnownLocation);};
 
@@ -17,8 +22,29 @@ function initMap() {
 
             map.setCenter(lastKnownLocation);
             map.setZoom(zoomLevel.city);
+
+            new google.maps.Marker({
+                position: lastKnownLocation,
+                map: map,
+                icon: createMarker(images.currentLocation),
+                //optimized: false
+            });
         }
     });
+}
+
+function createMarker(imageType){
+    const iconBaseUrl = 'https://app.buildfire.com/app/media/';
+
+    return {
+        url: iconBaseUrl + imageType,
+        // This marker is 20 pixels wide by 20 pixels high.
+        scaledSize: new google.maps.Size(20, 20),
+        // The origin for this image is (0, 0).
+        origin: new google.maps.Point(0, 0),
+        // The anchor for this image is at the center of the circle
+        anchor: new google.maps.Point(10, 10)
+    };
 }
 
 function createMap(latitude, longitude){

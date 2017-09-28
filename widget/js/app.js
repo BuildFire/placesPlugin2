@@ -10,7 +10,7 @@ buildfire.datastore.get (placesTag, function(err, results){
 
     places = results.data;
 
-    //TODO: Trigger event to indicate ready state
+    //TODO: Trigger event to update with new data
 
     console.error('Places ', results.data);
 });
