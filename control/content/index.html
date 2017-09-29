@@ -2,16 +2,19 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<script src="../../../../scripts/buildfire.js"></script>
-    <script>
-        let placesTag = 'places';
 
-        buildfire.datastore.get (placesTag, function(err, results){
-            if(err){
-                console.error('datastore.get error', err);
-                return;
-            }
-        });
+    <!--SDK js-->
+    <script src="../../../../scripts/buildfire.js"></script>
+    <script src="../../../../scripts/jquery/jquery-1.11.2.min.js"></script>
+    <script src="../../../../scripts/angular/angular.min.js"></script>
+    <script src="../../../../scripts/angular/ui-bootstrap.min.js"></script>
+    <script src="../../../../scripts/jquery/jquery-ui.min.js"></script>
+
+    <!-- Libs -->
+    <script src="assets/js/sortable.js"></script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=places&sensor=true&key=AIzaSyC4Dw4EzKeyVBXWBsbO9-UgyEARL6WLrlU"></script>
+
+    <script>
 
         function addData(){
             console.error('add data');
@@ -30,11 +33,50 @@
                 }
             });
         }
+
+        setTimeout(function(){
+            var input = document.getElementById('pac-input');
+            var autocomplete = new google.maps.places.Autocomplete(input);
+
+            autocomplete.addListener('place_changed', function() {
+                var place = autocomplete.getPlace(),
+                    location = place.formatted_address,
+                    geometry = place.geometry,
+                    coordinates;
+
+                if (geometry) {
+                    coordinates = [geometrylocation.lng(), geometry.location.lat()];
+
+                }
+
+                console.error('place', location, coordinates);
+
+                if (!place.geometry) {
+                    // User entered the name of a Place that was not suggested and
+                    // pressed the Enter key, or the Place Details request failed.
+                    //window.alert("No details available for input: '" + place.name + "'");
+                    return;
+                }
+            });
+        }, 500);
     </script>
+
+    <script src="app.js"></script>
 </head>
 <body>
 
-<button onclick="addData()">Add Places</button>
+    <input id="pac-input" type="text" placeholder="Enter a location" size="100">
 
+    <div ng-app="places2Controller" ng-controller="contentController" class="container">
+        <div class="floatleft">
+            <ul ui-sortable="sortableOptions" ng-model="list" class="list">
+                <li ng-repeat="place in list" class="item">
+                    {{place.title}}
+                </li>
+            </ul>
+        </div>
+    </div>
+    <br>
+    <button onclick="addData()">Add Test Places</button>
 </body>
 </html>
