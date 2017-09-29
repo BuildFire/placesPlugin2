@@ -14,69 +14,28 @@
     <script src="assets/js/sortable.js"></script>
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=places&sensor=true&key=AIzaSyC4Dw4EzKeyVBXWBsbO9-UgyEARL6WLrlU"></script>
 
-    <script>
-
-        function addData(){
-            console.error('add data');
-            var mockData = [
-                {title: 'Extra-ordinary desserts',
-                    address: {name:'1430 Union St, San Diego, CA 92101', lat:32.720285, lng:-117.165927}},
-                {title: 'Ballast Point Brewing',
-                    address: {name:'2215 India St, San Diego, CA 92101', lat:32.727669, lng:-117.169695}},
-                {title: 'Cafe Italia',
-                    address: {name: '1704 India St, San Diego, CA 92101', lat:32.723331, lng:-117.168570}}
-            ];
-
-            buildfire.datastore.save(mockData, placesTag, function(err){
-                if(err){
-                    console.error('datastore.save error', err);
-                }
-            });
-        }
-
-        setTimeout(function(){
-            var input = document.getElementById('pac-input');
-            var autocomplete = new google.maps.places.Autocomplete(input);
-
-            autocomplete.addListener('place_changed', function() {
-                var place = autocomplete.getPlace(),
-                    location = place.formatted_address,
-                    geometry = place.geometry,
-                    coordinates;
-
-                if (geometry) {
-                    coordinates = [geometrylocation.lng(), geometry.location.lat()];
-
-                }
-
-                console.error('place', location, coordinates);
-
-                if (!place.geometry) {
-                    // User entered the name of a Place that was not suggested and
-                    // pressed the Enter key, or the Place Details request failed.
-                    //window.alert("No details available for input: '" + place.name + "'");
-                    return;
-                }
-            });
-        }, 500);
-    </script>
-
     <script src="app.js"></script>
 </head>
 <body>
-
-    <input id="pac-input" type="text" placeholder="Enter a location" size="100">
-
     <div ng-app="places2Controller" ng-controller="contentController" class="container">
+
+        <input type="text" ng-model="title" placeholder="Enter title">
+        <input id="pac-input" type="text" ng-model="location" placeholder="Enter a location" size="100">
+
+        <hr>
+
         <div class="floatleft">
             <ul ui-sortable="sortableOptions" ng-model="list" class="list">
                 <li ng-repeat="place in list" class="item">
-                    {{place.title}}
+                    <b>{{place.title}}</b> <br> {{place.address.name}}
                 </li>
             </ul>
         </div>
+
+        <hr>
+        <!--
+        <button ng-click="addData()">Reset Test Places</button>
+        -->
     </div>
-    <br>
-    <button onclick="addData()">Add Test Places</button>
 </body>
 </html>

@@ -34,7 +34,9 @@ function initMap() {
             return;
         }
 
-        places = results.data;
+        console.error('results', results);
+
+        //TODO: If there is only one entry, it returns an object
 
         places.forEach((place) => {
             addMarker(map, place.address, 'google_marker_red_icon.png');
