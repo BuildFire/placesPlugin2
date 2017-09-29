@@ -16,9 +16,12 @@
         function addData(){
             console.error('add data');
             var mockData = [
-                {title: 'Extra-ordinary desserts', address: '1430 Union St, San Diego, CA 92101'},
-                {title: 'Ballast Point Brewing', address: '2215 India St, San Diego, CA 92101'},
-                {title: 'Cafe Italia', address: '1704 India St, San Diego, CA 92101'}
+                {title: 'Extra-ordinary desserts',
+                    address: {name:'1430 Union St, San Diego, CA 92101', lat:32.720285, lng:-117.165927}},
+                {title: 'Ballast Point Brewing',
+                    address: {name:'2215 India St, San Diego, CA 92101', lat:32.727669, lng:-117.169695}},
+                {title: 'Cafe Italia',
+                    address: {name: '1704 India St, San Diego, CA 92101', lat:32.723331, lng:-117.168570}}
             ];
 
             buildfire.datastore.save(mockData, placesTag, function(err){
@@ -30,8 +33,8 @@
     </script>
 </head>
 <body>
-<!--
+
 <button onclick="addData()">Add Places</button>
--->
+
 </body>
 </html>

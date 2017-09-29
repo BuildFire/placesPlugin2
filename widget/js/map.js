@@ -1,5 +1,4 @@
-let map,
-    usa = {lat: 37.09024, lng: -95.712891},
+let usa = {lat: 37.09024, lng: -95.712891},
     zoomLevel = {city: 14, country: 3},
     defaultLocation = usa,
     lastKnownLocation = defaultLocation,
@@ -23,28 +22,24 @@ function initMap() {
             map.setCenter(lastKnownLocation);
             map.setZoom(zoomLevel.city);
 
-            new google.maps.Marker({
-                position: lastKnownLocation,
-                map: map,
-                icon: createMarker(images.currentLocation),
-                //optimized: false
-            });
+            addMarker(map, lastKnownLocation, images.currentLocation);
+
         }
     });
-}
 
-function createMarker(imageType){
-    const iconBaseUrl = 'https://app.buildfire.com/app/media/';
 
-    return {
-        url: iconBaseUrl + imageType,
-        // This marker is 20 pixels wide by 20 pixels high.
-        scaledSize: new google.maps.Size(20, 20),
-        // The origin for this image is (0, 0).
-        origin: new google.maps.Point(0, 0),
-        // The anchor for this image is at the center of the circle
-        anchor: new google.maps.Point(10, 10)
-    };
+    buildfire.datastore.get(placesTag, function(err, results){
+        if(err){
+            console.error('datastore.get error', err);
+            return;
+        }
+
+        places = results.data;
+
+        places.forEach((place) => {
+            addMarker(map, place.address, 'google_marker_red_icon.png');
+        });
+    });
 }
 
 function createMap(latitude, longitude){
@@ -53,12 +48,15 @@ function createMap(latitude, longitude){
         mapTypeId = google.maps.MapTypeId.ROADMAP,
         zoomPosition = google.maps.ControlPosition.RIGHT_TOP;
 
+    let zoomTo = (lastKnownLocation != defaultLocation) ? zoomLevel.city : zoomLevel.country,
+        centerOn = (lastKnownLocation != defaultLocation) ? lastKnownLocation : defaultLocation ;
+
     let options = {
         streetViewControl: false,
         mapTypeControl: false,
         fullscreenControl: false,
-        zoom: zoomLevel.country,
-        center: defaultLocation,
+        zoom: zoomTo,
+        center: centerOn,
         mapTypeId: mapTypeId,
         zoomControlOptions: {
             position: zoomPosition
@@ -77,4 +75,29 @@ function createMap(latitude, longitude){
 
     map.controls[locationBottomLeft].push(centerControlDiv);
     map.controls[locationBottomRight].push(filterMapDiv);
+}
+
+function addMarker(map, position, iconType){
+
+    console.error('Adding marker', position, iconType);
+
+    new google.maps.Marker({
+        position: position,
+        map: map,
+        icon: createMarker(iconType)
+    });
+}
+
+function createMarker(imageType){
+    const iconBaseUrl = 'https://app.buildfire.com/app/media/';
+
+    return {
+        url: iconBaseUrl + imageType,
+        // This marker is 20 pixels wide by 20 pixels high.
+        scaledSize: new google.maps.Size(20, 20),
+        // The origin for this image is (0, 0).
+        origin: new google.maps.Point(0, 0),
+        // The anchor for this image is at the center of the circle
+        anchor: new google.maps.Point(10, 10)
+    };
 }

@@ -1,5 +1,6 @@
 let placesTag = 'places',
     mode = 'map',
+    map,
     places;
 
 buildfire.datastore.get (placesTag, function(err, results){
@@ -10,7 +11,11 @@ buildfire.datastore.get (placesTag, function(err, results){
 
     places = results.data;
 
-    //TODO: Trigger event to update with new data
+    //If we add here, we need to ensure the map is ready
 
-    console.error('Places ', results.data);
+    /*
+    places.forEach((place) => {
+        addMarker(map, place.address, 'google_marker_red_icon.png');
+    });
+    */
 });
