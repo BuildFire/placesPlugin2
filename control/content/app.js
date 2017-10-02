@@ -5,6 +5,7 @@ let placesTag = 'places';
 myapp.controller('contentController', function ($scope) {
     let placesTag = 'places';
     $scope.list = [];
+    $scope.sortBy = 'manual';
 
     buildfire.datastore.get (placesTag, function(err, result){
         if(err){
@@ -12,7 +13,7 @@ myapp.controller('contentController', function ($scope) {
             return;
         }
 
-        $scope.list = result.data;
+        $scope.list = result.data.places;
         $scope.$apply()
     });
 
@@ -42,7 +43,13 @@ myapp.controller('contentController', function ($scope) {
             $scope.location = '';
             $scope.$apply();
 
-            buildfire.datastore.save($scope.list, placesTag, function(err){
+            $scope.list.forEach(function(element, index){
+                element.sort = index;
+            });
+
+            console.error('$scope.list', $scope.list);
+
+            buildfire.datastore.save({sortBy: $scope.sortBy, places: $scope.list}, placesTag, function(err){
                 if(err){
                     console.error(err);
                 }
@@ -62,14 +69,18 @@ myapp.controller('contentController', function ($scope) {
     //This is just for testing
     $scope.addData = function(){
         console.error('add data');
-        var mockData = [
-            {title: 'Extra-ordinary desserts',
-                address: {name:'1430 Union St, San Diego, CA 92101', lat:32.720285, lng:-117.165927}},
-            {title: 'Ballast Point Brewing',
-                address: {name:'2215 India St, San Diego, CA 92101', lat:32.727669, lng:-117.169695}},
-            {title: 'Cafe Italia',
-                address: {name: '1704 India St, San Diego, CA 92101', lat:32.723331, lng:-117.168570}}
-        ];
+        var mockData =
+            {
+                sortBy: 'manual',
+                places:             [
+                    {title: 'Extra-ordinary desserts',
+                        address: {name:'1430 Union St, San Diego, CA 92101', lat:32.720285, lng:-117.165927}},
+                    {title: 'Ballast Point Brewing',
+                        address: {name:'2215 India St, San Diego, CA 92101', lat:32.727669, lng:-117.169695}},
+                    {title: 'Cafe Italia',
+                        address: {name: '1704 India St, San Diego, CA 92101', lat:32.723331, lng:-117.168570}}
+                ]
+            };
 
         buildfire.datastore.save(mockData, placesTag, function(err){
             if(err){

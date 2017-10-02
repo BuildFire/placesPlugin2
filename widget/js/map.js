@@ -33,8 +33,6 @@ function initMap() {
             return;
         }
 
-        console.error('results', results);
-
         //TODO: If there is only one entry, it returns an object
 
         if(places.length){
@@ -46,7 +44,7 @@ function initMap() {
 
     buildfire.datastore.onUpdate((event) => {
         if(event.tag === placesTag){
-            places = event.data;
+            places = event.data.places;
 
             places.forEach((place) => {
                 addMarker(map, place.address, 'google_marker_red_icon.png');
