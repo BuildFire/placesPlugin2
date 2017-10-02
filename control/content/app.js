@@ -38,9 +38,9 @@ myapp.controller('contentController', function ($scope) {
             location = {title: $scope.title, address: {name: address, lat: coordinates.lat, lng: coordinates.lng}};
 
             $scope.list.push(location);
-            $scope.$apply();
             $scope.title = '';
             $scope.location = '';
+            $scope.$apply();
 
             buildfire.datastore.save($scope.list, placesTag, function(err){
                 if(err){

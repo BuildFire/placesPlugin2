@@ -27,7 +27,6 @@ function initMap() {
         }
     });
 
-
     buildfire.datastore.get(placesTag, function(err, results){
         if(err){
             console.error('datastore.get error', err);
@@ -38,9 +37,21 @@ function initMap() {
 
         //TODO: If there is only one entry, it returns an object
 
-        places.forEach((place) => {
-            addMarker(map, place.address, 'google_marker_red_icon.png');
-        });
+        if(places.length){
+            places.forEach((place) => {
+                addMarker(map, place.address, 'google_marker_red_icon.png');
+            });
+        }
+    });
+
+    buildfire.datastore.onUpdate((event) => {
+        if(event.tag === placesTag){
+            places = event.data;
+
+            places.forEach((place) => {
+                addMarker(map, place.address, 'google_marker_red_icon.png');
+            });
+        }
     });
 }
 
@@ -80,9 +91,6 @@ function createMap(latitude, longitude){
 }
 
 function addMarker(map, position, iconType){
-
-    console.error('Adding marker', position, iconType);
-
     new google.maps.Marker({
         position: position,
         map: map,
