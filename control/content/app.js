@@ -5,7 +5,25 @@ let placesTag = 'places';
 myapp.controller('contentController', function ($scope) {
     let placesTag = 'places';
     $scope.list = [];
-    $scope.sortBy = 'manual';
+    $scope.sortBy = 'manual'; //TODO: Wire up UI
+
+    let updateSortOrder = function(places, sortBy){
+        //Update the sort order to reflect the physical order
+        places.forEach(function(element, index){
+            element.sort = index;
+        });
+
+        console.error('places', places);
+
+        buildfire.datastore.save({sortBy, places}, placesTag, function(err){
+            if(err){
+                console.error(err);
+                return;
+            }
+
+            console.error('DataStore Updated');
+        });
+    };
 
     buildfire.datastore.get (placesTag, function(err, result){
         if(err){
@@ -19,12 +37,18 @@ myapp.controller('contentController', function ($scope) {
 
     $scope.sortableOptions = {
         update: function() {
-            console.error('update');
+
+            //Due to buggy nature of "sortable module", a delay is required
+            setTimeout(function(){
+                let places = angular.copy($scope.list);
+                let sortBy = angular.copy($scope.sortBy);
+                updateSortOrder(places, sortBy);
+            }, 200);
         }
     };
 
-    var input = document.getElementById('pac-input');
-    var autocomplete = new google.maps.places.Autocomplete(input);
+    let input = document.getElementById('pac-input');
+    let autocomplete = new google.maps.places.Autocomplete(input);
 
     autocomplete.addListener('place_changed', function() {
         var place = autocomplete.getPlace(),
@@ -48,17 +72,9 @@ myapp.controller('contentController', function ($scope) {
             $scope.location = '';
             $scope.$apply();
 
-            $scope.list.forEach(function(element, index){
-                element.sort = index;
-            });
-
-            console.error('$scope.list', $scope.list);
-
-            buildfire.datastore.save({sortBy: $scope.sortBy, places: $scope.list}, placesTag, function(err){
-                if(err){
-                    console.error(err);
-                }
-            });
+            let places = angular.copy($scope.list);
+            let sortBy = angular.copy($scope.sortBy);
+            updateSortOrder(places, sortBy);
         }else{
             //TODO: Handle manually entered lat/lng coordinates
 
@@ -67,8 +83,6 @@ myapp.controller('contentController', function ($scope) {
             //window.alert("No details available for input: '" + place.name + "'");
             return;
         }
-
-
     });
 
     //This is just for testing

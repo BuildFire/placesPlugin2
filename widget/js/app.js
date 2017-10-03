@@ -54,3 +54,13 @@ buildfire.datastore.get (placesTag, function(err, results){
     });
     */
 });
+
+buildfire.datastore.onUpdate((event) => {
+    if(event.tag === placesTag){
+        places = event.data.places;
+
+        places.forEach((place) => {
+            addMarker(map, place.address, 'google_marker_red_icon.png');
+        });
+    }
+});
