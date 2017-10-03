@@ -38,7 +38,12 @@ myapp.controller('contentController', function ($scope) {
 
             location = {title: $scope.title, address: {name: address, lat: coordinates.lat, lng: coordinates.lng}};
 
-            $scope.list.push(location);
+            if($scope.list){
+                $scope.list.push(location);
+            }else{
+                $scope.list = [location];
+            }
+
             $scope.title = '';
             $scope.location = '';
             $scope.$apply();

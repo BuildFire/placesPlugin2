@@ -38,7 +38,7 @@ buildfire.datastore.get (placesTag, function(err, results){
 
     let data = results.data;
 
-    if(data){
+    if(data && data.places){
         let sortBy = sort[data.sortBy];
         places = data.places.sort(sortBy);
 
