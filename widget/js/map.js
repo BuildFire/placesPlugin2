@@ -10,6 +10,13 @@ let usa = {lat: 37.09024, lng: -95.712891},
 
 let centerMap = () => {map.setCenter(lastKnownLocation);};
 
+function updateMap(newPlaces) {
+    //Add new markers
+    newPlaces.forEach((place) => {
+        addMarker(map, place.address, 'google_marker_red_icon.png');
+    });
+}
+
 function initMap() {
     //Create the map first (Don't wait for location)
     createMap(defaultLocation.lat, defaultLocation.lng);
@@ -42,7 +49,10 @@ function initMap() {
         }
     });
 
+    /*
     buildfire.datastore.onUpdate((event) => {
+        console.error('map onUpdate');
+
         if(event.tag === placesTag){
             places = event.data.places;
 
@@ -51,6 +61,7 @@ function initMap() {
             });
         }
     });
+    */
 }
 
 function createMap(latitude, longitude){

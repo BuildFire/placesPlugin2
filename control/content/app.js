@@ -1,9 +1,7 @@
 var myapp = angular.module('places2Controller', ['ui.sortable']);
 
-let placesTag = 'places';
-
 myapp.controller('contentController', function ($scope) {
-    let placesTag = 'places';
+    let placesTag = 'places', placesId;
     $scope.list = [];
     $scope.sortBy = 'manual'; //TODO: Wire up UI
 
@@ -13,15 +11,11 @@ myapp.controller('contentController', function ($scope) {
             element.sort = index;
         });
 
-        console.error('places', places);
-
         buildfire.datastore.save({sortBy, places}, placesTag, function(err){
             if(err){
                 console.error(err);
                 return;
             }
-
-            console.error('DataStore Updated');
         });
     };
 
@@ -30,6 +24,8 @@ myapp.controller('contentController', function ($scope) {
             console.error('datastore.get error', err);
             return;
         }
+
+        placesId = result.id;
 
         $scope.list = result.data.places;
         $scope.$apply()
@@ -84,30 +80,4 @@ myapp.controller('contentController', function ($scope) {
             return;
         }
     });
-
-    //This is just for testing
-    $scope.addData = function(){
-        console.error('add data');
-        var mockData =
-            {
-                sortBy: 'manual',
-                places:             [
-                    {title: 'Extra-ordinary desserts',
-                        address: {name:'1430 Union St, San Diego, CA 92101', lat:32.720285, lng:-117.165927}},
-                    {title: 'Ballast Point Brewing',
-                        address: {name:'2215 India St, San Diego, CA 92101', lat:32.727669, lng:-117.169695}},
-                    {title: 'Cafe Italia',
-                        address: {name: '1704 India St, San Diego, CA 92101', lat:32.723331, lng:-117.168570}}
-                ]
-            };
-
-        buildfire.datastore.save(mockData, placesTag, function(err){
-            if(err){
-                console.error('datastore.save error', err);
-                return;
-            }
-
-            $scope.$apply();
-        });
-    }
 });
