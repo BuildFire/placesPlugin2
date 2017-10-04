@@ -29,8 +29,9 @@ let listView = {
         let filterDiv = document.getElementById('filter');
         new FilterControl(filterDiv);
 
-        //TODO: Replace global places reference
-        listView.addPlaces(places);
+        //console.error('initList', app.places);
+
+        listView.addPlaces(app.places);
     },
     updateList: (newPlaces) => {
         console.error('update list');

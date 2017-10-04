@@ -28,7 +28,7 @@ let mapView = {
             }
         });
 
-        buildfire.datastore.get(placesTag, function(err, results){
+        buildfire.datastore.get(app.settings.placesTag, function(err, results){
             if(err){
                 console.error('datastore.get error', err);
                 return;
@@ -36,8 +36,8 @@ let mapView = {
 
             //TODO: If there is only one entry, it returns an object
 
-            if(places && places.length){
-                places.forEach((place) => {
+            if(app.places && app.places.length){
+                app.places.forEach((place) => {
                     mapView.addMarker(map, place.address, 'google_marker_red_icon.png');
                 });
             }

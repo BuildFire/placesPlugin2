@@ -19,7 +19,7 @@ function loadControl(initFunction){
     setTimeout( function(){ initFunction()}, 500)
 }
 
-//TODO: Make routing more intelligent (Update vs init)
+
 function loadMap(){
     loadHTML('./map.html', 'view');  loadControl(mapView.initMap)
 }
@@ -38,7 +38,9 @@ router.on({
 
 // set the default route
 router.on(() => {
-    if(mode == 'list'){
+    app.init();
+
+    if(app.settings.mode == 'list'){
         loadList()
     }
     else{

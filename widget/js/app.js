@@ -1,7 +1,4 @@
-let placesTag = 'places',
-    mode = 'map',
-    map,
-    places;
+let map;
 
 let sort = {
     alphabetical: (a, b) => {
@@ -30,48 +27,49 @@ let sort = {
     }
 };
 
-function initApp() {
-    buildfire.datastore.get (placesTag, function(err, results){
-        if(err){
-            console.error('datastore.get error', err);
-            return;
-        }
+let app = {
+    settings: {
+        placesTag: 'places',
+        mode: 'map'
+    },
+    places: null,
+    init: (callback) => {
+      buildfire.datastore.get (app.settings.placesTag, function(err, results){
+          if(err){
+              console.error('datastore.get error', err);
+              return;
+          }
 
-        let data = results.data;
+          let data = results.data;
 
-        if(data && data.places){
-            let sortBy = sort[data.sortBy];
-            places = data.places.sort(sortBy);
+          if(data && data.places){
+              let sortBy = sort[data.sortBy];
+              app.places = data.places.sort(sortBy);
 
-            console.error('places', places);
-        }
-    });
+              console.error('app.places', app.places);
+          }
+      });
 
-    buildfire.datastore.onUpdate(function(event) {
-        //This isn't triggering
-        if(event.tag === placesTag){
-            let currentPlaces = places;
+      buildfire.datastore.onUpdate(function(event) {
+          if(event.tag === app.settings.placesTag){
+              let currentPlaces = app.places;
 
-            places = event.data.places;
+              app.places = event.data.places;
 
-            //console.error('currentPlaces', currentPlaces);
-            //console.error('newPlaces', places);
+              //TODO: Add unique ID, to detect new item from change
 
-            //TODO: Add unique ID, to detect new item from change
+              //Do comparison to see what's changed
+              let updatedPlaces= _.filter(app.places, function(obj){ return !_.find(currentPlaces, obj); });
 
-            //Do comparison to see what's changed
-            let updatedPlaces= _.filter(places, function(obj){ return !_.find(currentPlaces, obj); });
+              console.error('updatedPlaces', updatedPlaces);
 
-            console.error('updatedPlaces', updatedPlaces);
-
-            if(mode === 'map'){
-                mapView.updateMap(updatedPlaces);
-            }else{
-                //Load new items
-                listView.updateList(updatedPlaces);
-            }
-        }
-    });
-}
-
-initApp();
+              if(app.settings.mode === 'map'){
+                  mapView.updateMap(updatedPlaces);
+              }else{
+                  //Load new items
+                  listView.updateList(updatedPlaces);
+              }
+          }
+      });
+    }
+};
