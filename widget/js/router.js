@@ -19,12 +19,13 @@ function loadControl(initFunction){
     setTimeout( function(){ initFunction()}, 500)
 }
 
+//TODO: Make routing more intelligent (Update vs init)
 function loadMap(){
     loadHTML('./map.html', 'view');  loadControl(initMap)
 }
 
 function loadList(){
-    loadHTML('./list.html', 'view'); loadControl(initList)
+    loadHTML('./list.html', 'view'); loadControl(listView.initList)
 }
 
 // use #! to hash

@@ -54,8 +54,8 @@ function initApp() {
 
             places = event.data.places;
 
-            console.error('currentPlaces', currentPlaces);
-            console.error('newPlaces', places);
+            //console.error('currentPlaces', currentPlaces);
+            //console.error('newPlaces', places);
 
             //TODO: Add unique ID, to detect new item from change
 
@@ -68,7 +68,7 @@ function initApp() {
                 updateMap(updatedPlaces);
             }else{
                 //Load new items
-                updateList(updatedPlaces);
+                listView.updateList(updatedPlaces);
             }
         }
     });
