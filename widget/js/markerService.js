@@ -31,7 +31,7 @@ function createControl(controlDiv, buttons){
 
 function CenterControl(controlDiv) {
     createControl(controlDiv, [
-        {name:'center', action: centerMap, padding: '8px'}
+        {name:'center', action: mapView.centerMap, padding: '8px'}
     ]);
 }
 

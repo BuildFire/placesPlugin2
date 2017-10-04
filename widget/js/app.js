@@ -65,7 +65,7 @@ function initApp() {
             console.error('updatedPlaces', updatedPlaces);
 
             if(mode === 'map'){
-                updateMap(updatedPlaces);
+                mapView.updateMap(updatedPlaces);
             }else{
                 //Load new items
                 listView.updateList(updatedPlaces);

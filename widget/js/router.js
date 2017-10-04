@@ -21,7 +21,7 @@ function loadControl(initFunction){
 
 //TODO: Make routing more intelligent (Update vs init)
 function loadMap(){
-    loadHTML('./map.html', 'view');  loadControl(initMap)
+    loadHTML('./map.html', 'view');  loadControl(mapView.initMap)
 }
 
 function loadList(){
