@@ -34,26 +34,29 @@ let app = {
     places: null,
     init: (callback) => {
 
-      //Set default state
-      app.settings.mode = app.settings.state.map;
+        // TODO: Get from settings
+        //Set default state
+        app.settings.mode = app.settings.state.list;
 
-      buildfire.datastore.get (app.settings.placesTag, function(err, results){
-          if(err){
+        buildfire.datastore.get (app.settings.placesTag, function(err, results){
+            if(err){
               console.error('datastore.get error', err);
               return;
-          }
+            }
 
-          let data = results.data;
+            let data = results.data;
 
-          if(data && data.places){
+            if(data && data.places){
               let sortBy = sort[data.sortBy];
               app.places = data.places.sort(sortBy);
+            }
 
-              console.error('app.places', app.places);
-          }
-      });
+            if(callback){
+                callback();
+            }
+        });
 
-      buildfire.datastore.onUpdate(function(event) {
+        buildfire.datastore.onUpdate(function(event) {
           if(event.tag === app.settings.placesTag){
               let currentPlaces = app.places;
 
@@ -73,6 +76,6 @@ let app = {
                   listView.updateList(updatedPlaces);
               }
           }
-      });
+        });
     }
 };

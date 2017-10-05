@@ -29,8 +29,6 @@ let listView = {
         let filterDiv = document.getElementById('filter');
         new FilterControl(filterDiv);
 
-        //console.error('initList', app.places);
-
         listView.addPlaces(app.places);
     },
     updateList: (newPlaces) => {

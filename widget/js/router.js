@@ -38,14 +38,14 @@ router.on({
 
 // set the default route
 router.on(() => {
-    app.init();
-
-    if(app.settings.mode == app.settings.state.list){
-        loadList()
-    }
-    else{
-        loadMap();
-    }
+    app.init(() => {
+        if(app.settings.mode == app.settings.state.list){
+            loadList()
+        }
+        else{
+            loadMap();
+        }
+    });
 });
 
 // set the 404 route
