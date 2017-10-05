@@ -27,11 +27,16 @@ let sort = {
 
 let app = {
     settings: {
+        state: {map: 'map', list: 'list'},
         placesTag: 'places',
-        mode: 'map'
+        mode: null
     },
     places: null,
     init: (callback) => {
+
+      //Set default state
+      app.settings.mode = app.settings.state.map;
+
       buildfire.datastore.get (app.settings.placesTag, function(err, results){
           if(err){
               console.error('datastore.get error', err);
@@ -61,7 +66,7 @@ let app = {
 
               console.error('updatedPlaces', updatedPlaces);
 
-              if(app.settings.mode === 'map'){
+              if(app.settings.mode === app.settings.state.map){
                   mapView.updateMap(updatedPlaces);
               }else{
                   //Load new items

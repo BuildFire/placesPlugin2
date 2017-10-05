@@ -1,7 +1,7 @@
 let filter = () => {document.getElementById("mySidenav").style.height = "100%";};
 let closeNav = () => document.getElementById("mySidenav").style.height = "0";
 let changeView = () => {
-    app.settings.mode = (app.settings.mode == 'list') ? 'map' : 'list';
+    app.settings.mode = (app.settings.mode == app.settings.state.list) ? app.settings.state.map : app.settings.state.map.list;
     router.navigate(`/${app.settings.mode}`);
 };
 
@@ -15,7 +15,7 @@ function createControl(controlDiv, buttons){
         let controlButton = document.createElement('div');
         let imageName = (button.name) ? button.name : app.settings.mode;
         if(imageName === 'changeView'){
-            imageName = (app.settings.mode === 'list') ? 'map' : 'list';
+            imageName = (app.settings.mode === app.settings.state.list) ? app.settings.state.map : app.settings.state.list;
         }
 
         controlButton.style.display = 'inline-block';

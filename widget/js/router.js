@@ -40,7 +40,7 @@ router.on({
 router.on(() => {
     app.init();
 
-    if(app.settings.mode == 'list'){
+    if(app.settings.mode == app.settings.state.list){
         loadList()
     }
     else{
