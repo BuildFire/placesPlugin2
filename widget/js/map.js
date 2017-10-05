@@ -20,8 +20,8 @@ let mapView = {
             if(!err && position && position.coords){
                 mapView.lastKnownLocation = {lat: position.coords.latitude, lng: position.coords.longitude};
 
-                map.setCenter(mapView.lastKnownLocation);
-                map.setZoom(mapView.settings.zoomLevel.city);
+                window.map.setCenter(mapView.lastKnownLocation);
+                window.map.setZoom(mapView.settings.zoomLevel.city);
 
                 mapView.addMarker(map, mapView.lastKnownLocation, mapView.settings.images.currentLocation);
 
@@ -49,7 +49,7 @@ let mapView = {
             mapView.addMarker(map, place.address, 'google_marker_red_icon.png');
         });
     },
-    centerMap: () => { map.setCenter(mapView.lastKnownLocation) },
+    centerMap: () => { window.map.setCenter(mapView.lastKnownLocation) },
     addMarker: (map, position, iconType) => {
         new google.maps.Marker({
             position: position,
@@ -101,7 +101,7 @@ let mapView = {
 
         centerControlDiv.index = 1;
 
-        map.controls[locationBottomLeft].push(centerControlDiv);
-        map.controls[locationBottomRight].push(filterMapDiv);
+        window.map.controls[locationBottomLeft].push(centerControlDiv);
+        window.map.controls[locationBottomRight].push(filterMapDiv);
     }
 };

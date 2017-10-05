@@ -1,5 +1,3 @@
-let map;
-
 let sort = {
     alphabetical: (a, b) => {
         if(a.title < b.title)
