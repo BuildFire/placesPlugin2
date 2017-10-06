@@ -7,6 +7,15 @@ let listView = {
         places.forEach((place, index) => {
             let listItem = document.createElement('div');
 
+            listItem.onclick = e => {
+                e.preventDefault();
+
+                app.selectedPlace = place;
+                router.navigate(app.settings.state.detail);
+            };
+
+            listItem.style.cursor = 'pointer';
+
             //Add Image
             let image = document.createElement('img');
             image.src = (place.src)? place.src : defaultImage;

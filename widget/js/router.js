@@ -16,7 +16,7 @@ function loadHTML(url, id) {
 
 //Provide a delay to let the template load first
 function loadControl(initFunction, data){
-    setTimeout( function(){ initFunction(data)}, 500)
+    setTimeout( function(){ initFunction(data)}, 50)
 }
 
 
