@@ -13,13 +13,18 @@ let listView = {
 
             let title = document.createElement('div');
             title.innerHTML = place.title;
+            title.style.display = 'inline-block';
+            title.style.paddingLeft = '5px';
 
             let address = document.createElement('div');
             address.innerHTML = place.address;
 
             let distance = document.createElement('div');
             distance.setAttribute('id', `distance${index}`);
-            distance.innerHTML = (place.distance) ? place.distance : '';
+            distance.innerHTML = (place.distance) ? place.distance : '...';
+            distance.style.display = 'inline-block';
+            distance.style.float = 'right';
+            distance.style.paddingRight = '5px';
 
             listItem.appendChild(image);
             listItem.appendChild(title);

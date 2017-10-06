@@ -50,7 +50,7 @@ let mapView = {
 
         marker.addListener('click', () => {
             let locationDetails = document.getElementById('locationDetails');
-            locationDetails.querySelector('#name').innerHTML = place.address.name;
+            locationDetails.querySelector('#name').innerHTML = place.title;
             locationDetails.style.height = '30px';
             locationDetails.querySelector('#distance').innerHTML = place.distance;
         });
