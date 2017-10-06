@@ -47,7 +47,8 @@ let listView = {
     },
     updateDistances: (places) => {
         places.forEach((place, index) => {
-            document.getElementById(`distance${index}`).innerHTML = place.distance;
+            if(places.distance)
+                document.getElementById(`distance${index}`).innerHTML = place.distance;
         });
     }
 };

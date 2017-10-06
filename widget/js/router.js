@@ -15,8 +15,8 @@ function loadHTML(url, id) {
 }
 
 //Provide a delay to let the template load first
-function loadControl(initFunction, places){
-    setTimeout( function(){ initFunction(places)}, 500)
+function loadControl(initFunction, data){
+    setTimeout( function(){ initFunction(data)}, 500)
 }
 
 
@@ -28,12 +28,17 @@ function loadList(places){
     loadHTML('./list.html', 'view'); loadControl(listView.initList, places)
 }
 
+function loadDetail(place){
+    loadHTML('./detail.html', 'view'); loadControl(detailView.init, place)
+}
+
 // use #! to hash
 router = new Navigo(null, true);
 router.on({
     // 'view' is the id of the div element inside which we render the HTML
     'map': () => { loadMap(app.places) },
     'list': () => { loadList(app.places) },
+    'detail': () => { loadDetail(app.selectedPlace) },
 });
 
 const gotPlaces = (err, places) => {
@@ -44,7 +49,7 @@ const gotPlaces = (err, places) => {
         loadMap(places);
     }
 };
-
+//TODO: Move logic to app.js
 const gotLocation = (err, location) =>{
     //Calculate distances
     console.error('location', location.latitude, location.longitude, app.places);

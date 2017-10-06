@@ -27,11 +27,12 @@ let sort = {
 
 let app = {
     settings: {
-        state: {map: 'map', list: 'list'},
+        state: {map: 'map', list: 'list', detail: 'detail'},
         placesTag: 'places',
         mode: null
     },
     places: null,
+    selectedPlace: null,
     init: (placesCallback, positionCallback) => {
 
         // TODO: Get from cache. If cache not present, get from dataStore. Save in cache for next time.

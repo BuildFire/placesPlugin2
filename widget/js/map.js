@@ -50,9 +50,26 @@ let mapView = {
 
         marker.addListener('click', () => {
             let locationDetails = document.getElementById('locationDetails');
-            locationDetails.querySelector('#name').innerHTML = place.title;
-            locationDetails.style.height = '30px';
-            locationDetails.querySelector('#distance').innerHTML = place.distance;
+            let titleDiv = locationDetails.querySelector('#name');
+            let distanceDiv = locationDetails.querySelector('#distance');
+            titleDiv.innerHTML = place.title;
+            titleDiv.style.paddingLeft = '5px';
+            distanceDiv.innerHTML = place.distance;
+            distanceDiv.style.paddingRight = '5px';
+
+            locationDetails.onclick = e => {
+                e.preventDefault();
+
+                app.selectedPlace = place;
+                router.navigate(app.settings.state.detail);
+            };
+
+            locationDetails.style.cursor = 'pointer';
+
+            const detailsSize = 50;
+            locationDetails.style.height = `${detailsSize}px`;
+            let newHeight = document.getElementById('mapView').getBoundingClientRect().height - detailsSize;
+            document.getElementById('mapView').style.height = `${newHeight}px`;
         });
     },
     createMarker:(imageType) => {
