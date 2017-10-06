@@ -30,39 +30,29 @@ let mapView = {
         //TODO: If there is only one entry, it returns an object
         if(places && places.length){
             places.forEach((place) => {
-                mapView.addMarker(map, place.address, 'google_marker_red_icon.png');
+                mapView.addMarker(map, place, 'google_marker_red_icon.png');
             });
         }
     },
     updateMap: (newPlaces) => {
         //Add new markers
         newPlaces.forEach((place) => {
-            mapView.addMarker(map, place.address, 'google_marker_red_icon.png');
+            mapView.addMarker(map, place, 'google_marker_red_icon.png');
         });
     },
     centerMap: () => { window.map.setCenter(mapView.lastKnownLocation) },
-    addMarker: (map, position, iconType) => {
+    addMarker: (map, place, iconType) => {
         let marker = new google.maps.Marker({
-            position: position,
+            position: place.address,
             map: map,
             icon: mapView.createMarker(iconType)
         });
 
         marker.addListener('click', () => {
             let locationDetails = document.getElementById('locationDetails');
-            locationDetails.querySelector('#name').innerHTML = position.name;
+            locationDetails.querySelector('#name').innerHTML = place.address.name;
             locationDetails.style.height = '30px';
-
-            //TODO: Do this on initial load
-            let service = new google.maps.DistanceMatrixService();
-            service.getDistanceMatrix(
-                {
-                    origins: [mapView.lastKnownLocation],
-                    destinations: [new google.maps.LatLng(position.lat, position.lng)],
-                    travelMode: 'DRIVING',
-                    unitSystem: google.maps.UnitSystem.IMPERIAL //google.maps.UnitSystem.METRIC
-                }, (response) => {locationDetails.querySelector('#distance').innerHTML =  response.rows[0].elements[0].distance.text});
-
+            locationDetails.querySelector('#distance').innerHTML = place.distance;
         });
     },
     createMarker:(imageType) => {

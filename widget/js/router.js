@@ -49,22 +49,29 @@ const gotLocation = (err, location) =>{
     //Calculate distances
     console.error('location', location.latitude, location.longitude, app.places);
 
-    let distanceService = new google.maps.DistanceMatrixService();
+    let destinations = [];
 
-    app.places.forEach(element => {
-        distanceService.getDistanceMatrix(
-            {
-                origins: [{lat: location.latitude, lng: location.longitude}],
-                destinations: [new google.maps.LatLng(element.lat, element.lng)],
-                travelMode: 'DRIVING',
-                unitSystem: google.maps.UnitSystem.IMPERIAL //google.maps.UnitSystem.METRIC
-            }, (response, status) => {
-                //element.distance =  response.rows[0].elements[0].distance.text;
-                console.log('response', response);
-                console.log('status', status);
-                //console.error('element.distance', element.distance);
-            });
+    app.places.forEach(place => {
+        destinations.push(new google.maps.LatLng(place.address.lat, place.address.lng))
+    });
 
+    let origin = [{lat: location.latitude, lng: location.longitude}];
+
+    let service = new google.maps.DistanceMatrixService();
+    service.getDistanceMatrix({
+        origins: origin,
+        destinations: destinations,
+        travelMode: google.maps.TravelMode.DRIVING,
+        unitSystem: google.maps.UnitSystem.IMPERIAL //google.maps.UnitSystem.METRIC
+    }, (response) => {
+        //Update places with distance
+        app.places.map((place, index)=>{
+           place.distance =  response.rows[0].elements[index].distance.text;
+        });
+
+        if(app.settings.mode == app.settings.state.list){
+            listView.updateDistances(app.places);
+        }
     });
 };
 

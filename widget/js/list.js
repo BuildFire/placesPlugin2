@@ -4,21 +4,26 @@ let listView = {
 
         let listContainer = document.getElementById("listView");
 
-        places.forEach((element) => {
+        places.forEach((place, index) => {
             let listItem = document.createElement('div');
 
             //Add Image
             let image = document.createElement('img');
-            image.src = (element.src)? element.src : defaultImage;
+            image.src = (place.src)? place.src : defaultImage;
 
             let title = document.createElement('div');
-            title.innerHTML = element.title;
+            title.innerHTML = place.title;
 
             let address = document.createElement('div');
-            address.innerHTML = element.address;
+            address.innerHTML = place.address;
+
+            let distance = document.createElement('div');
+            distance.setAttribute('id', `distance${index}`);
+            distance.innerHTML = (place.distance) ? place.distance : '';
 
             listItem.appendChild(image);
             listItem.appendChild(title);
+            listItem.appendChild(distance);
             //listItem.appendChild(address);
 
             listContainer.appendChild(listItem);
@@ -34,5 +39,10 @@ let listView = {
     updateList: (newPlaces) => {
         console.error('update list');
         listView.addPlaces(newPlaces);
+    },
+    updateDistances: (places) => {
+        places.forEach((place, index) => {
+            document.getElementById(`distance${index}`).innerHTML = place.distance;
+        });
     }
 };
