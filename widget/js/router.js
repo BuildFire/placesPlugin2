@@ -63,6 +63,7 @@ const gotLocation = (err, location) =>{
     let origin = [{lat: location.latitude, lng: location.longitude}];
 
     let service = new google.maps.DistanceMatrixService();
+
     service.getDistanceMatrix({
         origins: origin,
         destinations: destinations,
