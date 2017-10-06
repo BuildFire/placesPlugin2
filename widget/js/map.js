@@ -48,6 +48,8 @@ let mapView = {
             icon: mapView.createMarker(iconType)
         });
 
+        const originalHeight = document.getElementById('mapView').getBoundingClientRect().height;
+
         marker.addListener('click', () => {
             let locationDetails = document.getElementById('locationDetails');
             let titleDiv = locationDetails.querySelector('#name');
@@ -67,9 +69,14 @@ let mapView = {
             locationDetails.style.cursor = 'pointer';
 
             const detailsSize = 50;
+            const mapViewDiv = document.getElementById('mapView');
+
             locationDetails.style.height = `${detailsSize}px`;
-            let newHeight = document.getElementById('mapView').getBoundingClientRect().height - detailsSize;
-            document.getElementById('mapView').style.height = `${newHeight}px`;
+
+            if(mapViewDiv.getBoundingClientRect().height === originalHeight){
+                let newHeight = originalHeight - detailsSize;
+                mapViewDiv.style.height = `${newHeight}px`;
+            }
         });
     },
     createMarker:(imageType) => {
