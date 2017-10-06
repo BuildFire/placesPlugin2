@@ -32,9 +32,9 @@ let app = {
         mode: null
     },
     places: null,
-    init: (callback) => {
+    init: (placesCallback, positionCallback) => {
 
-        // TODO: Get from settings
+        // TODO: Get from cache. If cache not present, get from dataStore. Save in cache for next time.
         //Set default state
         app.settings.mode = app.settings.state.list;
 
@@ -44,15 +44,21 @@ let app = {
               return;
             }
 
-            let data = results.data;
+            let places,
+                data = results.data;
 
             if(data && data.places){
               let sortBy = sort[data.sortBy];
-              app.places = data.places.sort(sortBy);
+              places = data.places.sort(sortBy);
+              app.places = places;
             }
 
-            if(callback){
-                callback();
+            placesCallback(null, places);
+        });
+
+        buildfire.geo.getCurrentPosition({}, (err, position) => {
+            if(!err && position && position.coords){
+                positionCallback(null, position.coords);
             }
         });
 
@@ -60,12 +66,12 @@ let app = {
           if(event.tag === app.settings.placesTag){
               let currentPlaces = app.places;
 
-              app.places = event.data.places;
+              let places = event.data.places;
 
               //TODO: Add unique ID, to detect new item from change
 
               //Do comparison to see what's changed
-              let updatedPlaces= _.filter(app.places, function(obj){ return !_.find(currentPlaces, obj); });
+              let updatedPlaces= _.filter(places, function(obj){ return !_.find(currentPlaces, obj); });
 
               console.error('updatedPlaces', updatedPlaces);
 

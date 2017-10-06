@@ -24,12 +24,12 @@ let listView = {
             listContainer.appendChild(listItem);
         });
     },
-    initList: () => {
+    initList: (places) => {
         //Add filter control
         let filterDiv = document.getElementById('filter');
         new FilterControl(filterDiv);
 
-        listView.addPlaces(app.places);
+        listView.addPlaces(places);
     },
     updateList: (newPlaces) => {
         console.error('update list');

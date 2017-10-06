@@ -15,40 +15,65 @@ function loadHTML(url, id) {
 }
 
 //Provide a delay to let the template load first
-function loadControl(initFunction){
-    setTimeout( function(){ initFunction()}, 500)
+function loadControl(initFunction, places){
+    setTimeout( function(){ initFunction(places)}, 500)
 }
 
 
-function loadMap(){
-    loadHTML('./map.html', 'view');  loadControl(mapView.initMap)
+function loadMap(places){
+    loadHTML('./map.html', 'view');  loadControl(mapView.initMap, places)
 }
 
-function loadList(){
-    loadHTML('./list.html', 'view'); loadControl(listView.initList)
+function loadList(places){
+    loadHTML('./list.html', 'view'); loadControl(listView.initList, places)
 }
 
 // use #! to hash
 router = new Navigo(null, true);
 router.on({
     // 'view' is the id of the div element inside which we render the HTML
-    'map': () => { loadMap() },
-    'list': () => { loadList() },
+    'map': () => { loadMap(app.places) },
+    'list': () => { loadList(app.places) },
 });
+
+const gotPlaces = (err, places) => {
+    if(app.settings.mode == app.settings.state.list){
+        loadList(places)
+    }
+    else{
+        loadMap(places);
+    }
+};
+
+const gotLocation = (err, location) =>{
+    //Calculate distances
+    console.error('location', location.latitude, location.longitude, app.places);
+
+    let distanceService = new google.maps.DistanceMatrixService();
+
+    app.places.forEach(element => {
+        distanceService.getDistanceMatrix(
+            {
+                origins: [{lat: location.latitude, lng: location.longitude}],
+                destinations: [new google.maps.LatLng(element.lat, element.lng)],
+                travelMode: 'DRIVING',
+                unitSystem: google.maps.UnitSystem.IMPERIAL //google.maps.UnitSystem.METRIC
+            }, (response, status) => {
+                //element.distance =  response.rows[0].elements[0].distance.text;
+                console.log('response', response);
+                console.log('status', status);
+                //console.error('element.distance', element.distance);
+            });
+
+    });
+};
 
 // set the default route
 router.on(() => {
-    app.init(() => {
-        if(app.settings.mode == app.settings.state.list){
-            loadList()
-        }
-        else{
-            loadMap();
-        }
-    });
+    app.init(gotPlaces, gotLocation);
 });
 
 // set the 404 route
-router.notFound((query) => { $id('view').innerHTML = '<h3>Couldn\'t find the page you\'re looking for...</h3>'; })
+router.notFound((query) => { $id('view').innerHTML = '<h3>Error</h3>'; })
 
 router.resolve();
