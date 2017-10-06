@@ -54,16 +54,28 @@ let mapView = {
             let locationDetails = document.getElementById('locationDetails');
             let titleDiv = locationDetails.querySelector('#name');
             let distanceDiv = locationDetails.querySelector('#distance');
+            let closeDiv = locationDetails.querySelector('#close');
             titleDiv.innerHTML = place.title;
             titleDiv.style.paddingLeft = '5px';
             distanceDiv.innerHTML = place.distance;
             distanceDiv.style.paddingRight = '5px';
+            closeDiv.innerHTML = '&times';
 
             locationDetails.onclick = e => {
                 e.preventDefault();
 
                 app.selectedPlace = place;
                 router.navigate(app.settings.state.detail);
+            };
+
+            closeDiv.onclick = e => {
+                e.stopPropagation();
+
+                titleDiv.innerHTML = '';
+                distanceDiv.innerHTML = '';
+                closeDiv.innerHTML = '';
+                locationDetails.style.height = 0;
+                mapViewDiv.style.height = originalHeight;
             };
 
             locationDetails.style.cursor = 'pointer';

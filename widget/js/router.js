@@ -87,6 +87,6 @@ router.on(() => {
 });
 
 // set the 404 route
-router.notFound((query) => { $id('view').innerHTML = '<h3>Error</h3>'; })
+router.notFound((query) => { $id('view').innerHTML = '<h3>Invalid Route</h3>'; })
 
 router.resolve();
