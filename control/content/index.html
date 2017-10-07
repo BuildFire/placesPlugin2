@@ -21,6 +21,14 @@
 <body>
     <div ng-app="places2Controller" ng-controller="contentController" class="container">
 
+        Default view:
+        <select ng-model="defaultView" ng-change="changeDefaultView()">
+            <option value="map">map</option>
+            <option value="list">list</option>
+        </select>
+
+        <hr>
+
         <input type="text" ng-model="title" placeholder="Enter title">
         <input id="pac-input" type="text" ng-model="location" placeholder="Enter a location" size="100">
 

@@ -3,9 +3,9 @@ let filterControl = {
     filter: () => document.getElementById("mySidenav").style.height = "100%",
     closeNav: () => document.getElementById("mySidenav").style.height = "0",
     changeView: () => {
-        app.settings.mode = (app.settings.mode == app.settings.state.list) ? app.settings.state.map : app.settings.state.list;
+        app.state.mode = (app.state.mode == app.settings.viewStates.list) ? app.settings.viewStates.map : app.settings.viewStates.list;
 
-        router.navigate(`/${app.settings.mode}`);
+        router.navigate(`/${app.state.mode}`);
     },
     createControl: (controlDiv, buttons) => {
         let container = document.createElement('div');
@@ -15,9 +15,9 @@ let filterControl = {
 
         buttons.forEach((button) =>{
             let controlButton = document.createElement('div');
-            let imageName = (button.name) ? button.name : app.settings.mode;
+            let imageName = (button.name) ? button.name : app.state.mode;
             if(imageName === 'changeView'){
-                imageName = (app.settings.mode === app.settings.state.list) ? app.settings.state.map : app.settings.state.list;
+                imageName = (app.state.mode === app.settings.viewStates.list) ? app.settings.viewStates.map : app.settings.viewStates.list;
             }
 
             controlButton.style.display = 'inline-block';

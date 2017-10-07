@@ -36,13 +36,13 @@ function loadDetail(place){
 router = new Navigo(null, true);
 router.on({
     // 'view' is the id of the div element inside which we render the HTML
-    'map': () => { loadMap(app.places) },
-    'list': () => { loadList(app.places) },
-    'detail': () => { loadDetail(app.selectedPlace) },
+    'map': () => { loadMap(app.state.places) },
+    'list': () => { loadList(app.state.places) },
+    'detail': () => { loadDetail(app.state.selectedPlace) },
 });
 
 const gotPlaces = (err, places) => {
-    if(app.settings.mode == app.settings.state.list){
+    if(app.state.mode == app.settings.viewStates.list){
         loadList(places)
     }
     else{
@@ -52,11 +52,11 @@ const gotPlaces = (err, places) => {
 //TODO: Move logic to app.js
 const gotLocation = (err, location) =>{
     //Calculate distances
-    console.error('location', location.latitude, location.longitude, app.places);
+    console.error('location', location.latitude, location.longitude, app.state.places);
 
     let destinations = [];
 
-    app.places.forEach(place => {
+    app.state.places.forEach(place => {
         destinations.push(new google.maps.LatLng(place.address.lat, place.address.lng))
     });
 
@@ -71,12 +71,12 @@ const gotLocation = (err, location) =>{
         unitSystem: google.maps.UnitSystem.IMPERIAL //google.maps.UnitSystem.METRIC
     }, (response) => {
         //Update places with distance
-        app.places.map((place, index)=>{
+        app.state.places.map((place, index)=>{
            place.distance =  response.rows[0].elements[index].distance.text;
         });
 
-        if(app.settings.mode == app.settings.state.list){
-            listView.updateDistances(app.places);
+        if(app.state.mode == app.settings.viewStates.list){
+            listView.updateDistances(app.state.places);
         }
     });
 };

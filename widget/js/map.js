@@ -64,8 +64,8 @@ let mapView = {
             locationDetails.onclick = e => {
                 e.preventDefault();
 
-                app.selectedPlace = place;
-                router.navigate(app.settings.state.detail);
+                app.state.selectedPlace = place;
+                router.navigate(app.settings.viewStates.detail);
             };
 
             closeDiv.onclick = e => {

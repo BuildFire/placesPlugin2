@@ -27,17 +27,19 @@ let sort = {
 
 let app = {
     settings: {
-        state: {map: 'map', list: 'list', detail: 'detail'},
+        viewStates: {map: 'map', list: 'list', detail: 'detail'},
         placesTag: 'places',
-        mode: null
     },
-    places: null,
-    selectedPlace: null,
+    state: {
+        mode: null,
+        places: null,
+        selectedPlace: null,
+    },
     init: (placesCallback, positionCallback) => {
 
         // TODO: Get from cache. If cache not present, get from dataStore. Save in cache for next time.
         //Set default state
-        app.settings.mode = app.settings.state.list;
+        app.state.mode = app.settings.viewStates.list;
 
         buildfire.datastore.get (app.settings.placesTag, function(err, results){
             if(err){
@@ -49,9 +51,12 @@ let app = {
                 data = results.data;
 
             if(data && data.places){
-              let sortBy = sort[data.sortBy];
-              places = data.places.sort(sortBy);
-              app.places = places;
+                app.state.mode = data.defaultView;
+                console.error(data);
+
+                let sortBy = sort[data.sortBy];
+                places = data.places.sort(sortBy);
+                app.state.places = places;
             }
 
             placesCallback(null, places);
@@ -65,18 +70,18 @@ let app = {
 
         buildfire.datastore.onUpdate(function(event) {
           if(event.tag === app.settings.placesTag){
-              let currentPlaces = app.places;
-
+              let currentPlaces = app.state.places;
               let places = event.data.places;
 
-              //TODO: Add unique ID, to detect new item from change
+              let currentViewState = app.state.mode;
 
+              //TODO: Add unique ID, to detect new item from change
               //Do comparison to see what's changed
               let updatedPlaces= _.filter(places, function(obj){ return !_.find(currentPlaces, obj); });
 
               console.error('updatedPlaces', updatedPlaces);
 
-              if(app.settings.mode === app.settings.state.map){
+              if(app.state.mode === app.settings.viewStates.map){
                   mapView.updateMap(updatedPlaces);
               }else{
                   //Load new items

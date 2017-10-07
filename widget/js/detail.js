@@ -8,7 +8,7 @@ let detailView = {
         view.onclick = e => {
             e.preventDefault();
 
-            router.navigate(app.settings.state.map);
+            router.navigate(app.settings.viewStates.map);
         };
         view.style.cursor = 'pointer';
     },

@@ -4,20 +4,7 @@ myapp.controller('contentController', function ($scope) {
     let placesTag = 'places', placesId;
     $scope.list = [];
     $scope.sortBy = 'manual'; //TODO: Wire up UI
-
-    let updateSortOrder = function(places, sortBy){
-        //Update the sort order to reflect the physical order
-        places.forEach(function(element, index){
-            element.sort = index;
-        });
-
-        buildfire.datastore.save({sortBy, places}, placesTag, function(err){
-            if(err){
-                console.error(err);
-                return;
-            }
-        });
-    };
+    $scope.defaultView = 'map';
 
     buildfire.datastore.get (placesTag, function(err, result){
         if(err){
@@ -31,6 +18,28 @@ myapp.controller('contentController', function ($scope) {
         $scope.$apply()
     });
 
+    let saveChanges = function(places, sortBy, defaultView){
+        //Update the sort order to reflect the physical order
+        places.forEach(function(element, index){
+            element.sort = index;
+        });
+
+        buildfire.datastore.save({sortBy, places, defaultView}, placesTag, function(err){
+            if(err){
+                console.error(err);
+                return;
+            }
+        });
+    };
+
+    $scope.changeDefaultView = function(){
+        let places = angular.copy($scope.list);
+        let sortBy = angular.copy($scope.sortBy);
+        let defaultView = angular.copy($scope.defaultView);
+
+        saveChanges(places, sortBy, defaultView);
+    };
+
     $scope.sortableOptions = {
         update: function() {
 
@@ -38,7 +47,8 @@ myapp.controller('contentController', function ($scope) {
             setTimeout(function(){
                 let places = angular.copy($scope.list);
                 let sortBy = angular.copy($scope.sortBy);
-                updateSortOrder(places, sortBy);
+                let defaultView = angular.copy($scope.defaultView);
+                saveChanges(places, sortBy, defaultView);
             }, 200);
         }
     };
@@ -70,7 +80,7 @@ myapp.controller('contentController', function ($scope) {
 
             let places = angular.copy($scope.list);
             let sortBy = angular.copy($scope.sortBy);
-            updateSortOrder(places, sortBy);
+            saveChanges(places, sortBy);
         }else{
             //TODO: Handle manually entered lat/lng coordinates
 
