@@ -71,15 +71,21 @@ let app = {
         buildfire.datastore.onUpdate(function(event) {
           if(event.tag === app.settings.placesTag){
               let currentPlaces = app.state.places;
-              let places = event.data.places;
-
+              let newPlaces = event.data.places;
               let currentViewState = app.state.mode;
+              let newViewState = event.data.defaultView;
+
+              if(currentViewState != newViewState){
+                  app.state.mode = newViewState;
+                  router.navigate(newViewState);
+                  return;
+              }
 
               //TODO: Add unique ID, to detect new item from change
               //Do comparison to see what's changed
-              let updatedPlaces= _.filter(places, function(obj){ return !_.find(currentPlaces, obj); });
+              let updatedPlaces = _.filter(newPlaces, function(obj){ return !_.find(currentPlaces, obj); });
 
-              console.error('updatedPlaces', updatedPlaces);
+              //console.error('updatedPlaces', updatedPlaces);
 
               if(app.state.mode === app.settings.viewStates.map){
                   mapView.updateMap(updatedPlaces);
