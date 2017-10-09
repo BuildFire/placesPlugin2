@@ -37,6 +37,14 @@
         </select>
 
         <hr>
+        Categories:
+        <ul ui-sortable ng-model="categories">
+            <li ng-repeat="category in categories" class="item">
+                <b>{{category}}</b>
+            </li>
+        </ul>
+
+        <hr>
 
         <input type="text" ng-model="title" placeholder="Enter title">
         <input id="pac-input" type="text" ng-model="location" placeholder="Enter a location" size="100">

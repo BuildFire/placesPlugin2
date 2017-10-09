@@ -36,6 +36,7 @@ let app = {
         places: null,
         selectedPlace: null,
         sortBy: null,
+        categories: null,
     },
     init: (placesCallback, positionCallback) => {
 
@@ -54,8 +55,10 @@ let app = {
                 data = results.data;
 
             if(data && data.places){
+                console.error('data', data);
+
+                app.state.categories = data.categories;
                 app.state.mode = data.defaultView;
-                console.error(data);
 
                 let sortBy = sort[data.sortBy];
                 places = data.places.sort(sortBy);
@@ -99,7 +102,7 @@ let app = {
                   router.navigate(newViewState);
                   return;
               }
-              
+
               //TODO: Add unique ID, to detect new item from change
               //Do comparison to see what's changed
               let updatedPlaces = _.filter(newPlaces, function(obj){ return !_.find(currentPlaces, obj); });

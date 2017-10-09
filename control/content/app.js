@@ -5,6 +5,7 @@ myapp.controller('contentController', function ($scope) {
     $scope.list = [];
     $scope.sortBy = 'manual';
     $scope.defaultView = 'map';
+    $scope.categories = ['restaurant', 'park', 'site'];
 
     buildfire.datastore.get (placesTag, function(err, result){
         if(err){
@@ -18,13 +19,28 @@ myapp.controller('contentController', function ($scope) {
         $scope.$apply()
     });
 
-    let saveChanges = function(places, sortBy, defaultView){
+    let saveChanges = function(data){
         //Update the sort order to reflect the physical order
-        places.forEach(function(element, index){
-            element.sort = index;
+        data.places.forEach(function(place, index){
+            place.sort = index;
+
+            /* Mock categories until the UI is built
+            if(index % 2 === 0){
+                place.categories = ['restaurant']
+            }else
+            {
+                place.categories = ['park']
+            }
+
+            if(index % 3 === 0){
+                place.categories.push('site');
+            }*/
+
         });
 
-        buildfire.datastore.save({sortBy, places, defaultView}, placesTag, function(err){
+        console.error('saving data', data);
+
+        buildfire.datastore.save(data, placesTag, function(err){
             if(err){
                 console.error(err);
                 return;
@@ -43,9 +59,10 @@ myapp.controller('contentController', function ($scope) {
     let processChanges = function(){
         let places = angular.copy($scope.list);
         let sortBy = angular.copy($scope.sortBy);
+        let categories = angular.copy($scope.categories);
         let defaultView = angular.copy($scope.defaultView);
 
-        saveChanges(places, sortBy, defaultView);
+        saveChanges({places, sortBy, categories, defaultView});
     };
 
     $scope.sortableOptions = {
@@ -53,10 +70,7 @@ myapp.controller('contentController', function ($scope) {
 
             //Due to buggy nature of "sortable module", a delay is required
             setTimeout(function(){
-                let places = angular.copy($scope.list);
-                let sortBy = angular.copy($scope.sortBy);
-                let defaultView = angular.copy($scope.defaultView);
-                saveChanges(places, sortBy, defaultView);
+                processChanges();
             }, 200);
         }
     };
