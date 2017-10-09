@@ -51,7 +51,6 @@ let listView = {
         listView.addPlaces(places);
     },
     updateList: (newPlaces) => {
-        console.error('update list');
         listView.addPlaces(newPlaces);
     },
     updateDistances: (places) => {

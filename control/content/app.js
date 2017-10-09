@@ -3,7 +3,7 @@ var myapp = angular.module('places2Controller', ['ui.sortable']);
 myapp.controller('contentController', function ($scope) {
     let placesTag = 'places', placesId;
     $scope.list = [];
-    $scope.sortBy = 'manual'; //TODO: Wire up UI
+    $scope.sortBy = 'manual';
     $scope.defaultView = 'map';
 
     buildfire.datastore.get (placesTag, function(err, result){
@@ -33,6 +33,14 @@ myapp.controller('contentController', function ($scope) {
     };
 
     $scope.changeDefaultView = function(){
+        processChanges();
+    };
+
+    $scope.changeSortOrder = function(){
+        processChanges();
+    };
+
+    let processChanges = function(){
         let places = angular.copy($scope.list);
         let sortBy = angular.copy($scope.sortBy);
         let defaultView = angular.copy($scope.defaultView);

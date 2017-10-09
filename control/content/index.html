@@ -23,8 +23,17 @@
 
         Default view:
         <select ng-model="defaultView" ng-change="changeDefaultView()">
-            <option value="map">map</option>
-            <option value="list">list</option>
+            <option value="map">Map</option>
+            <option value="list">List</option>
+        </select>
+
+        <hr>
+
+        Sort Order:
+        <select ng-model="sortBy" ng-change="changeSortOrder()">
+            <option value="alpha">Alphabetical</option>
+            <option value="alphaDesc">Reverse Alphabetical</option>
+            <option value="manual">Manual</option>
         </select>
 
         <hr>

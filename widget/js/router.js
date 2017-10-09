@@ -52,7 +52,7 @@ const gotPlaces = (err, places) => {
 //TODO: Move logic to app.js
 const gotLocation = (err, location) =>{
     //Calculate distances
-    console.error('location', location.latitude, location.longitude, app.state.places);
+    console.error('Got current location');
 
     let destinations = [];
 
