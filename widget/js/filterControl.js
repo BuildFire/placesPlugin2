@@ -22,22 +22,25 @@ let filterControl = {
         let index = app.state.categories.indexOf(category);
 
         //remove category
-        app.state.categories.splice(index, 1);
+        //TODO: Add active status to category
+        //app.state.categories.splice(index, 1);
 
         //Update UI to reflect selected categories
-        app.state.places.filter(place => {
+        app.state.places = app.state.places.filter(place => {
             //If a location has no categories, we always show it
-            if(typeof place.category === 'undefined' || place.category.length === 0){
+            if(typeof place.categories === 'undefined' || place.categories.length === 0){
                 console.error('No category');
                 return true;
             }
 
-            let matches = place.categories.some(r => app.state.categories.includes(r));
+            let isMatch = place.categories.some(r => app.state.categories.includes(r));
 
-            return (matches && matches.length && matches.length > 0);
+            return isMatch;
         });
 
         console.error('filter', category);
+        console.error('app.state.places', app.state.places);
+        //TODO: Update UI
     },
     closeNav: () => document.getElementById("mySidenav").style.height = "0",
     changeView: () => {

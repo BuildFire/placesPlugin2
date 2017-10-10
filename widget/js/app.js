@@ -55,7 +55,6 @@ let app = {
                 data = results.data;
 
             if(data && data.places){
-                console.error('data', data);
 
                 app.state.categories = data.categories;
                 app.state.mode = data.defaultView;
