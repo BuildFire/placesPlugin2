@@ -64,7 +64,7 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
 }
 
 .mapCenter{
-    position: absolute;
+    position: fixed;
     left: 10px;
     text-align: center;
     margin-top: 137%;
@@ -73,7 +73,7 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
 
 .listViewFilter{
     width: 110px;
-    position: absolute;
+    position: fixed;
     right: 10px;
     text-align: center;
     margin-top: 137%;
