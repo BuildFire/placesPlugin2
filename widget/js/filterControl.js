@@ -13,6 +13,10 @@ let filterControl = {
                 link.setAttribute('href', 'javascript:void(0)');
                 link.setAttribute('id', category.name);
                 link.setAttribute('onclick', `filterControl.filterCategory('${category.name}')`);
+
+                if(!category.isActive){
+                    link.setAttribute('style', `background-color:red`);
+                }
             });
         }
 
@@ -27,28 +31,29 @@ let filterControl = {
         let backgroundColor = (app.state.categories[categoryIndex].isActive) ? 'black' : 'red';
         categoryDiv.setAttribute('style', `background-color:${backgroundColor};`);
 
-        let activeCategories = app.state.categories.filter((x, index) => {return index != categoryIndex}).map(c => c.name);
+        let activeCategories = app.state.categories.filter((category) => {return category.isActive}).map(c => c.name);
+
 
         //TODO: Make copy of unfiltered places
-        app.state.places = app.state.places.filter(place => {
+        app.state.filteredPlaces = app.state.places.filter(place => {
             //If a location has no categories, we always show it
             if(typeof place.categories === 'undefined' || place.categories.length === 0){
                 console.error('No category');
                 return true;
             }
 
-            //Does the place include any of the
-
+            //Does the place include any of the active categories
             let isMatch = place.categories.some(placeCategory => {
                 return activeCategories.includes(placeCategory);
             });
 
             return isMatch;
         });
-
-        //TODO: Update UI to reflect selected categories
     },
-    closeNav: () => document.getElementById("mySidenav").style.height = "0",
+    closeNav: () => {
+        gotPlaces(null, app.state.filteredPlaces);
+        document.getElementById("mySidenav").style.height = "0";
+    },
     changeView: () => {
         app.state.mode = (app.state.mode == app.settings.viewStates.list) ? app.settings.viewStates.map : app.settings.viewStates.list;
 
