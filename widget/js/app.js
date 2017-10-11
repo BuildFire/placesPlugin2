@@ -56,7 +56,11 @@ let app = {
 
             if(data && data.places){
 
-                app.state.categories = data.categories;
+                app.state.categories = data.categories.map(category => {
+                    return {name: category, isActive: true};
+                });
+                //TODO: Change state.categories to have name and isShown boolean
+
                 app.state.mode = data.defaultView;
 
                 let sortBy = sort[data.sortBy];

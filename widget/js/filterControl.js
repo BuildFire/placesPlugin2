@@ -9,23 +9,27 @@ let filterControl = {
         if(app.state.categories){
             app.state.categories.forEach(category => {
                 let link = categoriesDiv.appendChild(document.createElement('a'));
-                link.innerHTML = category;
+                link.innerHTML = category.name;
                 link.setAttribute('href', 'javascript:void(0)');
-                link.setAttribute('id', category);
-                link.setAttribute('onclick', `filterControl.filterCategory('${category}')`);
+                link.setAttribute('id', category.name);
+                link.setAttribute('onclick', `filterControl.filterCategory('${category.name}')`);
             });
         }
 
         sideNav.style.height = "100%";
     },
-    filterCategory: (category) => {
-        let index = app.state.categories.indexOf(category);
+    filterCategory: (categoryName) => {
+        let categoryIndex = app.state.categories.findIndex(category => {return category.name === categoryName});
+        //Switch the category's state
+        app.state.categories[categoryIndex].isActive = (!app.state.categories[categoryIndex].isActive);
 
-        //remove category
-        //TODO: Add active status to category
-        //app.state.categories.splice(index, 1);
+        let categoryDiv = document.getElementById(categoryName);
+        let backgroundColor = (app.state.categories[categoryIndex].isActive) ? 'black' : 'red';
+        categoryDiv.setAttribute('style', `background-color:${backgroundColor};`);
 
-        //Update UI to reflect selected categories
+        let activeCategories = app.state.categories.filter((x, index) => {return index != categoryIndex}).map(c => c.name);
+
+        //TODO: Make copy of unfiltered places
         app.state.places = app.state.places.filter(place => {
             //If a location has no categories, we always show it
             if(typeof place.categories === 'undefined' || place.categories.length === 0){
@@ -33,14 +37,16 @@ let filterControl = {
                 return true;
             }
 
-            let isMatch = place.categories.some(r => app.state.categories.includes(r));
+            //Does the place include any of the
+
+            let isMatch = place.categories.some(placeCategory => {
+                return activeCategories.includes(placeCategory);
+            });
 
             return isMatch;
         });
 
-        console.error('filter', category);
-        console.error('app.state.places', app.state.places);
-        //TODO: Update UI
+        //TODO: Update UI to reflect selected categories
     },
     closeNav: () => document.getElementById("mySidenav").style.height = "0",
     changeView: () => {
