@@ -34,6 +34,7 @@ let app = {
     state: {
         mode: null,
         places: null,
+        filteredPlaces: null,
         selectedPlace: null,
         sortBy: null,
         categories: null,
@@ -55,17 +56,16 @@ let app = {
                 data = results.data;
 
             if(data && data.places){
-
                 app.state.categories = data.categories.map(category => {
                     return {name: category, isActive: true};
                 });
-                //TODO: Change state.categories to have name and isShown boolean
 
                 app.state.mode = data.defaultView;
 
                 let sortBy = sort[data.sortBy];
                 places = data.places.sort(sortBy);
                 app.state.places = places;
+                app.state.filteredPlaces = places;
             }
 
             placesCallback(null, places);

@@ -34,7 +34,6 @@ let filterControl = {
         let activeCategories = app.state.categories.filter((category) => {return category.isActive}).map(c => c.name);
 
 
-        //TODO: Make copy of unfiltered places
         app.state.filteredPlaces = app.state.places.filter(place => {
             //If a location has no categories, we always show it
             if(typeof place.categories === 'undefined' || place.categories.length === 0){

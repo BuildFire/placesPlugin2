@@ -36,8 +36,8 @@ function loadDetail(place){
 router = new Navigo(null, true);
 router.on({
     // 'view' is the id of the div element inside which we render the HTML
-    'map': () => { loadMap(app.state.places) },
-    'list': () => { loadList(app.state.places) },
+    'map': () => { loadMap(app.state.filteredPlaces) },
+    'list': () => { loadList(app.state.filteredPlaces) },
     'detail': () => { loadDetail(app.state.selectedPlace) },
 });
 
@@ -76,7 +76,7 @@ const gotLocation = (err, location) =>{
         });
 
         if(app.state.mode == app.settings.viewStates.list){
-            listView.updateDistances(app.state.places);
+            listView.updateDistances(app.state.filteredPlaces);
         }
     });
 };
