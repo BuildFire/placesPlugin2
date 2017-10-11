@@ -48,7 +48,8 @@ let mapView = {
             icon: mapView.createMarker(iconType)
         });
 
-        const originalHeight = document.getElementById('mapView').getBoundingClientRect().height;
+        const mapViewDiv = document.getElementById('mapView');
+        const originalHeight = (mapViewDiv) ? mapViewDiv.getBoundingClientRect().height: 0;
 
         marker.addListener('click', () => {
             let locationDetails = document.getElementById('locationDetails');
@@ -130,12 +131,13 @@ let mapView = {
         let centerControlDiv = document.createElement('div'),
             filterMapDiv = document.createElement('div');
 
-        new CenterControl(centerControlDiv);
-        new FilterControl(filterMapDiv);
+        let filterDiv = document.getElementById('mapFilter');
+        let centerDiv = document.getElementById('mapCenter');
 
-        centerControlDiv.index = 1;
+        new CenterControl(centerDiv);
+        new FilterControl(filterDiv);
 
-        window.map.controls[locationBottomLeft].push(centerControlDiv);
-        window.map.controls[locationBottomRight].push(filterMapDiv);
+        //window.map.controls[locationBottomLeft].push(centerControlDiv);
+        //window.map.controls[locationBottomRight].push(filterMapDiv);
     }
 };

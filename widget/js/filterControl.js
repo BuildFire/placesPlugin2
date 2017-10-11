@@ -91,7 +91,7 @@ function CenterControl(controlDiv) {
 
 function FilterControl (controlDiv){
     filterControl.createControl(controlDiv, [
-        {name:'changeView', action: filterControl.changeView, padding: '12px'},
-        {name:'filter', action: filterControl.openFilter, padding: '12px'}
+        {name:'changeView', action: filterControl.changeView, padding: '10px 10px 8px 10px'},
+        {name:'filter', action: filterControl.openFilter, padding: '10px 10px 8px 10px'}
     ]);
 }
