@@ -72,7 +72,7 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
 }
 
 .listViewFilter{
-    width: 100px;
+    width: 110px;
     position: absolute;
     right: 10px;
     text-align: center;

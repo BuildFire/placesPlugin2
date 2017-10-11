@@ -106,9 +106,7 @@ let mapView = {
         };
     },
     createMap: () =>{
-        let locationBottomLeft = google.maps.ControlPosition.BOTTOM_LEFT,
-            locationBottomRight = google.maps.ControlPosition.BOTTOM_RIGHT,
-            mapTypeId = google.maps.MapTypeId.ROADMAP,
+        let mapTypeId = google.maps.MapTypeId.ROADMAP,
             zoomPosition = google.maps.ControlPosition.RIGHT_TOP;
 
         let zoomTo = (mapView.lastKnownLocation != defaultLocation) ? mapView.settings.zoomLevel.city : mapView.settings.zoomLevel.country,
@@ -128,16 +126,10 @@ let mapView = {
 
         map = new google.maps.Map(document.getElementById('mapView'), options);
 
-        let centerControlDiv = document.createElement('div'),
-            filterMapDiv = document.createElement('div');
-
         let filterDiv = document.getElementById('mapFilter');
         let centerDiv = document.getElementById('mapCenter');
 
         new CenterControl(centerDiv);
         new FilterControl(filterDiv);
-
-        //window.map.controls[locationBottomLeft].push(centerControlDiv);
-        //window.map.controls[locationBottomRight].push(filterMapDiv);
     }
 };

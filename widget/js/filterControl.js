@@ -85,13 +85,13 @@ let filterControl = {
 
 function CenterControl(controlDiv) {
     filterControl.createControl(controlDiv, [
-        {name:'center', action: mapView.centerMap, padding: '8px'}
+        {name:'center', action: mapView.centerMap, padding: '10px'}
     ]);
 }
 
 function FilterControl (controlDiv){
     filterControl.createControl(controlDiv, [
-        {name:'changeView', action: filterControl.changeView, padding: '10px 10px 8px 10px'},
-        {name:'filter', action: filterControl.openFilter, padding: '10px 10px 8px 10px'}
+        {name:'changeView', action: filterControl.changeView, padding: '14px 16px 8px 8px'},
+        {name:'filter', action: filterControl.openFilter, padding: '14px 8px 8px 16px'}
     ]);
 }
