@@ -30,7 +30,7 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
     position: fixed;
     z-index: 2;
     bottom: 0;
-    background-color: #111;
+    background-color: white;
     overflow-x: scroll;
     transition: 0.5s;
     padding-top: 0;

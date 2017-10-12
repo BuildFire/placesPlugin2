@@ -7,16 +7,19 @@ let filterControl = {
         categoriesDiv.innerHTML = '';
 
         if(app.state.categories){
-            app.state.categories.forEach(category => {
-                let link = categoriesDiv.appendChild(document.createElement('a'));
-                link.innerHTML = category.name;
-                link.setAttribute('href', 'javascript:void(0)');
-                link.setAttribute('id', category.name);
-                link.setAttribute('onclick', `filterControl.filterCategory('${category.name}')`);
+            let context = {
+                categories: app.state.categories
+            };
 
-                if(!category.isActive){
-                    link.setAttribute('style', `background-color:red`);
-                }
+            axios.get('./templates/categories.hbs').then(response => {
+                // Compile the template
+                let theTemplate = Handlebars.compile(response.data);
+
+                // Pass our data to the template
+                let theCompiledHtml = theTemplate(context);
+
+                // Add the compiled html to the page
+                document.getElementById('categories').innerHTML = theCompiledHtml;
             });
         }
 
@@ -28,7 +31,7 @@ let filterControl = {
         app.state.categories[categoryIndex].isActive = (!app.state.categories[categoryIndex].isActive);
 
         let categoryDiv = document.getElementById(categoryName);
-        let backgroundColor = (app.state.categories[categoryIndex].isActive) ? 'black' : 'red';
+        let backgroundColor = (app.state.categories[categoryIndex].isActive) ? 'white' : 'red';
         categoryDiv.setAttribute('style', `background-color:${backgroundColor};`);
 
         let activeCategories = app.state.categories.filter((category) => {return category.isActive}).map(c => c.name);
