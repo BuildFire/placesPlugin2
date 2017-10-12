@@ -16,9 +16,15 @@ function loadHTML(url, id) {
 
 //Provide a delay to let the template load first
 function loadControl(initFunction, data){
-    setTimeout( function(){ initFunction(data)}, 50)
-}
 
+    let view = document.getElementById("view");
+    view.className = 'transition';
+
+    setTimeout( function(){
+        initFunction(data);
+        view.className = 'fade';
+    }, 50)
+}
 
 function loadMap(places){
     loadHTML('./map.html', 'view');  loadControl(mapView.initMap, places)

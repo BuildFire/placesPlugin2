@@ -27,7 +27,7 @@ let mapView = {
             }
         });
 
-        //TODO: If there is only one entry, it returns an object
+        //TODO: If there is only one entry, it returns an object (not an array)
         if(places && places.length){
             places.forEach((place) => {
                 mapView.addMarker(map, place, 'google_marker_red_icon.png');
