@@ -34,16 +34,17 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
     overflow-x: scroll;
     transition: 0.5s;
     padding-top: 0;
-    text-align:center;
+    text-align:left;
 }
 
 .sidenav a {
     padding: 8px 8px 8px 32px;
     text-decoration: none;
-    font-size: 25px;
+    /*font-size: 25px;*/
+    padding-left: 15px;
     color: #818181;
-    display: block;
     transition: 0.3s;
+    vertical-align: middle;
 }
 
 .sidenav .closebtn {

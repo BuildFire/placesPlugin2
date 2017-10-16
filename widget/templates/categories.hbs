@@ -1,9 +1,18 @@
-{{#each categories}}
-    <p>
-        <a href="javascript:void(0);" id="{{name}}">{{name}}</a>
-        <label class="switch">
-            <input type="checkbox" onclick="filterControl.filterCategory('{{name}}')" {{#if this.isActive}}checked{{/if}}>
-            <span class="slider round"></span>
-        </label>
-    </p>
-{{/each}}
+<table class="table">
+    <thead>
+        <th>Category:</th>
+    </thead>
+    <tbody>
+    {{#each categories}}
+        <tr style="white-space: nowrap;">
+            <td>
+                <a href="javascript:void(0);" id="{{name}}">{{name}}</a>
+                <label class="switch">
+                    <input type="checkbox" onclick="filterControl.filterCategory('{{name}}')" {{#if this.isActive}}checked{{/if}}>
+                    <span class="slider round"></span>
+                </label>
+            </td>
+        </tr>
+    {{/each}}
+    </tbody>
+</table>

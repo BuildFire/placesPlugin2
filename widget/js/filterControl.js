@@ -11,7 +11,7 @@ let filterControl = {
                 categories: app.state.categories
             };
 
-            axios.get('./templates/categories.hbs').then(response => {
+            window.axios.get('./templates/categories.hbs').then(response => {
                 // Compile the template
                 let theTemplate = Handlebars.compile(response.data);
 
@@ -30,12 +30,7 @@ let filterControl = {
         //Switch the category's state
         app.state.categories[categoryIndex].isActive = (!app.state.categories[categoryIndex].isActive);
 
-        let categoryDiv = document.getElementById(categoryName);
-        let backgroundColor = (app.state.categories[categoryIndex].isActive) ? 'white' : 'red';
-        categoryDiv.setAttribute('style', `background-color:${backgroundColor};`);
-
         let activeCategories = app.state.categories.filter((category) => {return category.isActive}).map(c => c.name);
-
 
         app.state.filteredPlaces = app.state.places.filter(place => {
             //If a location has no categories, we always show it
