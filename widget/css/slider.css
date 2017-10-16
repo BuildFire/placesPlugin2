@@ -1,4 +1,13 @@
 /* The switch - the box around the slider */
+
+.category-header{
+    background-color: black; color: white
+}
+
+th#category-header {
+    padding-left: 30px;
+}
+
 .switch {
     position: relative;
     /*display: inline-block;*/
