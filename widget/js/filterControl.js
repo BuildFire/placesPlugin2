@@ -71,7 +71,7 @@ let filterControl = {
 
             controlButton.style.display = 'inline-block';
             controlButton.style.padding = button.padding;
-            controlButton.innerHTML = `<img src="./images/${imageName}.svg"></img>`;
+            controlButton.innerHTML = `<object data="./images/${imageName}.svg" type="image/svg+xml"></object>`;
             if(button.action)
                 controlButton.onclick = button.action;
             container.appendChild(controlButton);

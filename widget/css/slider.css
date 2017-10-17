@@ -1,4 +1,28 @@
-/* The switch - the box around the slider */
+
+.Rectangle-4 {
+    width: 320px;
+    height: 40px;
+    border-radius: 2.5px;
+    border: solid 0.5px #000000;
+}
+
+.Default {
+    width: 44px;
+    height: 16px;
+    font-family: HelveticaNeue;
+    font-size: 14px;
+    text-align: left;
+    color: #ffffff;
+}
+
+.Closest-to-Me {
+    width: 44px;
+    height: 16px;
+    font-family: HelveticaNeue;
+    font-size: 14px;
+    text-align: left;
+    color: #000000;
+}
 
 .category-header{
     background-color: black; color: white
@@ -8,6 +32,7 @@ th#category-header {
     padding-left: 30px;
 }
 
+/* The switch - the box around the slider */
 .switch {
     position: relative;
     /*display: inline-block;*/
