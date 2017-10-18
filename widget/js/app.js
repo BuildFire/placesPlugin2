@@ -71,8 +71,13 @@ let app = {
             placesCallback(null, places);
         });
 
-        buildfire.geo.getCurrentPosition({}, (err, position) => {
-            if(!err && position && position.coords){
+        buildfire.geo.getCurrentPosition({timeout: 30}, (err, position) => {
+            if(err){
+                console.error('getCurrentPosition', err);
+                return
+            }
+
+            if(position && position.coords){
                 positionCallback(null, position.coords);
             }
         });

@@ -4,7 +4,9 @@ let listView = {
             return;
         }
 
-        var defaultImage = 'https://czi3m2qn.cloudimg.io/s/crop/342x193/https://pluginserver.buildfire.com/styles/media/holder-16x9.png';
+        let screenWidth = window.innerWidth;
+
+        const defaultImage = `https://czi3m2qn.cloudimg.io/s/width/${screenWidth}/https://pluginserver.buildfire.com/styles/media/holder-16x9.png`;
 
         let listContainer = document.getElementById("listView");
 
