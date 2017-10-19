@@ -23,7 +23,7 @@ function loadControl(initFunction, data){
     setTimeout( function(){
         initFunction(data);
         view.className = 'fade';
-    }, 150)
+    }, 250)
 }
 
 function loadMap(places){
@@ -90,7 +90,7 @@ const gotLocation = (err, location) =>{
 // set the default route
 router.on(() => {
     //Artificial delay to ensure the app is ready
-    setTimeout(() => app.init(gotPlaces, gotLocation), 2500);
+    setTimeout(() => app.init(gotPlaces, gotLocation), 5000);
 
     //app.init(gotPlaces, gotLocation);
 });

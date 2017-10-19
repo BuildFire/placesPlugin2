@@ -80,6 +80,7 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
     text-align: center;
     margin-top: 137%;
     z-index: 1;
+    backface-visibility: hidden;
 }
 
 #view.transition{
