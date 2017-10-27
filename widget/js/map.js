@@ -81,7 +81,7 @@ let mapView = {
 
             locationDetails.style.cursor = 'pointer';
 
-            const detailsSize = 50;
+            const detailsSize = 100;
             const mapViewDiv = document.getElementById('mapView');
 
             locationDetails.style.height = `${detailsSize}px`;

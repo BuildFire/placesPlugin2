@@ -1,16 +1,35 @@
 <style>
-    .a{
-        display: inline-block;
+    .aligner{
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
-    .b{
-        display: inline-block;
+    .detail-image{
+        border-radius: 100%;
+        padding: 5px;
+    }
+    .close{
         float: right;
+        padding: 5px;
     }
 </style>
 
 <div id="locationDetails" style="height:0">
-    <div class="a" id="name"></div><div id="distance" class="b"></div>
-    <div id="close"></div>
+
+    <div class="row aligner">
+        <div class="col-xs-4">
+            <img class="detail-image" src="https://czi3m2qn.cloudimg.io/s/width/90/https://pluginserver.buildfire.com/styles/media/holder.png"/>
+        </div>
+        <div class="col-xs-6">
+            <div class="name" id="name"></div>
+            <div id="address"></div>
+        </div>
+        <div class="col-xs-2">
+            <div class="close" id="close"></div>
+            <div id="distance" class="distance"></div>
+        </div>
+    </div>
+
 </div>
 
 <div id="mapView" style="height:100%;width:100%;position:absolute;"></div>
