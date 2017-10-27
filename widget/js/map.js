@@ -1,5 +1,6 @@
 let usa = {lat: 37.09024, lng: -95.712891},
-    defaultLocation = usa;
+    defaultLocation = usa,
+    originalHeight;
 
 let mapView = {
     settings: {
@@ -48,18 +49,21 @@ let mapView = {
             icon: mapView.createMarker(iconType)
         });
 
-        const mapViewDiv = document.getElementById('mapView');
-        const originalHeight = (mapViewDiv) ? mapViewDiv.getBoundingClientRect().height: 0;
-
         marker.addListener('click', () => {
             let locationDetails = document.getElementById('locationDetails');
             let titleDiv = locationDetails.querySelector('#name');
             let distanceDiv = locationDetails.querySelector('#distance');
             let closeDiv = locationDetails.querySelector('#close');
+            let arrowDiv = locationDetails.querySelector('#arrow');
+
             titleDiv.innerHTML = place.title;
             titleDiv.style.paddingLeft = '5px';
-            distanceDiv.innerHTML = place.distance;
-            distanceDiv.style.paddingRight = '5px';
+            if((typeof place.distance !== 'undefined')){
+                distanceDiv.innerHTML = place.distance;
+                distanceDiv.style.paddingRight = '5px';
+                arrowDiv.style.visibility = 'visible';
+            }
+
             closeDiv.innerHTML = '&times';
 
             locationDetails.onclick = e => {
@@ -76,7 +80,7 @@ let mapView = {
                 distanceDiv.innerHTML = '';
                 closeDiv.innerHTML = '';
                 locationDetails.style.height = 0;
-                mapViewDiv.style.height = originalHeight;
+                mapViewDiv.style.height = `${originalHeight}px`;
             };
 
             locationDetails.style.cursor = 'pointer';
@@ -131,5 +135,8 @@ let mapView = {
 
         new CenterControl(centerDiv);
         new FilterControl(filterDiv);
+
+        const mapViewDiv = document.getElementById('mapView');
+        originalHeight = (mapViewDiv) ? mapViewDiv.getBoundingClientRect().height: 0;
     }
 };
