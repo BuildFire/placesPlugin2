@@ -1,22 +1,23 @@
 {
-  "author":"BuildFire"
-,"pluginName":"Places 2 (test)"
-,"pluginDescription":"The Places plugin allows you to include a list and GPS map directory of categorized entries with pictures, contact information, instant directions, and even embed images and videos"
-,"supportEmail":"support@buildfire.com"
-,"control":{
-  "content":{
-    "enabled":true
-  }
-, "design":{
-    "enabled":false
-  }
-, "settings":{
-    "enabled":false
-  }
-}
-,"widget":{
+  "author":"BuildFire",
+  "pluginName":"Places 2 (test)",
+  "pluginDescription":"The Places plugin allows you to include a list and GPS map directory of categorized entries with pictures, contact information, instant directions, and even embed images and videos",
+  "supportEmail":"support@buildfire.com",
+  "control":{
+    "content":{
+      "enabled":true
+    },
+    "design":{
+      "enabled":true
+    },
+    "settings":{
+      "enabled":true
+    }
+  },
+  "widget":{
+    "enabled": true
+  },
 
-},
   "features": [{"name": "Geo"}],
   "languages" : ["en"]
 }
