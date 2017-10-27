@@ -52,12 +52,16 @@ let mapView = {
         marker.addListener('click', () => {
             let locationDetails = document.getElementById('locationDetails');
             let titleDiv = locationDetails.querySelector('#name');
+            let addressDiv = locationDetails.querySelector('#address');
             let distanceDiv = locationDetails.querySelector('#distance');
             let closeDiv = locationDetails.querySelector('#close');
             let arrowDiv = locationDetails.querySelector('#arrow');
 
             titleDiv.innerHTML = place.title;
-            titleDiv.style.paddingLeft = '5px';
+
+            addressDiv.innerHTML = place.address.name;
+            addressDiv.style['font-size'] = '12px';
+
             if((typeof place.distance !== 'undefined')){
                 distanceDiv.innerHTML = place.distance;
                 distanceDiv.style.paddingRight = '5px';
