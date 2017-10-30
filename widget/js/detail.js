@@ -2,15 +2,73 @@ let detailView = {
     init: (place) => {
         //Add filter control
         let view = document.getElementById('detailView');
-        view.innerHTML = place.title;
+        let screenWidth = window.innerWidth;
+        const title = place.title;
+        const imageName = place.image ? place.image : 'holder-16x9.png';
 
-        //TODO: Remove once back button has been implemented
-        view.onclick = e => {
-            e.preventDefault();
-
-            router.navigate(app.settings.viewStates.map);
+        let context = {
+            width: screenWidth,
+            imageName: imageName,
+            title: title
         };
-        view.style.cursor = 'pointer';
+
+        console.error('place', place);
+
+        window.axios.get('./templates/detail.hbs').then(response => {
+            // Compile the template
+            let theTemplate = Handlebars.compile(response.data);
+
+            // Pass our data to the template
+            let theCompiledHtml = theTemplate(context);
+
+            // Add the compiled html to the page
+            view.innerHTML = theCompiledHtml;
+
+
+            let mapTypeId = google.maps.MapTypeId.ROADMAP,
+                zoomPosition = google.maps.ControlPosition.RIGHT_TOP,
+                zoomTo = 14, //city
+                centerOn = {lat: place.address.lat, lng: place.address.lng};
+
+            let options = {
+                streetViewControl: false,
+                mapTypeControl: false,
+                fullscreenControl: false,
+                zoom: zoomTo,
+                center: centerOn,
+                mapTypeId: mapTypeId,
+                zoomControlOptions: {
+                    position: zoomPosition
+                }
+            };
+
+            map = new google.maps.Map(document.getElementById('smallMap'), options);
+
+            const iconBaseUrl = 'https://app.buildfire.com/app/media/',
+                icon = {
+                    url: iconBaseUrl + 'google_marker_red_icon.png',
+                    // This marker is 20 pixels wide by 20 pixels high.
+                    scaledSize: new google.maps.Size(20, 20),
+                    // The origin for this image is (0, 0).
+                    origin: new google.maps.Point(0, 0),
+                    // The anchor for this image is at the center of the circle
+                    anchor: new google.maps.Point(10, 10)
+                }
+
+            new google.maps.Marker({
+                position: place.address,
+                map,
+                icon
+            });
+
+            //TODO: Remove once back button has been implemented
+            view.onclick = e => {
+                e.preventDefault();
+
+                router.navigate(app.settings.viewStates.map);
+            };
+            view.style.cursor = 'pointer';
+        });
     },
 
 };
