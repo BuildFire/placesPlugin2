@@ -97,3 +97,23 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
     .sidenav {padding-top: 15px;}
     .sidenav a {font-size: 18px;}
 }
+
+.aligner{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.detail-image{
+    border-radius: 100%;
+    padding: 5px;
+}
+.close{
+    float: right;
+    padding-right: 5px;
+}
+.arrow{
+    vertical-align: middle;
+}
+.distance{
+    font-size: 13px;
+}

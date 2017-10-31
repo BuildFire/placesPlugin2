@@ -9,7 +9,8 @@ let detailView = {
         let context = {
             width: screenWidth,
             imageName: imageName,
-            title: title
+            title: title,
+            distance: place.distance
         };
 
         console.error('place', place);
@@ -24,7 +25,7 @@ let detailView = {
             // Add the compiled html to the page
             view.innerHTML = theCompiledHtml;
 
-
+            //TODO: Move to common location
             let mapTypeId = google.maps.MapTypeId.ROADMAP,
                 zoomPosition = google.maps.ControlPosition.RIGHT_TOP,
                 zoomTo = 14, //city
