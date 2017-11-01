@@ -26,6 +26,7 @@ let sort = {
 };
 
 let app = {
+    goBack: null,
     settings: {
         viewStates: {map: 'map', list: 'list', detail: 'detail'},
         sortOptions: {alpha: 'alpha', alphaDesc: 'alphaDesc', manual: 'manual'},
@@ -38,8 +39,29 @@ let app = {
         selectedPlace: null,
         sortBy: null,
         categories: null,
+        navHistory: [],
+        isBackNav: false,
+    },
+    backButtonInit: () => {
+        app.goBack = window.buildfire.navigation.onBackButtonClick;
+
+        window.buildfire.navigation.onBackButtonClick = function(){
+            if (app.state.navHistory.length > 0){
+
+                let lastNavState = app.state.navHistory.pop();
+                
+                app.state.isBackNav = true;
+
+                router.navigate(lastNavState);
+            }
+            else{
+                app.goBack();
+            }
+        }
     },
     init: (placesCallback, positionCallback) => {
+
+        app.backButtonInit();
 
         // TODO: Get from cache. If cache not present, get from dataStore. Save in cache for next time.
         //Set default state

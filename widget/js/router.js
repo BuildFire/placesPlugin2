@@ -16,13 +16,13 @@ function loadHTML(url, id) {
 
 //Provide a delay to let the template load first
 function loadControl(initFunction, data){
-
     let view = document.getElementById("view");
     view.className = 'transition';
 
     setTimeout( function(){
         initFunction(data);
         view.className = 'fade';
+        app.state.isBackNav = false;
     }, 250)
 }
 
@@ -42,9 +42,23 @@ function loadDetail(place){
 router = new Navigo(null, true);
 router.on({
     // 'view' is the id of the div element inside which we render the HTML
-    'map': () => { loadMap(app.state.filteredPlaces) },
-    'list': () => { loadList(app.state.filteredPlaces) },
-    'detail': () => { loadDetail(app.state.selectedPlace) },
+    'map': () => {
+        loadMap(app.state.filteredPlaces);
+        if(!app.state.isBackNav)
+            app.state.navHistory.push(app.settings.viewStates.map)
+    },
+    'list': () => {
+        loadList(app.state.filteredPlaces);
+
+        if(!app.state.isBackNav)
+            app.state.navHistory.push(app.settings.viewStates.list)
+    },
+    'detail': () => {
+        loadDetail(app.state.selectedPlace);
+
+        if(!app.state.isBackNav)
+            app.state.navHistory.push(app.settings.viewStates.detail)
+    },
 });
 
 const gotPlaces = (err, places) => {
@@ -90,7 +104,7 @@ const gotLocation = (err, location) =>{
 // set the default route
 router.on(() => {
     //Artificial delay to ensure the app is ready
-    setTimeout(() => app.init(gotPlaces, gotLocation), 5000);
+    setTimeout(() => app.init(gotPlaces, gotLocation), 200);
 
     //app.init(gotPlaces, gotLocation);
 });
