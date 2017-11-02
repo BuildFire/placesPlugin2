@@ -48,8 +48,13 @@ let app = {
         window.buildfire.navigation.onBackButtonClick = function(){
             if (app.state.navHistory.length > 0){
 
+                //Don't navigate to the current state (may occur when using back button)
+                if(app.state.mode === app.state.navHistory[app.state.navHistory.length-1])
+                    app.state.navHistory.pop();
+
+                //Get previous state
                 let lastNavState = app.state.navHistory.pop();
-                
+
                 app.state.isBackNav = true;
 
                 router.navigate(lastNavState);

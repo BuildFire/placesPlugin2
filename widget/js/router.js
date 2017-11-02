@@ -44,17 +44,21 @@ router.on({
     // 'view' is the id of the div element inside which we render the HTML
     'map': () => {
         loadMap(app.state.filteredPlaces);
+        app.state.mode = app.settings.viewStates.map;
+
         if(!app.state.isBackNav)
             app.state.navHistory.push(app.settings.viewStates.map)
     },
     'list': () => {
         loadList(app.state.filteredPlaces);
+        app.state.mode = app.settings.viewStates.list;
 
         if(!app.state.isBackNav)
             app.state.navHistory.push(app.settings.viewStates.list)
     },
     'detail': () => {
         loadDetail(app.state.selectedPlace);
+        app.state.mode = app.settings.viewStates.detail;
 
         if(!app.state.isBackNav)
             app.state.navHistory.push(app.settings.viewStates.detail)
@@ -104,7 +108,7 @@ const gotLocation = (err, location) =>{
 // set the default route
 router.on(() => {
     //Artificial delay to ensure the app is ready
-    setTimeout(() => app.init(gotPlaces, gotLocation), 200);
+    setTimeout(() => app.init(gotPlaces, gotLocation), 500);
 
     //app.init(gotPlaces, gotLocation);
 });
