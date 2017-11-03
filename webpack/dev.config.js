@@ -16,7 +16,7 @@ const WebpackConfig = {
     'control/content/content': path.join(__dirname, '../src/control/content/content.js'),
     'control/design/design': path.join(__dirname, '../src/control/design/design.js'),
     'control/settings/settings': path.join(__dirname, '../src/control/settings/settings.js'),
-    'widget/widget': path.join(__dirname, '../src/widget/widget.js')
+    'widget/widget': path.join(__dirname, '../src/widget/js/app.js')
   },
 
   output: {
