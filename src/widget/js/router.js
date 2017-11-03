@@ -1,4 +1,4 @@
-import Navigo from "./lib/navigo.min.js"
+import Navigo from "navigo"
 
 // getElementById wrapper
 function $id(id) {

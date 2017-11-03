@@ -1,5 +1,3 @@
-import "./lib/handlebars.min.js"
-import axios from "./lib/axios.min.js"
 import "./lib/markercluster.js"
 
 import "./filterControl.js"

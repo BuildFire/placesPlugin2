@@ -1,5 +1,5 @@
-import axios from "./lib/axios.min.js"
-import Handlebars from "./lib/handlebars.min.js"
+import axios from "axios"
+import Handlebars from "./lib/handlebars"
 
 window.detailView = {
     init: (place) => {
