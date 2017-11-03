@@ -33,6 +33,22 @@ let mapView = {
             places.forEach((place) => {
                 mapView.addMarker(map, place, 'google_marker_red_icon.png');
             });
+            
+            let clusterOptions = {
+                gridSize: 53,
+                styles: [
+                    {
+                        textColor: 'white',
+                        url: 'https://app.buildfire.com/app/media/google_marker_blue_icon2.png',
+                        height: 53,
+                        width: 53
+                    }
+                ],
+                maxZoom: 15
+            };
+
+            // Add a marker clusterer to manage the markers.
+            new MarkerClusterer(map, app.state.markers, clusterOptions);
         }
     },
     updateMap: (newPlaces) => {
@@ -49,56 +65,59 @@ let mapView = {
             icon: mapView.createMarker(iconType)
         });
 
-        marker.addListener('click', () => {
-            let locationDetails = document.getElementById('locationDetails');
-            let titleDiv = locationDetails.querySelector('#name');
-            let addressDiv = locationDetails.querySelector('#address');
-            let distanceDiv = locationDetails.querySelector('#distance');
-            let closeDiv = locationDetails.querySelector('#close');
-            let arrowDiv = locationDetails.querySelector('#arrow');
+        app.state.markers.push(marker);
 
-            titleDiv.innerHTML = place.title;
+        marker.addListener('click', () => {mapView.markerClick(place)});
+    },
+    markerClick: (place) => {
+        let locationDetails = document.getElementById('locationDetails');
+        let titleDiv = locationDetails.querySelector('#name');
+        let addressDiv = locationDetails.querySelector('#address');
+        let distanceDiv = locationDetails.querySelector('#distance');
+        let closeDiv = locationDetails.querySelector('#close');
+        let arrowDiv = locationDetails.querySelector('#arrow');
 
-            addressDiv.innerHTML = place.address.name;
-            addressDiv.style['font-size'] = '12px';
+        titleDiv.innerHTML = place.title;
 
-            if((typeof place.distance !== 'undefined')){
-                distanceDiv.innerHTML = place.distance;
-                distanceDiv.style.paddingRight = '5px';
-                arrowDiv.style.visibility = 'visible';
-            }
+        addressDiv.innerHTML = place.address.name;
+        addressDiv.style['font-size'] = '12px';
 
-            closeDiv.innerHTML = '&times';
+        if((typeof place.distance !== 'undefined')){
+            distanceDiv.innerHTML = place.distance;
+            distanceDiv.style.paddingRight = '5px';
+            arrowDiv.style.visibility = 'visible';
+        }
 
-            locationDetails.onclick = e => {
-                e.preventDefault();
+        closeDiv.innerHTML = '&times';
 
-                app.state.selectedPlace = place;
-                router.navigate(app.settings.viewStates.detail);
-            };
+        locationDetails.onclick = e => {
+            e.preventDefault();
 
-            closeDiv.onclick = e => {
-                e.stopPropagation();
+            app.state.selectedPlace = place;
+            router.navigate(app.settings.viewStates.detail);
+        };
 
-                titleDiv.innerHTML = '';
-                distanceDiv.innerHTML = '';
-                closeDiv.innerHTML = '';
-                locationDetails.style.height = 0;
-                mapViewDiv.style.height = `${originalHeight}px`;
-            };
+        closeDiv.onclick = e => {
+            e.stopPropagation();
 
-            locationDetails.style.cursor = 'pointer';
+            titleDiv.innerHTML = '';
+            distanceDiv.innerHTML = '';
+            closeDiv.innerHTML = '';
+            locationDetails.style.height = 0;
+            mapViewDiv.style.height = `${originalHeight}px`;
+        };
 
-            const detailsSize = 100;
-            const mapViewDiv = document.getElementById('mapView');
+        locationDetails.style.cursor = 'pointer';
 
-            locationDetails.style.height = `${detailsSize}px`;
+        const detailsSize = 100;
+        const mapViewDiv = document.getElementById('mapView');
 
-            if(mapViewDiv.getBoundingClientRect().height === originalHeight){
-                let newHeight = originalHeight - detailsSize;
-                mapViewDiv.style.height = `${newHeight}px`;
-            }
-        });
+        locationDetails.style.height = `${detailsSize}px`;
+
+        if(mapViewDiv.getBoundingClientRect().height === originalHeight){
+            let newHeight = originalHeight - detailsSize;
+            mapViewDiv.style.height = `${newHeight}px`;
+        }
     },
     createMarker:(imageType) => {
         const iconBaseUrl = 'https://app.buildfire.com/app/media/';
