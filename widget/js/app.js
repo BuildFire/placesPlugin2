@@ -36,6 +36,7 @@ let app = {
         mode: null,
         places: null,
         markers: [],
+        bounds: null,
         filteredPlaces: null,
         selectedPlace: null,
         sortBy: null,

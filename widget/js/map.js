@@ -21,8 +21,8 @@ let mapView = {
             if(!err && position && position.coords){
                 mapView.lastKnownLocation = {lat: position.coords.latitude, lng: position.coords.longitude};
 
-                window.map.setCenter(mapView.lastKnownLocation);
-                window.map.setZoom(mapView.settings.zoomLevel.city);
+                //window.map.setCenter(mapView.lastKnownLocation);
+                //window.map.setZoom(mapView.settings.zoomLevel.city);
 
                 mapView.addMarker(map, mapView.lastKnownLocation, mapView.settings.images.currentLocation);
             }
@@ -33,7 +33,7 @@ let mapView = {
             places.forEach((place) => {
                 mapView.addMarker(map, place, 'google_marker_red_icon.png');
             });
-            
+
             let clusterOptions = {
                 gridSize: 53,
                 styles: [
@@ -49,6 +49,8 @@ let mapView = {
 
             // Add a marker clusterer to manage the markers.
             new MarkerClusterer(map, app.state.markers, clusterOptions);
+
+            map.fitBounds(app.state.bounds);
         }
     },
     updateMap: (newPlaces) => {
@@ -65,9 +67,15 @@ let mapView = {
             icon: mapView.createMarker(iconType)
         });
 
-        app.state.markers.push(marker);
+        if(place.address){
+            let lat = place.address.lat,
+                lng = place.address.lng;
 
-        marker.addListener('click', () => {mapView.markerClick(place)});
+            app.state.markers.push(marker);
+            app.state.bounds.extend({lat, lng});
+
+            marker.addListener('click', () => {mapView.markerClick(place)});
+        }
     },
     markerClick: (place) => {
         let locationDetails = document.getElementById('locationDetails');
@@ -152,6 +160,8 @@ let mapView = {
         };
 
         map = new google.maps.Map(document.getElementById('mapView'), options);
+
+        app.state.bounds = new google.maps.LatLngBounds();
 
         let filterDiv = document.getElementById('mapFilter');
         let centerDiv = document.getElementById('mapCenter');
