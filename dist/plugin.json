@@ -19,6 +19,5 @@
   },
 
   "features": [{"name": "Geo"}],
-  "languages" : ["en"],
-  "webpack": 8080
+  "languages" : ["en"]
 }
