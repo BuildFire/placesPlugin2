@@ -5,7 +5,7 @@ import "./map.js"
 import "./list.js"
 import "./detail.js"
 import "./router.js"
-import "./sort.js"
+import PlacesSort from "./PlacesSort.js"
 
 window.app = {
     goBack: null,
@@ -73,7 +73,7 @@ window.app = {
 
                 app.state.mode = data.defaultView;
 
-                let sortBy = sort[data.sortBy];
+                let sortBy = PlacesSort[data.sortBy];
                 places = data.places.sort(sortBy);
                 app.state.places = places;
                 app.state.filteredPlaces = places;
@@ -109,7 +109,7 @@ window.app = {
 
               if(currentSortOrder != newSortOrder){
                   app.state.sortBy = newSortOrder;
-                  let sortBy = sort[app.state.sortBy];
+                  let sortBy = PlacesSort[app.state.sortBy];
                   app.state.places.sort(sortBy);
 
                   if(app.state.mode === app.settings.viewStates.list)

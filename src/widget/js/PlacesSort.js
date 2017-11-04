@@ -1,21 +1,23 @@
-window.sort = {
-    alpha: (a, b) => {
+class PlacesSort {
+    alpha(a, b) {
         if(a.title < b.title)
             return -1;
         if(a.title > b.title)
             return 1;
 
         return 0;
-    },
-    alphaDesc: (a, b) => {
+    }
+
+    alphaDesc(a, b) {
         if(a.title > b.title)
             return -1;
         if(a.title < b.title)
             return 1;
 
         return 0;
-    },
-    manual: (a, b) => {
+    }
+
+    manual(a, b) {
         if(a.sort < b.sort)
             return -1;
         if(a.sort > b.sort)
@@ -23,4 +25,6 @@ window.sort = {
 
         return 0;
     }
-};
+}
+
+export default PlacesSort;
