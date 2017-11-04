@@ -159,7 +159,7 @@ window.mapView = {
             }
         };
 
-        map = new google.maps.Map(document.getElementById('mapView'), options);
+        window.map = new google.maps.Map(document.getElementById('mapView'), options);
 
         app.state.bounds = new google.maps.LatLngBounds();
 
@@ -170,6 +170,6 @@ window.mapView = {
         new FilterControl(filterDiv);
 
         const mapViewDiv = document.getElementById('mapView');
-        originalHeight = (mapViewDiv) ? mapViewDiv.getBoundingClientRect().height: 0;
+        window.originalHeight = (mapViewDiv) ? mapViewDiv.getBoundingClientRect().height: 0;
     }
 };

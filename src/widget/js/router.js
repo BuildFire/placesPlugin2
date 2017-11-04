@@ -32,7 +32,8 @@ function loadMap(places){
     loadHTML('./map.html', 'view');  loadControl(mapView.initMap, places)
 }
 
-function loadList(places){
+//TODO: Make module
+window.loadList = function(places){
     loadHTML('./list.html', 'view'); loadControl(listView.initList, places)
 }
 
