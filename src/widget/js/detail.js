@@ -64,14 +64,6 @@ window.detailView = {
                 map,
                 icon
             });
-
-            //TODO: Remove once back button has been implemented
-            view.onclick = e => {
-                e.preventDefault();
-
-                router.navigate(app.settings.viewStates.map);
-            };
-            view.style.cursor = 'pointer';
         });
     },
 
