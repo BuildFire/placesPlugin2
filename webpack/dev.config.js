@@ -1,4 +1,5 @@
 const path = require('path');
+const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
@@ -9,9 +10,6 @@ const WebpackConfig = {
   devtool: 'eval-source-map',
 
   entry: {
-    //  Webpack dev server
-    'devServer': `webpack-dev-server/client?http://0.0.0.0:8080`,
-
     // Plugin entry points
     'control/content/content': path.join(__dirname, '../src/control/content/content.js'),
     'control/design/design': path.join(__dirname, '../src/control/design/design.js'),
@@ -30,22 +28,26 @@ const WebpackConfig = {
     angular: 'angular'
   },
 
+  resolve: {
+    alias: {
+      'react': 'preact-compat',
+      'react-dom': 'preact-compat'
+    }
+  },
+
   module: {
     rules: [
       {
         test: /\.js$/,
         exclude: /(node_modules|bower_components)/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-              presets: ['@babel/preset-env']
-          }
-        }
+        use: { loader: 'babel-loader' }
       }
     ]
   },
 
   plugins: [
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.NamedModulesPlugin(),
     new HtmlWebpackPlugin({
       filename: 'control/content/index.html',
       inject: true,
