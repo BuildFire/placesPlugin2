@@ -4,19 +4,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link href="../../../../styles/helper.css" rel="stylesheet">
-
-    <!--SDK js-->
     <script src="../../../../scripts/buildfire.js"></script>
-    <script src="../../../../scripts/jquery/jquery-1.11.2.min.js"></script>
-    <script src="../../../../scripts/angular/angular.min.js"></script>
-
-    <script src="../../../../scripts/jquery/jquery-ui.min.js"></script>
-
-    <!-- Libs -->
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyC4Dw4EzKeyVBXWBsbO9-UgyEARL6WLrlU"></script>
 </head>
 <body>
-    <div ng-app="places2Controller" ng-controller="contentController" class="container">
+    <div id="mount"></div>
+
+    <!-- <div ng-app="places2Controller" ng-controller="contentController" class="container">
 
         Default view:
         <select ng-model="defaultView" ng-change="changeDefaultView()">
@@ -57,9 +51,9 @@
         </div>
 
         <hr>
-        <!--
+
         <button ng-click="addData()">Reset Test Places</button>
-        -->
-    </div>
+
+    </div> -->
 </body>
 </html>

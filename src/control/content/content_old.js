@@ -1,3 +1,6 @@
+import  './assets/js/sortable'
+import angular from 'angular'
+
 var myapp = angular.module('places2Controller', ['ui.sortable']);
 
 myapp.controller('contentController', function ($scope) {
