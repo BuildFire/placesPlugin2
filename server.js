@@ -1,14 +1,17 @@
+const express = require('express');
 const webpack = require('webpack');
-const WebpackDevServer = require('webpack-dev-server');
+const WebpackConfig = require('./webpack/dev.config');
+const createWebpackMiddleware = require('webpack-dev-middleware');
+const createWebpackHotMiddlewware = require('webpack-hot-middleware');
 const pluginJson = require('./plugin.json');
 
-const WebpackConfig = require('./webpack/dev.config');
 const compiler = webpack(WebpackConfig);
-
-const devServer = new WebpackDevServer(compiler, WebpackConfig.devServer);
-
-const { port, host } = WebpackConfig.devServer;
-devServer.listen(port, host, err => {
-    if (err) return console.error(err);
-    console.log('\x1b[32m', 'Serving plugin ' + pluginJson.pluginName + ' on [::]:8080 \x1b[0m');
+const app = express();
+app.use('/', express.static(__dirname));
+const webpackDevMiddleware = createWebpackMiddleware(compiler, WebpackConfig.devServer);
+app.use(webpackDevMiddleware);
+app.use(createWebpackHotMiddlewware(compiler));
+app.listen(WebpackConfig.devServer.port, () => {
+  console.log('  \x1b[32mPlugin ' + pluginJson.pluginName + ' running [::]:8080\x1b[0m');
+  console.log('');
 });
