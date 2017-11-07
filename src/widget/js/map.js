@@ -39,7 +39,7 @@ window.mapView = {
                 styles: [
                     {
                         textColor: 'white',
-                        url: 'https://app.buildfire.com/app/media/google_marker_blue_icon2.png',
+                        url: 'https://czi3m2qn.cloudimg.io/s/width/53/https://app.buildfire.com/app/media/google_marker_blue_icon2.png',
                         height: 53,
                         width: 53
                     }

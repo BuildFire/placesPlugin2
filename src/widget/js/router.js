@@ -79,7 +79,7 @@ window.gotPlaces = (err, places) => {
 //TODO: Move logic to app.js
 const gotLocation = (err, location) =>{
     //Calculate distances
-    console.error('Got current location');
+    console.log('Got current location');
 
     let destinations = [];
 
