@@ -1,5 +1,16 @@
+tbody {
+    border-radius: 5px;
+}
+
+table td.action {
+    width: 30px;
+    padding: 0 !important;
+    vertical-align: middle !important;
+}
 
 table img.delete {
-    width: 20px;
-    display: block;
+    display: inline;
+    vertical-align: middle;
+    width: 18px;
+    cursor: pointer;
 }

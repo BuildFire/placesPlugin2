@@ -22,12 +22,20 @@ class Content extends React.Component {
     });
   }
 
+  /**
+   * Handle state saving to the datastore
+   */
   handleSave() {
     buildfire.datastore.save(this.state, 'places', (err) => {
       if (err) console.error(err);
     });
   }
 
+  /**
+   * Handle a deletion of a location index
+   *
+   * @param   {Number} index Location index on places array
+   */
   handleDelete(index) {
     const { places } = this.state;
     places.splice(index, 1);
@@ -35,11 +43,15 @@ class Content extends React.Component {
     this.handleSave();
   }
 
+  /**
+   * Handle a location submission and save to datastore
+   *
+   * @param   {Object} location Location object
+   */
   onLocationSubmit(location) {
     const { places } = this.state;
     places.push(location);
     this.setState({ places });
-
     this.handleSave();
   }
 

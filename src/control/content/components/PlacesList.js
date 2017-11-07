@@ -8,11 +8,13 @@ const PlacesList = (props) => {
           <tr key={ index }>
             <td>{ place.title }</td>
             <td>{ place.address.name }</td>
-            <td>
-              <img
-                className='delete'
-                onClick={ () => props.handleDelete(index) }
-                src='assets/svg/icon.svg' />
+            <td className='action'>
+              <span>
+                <img
+                  className='delete'
+                  onClick={ () => props.handleDelete(index) }
+                  src='assets/svg/icon.svg' />
+              </span>
             </td>
           </tr>
         )) }
