@@ -1,13 +1,14 @@
 import buildfire from 'buildfire';
 import React from 'react';
-import PlacesInput from './PlacesInput';
+import PlacesInput from './components/PlacesInput';
+import PlacesList from './components/PlacesList';
 
 class Content extends React.Component {
   constructor(props) {
     super(props);
     this.PLACES_TAG = 'places';
     this.state = {
-      list: [],
+      places: [],
       categories: [],
       sortBy: 'manual',
       defaultView: 'map',
@@ -17,7 +18,7 @@ class Content extends React.Component {
   componentWillMount() {
     buildfire.datastore.get(this.PLACES_TAG, (err, result) => {
       if (err) return console.error(err);
-      this.setState({ list: result.data.places || [] });
+      this.setState({ places: result.data.places || [] });
     });
   }
 
@@ -27,20 +28,31 @@ class Content extends React.Component {
     });
   }
 
+  handleDelete(index) {
+    const { places } = this.state;
+    places.splice(index, 1);
+    this.setState({ places });
+    this.handleSave();
+  }
+
   onLocationSubmit(location) {
-    const { list } = this.state;
-    list.push(location);
-    this.setState({ list });
+    const { places } = this.state;
+    places.push(location);
+    this.setState({ places });
 
     this.handleSave();
   }
 
   render() {
+    const { places } = this.state;
+
     return (
       <div>
         <PlacesInput
           onSubmit={ (location) => this.onLocationSubmit(location) } />
-
+        <PlacesList
+          places={ places }
+          handleDelete={ (index) => this.handleDelete(index) }/>
       </div>
     );
   }
