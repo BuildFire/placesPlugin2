@@ -1,3 +1,4 @@
+import {filter, find} from 'lodash'
 import "./lib/markercluster.js"
 
 import "./filterControl.js"
@@ -126,7 +127,7 @@ window.app = {
 
               //TODO: Add unique ID, to detect new item from change
               //Do comparison to see what's changed
-              let updatedPlaces = _.filter(newPlaces, function(obj){ return !_.find(currentPlaces, obj); });
+              let updatedPlaces = filter(newPlaces, function(obj){ return !find(currentPlaces, obj); });
 
               if(app.state.mode === app.settings.viewStates.map){
                   mapView.updateMap(updatedPlaces);
