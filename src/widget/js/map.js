@@ -31,7 +31,7 @@ window.mapView = {
         //TODO: If there is only one entry, it returns an object (not an array)
         if(places && places.length){
             places.forEach((place) => {
-                mapView.addMarker(map, place, 'google_marker_red_icon.png');
+                mapView.addMarker(map, place, mapView.settings.images.place);
             });
 
             let clusterOptions = {
@@ -56,7 +56,7 @@ window.mapView = {
     updateMap: (newPlaces) => {
         //Add new markers
         newPlaces.forEach((place) => {
-            mapView.addMarker(map, place, 'google_marker_red_icon.png');
+            mapView.addMarker(map, place, mapView.settings.images.place);
         });
     },
     centerMap: () => { window.map.setCenter(mapView.lastKnownLocation) },
@@ -74,10 +74,22 @@ window.mapView = {
             app.state.markers.push(marker);
             app.state.bounds.extend({lat, lng});
 
-            marker.addListener('click', () => {mapView.markerClick(place)});
+            marker.addListener('click', () => {mapView.markerClick(place, marker)});
         }
     },
-    markerClick: (place) => {
+    markerClick: (place, marker) => {
+        //Show the location as selected
+        marker.setIcon(mapView.createMarker(mapView.settings.images.selected));
+
+        place.marker = marker;
+
+        app.state.selectedPlace.unshift(place);
+
+        //Mark the other locations as not selected
+        if(app.state.selectedPlace.length > 1 && app.state.selectedPlace[1].marker){
+            app.state.selectedPlace[1].marker.setIcon(mapView.createMarker(mapView.settings.images.place));
+        }
+
         let locationDetails = document.getElementById('locationDetails');
         let titleDiv = locationDetails.querySelector('#name');
         let addressDiv = locationDetails.querySelector('#address');
@@ -100,8 +112,6 @@ window.mapView = {
 
         locationDetails.onclick = e => {
             e.preventDefault();
-
-            app.state.selectedPlace = place;
             router.navigate(app.settings.viewStates.detail);
         };
 

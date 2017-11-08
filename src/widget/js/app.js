@@ -21,7 +21,7 @@ window.app = {
         markers: [],
         bounds: null,
         filteredPlaces: null,
-        selectedPlace: null,
+        selectedPlace: [],
         sortBy: null,
         categories: null,
         navHistory: [],

@@ -16,7 +16,7 @@ window.detailView = {
             distance: place.distance
         };
 
-        console.error('place', place);
+        console.log('place', place);
 
         axios.get('./templates/detail.hbs').then(response => {
             // Compile the template

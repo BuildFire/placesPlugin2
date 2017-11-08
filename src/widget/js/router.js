@@ -60,7 +60,9 @@ router.on({
             app.state.navHistory.push(app.settings.viewStates.list)
     },
     'detail': () => {
-        loadDetail(app.state.selectedPlace);
+        console.error('app.state.selectedPlace', app.state.selectedPlace[0]);
+
+        loadDetail(app.state.selectedPlace[0]);
         app.state.mode = app.settings.viewStates.detail;
 
         if(!app.state.isBackNav)
