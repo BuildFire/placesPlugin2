@@ -11,10 +11,26 @@ const WebpackConfig = {
 
   entry: {
     // Plugin entry points
-    'control/content/content': path.join(__dirname, '../src/control/content/index.js'),
-    'control/design/design': path.join(__dirname, '../src/control/design/design.js'),
-    'control/settings/settings': path.join(__dirname, '../src/control/settings/settings.js'),
-    'widget/widget': path.join(__dirname, '../src/widget/js/app.js')
+    'control/content/content': [
+        'webpack-hot-middleware/client',
+        'preact/devtools',
+        path.join(__dirname, '../src/control/content/index.js')
+      ],
+    'control/design/design': [
+        'webpack-hot-middleware/client',
+        'preact/devtools',
+        path.join(__dirname, '../src/control/design/design.js')
+      ],
+    'control/settings/settings': [
+        'webpack-hot-middleware/client',
+        'preact/devtools',
+        path.join(__dirname, '../src/control/settings/settings.js')
+      ],
+    'widget/widget': [
+        'webpack-hot-middleware/client',
+        'preact/devtools',
+        path.join(__dirname, '../src/widget/js/app.js')
+      ]
   },
 
   output: {
@@ -102,6 +118,7 @@ const WebpackConfig = {
 
   devServer: {
     port: 8080,
+    hot: true,
     host: '0.0.0.0',
     inline: true,
     contentBase: path.join(__dirname, '../dist'),

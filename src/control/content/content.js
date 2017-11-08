@@ -2,6 +2,8 @@ import buildfire from 'buildfire';
 import React from 'react';
 import PlacesInput from './components/PlacesInput';
 import PlacesList from './components/PlacesList';
+import CategoriesList from './components/CategoriesList';
+import MapOptions from './components/MapOptions';
 
 class Content extends React.Component {
   constructor(props) {
@@ -18,7 +20,12 @@ class Content extends React.Component {
   componentWillMount() {
     buildfire.datastore.get(this.PLACES_TAG, (err, result) => {
       if (err) return console.error(err);
-      this.setState({ places: result.data.places || [] });
+      this.setState({
+        places: result.data.places || [],
+        categories: result.data.categories || [],
+        defaultView: result.data.defaultView || 'map',
+        sortBy: result.data.sortBy || 'manual'
+      });
     });
   }
 
@@ -36,10 +43,22 @@ class Content extends React.Component {
    *
    * @param   {Number} index Location index on places array
    */
-  handleDelete(index) {
+  handleLocationDelete(index) {
     const { places } = this.state;
     places.splice(index, 1);
     this.setState({ places });
+    this.handleSave();
+  }
+
+  /**
+   * Handle a deletion of a category index
+   *
+   * @param   {Number} index Location index on places array
+   */
+  handleCategoryDelete(index) {
+    const { categories } = this.state;
+    categories.splice(index, 1);
+    this.setState({ categories });
     this.handleSave();
   }
 
@@ -55,16 +74,48 @@ class Content extends React.Component {
     this.handleSave();
   }
 
+  /**
+   * Handle category submission
+   *
+   * @param   {String} category Category name
+   */
+  onCategorySubmit(category) {
+    const { categories } = this.state;
+    categories.push(category);
+    this.setState({ categories });
+    this.handleSave();
+  }
+
+  handleOptionChange(option) {
+    const update = {};
+    update[option.name] = option.value;
+    this.setState(update);
+    this.handleSave();
+  }
+
   render() {
-    const { places } = this.state;
+    const { places, categories } = this.state;
 
     return (
       <div>
-        <PlacesInput
-          onSubmit={ (location) => this.onLocationSubmit(location) } />
-        <PlacesList
-          places={ places }
-          handleDelete={ (index) => this.handleDelete(index) }/>
+        <div className='row'>
+          <CategoriesList
+            categories={ categories }
+            handleDelete={ (index) => this.handleCategoryDelete(index) }
+            onSubmit={ (category) => this.onCategorySubmit(category) } />
+          <MapOptions
+            options={ this.state }
+            onChange={ (option) => this.handleOptionChange(option) } />
+        </div>
+        <div className='row'>
+          <div className='col-xs-12'>
+            <PlacesInput
+              onSubmit={ (location) => this.onLocationSubmit(location) } />
+            <PlacesList
+              places={ places }
+              handleDelete={ (index) => this.handleLocationDelete(index) }/>
+          </div>
+        </div>
       </div>
     );
   }
