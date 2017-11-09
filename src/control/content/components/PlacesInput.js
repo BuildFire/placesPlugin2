@@ -76,7 +76,17 @@ class PlacesInput extends React.Component {
               type='file'
               id='csv'
               accept='.csv' />
-            <label className='btn btn-success' htmlFor='csv'>Import CSV</label>
+            <div className='button-group'>
+              <label
+                className='btn btn-success'
+                htmlFor='csv'>
+                Import CSV
+              </label>
+              <button
+                className='btn btn-primary template'>
+                CSV Template
+              </button>
+            </div>
           </div>
         </div>
         <div className='row'>
