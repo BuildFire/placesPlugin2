@@ -69,28 +69,28 @@ const WebpackConfig = {
       inject: true,
       minify: { removeComments: true, collapseWhitespace: true },
       template: path.join(__dirname, '../src/control/content/index.html'),
-      chunks: ['devServer', 'control/content/content']
+      chunks: ['control/content/content']
     }),
     new HtmlWebpackPlugin({
       filename: 'control/design/index.html',
       inject: true,
       minify: { removeComments: true, collapseWhitespace: true },
       template: path.join(__dirname, '../src/control/design/index.html'),
-      chunks: ['devServer', 'control/design/design']
+      chunks: ['control/design/design']
     }),
     new HtmlWebpackPlugin({
       filename: 'control/settings/index.html',
       inject: true,
       minify: { removeComments: true, collapseWhitespace: true },
       template: path.join(__dirname, '../src/control/settings/index.html'),
-      chunks: ['devServer', 'control/settings/settings']
+      chunks: ['control/settings/settings']
     }),
     new HtmlWebpackPlugin({
       filename: 'widget/index.html',
       inject: true,
       minify: { removeComments: true, collapseWhitespace: true },
       template: path.join(__dirname, '../src/widget/index.html'),
-      chunks: ['devServer', 'widget/widget']
+      chunks: ['widget/widget']
     }),
     new CopyWebpackPlugin([{
       from: path.join(__dirname, '../src/control'),
