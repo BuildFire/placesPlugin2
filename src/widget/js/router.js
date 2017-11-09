@@ -60,7 +60,9 @@ router.on({
             app.state.navHistory.push(app.settings.viewStates.list)
     },
     'detail': () => {
-        loadDetail(app.state.selectedPlace);
+        console.error('app.state.selectedPlace', app.state.selectedPlace[0]);
+
+        loadDetail(app.state.selectedPlace[0]);
         app.state.mode = app.settings.viewStates.detail;
 
         if(!app.state.isBackNav)
@@ -79,7 +81,7 @@ window.gotPlaces = (err, places) => {
 //TODO: Move logic to app.js
 const gotLocation = (err, location) =>{
     //Calculate distances
-    console.error('Got current location');
+    console.log('Got current location');
 
     let destinations = [];
 

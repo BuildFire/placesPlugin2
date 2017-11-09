@@ -1,3 +1,4 @@
+import {filter, find} from 'lodash'
 import "./lib/markercluster.js"
 
 import "./filterControl.js"
@@ -20,11 +21,11 @@ window.app = {
         markers: [],
         bounds: null,
         filteredPlaces: null,
-        selectedPlace: null,
+        selectedPlace: [],
         sortBy: null,
         categories: null,
         navHistory: [],
-        isBackNav: false,
+        isBackNav: false
     },
     backButtonInit: () => {
         app.goBack = window.buildfire.navigation.onBackButtonClick;
@@ -59,7 +60,7 @@ window.app = {
 
         buildfire.datastore.get (app.settings.placesTag, function(err, results){
             if(err){
-              console.error('datastore.get error', err);
+              console.log('datastore.get error', err);
               return;
             }
 
@@ -82,9 +83,10 @@ window.app = {
             placesCallback(null, places);
         });
 
-        console.error('Calling getCurrentPosition');
+        console.log('Calling getCurrentPosition');
+
         buildfire.geo.getCurrentPosition({}, (err, position) => {
-            console.error('getCurrentPosition result', err, position);
+            console.log('getCurrentPosition result', err, position);
             if(err){
                 console.error('getCurrentPosition', err);
                 return
@@ -98,7 +100,7 @@ window.app = {
         buildfire.datastore.onUpdate(function(event) {
           if(event.tag === app.settings.placesTag){
 
-              console.error('Got update');
+              console.log('Got update');
 
               let currentPlaces = app.state.places;
               let newPlaces = event.data.places;
@@ -126,7 +128,7 @@ window.app = {
 
               //TODO: Add unique ID, to detect new item from change
               //Do comparison to see what's changed
-              let updatedPlaces = _.filter(newPlaces, function(obj){ return !_.find(currentPlaces, obj); });
+              let updatedPlaces = filter(newPlaces, function(obj){ return !find(currentPlaces, obj); });
 
               if(app.state.mode === app.settings.viewStates.map){
                   mapView.updateMap(updatedPlaces);

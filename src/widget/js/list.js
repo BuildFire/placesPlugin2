@@ -16,7 +16,7 @@ window.listView = {
             listItem.onclick = e => {
                 e.preventDefault();
 
-                app.state.selectedPlace = place;
+                app.state.selectedPlace.unshift(place);
                 router.navigate(app.settings.viewStates.detail);
             };
 
