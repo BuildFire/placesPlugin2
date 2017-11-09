@@ -14,3 +14,12 @@ table img.delete {
     width: 18px;
     cursor: pointer;
 }
+
+#csv {
+  display: none;
+}
+
+label[for=csv] {
+  margin: 15px 0;
+  float: right;
+}

@@ -1,4 +1,5 @@
 import React from 'react';
+import csv from 'csv-js';
 
 class PlacesInput extends React.Component {
   constructor(props) {
@@ -42,33 +43,65 @@ class PlacesInput extends React.Component {
     }
   }
 
+  onFileChange() {
+    let file = this.fileInput.files[0]
+    let reader = new FileReader();
+    reader.onload = e => {
+      let rows = csv.parse(e.target.result);
+      let locations = rows.map(row => ({
+        title: row[0],
+        address: {
+          name: row[1],
+          lat: parseFloat(row[2]),
+          lng: parseFloat(row[3])
+        }
+      }));
+      this.props.onMultipleSubmit(locations);
+    }
+    reader.onerror = e => console.error('Error reading csv');
+    reader.readAsText(file, 'UTF-8');
+  }
+
   render() {
     return (
-      <div className='row'>
-        <div className='col-xs-12'>
-          <h3>Add Location</h3>
+      <div>
+        <div className='row'>
+          <div className='col-xs-6'>
+            <h3>Add Location</h3>
+          </div>
+          <div className='col-xs-6'>
+            <input
+              onChange={ () => this.onFileChange() }
+              ref={ n => this.fileInput = n }
+              type='file'
+              id='csv'
+              accept='.csv' />
+            <label className='btn btn-success' htmlFor='csv'>Import CSV</label>
+          </div>
         </div>
-        <form>
-          <div className='col-xs-6'>
-            <div className='form-group'>
-              <input
-                type='text'
-                placeholder='Location Title'
-                value={ this.state.title }
-                onChange={ e => this.setState({ title: e.target.value }) }
-                className='form-control' />
+        <div className='row'>
+          <form>
+            <div className='col-xs-6'>
+              <div className='form-group'>
+                <input
+                  type='text'
+                  placeholder='Location Title'
+                  value={ this.state.title }
+                  onChange={ e => this.setState({ title: e.target.value }) }
+                  className='form-control' />
+              </div>
             </div>
-          </div>
-          <div className='col-xs-6'>
-            <div className='form-group'>
-              <input
-                type='text'
-                placeholder='Location Address'
-                ref={ n => this.input = n }
-                className='form-control' />
+            <div className='col-xs-6'>
+              <div className='form-group'>
+                <input
+                  type='text'
+                  placeholder='Location Address'
+                  ref={ n => this.input = n }
+                  className='form-control' />
+              </div>
             </div>
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
     );
   }

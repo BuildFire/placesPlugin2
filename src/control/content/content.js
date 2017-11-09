@@ -75,6 +75,18 @@ class Content extends React.Component {
   }
 
   /**
+   * Handle multiple location submissions (such as csv imports)
+   *
+   * @param   {Object} locations Locations array
+   */
+  onMultipleLocationSubmit(locations) {
+    const { places } = this.state;
+    locations.forEach(location => places.push(location));
+    this.setState({ places });
+    this.handleSave();
+  }
+
+  /**
    * Handle category submission
    *
    * @param   {String} category Category name
@@ -86,6 +98,11 @@ class Content extends React.Component {
     this.handleSave();
   }
 
+  /**
+   * Handle map option changes
+   *
+   * @param   {Object} option Option object as { name, value }
+   */
   handleOptionChange(option) {
     const update = {};
     update[option.name] = option.value;
@@ -110,6 +127,7 @@ class Content extends React.Component {
         <div className='row'>
           <div className='col-xs-12'>
             <PlacesInput
+              onMultipleSubmit={ (locations) => this.onMultipleLocationSubmit(locations) }
               onSubmit={ (location) => this.onLocationSubmit(location) } />
             <PlacesList
               places={ places }
