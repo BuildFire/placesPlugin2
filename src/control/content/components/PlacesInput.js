@@ -44,11 +44,11 @@ class PlacesInput extends React.Component {
   }
 
   onFileChange() {
-    let file = this.fileInput.files[0]
-    let reader = new FileReader();
+    const file = this.fileInput.files[0]
+    const reader = new FileReader();
     reader.onload = e => {
-      let rows = csv.parse(e.target.result);
-      let locations = rows.map(row => ({
+      const rows = csv.parse(e.target.result);
+      const locations = rows.map(row => ({
         title: row[0],
         address: {
           name: row[1],
@@ -60,6 +60,19 @@ class PlacesInput extends React.Component {
     }
     reader.onerror = e => console.error('Error reading csv');
     reader.readAsText(file, 'UTF-8');
+  }
+
+  handleTemplateDownload() {
+    const rows = [['name','address_name','address_lat','address_lng']]
+    let csvContent  = 'data:text/csv;charset=utf-8,';
+    rows.forEach(row => csvContent += row.join(',') + '\r\n');
+
+    const encodedURI = encodeURI(csvContent);
+    const link = document.createElement('a');
+    link.setAttribute('href', encodedURI);
+    link.setAttribute('download', 'places_template.csv');
+    document.body.appendChild(link);
+    link.click();
   }
 
   render() {
@@ -83,6 +96,7 @@ class PlacesInput extends React.Component {
                 Import CSV
               </label>
               <button
+                onClick={ this.handleTemplateDownload }
                 className='btn btn-primary template'>
                 CSV Template
               </button>

@@ -6,7 +6,6 @@ const PlacesList = (props) => {
       <tbody>
         { props.places.map((place, index) => (
           <tr key={ index }>
-            { console.log(place) }
             <td>{ place.title }</td>
             <td>{ place.address.name }</td>
             <td className='action'>

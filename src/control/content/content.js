@@ -1,5 +1,6 @@
 import buildfire from 'buildfire';
 import React from 'react';
+import debounce from './lib/debounce';
 import PlacesInput from './components/PlacesInput';
 import PlacesList from './components/PlacesList';
 import CategoriesList from './components/CategoriesList';
@@ -32,11 +33,11 @@ class Content extends React.Component {
   /**
    * Handle state saving to the datastore
    */
-  handleSave() {
+  handleSave = debounce(() => {
     buildfire.datastore.save(this.state, 'places', (err) => {
       if (err) console.error(err);
     });
-  }
+  }, 600)
 
   /**
    * Handle a deletion of a location index

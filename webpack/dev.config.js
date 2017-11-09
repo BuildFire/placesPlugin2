@@ -121,11 +121,14 @@ const WebpackConfig = {
     hot: true,
     host: '0.0.0.0',
     inline: true,
-    contentBase: path.join(__dirname, '../dist'),
+    contentBase: path.join(__dirname, '../'),
     publicPath: '/',
     quiet: false,
     noInfo: true,
     disableHostCheck: true,
+    headers: {
+      'Access-Control-Allow-Origin': '*'
+    }
   }
 
 };
