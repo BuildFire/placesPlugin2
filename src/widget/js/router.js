@@ -3,6 +3,7 @@ import Navigo from "navigo"
 const views = {
     listViewDiv: document.getElementById('listViewDiv'),
     mapViewDiv: document.getElementById('mapViewDiv'),
+    detailViewDiv: document.getElementById('detailViewDiv'),
     sideNavDiv: document.getElementById('sideNavDiv'),
     activeView: null
 };
@@ -48,6 +49,7 @@ window.loadMap = function(){
     views.activeView = 'mapViewDiv';
     views.listViewDiv.style.display = 'none';
     views.mapViewDiv.style.display = 'block';
+    views.detailViewDiv.style.display = 'none';
 };
 
 window.initList = function(places, isActive){
@@ -63,16 +65,19 @@ window.loadList = function(){
     views.activeView = 'listViewDiv';
     views.mapViewDiv.style.display = 'none';
     views.listViewDiv.style.display = 'block';
+    views.detailViewDiv.style.display = 'none';
 };
 
 function loadDetail(place){
-    loadHTML('./detail.html', 'view'); loadControl(detailView.init, place)
+    views.mapViewDiv.style.display = 'none';
+    views.listViewDiv.style.display = 'none';
+    views.detailViewDiv.style.display = 'block';
+    loadHTML('./detail.html', 'detailViewDiv'); loadControl(detailView.init, place)
 }
 
 // use #! to hash
 window.router = new Navigo(null, true);
 router.on({
-    // 'view' is the id of the div element inside which we render the HTML
     'map': () => {
         loadMap(app.state.filteredPlaces);
         app.state.mode = app.settings.viewStates.map;
