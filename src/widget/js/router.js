@@ -1,5 +1,9 @@
 import Navigo from "navigo"
 
+const listViewDiv = document.getElementById("listViewB");
+const mapViewDiv = document.getElementById("mapViewB");
+let activeView = null;
+
 // getElementById wrapper
 function $id(id) {
     return document.getElementById(id);
@@ -20,7 +24,7 @@ function loadHTML(url, id) {
 function loadControl(initFunction, data){
     let view = document.getElementById("view");
     view.className = 'transition';
-
+    
     setTimeout( function(){
         initFunction(data);
         view.className = 'fade';
@@ -28,14 +32,28 @@ function loadControl(initFunction, data){
     }, 250)
 }
 
-function loadMap(places){
-    loadHTML('./map.html', 'view');  loadControl(mapView.initMap, places)
-}
+window.initMap = function(places){
+    activeView = 'mapViewB';
+    loadHTML('./map.html', 'mapViewB');  loadControl(mapView.initMap, places);
+};
 
-//TODO: Make module
-window.loadList = function(places){
-    loadHTML('./list.html', 'view'); loadControl(listView.initList, places)
-}
+window.loadMap = function(){
+    activeView = 'mapViewB';
+    listViewDiv.style.display = 'none';
+    mapViewDiv.style.display = 'block';
+};
+
+window.initList = function(places){
+    activeView = 'listViewB';
+    loadHTML('./list.html', 'listViewB'); loadControl(listView.initList, places);
+
+};
+
+window.loadList = function(){
+    activeView = 'listViewB';
+    mapViewDiv.style.display = 'none';
+    listViewDiv.style.display = 'block';
+};
 
 function loadDetail(place){
     loadHTML('./detail.html', 'view'); loadControl(detailView.init, place)
@@ -70,52 +88,9 @@ router.on({
     },
 });
 
-window.gotPlaces = (err, places) => {
-    if(app.state.mode == app.settings.viewStates.list){
-        loadList(places)
-    }
-    else{
-        loadMap(places);
-    }
-};
-//TODO: Move logic to app.js
-const gotLocation = (err, location) =>{
-    //Calculate distances
-    console.log('Got current location');
-
-    let destinations = [];
-
-    app.state.places.forEach(place => {
-        destinations.push(new google.maps.LatLng(place.address.lat, place.address.lng))
-    });
-
-    let origin = [{lat: location.latitude, lng: location.longitude}];
-
-    let service = new google.maps.DistanceMatrixService();
-
-    service.getDistanceMatrix({
-        origins: origin,
-        destinations: destinations,
-        travelMode: google.maps.TravelMode.DRIVING,
-        unitSystem: google.maps.UnitSystem.IMPERIAL //google.maps.UnitSystem.METRIC
-    }, (response) => {
-        //Update places with distance
-        app.state.places.map((place, index)=>{
-           place.distance =  response.rows[0].elements[index].distance.text;
-        });
-
-        if(app.state.mode == app.settings.viewStates.list){
-            listView.updateDistances(app.state.filteredPlaces);
-        }
-    });
-};
-
 // set the default route
 router.on(() => {
-    //Artificial delay to ensure the app is ready
-    setTimeout(() => app.init(gotPlaces, gotLocation), 500);
 
-    //app.init(gotPlaces, gotLocation);
 });
 
 // set the 404 route

@@ -50,7 +50,7 @@ window.filterControl = {
         });
     },
     closeNav: () => {
-        gotPlaces(null, app.state.filteredPlaces);
+        app.gotPlaces(null, app.state.filteredPlaces);
         document.getElementById("mySidenav").style.height = "0";
     },
     changeView: () => {

@@ -138,5 +138,46 @@ window.app = {
               }
           }
         });
+    },
+    gotPlaces: (err, places) => {
+        if(app.state.mode === app.settings.viewStates.list){
+            initList(places)
+        }
+        else{
+            initMap(places);
+        }
+    },
+    gotLocation: (err, location) =>{
+        //Calculate distances
+        console.log('Got current location');
+
+        let destinations = [];
+
+        app.state.places.forEach(place => {
+            destinations.push(new google.maps.LatLng(place.address.lat, place.address.lng))
+        });
+
+        let origin = [{lat: location.latitude, lng: location.longitude}];
+
+        let service = new google.maps.DistanceMatrixService();
+
+        service.getDistanceMatrix({
+            origins: origin,
+            destinations: destinations,
+            travelMode: google.maps.TravelMode.DRIVING,
+            unitSystem: google.maps.UnitSystem.IMPERIAL //google.maps.UnitSystem.METRIC
+        }, (response) => {
+            //Update places with distance
+            app.state.places.map((place, index)=>{
+                place.distance =  response.rows[0].elements[index].distance.text;
+            });
+
+            if(app.state.mode == app.settings.viewStates.list){
+                listView.updateDistances(app.state.filteredPlaces);
+            }
+        });
     }
 };
+
+//document.addEventListener('DOMContentLoaded', () => { app.init( app.gotPlaces, app.gotLocation) });
+setTimeout(app.init(app.gotPlaces, app.gotLocation), 250);
