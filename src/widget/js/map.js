@@ -122,19 +122,18 @@ window.mapView = {
             distanceDiv.innerHTML = '';
             closeDiv.innerHTML = '';
             locationDetails.style.height = 0;
-            mapViewDiv.style.height = `${originalHeight}px`;
+            app.views.mapView.style.height = `${originalHeight}px`;
         };
 
         locationDetails.style.cursor = 'pointer';
 
         const detailsSize = 100;
-        const mapViewDiv = document.getElementById('mapView');
 
         locationDetails.style.height = `${detailsSize}px`;
 
-        if(mapViewDiv.getBoundingClientRect().height === originalHeight){
+        if(app.views.mapView.getBoundingClientRect().height === originalHeight){
             let newHeight = originalHeight - detailsSize;
-            mapViewDiv.style.height = `${newHeight}px`;
+            app.views.mapView.style.height = `${newHeight}px`;
         }
     },
     createMarker:(imageType) => {
@@ -169,7 +168,7 @@ window.mapView = {
             }
         };
 
-        window.map = new google.maps.Map(document.getElementById('mapView'), options);
+        window.map = new google.maps.Map(document.getElementById('googleMap'), options);
 
         app.state.bounds = new google.maps.LatLngBounds();
 
@@ -179,7 +178,6 @@ window.mapView = {
         new CenterControl(centerDiv);
         new FilterControl(filterDiv);
 
-        const mapViewDiv = document.getElementById('mapView');
-        window.originalHeight = (mapViewDiv) ? mapViewDiv.getBoundingClientRect().height: 0;
+        window.originalHeight = (app.views.mapView) ? app.views.mapView.getBoundingClientRect().height: 0;
     }
 };

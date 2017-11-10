@@ -8,7 +8,7 @@ window.listView = {
 
         const defaultImage = `https://czi3m2qn.cloudimg.io/s/width/${screenWidth}/https://pluginserver.buildfire.com/styles/media/holder-16x9.png`;
 
-        let listContainer = document.getElementById("listViewDiv");
+        let listContainer = document.getElementById("listView");
 
         places.forEach((place, index) => {
             let listItem = document.createElement('div');

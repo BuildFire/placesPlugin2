@@ -1,13 +1,5 @@
 import Navigo from "navigo"
 
-const views = {
-    listViewDiv: document.getElementById('listViewDiv'),
-    mapViewDiv: document.getElementById('mapViewDiv'),
-    detailViewDiv: document.getElementById('detailViewDiv'),
-    sideNavDiv: document.getElementById('sideNavDiv'),
-    activeView: null
-};
-
 // getElementById wrapper
 function $id(id) {
     return document.getElementById(id);
@@ -38,40 +30,40 @@ function loadControl(initFunction, data){
 
 window.initMap = function(places, isActive){
     if(isActive){
-        views.activeView = 'mapViewDiv';
-        views[views.activeView ].style.display = 'block';
+        app.views.activeView = 'mapView';
+        app.views[app.views.activeView].style.display = 'block';
     }
 
-    loadHTML('./map.html', 'mapViewDiv');  loadControl(mapView.initMap, places);
+    loadHTML('./map.html', 'mapView');  loadControl(mapView.initMap, places);
 };
 
 window.loadMap = function(){
-    views.activeView = 'mapViewDiv';
-    views.listViewDiv.style.display = 'none';
-    views.mapViewDiv.style.display = 'block';
-    views.detailViewDiv.style.display = 'none';
+    app.views.activeView = 'mapView';
+    app.views.listView.style.display = 'none';
+    app.views.mapView.style.display = 'block';
+    app.views.detailViewDiv.style.display = 'none';
 };
 
 window.initList = function(places, isActive){
     if(isActive){
-        views.activeView = 'listViewDiv';
-        views[views.activeView ].style.display = 'block';
+        app.views.activeView = 'listView';
+        app.views[app.views.activeView ].style.display = 'block';
     }
 
-    loadHTML('./list.html', 'listViewDiv'); loadControl(listView.initList, places);
+    loadHTML('./list.html', 'listView'); loadControl(listView.initList, places);
 };
 
 window.loadList = function(){
-    views.activeView = 'listViewDiv';
-    views.mapViewDiv.style.display = 'none';
-    views.listViewDiv.style.display = 'block';
-    views.detailViewDiv.style.display = 'none';
+    app.views.activeView = 'listView';
+    app.views.mapView.style.display = 'none';
+    app.views.listView.style.display = 'block';
+    app.views.detailViewDiv.style.display = 'none';
 };
 
 function loadDetail(place){
-    views.mapViewDiv.style.display = 'none';
-    views.listViewDiv.style.display = 'none';
-    views.detailViewDiv.style.display = 'block';
+    app.views.mapView.style.display = 'none';
+    app.views.listView.style.display = 'none';
+    app.views.detailViewDiv.style.display = 'block';
     loadHTML('./detail.html', 'detailViewDiv'); loadControl(detailView.init, place)
 }
 

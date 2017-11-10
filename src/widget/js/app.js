@@ -15,6 +15,13 @@ window.app = {
         sortOptions: {alpha: 'alpha', alphaDesc: 'alphaDesc', manual: 'manual'},
         placesTag: 'places',
     },
+    views: {
+        listView: document.getElementById('listView'),
+        mapView: document.getElementById('mapView'),
+        detailViewDiv: document.getElementById('detailViewDiv'),
+        sideNavDiv: document.getElementById('sideNavDiv'),
+        activeView: null //TODO: Move to state
+    },
     state: {
         mode: null,
         places: null,
