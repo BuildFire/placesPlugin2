@@ -18,12 +18,12 @@ function loadHTML(url, id) {
 
 //Provide a delay to let the template load first
 function loadControl(initFunction, data){
-    let view = document.getElementById('view');
-    view.className = 'transition';
+    //let view = document.getElementById('view');
+    //view.className = 'transition';
 
     setTimeout( function(){
         initFunction(data);
-        view.className = 'fade';
+        //view.className = 'fade';
         app.state.isBackNav = false;
     }, 250)
 }

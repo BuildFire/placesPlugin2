@@ -149,7 +149,8 @@ window.app = {
     gotPlaces: (err, places) => {
         if(app.state.mode === app.settings.viewStates.list){
             initList(places, true);
-            initMap(places);
+            //TODO: Resolve issue of having to init the map in active mode
+            initMap(places, true);
         }
         else{
             initMap(places, true);
