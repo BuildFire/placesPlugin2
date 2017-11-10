@@ -18,8 +18,8 @@ window.app = {
     views: {
         listView: document.getElementById('listView'),
         mapView: document.getElementById('mapView'),
-        detailViewDiv: document.getElementById('detailViewDiv'),
-        sideNavDiv: document.getElementById('sideNavDiv'),
+        detailView: document.getElementById('detailView'),
+        sideNav: document.getElementById('sideNav'),
         activeView: null //TODO: Move to state
     },
     state: {

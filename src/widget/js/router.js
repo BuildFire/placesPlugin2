@@ -41,7 +41,7 @@ window.loadMap = function(){
     app.views.activeView = 'mapView';
     app.views.listView.style.display = 'none';
     app.views.mapView.style.display = 'block';
-    app.views.detailViewDiv.style.display = 'none';
+    app.views.detailView.style.display = 'none';
 };
 
 window.initList = function(places, isActive){
@@ -57,14 +57,14 @@ window.loadList = function(){
     app.views.activeView = 'listView';
     app.views.mapView.style.display = 'none';
     app.views.listView.style.display = 'block';
-    app.views.detailViewDiv.style.display = 'none';
+    app.views.detailView.style.display = 'none';
 };
 
 function loadDetail(place){
     app.views.mapView.style.display = 'none';
     app.views.listView.style.display = 'none';
-    app.views.detailViewDiv.style.display = 'block';
-    loadHTML('./detail.html', 'detailViewDiv'); loadControl(detailView.init, place)
+    app.views.detailView.style.display = 'block';
+    loadHTML('./detail.html', 'detailView'); loadControl(detailView.init, place)
 }
 
 // use #! to hash
