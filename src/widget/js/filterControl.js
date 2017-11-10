@@ -3,7 +3,7 @@ import Handlebars from "./lib/handlebars"
 
 window.filterControl = {
     openFilter: () => {
-        let sideNav = document.getElementById("mySidenav");
+        let sideNav = document.getElementById("sideNavDiv");
         let categoriesDiv = sideNav.querySelector('#categories');
 
         categoriesDiv.innerHTML = '';
@@ -50,8 +50,7 @@ window.filterControl = {
         });
     },
     closeNav: () => {
-        app.gotPlaces(null, app.state.filteredPlaces);
-        document.getElementById("mySidenav").style.height = "0";
+        document.getElementById("sideNavDiv").style.height = "0";
     },
     changeView: () => {
         app.state.mode = (app.state.mode == app.settings.viewStates.list) ? app.settings.viewStates.map : app.settings.viewStates.list;

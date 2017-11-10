@@ -141,10 +141,12 @@ window.app = {
     },
     gotPlaces: (err, places) => {
         if(app.state.mode === app.settings.viewStates.list){
-            initList(places)
+            initList(places, true);
+            initMap(places);
         }
         else{
-            initMap(places);
+            initMap(places, true);
+            initList(places);
         }
     },
     gotLocation: (err, location) =>{

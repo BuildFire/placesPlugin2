@@ -1,8 +1,11 @@
 import Navigo from "navigo"
 
-const listViewDiv = document.getElementById("listViewB");
-const mapViewDiv = document.getElementById("mapViewB");
-let activeView = null;
+const views = {
+    listViewDiv: document.getElementById('listViewDiv'),
+    mapViewDiv: document.getElementById('mapViewDiv'),
+    sideNavDiv: document.getElementById('sideNavDiv'),
+    activeView: null
+};
 
 // getElementById wrapper
 function $id(id) {
@@ -22,9 +25,9 @@ function loadHTML(url, id) {
 
 //Provide a delay to let the template load first
 function loadControl(initFunction, data){
-    let view = document.getElementById("view");
+    let view = document.getElementById('view');
     view.className = 'transition';
-    
+
     setTimeout( function(){
         initFunction(data);
         view.className = 'fade';
@@ -32,27 +35,34 @@ function loadControl(initFunction, data){
     }, 250)
 }
 
-window.initMap = function(places){
-    activeView = 'mapViewB';
-    loadHTML('./map.html', 'mapViewB');  loadControl(mapView.initMap, places);
+window.initMap = function(places, isActive){
+    if(isActive){
+        views.activeView = 'mapViewDiv';
+        views[views.activeView ].style.display = 'block';
+    }
+
+    loadHTML('./map.html', 'mapViewDiv');  loadControl(mapView.initMap, places);
 };
 
 window.loadMap = function(){
-    activeView = 'mapViewB';
-    listViewDiv.style.display = 'none';
-    mapViewDiv.style.display = 'block';
+    views.activeView = 'mapViewDiv';
+    views.listViewDiv.style.display = 'none';
+    views.mapViewDiv.style.display = 'block';
 };
 
-window.initList = function(places){
-    activeView = 'listViewB';
-    loadHTML('./list.html', 'listViewB'); loadControl(listView.initList, places);
+window.initList = function(places, isActive){
+    if(isActive){
+        views.activeView = 'listViewDiv';
+        views[views.activeView ].style.display = 'block';
+    }
 
+    loadHTML('./list.html', 'listViewDiv'); loadControl(listView.initList, places);
 };
 
 window.loadList = function(){
-    activeView = 'listViewB';
-    mapViewDiv.style.display = 'none';
-    listViewDiv.style.display = 'block';
+    views.activeView = 'listViewDiv';
+    views.mapViewDiv.style.display = 'none';
+    views.listViewDiv.style.display = 'block';
 };
 
 function loadDetail(place){
