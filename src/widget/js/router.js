@@ -30,15 +30,15 @@ function loadControl(initFunction, data){
 
 window.initMap = function(places, isActive){
     if(isActive){
-        app.views.activeView = 'mapView';
-        app.views[app.views.activeView].style.display = 'block';
+        app.state.activeView = 'mapView';
+        app.views[app.state.activeView].style.display = 'block';
     }
 
     loadHTML('./map.html', 'mapView');  loadControl(mapView.initMap, places);
 };
 
 window.loadMap = function(){
-    app.views.activeView = 'mapView';
+    app.state.activeView = 'mapView';
     app.views.listView.style.display = 'none';
     app.views.mapView.style.display = 'block';
     app.views.detailView.style.display = 'none';
@@ -46,15 +46,15 @@ window.loadMap = function(){
 
 window.initList = function(places, isActive){
     if(isActive){
-        app.views.activeView = 'listView';
-        app.views[app.views.activeView ].style.display = 'block';
+        app.state.activeView = 'listView';
+        app.views[app.state.activeView ].style.display = 'block';
     }
 
     loadHTML('./list.html', 'listView'); loadControl(listView.initList, places);
 };
 
 window.loadList = function(){
-    app.views.activeView = 'listView';
+    app.state.activeView = 'listView';
     app.views.mapView.style.display = 'none';
     app.views.listView.style.display = 'block';
     app.views.detailView.style.display = 'none';
@@ -85,7 +85,7 @@ router.on({
             app.state.navHistory.push(app.settings.viewStates.list)
     },
     'detail': () => {
-        console.error('app.state.selectedPlace', app.state.selectedPlace[0]);
+        console.log('app.state.selectedPlace', app.state.selectedPlace[0]);
 
         loadDetail(app.state.selectedPlace[0]);
         app.state.mode = app.settings.viewStates.detail;

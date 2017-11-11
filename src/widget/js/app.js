@@ -20,10 +20,10 @@ window.app = {
         mapView: document.getElementById('mapView'),
         detailView: document.getElementById('detailView'),
         sideNav: document.getElementById('sideNav'),
-        activeView: null //TODO: Move to state
     },
     state: {
         mode: null,
+        activeView: null,
         places: null,
         markers: [],
         bounds: null,
@@ -59,11 +59,6 @@ window.app = {
     init: (placesCallback, positionCallback) => {
 
         app.backButtonInit();
-
-        // TODO: Get from cache. If cache not present, get from dataStore. Save in cache for next time.
-        //Set default state
-        app.state.mode = app.settings.viewStates.list;
-        app.state.sortBy = app.settings.sortOptions.manual;
 
         buildfire.datastore.get (app.settings.placesTag, function(err, results){
             if(err){
