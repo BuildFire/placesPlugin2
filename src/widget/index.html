@@ -11,16 +11,18 @@
     <script src="../../../scripts/buildfire.js"></script>
 </head>
 <body>
-    <div id="listView" style="display: none"></div>
-    <div id="mapView" style="display: none"></div>
-    <div id="detailView" style="display: none"></div>
-    <div id="sideNav" class="sidenav">
-        <div>
-            <a href="javascript:void(0)" class="closebtn" onclick="filterControl.closeNav()">&times;</a>
+    <div id="view">
+        <div id="listView" style="display: none"></div>
+        <div id="mapView" style="display: none"></div>
+        <div id="detailView" style="display: none"></div>
+        <div id="sideNav" class="sidenav">
+            <div>
+                <a href="javascript:void(0)" class="closebtn" onclick="filterControl.closeNav()">&times;</a>
+            </div>
+            <br>
+            <br>
+            <div id="categories"></div>
         </div>
-        <br>
-        <br>
-        <div id="categories"></div>
     </div>
 </body>
 </html>

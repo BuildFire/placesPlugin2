@@ -18,12 +18,12 @@ function loadHTML(url, id) {
 
 //Provide a delay to let the template load first
 function loadControl(initFunction, data){
-    //let view = document.getElementById('view');
-    //view.className = 'transition';
+    let view = document.getElementById('view');
+    view.className = 'transition';
 
     setTimeout( function(){
         initFunction(data);
-        //view.className = 'fade';
+        view.className = 'fade';
         app.state.isBackNav = false;
     }, 250)
 }
@@ -38,10 +38,15 @@ window.initMap = function(places, isActive){
 };
 
 window.loadMap = function(){
+    let view = document.getElementById('view');
+    view.className = 'transition';
+
     app.state.activeView = 'mapView';
     app.views.listView.style.display = 'none';
     app.views.mapView.style.display = 'block';
     app.views.detailView.style.display = 'none';
+
+    setTimeout(() => view.className = 'fade', 150);
 };
 
 window.initList = function(places, isActive){
@@ -54,10 +59,15 @@ window.initList = function(places, isActive){
 };
 
 window.loadList = function(){
+    let view = document.getElementById('view');
+    view.className = 'transition';
+
     app.state.activeView = 'listView';
     app.views.mapView.style.display = 'none';
     app.views.listView.style.display = 'block';
     app.views.detailView.style.display = 'none';
+
+    setTimeout(() => view.className = 'fade', 150);
 };
 
 function loadDetail(place){

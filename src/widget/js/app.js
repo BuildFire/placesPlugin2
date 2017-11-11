@@ -184,5 +184,5 @@ window.app = {
     }
 };
 
-//document.addEventListener('DOMContentLoaded', () => { app.init( app.gotPlaces, app.gotLocation) });
-setTimeout(app.init(app.gotPlaces, app.gotLocation), 250);
+document.addEventListener('DOMContentLoaded', () => { app.init( app.gotPlaces, app.gotLocation) });
+//setTimeout(app.init(app.gotPlaces, app.gotLocation), 250);
