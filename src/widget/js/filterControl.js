@@ -54,6 +54,11 @@ window.filterControl = {
     },
     changeView: () => {
         app.state.mode = (app.state.mode == app.settings.viewStates.list) ? app.settings.viewStates.map : app.settings.viewStates.list;
+        
+        let switchViewButton = document.getElementsByClassName("changeView");
+        Array.prototype.map.call(switchViewButton, (image)=> {
+            image.src = (image.src.includes('map')) ? image.src.replace('map', 'list') : image.src.replace('list', 'map');
+        });
 
         router.navigate(`/${app.state.mode}`);
     },
@@ -66,13 +71,15 @@ window.filterControl = {
         buttons.forEach((button) =>{
             let controlButton = document.createElement('div');
             let imageName = (button.name) ? button.name : app.state.mode;
+            let changeViewClass = (imageName === 'changeView') ? 'class="changeView"' : '';
+
             if(imageName === 'changeView'){
                 imageName = (app.state.mode === app.settings.viewStates.list) ? app.settings.viewStates.map : app.settings.viewStates.list;
             }
 
             controlButton.style.display = 'inline-block';
             controlButton.style.padding = button.padding;
-            controlButton.innerHTML = `<img src="./images/${imageName}.png"></img>`;
+            controlButton.innerHTML = `<img ${changeViewClass} src="./images/${imageName}.png"></img>`;
             if(button.action)
                 controlButton.onclick = button.action;
             container.appendChild(controlButton);
