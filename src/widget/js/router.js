@@ -37,18 +37,6 @@ window.initMap = function(places, isActive){
     loadHTML('./map.html', 'mapView');  loadControl(mapView.initMap, places);
 };
 
-window.loadMap = function(){
-    let view = document.getElementById('view');
-    view.className = 'transition';
-
-    app.state.activeView = 'mapView';
-    app.views.listView.style.display = 'none';
-    app.views.mapView.style.display = 'block';
-    app.views.detailView.style.display = 'none';
-
-    setTimeout(() => view.className = 'fade', 150);
-};
-
 window.initList = function(places, isActive){
     if(isActive){
         app.state.activeView = 'listView';
@@ -58,17 +46,27 @@ window.initList = function(places, isActive){
     loadHTML('./list.html', 'listView'); loadControl(listView.initList, places);
 };
 
+window.loadMap = function(){
+    updateView('mapView');
+};
+
 window.loadList = function(){
+    updateView('listView');
+};
+
+function updateView(activeView){
     let view = document.getElementById('view');
     view.className = 'transition';
 
-    app.state.activeView = 'listView';
+    app.state.activeView = activeView;
     app.views.mapView.style.display = 'none';
-    app.views.listView.style.display = 'block';
+    app.views.listView.style.display = 'none';
     app.views.detailView.style.display = 'none';
 
+    app.views[activeView].style.display = 'block';
+
     setTimeout(() => view.className = 'fade', 150);
-};
+}
 
 function loadDetail(place){
     app.views.mapView.style.display = 'none';
