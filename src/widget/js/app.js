@@ -62,7 +62,7 @@ window.app = {
 
         buildfire.datastore.get (app.settings.placesTag, function(err, results){
             if(err){
-              console.log('datastore.get error', err);
+              console.error('datastore.get error', err);
               return;
             }
 
@@ -128,7 +128,6 @@ window.app = {
                   return;
               }
 
-              //TODO: Add unique ID, to detect new item from change
               //Do comparison to see what's changed
               let updatedPlaces = filter(newPlaces, function(obj){ return !find(currentPlaces, obj); });
 

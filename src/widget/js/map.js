@@ -123,6 +123,11 @@ window.mapView = {
             closeDiv.innerHTML = '';
             locationDetails.style.height = 0;
             app.views.mapView.style.height = `${originalHeight}px`;
+
+            //Un-select location
+            app.state.selectedPlace[0]
+                .marker.setIcon(mapView.createMarker(mapView.settings.images.place));
+            app.state.selectedPlace.shift();
         };
 
         locationDetails.style.cursor = 'pointer';
