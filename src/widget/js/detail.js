@@ -9,8 +9,12 @@ window.detailView = {
         const title = place.title;
         const imageName = place.image ? place.image : 'holder-16x9.png';
 
+        //TODO:This is hacky ... come up with a better way
+        const mapHeight = document.getElementById('view').getBoundingClientRect().height/3;
+
         let context = {
             width: screenWidth,
+            height: mapHeight,
             imageName: imageName,
             title: title,
             distance: place.distance,
