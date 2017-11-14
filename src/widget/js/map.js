@@ -100,7 +100,6 @@ window.mapView = {
         titleDiv.innerHTML = place.title;
 
         addressDiv.innerHTML = place.address.name;
-        addressDiv.style['font-size'] = '12px';
 
         if((typeof place.distance !== 'undefined')){
             distanceDiv.innerHTML = place.distance;

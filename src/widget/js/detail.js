@@ -13,7 +13,8 @@ window.detailView = {
             width: screenWidth,
             imageName: imageName,
             title: title,
-            distance: place.distance
+            distance: place.distance,
+            address: place.address.name
         };
 
         console.log('place', place);
@@ -50,7 +51,7 @@ window.detailView = {
 
             const iconBaseUrl = 'https://app.buildfire.com/app/media/',
                 icon = {
-                    url: iconBaseUrl + 'google_marker_red_icon.png',
+                    url: iconBaseUrl + 'google_marker_green_icon.png',
                     // This marker is 20 pixels wide by 20 pixels high.
                     scaledSize: new google.maps.Size(20, 20),
                     // The origin for this image is (0, 0).

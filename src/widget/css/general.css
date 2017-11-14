@@ -117,3 +117,8 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
 .distance{
     font-size: 13px;
 }
+
+.title{
+    font-size: 1.1em;
+    font-weight: 500;
+}
