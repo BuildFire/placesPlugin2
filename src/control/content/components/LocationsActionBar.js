@@ -1,20 +1,12 @@
 import React from 'react';
 import csv from 'csv-js';
 
-class PlacesInput extends React.Component {
+class LocationsActionBar extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      title: ''
+      addingLocation: false
     }
-  }
-
-  /**
-   * Mount the google places autocomplete when the node is ready
-   */
-  componentDidMount() {
-    this.autocomplete = new window.google.maps.places.Autocomplete(this.input);
-    this.autocomplete.addListener('place_changed', () => this.onPlaceChanged());
   }
 
   /**
@@ -41,6 +33,16 @@ class PlacesInput extends React.Component {
       this.input.value = '';
       this.setState({ title: '' });
     }
+  }
+
+  onAddLocation() {
+    this.props.onAddLocation();
+    this.setState({ addingLocation: true })
+  }
+
+  onAddLocationCancel() {
+    this.props.onAddLocationCancel();
+    this.setState({ addingLocation: false });
   }
 
   onFileChange() {
@@ -80,7 +82,21 @@ class PlacesInput extends React.Component {
       <div>
         <div className='row'>
           <div className='col-xs-6'>
-            <h3>Add Location</h3>
+            <div className='button-group'>
+              { this.state.addingLocation ? (
+                <button
+                  className='btn btn-danger'
+                  onClick={ () => this.onAddLocationCancel() }>
+                  Cancel
+                </button>
+              ) : (
+                <button
+                  className='btn btn-success'
+                  onClick={ () => this.onAddLocation() }>
+                  Add Location
+                </button>
+              ) }
+            </div>
           </div>
           <div className='col-xs-6'>
             <input
@@ -89,7 +105,7 @@ class PlacesInput extends React.Component {
               type='file'
               id='csv'
               accept='.csv' />
-            <div className='button-group'>
+            <div className='button-group right'>
               <label
                 className='btn btn-success'
                 htmlFor='csv'>
@@ -103,32 +119,9 @@ class PlacesInput extends React.Component {
             </div>
           </div>
         </div>
-        <div className='row'>
-          <form>
-            <div className='col-xs-6'>
-              <div className='form-group'>
-                <input
-                  type='text'
-                  placeholder='Location Title'
-                  value={ this.state.title }
-                  onChange={ e => this.setState({ title: e.target.value }) }
-                  className='form-control' />
-              </div>
-            </div>
-            <div className='col-xs-6'>
-              <div className='form-group'>
-                <input
-                  type='text'
-                  placeholder='Location Address'
-                  ref={ n => this.input = n }
-                  className='form-control' />
-              </div>
-            </div>
-          </form>
-        </div>
       </div>
     );
   }
 }
 
-export default PlacesInput;
+export default LocationsActionBar;

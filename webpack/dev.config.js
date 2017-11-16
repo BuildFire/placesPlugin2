@@ -24,7 +24,7 @@ const WebpackConfig = {
     'control/settings/settings': [
         'webpack-hot-middleware/client',
         'preact/devtools',
-        path.join(__dirname, '../src/control/settings/settings.js')
+        path.join(__dirname, '../src/control/settings/index.js')
       ],
     'widget/widget': [
         'webpack-hot-middleware/client',

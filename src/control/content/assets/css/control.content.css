@@ -19,14 +19,25 @@ table img.delete {
   display: none;
 }
 
+img.empty-state {
+  width: 100%;
+}
 .button-group {
+  text-align: left;
+}
+.button-group.right {
   text-align: right;
+}
+.button-group button {
+  display: inline-block;
+  margin: 15px 0;
 }
 
 label[for=csv] {
   margin: 15px 5px;
   display: inline-block;
 }
+
 button.template {
   margin: 15px 0;
   display: inline-block;
