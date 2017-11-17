@@ -2,7 +2,12 @@ import axios from "axios"
 import Handlebars from "./lib/handlebars"
 
 window.filterControl = {
+    originalPlaces: null,
+    updatedPlaces: null,
     openFilter: () => {
+        console.error('places', app.state.filteredPlaces);
+        filterControl.originalPlaces = app.state.filteredPlaces;
+
         let sideNav = document.getElementById("sideNav");
         let categoriesDiv = sideNav.querySelector('#categories');
 
@@ -48,8 +53,19 @@ window.filterControl = {
 
             return isMatch;
         });
+
+        filterControl.updatedPlaces = app.state.filteredPlaces;
     },
     closeNav: () => {
+        if(filterControl.originalPlaces != filterControl.updatedPlaces){
+            //Update view to reflect changes
+            if(app.state.mode === app.settings.viewStates.map){
+                mapView.filterMap(filterControl.originalPlaces, filterControl.updatedPlaces);
+            }else{
+                listView.filterMap(app.state.filteredPlaces);
+            }
+        }
+
         document.getElementById("sideNav").style.height = "0";
     },
     changeView: () => {

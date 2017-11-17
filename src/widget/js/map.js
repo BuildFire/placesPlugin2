@@ -1,3 +1,5 @@
+import {filter, find} from 'lodash'
+
 window.usa = {lat: 37.09024, lng: -95.712891};
 window.defaultLocation = usa;
 window.originalHeight;
@@ -58,6 +60,19 @@ window.mapView = {
         newPlaces.forEach((place) => {
             mapView.addMarker(map, place, mapView.settings.images.place);
         });
+    },
+    filterMap: (preFilteredPlaces, postfilteredPlaces) => {
+        //Find places that were filtered (to be removed)
+        let removedPlaces = filter(preFilteredPlaces, (preFilteredPlace) => { return !find(postfilteredPlaces, preFilteredPlace)});
+
+        removedPlaces.forEach((removedPlace) => {
+            console.error('Removed Place', removedPlace, app.state.markers);
+        });
+
+        //Find places that were added back
+        let addedPlaces = filter(postfilteredPlaces, (postFilteredPlace) => { return !find(preFilteredPlaces, postFilteredPlace)});
+
+        console.error('addedPlaces', addedPlaces);
     },
     centerMap: () => { window.map.setCenter(mapView.lastKnownLocation) },
     addMarker: (map, place, iconType) => {
