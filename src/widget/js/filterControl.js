@@ -1,3 +1,4 @@
+import {filter, find} from 'lodash'
 import axios from "axios"
 import Handlebars from "./lib/handlebars"
 
@@ -58,11 +59,17 @@ window.filterControl = {
     },
     closeNav: () => {
         if(filterControl.originalPlaces != filterControl.updatedPlaces){
+            let originalPlaces = filterControl.originalPlaces,
+                updatedPlaces = filterControl.updatedPlaces;
+
+            let removedPlaces = filter(originalPlaces, (preFilteredPlace) => { return !find(updatedPlaces, preFilteredPlace)});
+            let addedPlaces = filter(updatedPlaces, (postFilteredPlace) => { return !find(originalPlaces, postFilteredPlace)});
+
             //Update view to reflect changes
             if(app.state.mode === app.settings.viewStates.map){
-                mapView.filterMap(filterControl.originalPlaces, filterControl.updatedPlaces);
+                mapView.filterMap(removedPlaces, addedPlaces);
             }else{
-                listView.filterMap(app.state.filteredPlaces);
+                //listView.filterMap(removedPlaces, addedPlaces);
             }
         }
 
