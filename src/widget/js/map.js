@@ -65,14 +65,29 @@ window.mapView = {
         //Find places that were filtered (to be removed)
         let removedPlaces = filter(preFilteredPlaces, (preFilteredPlace) => { return !find(postfilteredPlaces, preFilteredPlace)});
 
-        removedPlaces.forEach((removedPlace) => {
-            console.error('Removed Place', removedPlace, app.state.markers);
+        removedPlaces.filter((removedPlace) => {
+            app.state.markers.forEach((marker) =>{
+                let lat = marker.getPosition().lat(),
+                    lng = marker.getPosition().lng();
+
+                const isMatch  = (removedPlace.address.lat === lat && removedPlace.address.lng === lng);
+
+                if(isMatch){
+                    console.error('Removed', removedPlace.title);
+                    marker.setMap(null);
+                    marker = null;
+                    //TODO: Need to deal with marker clusters
+                }
+
+                return !isMatch;
+            })
+
         });
 
         //Find places that were added back
         let addedPlaces = filter(postfilteredPlaces, (postFilteredPlace) => { return !find(preFilteredPlaces, postFilteredPlace)});
 
-        console.error('addedPlaces', addedPlaces);
+        //console.error('addedPlaces', addedPlaces);
     },
     centerMap: () => { window.map.setCenter(mapView.lastKnownLocation) },
     addMarker: (map, place, iconType) => {
