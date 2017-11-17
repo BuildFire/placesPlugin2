@@ -62,14 +62,14 @@ window.filterControl = {
             let originalPlaces = filterControl.originalPlaces,
                 updatedPlaces = filterControl.updatedPlaces;
 
-            let removedPlaces = filter(originalPlaces, (preFilteredPlace) => { return !find(updatedPlaces, preFilteredPlace)});
-            let addedPlaces = filter(updatedPlaces, (postFilteredPlace) => { return !find(originalPlaces, postFilteredPlace)});
+            let placesToHide = filter(originalPlaces, (preFilteredPlace) => { return !find(updatedPlaces, preFilteredPlace)});
+            let placesToShow = filter(updatedPlaces, (postFilteredPlace) => { return !find(originalPlaces, postFilteredPlace)});
 
             //Update view to reflect changes
             if(app.state.mode === app.settings.viewStates.map){
-                mapView.filterMap(removedPlaces, addedPlaces);
+                mapView.filterMap(placesToHide, placesToShow);
             }else{
-                //listView.filterMap(removedPlaces, addedPlaces);
+                //listView.filterMap(placesToRemove, addedPlaces);
             }
         }
 

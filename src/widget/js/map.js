@@ -4,6 +4,7 @@ window.originalHeight;
 
 window.mapView = {
     settings: {
+        markerClusterer: null,
         zoomLevel: {city: 14, country: 3},
         images: {
             currentLocation: 'google_marker_blue_icon.png',
@@ -48,7 +49,7 @@ window.mapView = {
             };
 
             // Add a marker clusterer to manage the markers.
-            new MarkerClusterer(map, app.state.markers, clusterOptions);
+            mapView.settings.markerClusterer = new MarkerClusterer(map, app.state.markers, clusterOptions);
 
             map.fitBounds(app.state.bounds);
         }
@@ -59,24 +60,30 @@ window.mapView = {
             mapView.addMarker(map, place, mapView.settings.images.place);
         });
     },
-    filterMap: (removedPlaces, addedPlaces) => {
+    filterMap: (placesToHide, placesToShow) => {
 
-        removedPlaces.filter((removedPlace) => {
-            app.state.markers.forEach((marker) =>{
+        placesToHide.forEach((placeToHide) => {
+            app.state.markers.filter((marker) =>{
                 let lat = marker.getPosition().lat(),
                     lng = marker.getPosition().lng();
 
-                const isMatch  = (removedPlace.address.lat === lat && removedPlace.address.lng === lng);
+                const isMatch  = (placeToHide.address.lat === lat && placeToHide.address.lng === lng);
 
                 if(isMatch){
-                    console.error('Removed', removedPlace.title);
+                    console.error('Removed', placeToHide.title);
                     marker.setMap(null);
                     marker = null;
+
                     //TODO: Need to deal with marker clusters
+                    //mapView.settings.markerClusterer.clearMarkers();
                 }
 
                 return !isMatch;
             })
+        });
+
+        placesToShow.forEach((place) =>{
+            mapView.addMarker(map, place, mapView.settings.images.place);
         });
     },
     centerMap: () => { window.map.setCenter(mapView.lastKnownLocation) },
