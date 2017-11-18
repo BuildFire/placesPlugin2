@@ -35,24 +35,26 @@ window.mapView = {
                 mapView.addMarker(map, place, mapView.settings.images.place);
             });
 
-            let clusterOptions = {
-                gridSize: 53,
-                styles: [
-                    {
-                        textColor: 'white',
-                        url: 'https://czi3m2qn.cloudimg.io/s/width/53/https://app.buildfire.com/app/media/google_marker_blue_icon2.png',
-                        height: 53,
-                        width: 53
-                    }
-                ],
-                maxZoom: 15
-            };
-
-            // Add a marker clusterer to manage the markers.
-            mapView.settings.markerClusterer = new MarkerClusterer(map, app.state.markers, clusterOptions);
-
+            mapView.addMarkerCluster();
             map.fitBounds(app.state.bounds);
         }
+    },
+    addMarkerCluster: () =>{
+        let clusterOptions = {
+            gridSize: 53,
+            styles: [
+                {
+                    textColor: 'white',
+                    url: 'https://czi3m2qn.cloudimg.io/s/width/53/https://app.buildfire.com/app/media/google_marker_blue_icon2.png',
+                    height: 53,
+                    width: 53
+                }
+            ],
+            maxZoom: 15
+        };
+
+        // Add a marker clusterer to manage the markers.
+        mapView.settings.markerClusterer = new MarkerClusterer(map, app.state.markers, clusterOptions);
     },
     updateMap: (newPlaces) => {
         //Add new markers
@@ -63,28 +65,32 @@ window.mapView = {
     filterMap: (placesToHide, placesToShow) => {
 
         placesToHide.forEach((placeToHide) => {
-            app.state.markers.filter((marker) =>{
+            app.state.markers = app.state.markers.filter((marker) =>{
                 let lat = marker.getPosition().lat(),
                     lng = marker.getPosition().lng();
 
                 const isMatch  = (placeToHide.address.lat === lat && placeToHide.address.lng === lng);
 
                 if(isMatch){
-                    console.error('Removed', placeToHide.title);
-                    marker.setMap(null);
-                    marker = null;
-
-                    //TODO: Need to deal with marker clusters
-                    //mapView.settings.markerClusterer.clearMarkers();
+                    console.error('Hide', placeToHide.title);
+                    //marker.setMap(null);
+                    //marker = null;
+                    marker.setVisible(false);
                 }
 
                 return !isMatch;
             })
         });
 
+        //TODO: Test adding markers
         placesToShow.forEach((place) =>{
             mapView.addMarker(map, place, mapView.settings.images.place);
         });
+        
+        if(placesToHide || placesToShow){
+            mapView.settings.markerClusterer.clearMarkers();
+            mapView.addMarkerCluster();
+        }
     },
     centerMap: () => { window.map.setCenter(mapView.lastKnownLocation) },
     addMarker: (map, place, iconType) => {
