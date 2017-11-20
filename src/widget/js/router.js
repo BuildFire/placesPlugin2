@@ -35,7 +35,11 @@ window.initMap = function(places, isActive){
         app.state.navHistory.push(app.settings.viewStates.map)
     }
 
-    loadHTML('./map.html', 'mapView');  loadControl(mapView.initMap, places);
+    loadHTML('./map.html', 'mapView');
+    loadControl(mapView.initMap, places);
+    app.state.mapInitiated = true;
+
+    loadMap();
 };
 
 window.initList = function(places, isActive){
@@ -45,7 +49,8 @@ window.initList = function(places, isActive){
         app.state.navHistory.push(app.settings.viewStates.list)
     }
 
-    loadHTML('./list.html', 'listView'); loadControl(listView.initList, places);
+    loadHTML('./list.html', 'listView');
+    loadControl(listView.initList, places);
 };
 
 window.loadMap = function(){
@@ -81,7 +86,13 @@ function loadDetail(place){
 window.router = new Navigo(null, true);
 router.on({
     'map': () => {
-        loadMap(app.state.filteredPlaces);
+        if(app.state.mapInitiated){
+            loadMap(app.state.filteredPlaces);
+        }
+        else{
+            initMap(app.state.places, true)
+        }
+
         app.state.mode = app.settings.viewStates.map;
 
         if(!app.state.isBackNav)

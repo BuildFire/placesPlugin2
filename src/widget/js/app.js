@@ -22,6 +22,7 @@ window.app = {
         sideNav: document.getElementById('sideNav'),
     },
     state: {
+        mapInitiated: false,
         mode: null,
         activeView: null,
         places: null,
@@ -143,8 +144,7 @@ window.app = {
     gotPlaces: (err, places) => {
         if(app.state.mode === app.settings.viewStates.list){
             initList(places, true);
-            //TODO: Resolve issue of having to init the map in active mode
-            initMap(places, true);
+            //We can not pre-init the map, as it needs to be visible
         }
         else{
             initMap(places, true);
