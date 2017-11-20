@@ -86,7 +86,7 @@ window.mapView = {
         placesToShow.forEach((place) =>{
             mapView.addMarker(map, place, mapView.settings.images.place);
         });
-        
+
         if(placesToHide || placesToShow){
             mapView.settings.markerClusterer.clearMarkers();
             mapView.addMarkerCluster();

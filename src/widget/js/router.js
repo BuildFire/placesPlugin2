@@ -32,6 +32,7 @@ window.initMap = function(places, isActive){
     if(isActive){
         app.state.activeView = 'mapView';
         app.views[app.state.activeView].style.display = 'block';
+        app.state.navHistory.push(app.settings.viewStates.map)
     }
 
     loadHTML('./map.html', 'mapView');  loadControl(mapView.initMap, places);
@@ -41,6 +42,7 @@ window.initList = function(places, isActive){
     if(isActive){
         app.state.activeView = 'listView';
         app.views[app.state.activeView ].style.display = 'block';
+        app.state.navHistory.push(app.settings.viewStates.list)
     }
 
     loadHTML('./list.html', 'listView'); loadControl(listView.initList, places);
