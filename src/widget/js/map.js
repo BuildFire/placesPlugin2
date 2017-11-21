@@ -136,31 +136,31 @@ window.mapView = {
             let theCompiledHtml = theTemplate(context);
 
             // Add the compiled html to the page
-            let locationDetails = document.getElementById('locationDetails');
-            locationDetails.innerHTML = theCompiledHtml;
+            let locationSummary = document.getElementById('locationSummary');
+            locationSummary.innerHTML = theCompiledHtml;
 
-            locationDetails.onclick = e => {
+            locationSummary.onclick = e => {
                 e.preventDefault();
                 router.navigate(app.settings.viewStates.detail);
             };
 
-            locationDetails.style.cursor = 'pointer';
+            locationSummary.style.cursor = 'pointer';
 
             const detailsSize = 100;
 
-            locationDetails.style.height = `${detailsSize}px`;
+            locationSummary.style.height = `${detailsSize}px`;
 
             if(app.views.mapView.getBoundingClientRect().height === originalHeight){
                 let newHeight = originalHeight - detailsSize;
                 app.views.mapView.style.height = `${newHeight}px`;
             }
 
-            let closeDiv = locationDetails.querySelector('#close');
+            let closeDiv = locationSummary.querySelector('#close');
 
             closeDiv.onclick = e => {
                 e.stopPropagation();
 
-                locationDetails.style.height = 0;
+                locationSummary.style.height = 0;
                 app.views.mapView.style.height = `${originalHeight}px`;
 
                 //Un-select location
