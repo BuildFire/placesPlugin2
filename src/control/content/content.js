@@ -1,42 +1,35 @@
 import buildfire from 'buildfire';
 import React from 'react';
-import PlacesInput from './components/PlacesInput';
-import PlacesList from './components/PlacesList';
+import debounce from './lib/debounce';
+import LocationsActionBar from './components/LocationsActionBar';
+import LocationList from './components/LocationList';
 import CategoriesList from './components/CategoriesList';
-import MapOptions from './components/MapOptions';
+import AddLocation from './components/AddLocation';
 
 class Content extends React.Component {
   constructor(props) {
     super(props);
-    this.PLACES_TAG = 'places';
     this.state = {
-      places: [],
-      categories: [],
-      sortBy: 'manual',
-      defaultView: 'map',
-    }
+      data: {},
+      addingLocation: false
+    };
   }
 
   componentWillMount() {
-    buildfire.datastore.get(this.PLACES_TAG, (err, result) => {
+    buildfire.datastore.get('places', (err, result) => {
       if (err) return console.error(err);
-      this.setState({
-        places: result.data.places || [],
-        categories: result.data.categories || [],
-        defaultView: result.data.defaultView || 'map',
-        sortBy: result.data.sortBy || 'manual'
-      });
+      this.setState({ data: result.data });
     });
   }
 
   /**
    * Handle state saving to the datastore
    */
-  handleSave() {
-    buildfire.datastore.save(this.state, 'places', (err) => {
+  handleSave = debounce(() => {
+    buildfire.datastore.save(this.state.data, 'places', (err) => {
       if (err) console.error(err);
     });
-  }
+  }, 600)
 
   /**
    * Handle a deletion of a location index
@@ -44,7 +37,7 @@ class Content extends React.Component {
    * @param   {Number} index Location index on places array
    */
   handleLocationDelete(index) {
-    const { places } = this.state;
+    const { places } = this.state.data;
     places.splice(index, 1);
     this.setState({ places });
     this.handleSave();
@@ -56,7 +49,8 @@ class Content extends React.Component {
    * @param   {Number} index Location index on places array
    */
   handleCategoryDelete(index) {
-    const { categories } = this.state;
+    let { categories } = this.state.data;
+    categories = categories || [];
     categories.splice(index, 1);
     this.setState({ categories });
     this.handleSave();
@@ -68,9 +62,22 @@ class Content extends React.Component {
    * @param   {Object} location Location object
    */
   onLocationSubmit(location) {
-    const { places } = this.state;
-    places.push(location);
-    this.setState({ places });
+    const {data } = this.state;
+    data.places.push(location);
+    this.setState({ data });
+    this.handleSave();
+    this.setState({ addingLocation: false });
+  }
+
+  /**
+   * Handle multiple location submissions (such as csv imports)
+   *
+   * @param   {Object} locations Locations array
+   */
+  onMultipleLocationSubmit(locations) {
+    const { data} = this.state;
+    locations.forEach(location => data.places.push(location));
+    this.setState({ data, addingLocation: false });
     this.handleSave();
   }
 
@@ -80,40 +87,44 @@ class Content extends React.Component {
    * @param   {String} category Category name
    */
   onCategorySubmit(category) {
-    const { categories } = this.state;
-    categories.push(category);
-    this.setState({ categories });
+    const { data } = this.state;
+    data.categories = data.categories || [];
+    data.categories.push(category);
+    this.setState({ data });
     this.handleSave();
   }
 
-  handleOptionChange(option) {
-    const update = {};
-    update[option.name] = option.value;
-    this.setState(update);
-    this.handleSave();
+  onAddLocation() {
+    this.setState({ addingLocation: true });
+  }
+
+  onAddLocationCancel() {
+    this.setState({ addingLocation: false });
   }
 
   render() {
-    const { places, categories } = this.state;
+    const { data, addingLocation } = this.state;
 
     return (
       <div>
         <div className='row'>
           <CategoriesList
-            categories={ categories }
+            categories={ data.categories }
             handleDelete={ (index) => this.handleCategoryDelete(index) }
             onSubmit={ (category) => this.onCategorySubmit(category) } />
-          <MapOptions
-            options={ this.state }
-            onChange={ (option) => this.handleOptionChange(option) } />
         </div>
         <div className='row'>
           <div className='col-xs-12'>
-            <PlacesInput
-              onSubmit={ (location) => this.onLocationSubmit(location) } />
-            <PlacesList
-              places={ places }
-              handleDelete={ (index) => this.handleLocationDelete(index) }/>
+            <LocationsActionBar
+              onAddLocation={ () => this.onAddLocation() }
+              onAddLocationCancel={ () => this.onAddLocationCancel() }
+              onMultipleSubmit={ (locations) => this.onMultipleLocationSubmit(locations) } />
+
+            { addingLocation
+                ? <AddLocation onSubmit={ location => this.onLocationSubmit(location) } />
+                : <LocationList
+                    places={ data.places }
+                    handleDelete={ (index) => this.handleLocationDelete(index) }/> }
           </div>
         </div>
       </div>

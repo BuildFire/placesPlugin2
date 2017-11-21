@@ -10,21 +10,21 @@ const WebpackConfig = {
   devtool: 'eval-source-map',
 
   entry: {
-    // Plugin entry points
+  // Plugin entry points
     'control/content/content': [
         'webpack-hot-middleware/client',
         'preact/devtools',
         path.join(__dirname, '../src/control/content/index.js')
       ],
-    'control/design/design': [
+      'control/design/design': [
         'webpack-hot-middleware/client',
         'preact/devtools',
         path.join(__dirname, '../src/control/design/design.js')
       ],
-    'control/settings/settings': [
+      'control/settings/settings': [
         'webpack-hot-middleware/client',
         'preact/devtools',
-        path.join(__dirname, '../src/control/settings/settings.js')
+        path.join(__dirname, '../src/control/settings/index.js')
       ],
     'widget/widget': [
         'webpack-hot-middleware/client',
@@ -69,28 +69,28 @@ const WebpackConfig = {
       inject: true,
       minify: { removeComments: true, collapseWhitespace: true },
       template: path.join(__dirname, '../src/control/content/index.html'),
-      chunks: ['devServer', 'control/content/content']
+      chunks: ['control/content/content']
     }),
     new HtmlWebpackPlugin({
       filename: 'control/design/index.html',
       inject: true,
       minify: { removeComments: true, collapseWhitespace: true },
       template: path.join(__dirname, '../src/control/design/index.html'),
-      chunks: ['devServer', 'control/design/design']
+      chunks: ['control/design/design']
     }),
     new HtmlWebpackPlugin({
       filename: 'control/settings/index.html',
       inject: true,
       minify: { removeComments: true, collapseWhitespace: true },
       template: path.join(__dirname, '../src/control/settings/index.html'),
-      chunks: ['devServer', 'control/settings/settings']
+      chunks: ['control/settings/settings']
     }),
     new HtmlWebpackPlugin({
       filename: 'widget/index.html',
       inject: true,
       minify: { removeComments: true, collapseWhitespace: true },
       template: path.join(__dirname, '../src/widget/index.html'),
-      chunks: ['devServer', 'widget/widget']
+      chunks: ['widget/widget']
     }),
     new CopyWebpackPlugin([{
       from: path.join(__dirname, '../src/control'),
@@ -115,17 +115,20 @@ const WebpackConfig = {
       to: path.join(__dirname, '../fonticons'),
     }])
   ],
-
+  
   devServer: {
     port: 8080,
     hot: true,
     host: '0.0.0.0',
     inline: true,
-    contentBase: path.join(__dirname, '../dist'),
+    contentBase: path.join(__dirname, '../'),
     publicPath: '/',
     quiet: false,
     noInfo: true,
     disableHostCheck: true,
+    headers: {
+      'Access-Control-Allow-Origin': '*'
+    }
   }
 
 };

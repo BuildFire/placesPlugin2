@@ -1,7 +1,9 @@
 import React from 'react';
 
 const PlacesList = (props) => {
-  return (
+  if (!props.places) return null;
+
+  return props.places.length ? (
     <table className='table table-striped'>
       <tbody>
         { props.places.map((place, index) => (
@@ -20,6 +22,8 @@ const PlacesList = (props) => {
         )) }
       </tbody>
     </table>
+  ) : (
+    <img className='empty-state' src='assets/svg/empty.svg'/>
   );
 };
 

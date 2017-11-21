@@ -13,7 +13,7 @@ const WebpackConfig = {
     // Plugin entry points
     'control/content/content': path.join(__dirname, '../src/control/content/index.js'),
     'control/design/design': path.join(__dirname, '../src/control/design/design.js'),
-    'control/settings/settings': path.join(__dirname, '../src/control/settings/settings.js'),
+    'control/settings/settings': path.join(__dirname, '../src/control/settings/index.js'),
     'widget/widget': path.join(__dirname, '../src/widget/js/app.js')
   },
 
@@ -21,7 +21,7 @@ const WebpackConfig = {
     path: path.join(__dirname, '../dist'),
     filename: '[name].js'
   },
-
+  
   externals: {
     buildfire: 'buildfire',
     angular: 'angular'
