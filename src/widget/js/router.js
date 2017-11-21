@@ -1,26 +1,22 @@
 import Navigo from "navigo"
 
-// getElementById wrapper
-function $id(id) {
-    return document.getElementById(id);
-}
-
 // asyncrhonously fetch the html template partial from the file directory,
 // then set its contents to the html of the parent element
 function loadHTML(url, id) {
-    let req = new XMLHttpRequest();
-    req.open('GET', url);
-    req.send();
-    req.onload = () => {
-        $id(id).innerHTML = req.responseText;
-    }
+    fetch(url)
+        .then(response => {
+            return response.text();
+        })
+        .then(responseText => {
+            document.getElementById(id).innerHTML = responseText;
+        });
 }
 
-//Provide a delay to let the template load first
 function loadControl(initFunction, data){
     let view = document.getElementById('view');
     view.className = 'transition';
 
+    //Provide a delay to let the template load first
     setTimeout( function(){
         initFunction(data);
         view.className = 'fade';
