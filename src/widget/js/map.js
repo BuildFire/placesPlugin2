@@ -1,4 +1,3 @@
-import axios from "axios"
 import Handlebars from "./lib/handlebars"
 
 window.usa = {lat: 37.09024, lng: -95.712891};
@@ -128,9 +127,14 @@ window.mapView = {
             distance: place.distance,
         };
 
-        axios.get('./templates/locationSummary.hbs').then(response => {
+        fetch('./templates/locationSummary.hbs')
+            .then(response => {
+                return response.text();
+            })
+            .then(response => {
+
             // Compile the template
-            let theTemplate = Handlebars.compile(response.data);
+            let theTemplate = Handlebars.compile(response);
 
             // Pass our data to the template
             let theCompiledHtml = theTemplate(context);

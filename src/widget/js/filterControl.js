@@ -1,12 +1,10 @@
 import {filter, find} from 'lodash'
-import axios from "axios"
 import Handlebars from "./lib/handlebars"
 
 window.filterControl = {
     originalPlaces: null,
     updatedPlaces: null,
     openFilter: () => {
-        console.error('places', app.state.filteredPlaces);
         filterControl.originalPlaces = app.state.filteredPlaces;
 
         let sideNav = document.getElementById("sideNav");
@@ -19,16 +17,20 @@ window.filterControl = {
                 categories: app.state.categories
             };
 
-            axios.get('./templates/categories.hbs').then(response => {
-                // Compile the template
-                let theTemplate = Handlebars.compile(response.data);
+            fetch('./templates/categories.hbs')
+                .then(response => {
+                    return response.text();
+                })
+                .then(response => {
+                    // Compile the template
+                    let theTemplate = Handlebars.compile(response);
 
-                // Pass our data to the template
-                let theCompiledHtml = theTemplate(context);
+                    // Pass our data to the template
+                    let theCompiledHtml = theTemplate(context);
 
-                // Add the compiled html to the page
-                document.getElementById('categories').innerHTML = theCompiledHtml;
-            });
+                    // Add the compiled html to the page
+                    document.getElementById('categories').innerHTML = theCompiledHtml;
+                });
         }
 
         sideNav.style.height = "100%";
