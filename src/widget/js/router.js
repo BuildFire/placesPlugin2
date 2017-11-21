@@ -18,7 +18,7 @@ function loadHTML(url, id) {
 
 //Provide a delay to let the template load first
 function loadControl(initFunction, data){
-    let view = document.getElementById("view");
+    let view = document.getElementById('view');
     view.className = 'transition';
 
     setTimeout( function(){
@@ -28,25 +28,71 @@ function loadControl(initFunction, data){
     }, 250)
 }
 
-function loadMap(places){
-    loadHTML('./map.html', 'view');  loadControl(mapView.initMap, places)
-}
+window.initMap = function(places, isActive){
+    if(isActive){
+        app.state.activeView = 'mapView';
+        app.views[app.state.activeView].style.display = 'block';
+        app.state.navHistory.push(app.settings.viewStates.map)
+    }
 
-//TODO: Make module
-window.loadList = function(places){
-    loadHTML('./list.html', 'view'); loadControl(listView.initList, places)
+    loadHTML('./map.html', 'mapView');
+    loadControl(mapView.initMap, places);
+    app.state.mapInitiated = true;
+
+    loadMap();
+};
+
+window.initList = function(places, isActive){
+    if(isActive){
+        app.state.activeView = 'listView';
+        app.views[app.state.activeView ].style.display = 'block';
+        app.state.navHistory.push(app.settings.viewStates.list)
+    }
+
+    loadHTML('./list.html', 'listView');
+    loadControl(listView.initList, places);
+};
+
+window.loadMap = function(){
+    updateView('mapView');
+};
+
+window.loadList = function(){
+    updateView('listView');
+};
+
+function updateView(activeView){
+    let view = document.getElementById('view');
+    view.className = 'transition';
+
+    app.state.activeView = activeView;
+    app.views.mapView.style.display = 'none';
+    app.views.listView.style.display = 'none';
+    app.views.detailView.style.display = 'none';
+
+    app.views[activeView].style.display = 'block';
+
+    setTimeout(() => view.className = 'fade', 150);
 }
 
 function loadDetail(place){
-    loadHTML('./detail.html', 'view'); loadControl(detailView.init, place)
+    app.views.mapView.style.display = 'none';
+    app.views.listView.style.display = 'none';
+    app.views.detailView.style.display = 'block';
+    loadHTML('./detail.html', 'detailView'); loadControl(detailView.init, place)
 }
 
 // use #! to hash
 window.router = new Navigo(null, true);
 router.on({
-    // 'view' is the id of the div element inside which we render the HTML
     'map': () => {
-        loadMap(app.state.filteredPlaces);
+        if(app.state.mapInitiated){
+            loadMap(app.state.filteredPlaces);
+        }
+        else{
+            initMap(app.state.places, true)
+        }
+
         app.state.mode = app.settings.viewStates.map;
 
         if(!app.state.isBackNav)
@@ -60,7 +106,7 @@ router.on({
             app.state.navHistory.push(app.settings.viewStates.list)
     },
     'detail': () => {
-        console.error('app.state.selectedPlace', app.state.selectedPlace[0]);
+        console.log('app.state.selectedPlace', app.state.selectedPlace[0]);
 
         loadDetail(app.state.selectedPlace[0]);
         app.state.mode = app.settings.viewStates.detail;
@@ -70,52 +116,9 @@ router.on({
     },
 });
 
-window.gotPlaces = (err, places) => {
-    if(app.state.mode == app.settings.viewStates.list){
-        loadList(places)
-    }
-    else{
-        loadMap(places);
-    }
-};
-//TODO: Move logic to app.js
-const gotLocation = (err, location) =>{
-    //Calculate distances
-    console.log('Got current location');
-
-    let destinations = [];
-
-    app.state.places.forEach(place => {
-        destinations.push(new google.maps.LatLng(place.address.lat, place.address.lng))
-    });
-
-    let origin = [{lat: location.latitude, lng: location.longitude}];
-
-    let service = new google.maps.DistanceMatrixService();
-
-    service.getDistanceMatrix({
-        origins: origin,
-        destinations: destinations,
-        travelMode: google.maps.TravelMode.DRIVING,
-        unitSystem: google.maps.UnitSystem.IMPERIAL //google.maps.UnitSystem.METRIC
-    }, (response) => {
-        //Update places with distance
-        app.state.places.map((place, index)=>{
-           place.distance =  response.rows[0].elements[index].distance.text;
-        });
-
-        if(app.state.mode == app.settings.viewStates.list){
-            listView.updateDistances(app.state.filteredPlaces);
-        }
-    });
-};
-
 // set the default route
 router.on(() => {
-    //Artificial delay to ensure the app is ready
-    setTimeout(() => app.init(gotPlaces, gotLocation), 500);
 
-    //app.init(gotPlaces, gotLocation);
 });
 
 // set the 404 route

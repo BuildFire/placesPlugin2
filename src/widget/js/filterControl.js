@@ -1,9 +1,13 @@
-import axios from "axios"
+import {filter, find} from 'lodash'
 import Handlebars from "./lib/handlebars"
 
 window.filterControl = {
+    originalPlaces: null,
+    updatedPlaces: null,
     openFilter: () => {
-        let sideNav = document.getElementById("mySidenav");
+        filterControl.originalPlaces = app.state.filteredPlaces;
+
+        let sideNav = document.getElementById("sideNav");
         let categoriesDiv = sideNav.querySelector('#categories');
 
         categoriesDiv.innerHTML = '';
@@ -13,16 +17,20 @@ window.filterControl = {
                 categories: app.state.categories
             };
 
-            axios.get('./templates/categories.hbs').then(response => {
-                // Compile the template
-                let theTemplate = Handlebars.compile(response.data);
+            fetch('./templates/categories.hbs')
+                .then(response => {
+                    return response.text();
+                })
+                .then(response => {
+                    // Compile the template
+                    let theTemplate = Handlebars.compile(response);
 
-                // Pass our data to the template
-                let theCompiledHtml = theTemplate(context);
+                    // Pass our data to the template
+                    let theCompiledHtml = theTemplate(context);
 
-                // Add the compiled html to the page
-                document.getElementById('categories').innerHTML = theCompiledHtml;
-            });
+                    // Add the compiled html to the page
+                    document.getElementById('categories').innerHTML = theCompiledHtml;
+                });
         }
 
         sideNav.style.height = "100%";
@@ -48,13 +56,34 @@ window.filterControl = {
 
             return isMatch;
         });
+
+        filterControl.updatedPlaces = app.state.filteredPlaces;
     },
     closeNav: () => {
-        gotPlaces(null, app.state.filteredPlaces);
-        document.getElementById("mySidenav").style.height = "0";
+        if(filterControl.originalPlaces != filterControl.updatedPlaces){
+            let originalPlaces = filterControl.originalPlaces,
+                updatedPlaces = filterControl.updatedPlaces;
+
+            let placesToHide = filter(originalPlaces, (preFilteredPlace) => { return !find(updatedPlaces, preFilteredPlace)});
+            let placesToShow = filter(updatedPlaces, (postFilteredPlace) => { return !find(originalPlaces, postFilteredPlace)});
+
+            //Update view to reflect changes
+            if(app.state.mode === app.settings.viewStates.map){
+                mapView.filterMap(placesToHide, placesToShow);
+            }else{
+                //listView.filterMap(placesToRemove, addedPlaces);
+            }
+        }
+
+        document.getElementById("sideNav").style.height = "0";
     },
     changeView: () => {
         app.state.mode = (app.state.mode == app.settings.viewStates.list) ? app.settings.viewStates.map : app.settings.viewStates.list;
+        
+        let switchViewButton = document.getElementsByClassName("changeView");
+        Array.prototype.map.call(switchViewButton, (image)=> {
+            image.src = (image.src.includes('map')) ? image.src.replace('map', 'list') : image.src.replace('list', 'map');
+        });
 
         router.navigate(`/${app.state.mode}`);
     },
@@ -67,13 +96,15 @@ window.filterControl = {
         buttons.forEach((button) =>{
             let controlButton = document.createElement('div');
             let imageName = (button.name) ? button.name : app.state.mode;
+            let changeViewClass = (imageName === 'changeView') ? 'class="changeView"' : '';
+
             if(imageName === 'changeView'){
                 imageName = (app.state.mode === app.settings.viewStates.list) ? app.settings.viewStates.map : app.settings.viewStates.list;
             }
 
             controlButton.style.display = 'inline-block';
             controlButton.style.padding = button.padding;
-            controlButton.innerHTML = `<img src="./images/${imageName}.png"></img>`;
+            controlButton.innerHTML = `<img ${changeViewClass} src="./images/${imageName}.png"></img>`;
             if(button.action)
                 controlButton.onclick = button.action;
             container.appendChild(controlButton);

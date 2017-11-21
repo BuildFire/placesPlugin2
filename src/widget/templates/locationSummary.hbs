@@ -3,11 +3,11 @@
         <img class="detail-image" src="https://czi3m2qn.cloudimg.io/s/width/90/https://pluginserver.buildfire.com/styles/media/holder.png"/>
     </div>
     <div class="col-xs-5">
-        <div class="name" id="name"></div>
-        <div id="address"></div>
+        <div class="name title">{{title}}</div>
+        <div>{{address}}</div>
     </div>
     <div class="col-xs-3">
-        <div class="close" id="close"></div><br>
-        <img class="arrow" id="arrow" src="./images/arrow.png"> <span id="distance" class="distance"></span>
+        <div class="close" id="close">&times</div><br>
+        {{#if distance}}<img class="arrow" id="arrow" src="./images/arrow.png"> <span class="distance">{{distance}}</span>{{/if}}
     </div>
 </div>

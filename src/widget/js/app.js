@@ -15,8 +15,16 @@ window.app = {
         sortOptions: {alpha: 'alpha', alphaDesc: 'alphaDesc', manual: 'manual'},
         placesTag: 'places',
     },
+    views: {
+        listView: document.getElementById('listView'),
+        mapView: document.getElementById('mapView'),
+        detailView: document.getElementById('detailView'),
+        sideNav: document.getElementById('sideNav'),
+    },
     state: {
+        mapInitiated: false,
         mode: null,
+        activeView: null,
         places: null,
         markers: [],
         bounds: null,
@@ -53,14 +61,9 @@ window.app = {
 
         app.backButtonInit();
 
-        // TODO: Get from cache. If cache not present, get from dataStore. Save in cache for next time.
-        //Set default state
-        app.state.mode = app.settings.viewStates.list;
-        app.state.sortBy = app.settings.sortOptions.manual;
-
         buildfire.datastore.get (app.settings.placesTag, function(err, results){
             if(err){
-              console.log('datastore.get error', err);
+              console.error('datastore.get error', err);
               return;
             }
 
@@ -126,9 +129,8 @@ window.app = {
                   return;
               }
 
-              //TODO: Add unique ID, to detect new item from change
               //Do comparison to see what's changed
-              let updatedPlaces = filter(newPlaces, function(obj){ return !find(currentPlaces, obj); });
+              let updatedPlaces = filter(newPlaces, (newPlace) => { return !find(currentPlaces, newPlace)});
 
               if(app.state.mode === app.settings.viewStates.map){
                   mapView.updateMap(updatedPlaces);
@@ -138,5 +140,48 @@ window.app = {
               }
           }
         });
+    },
+    gotPlaces: (err, places) => {
+        if(app.state.mode === app.settings.viewStates.list){
+            initList(places, true);
+            //We can not pre-init the map, as it needs to be visible
+        }
+        else{
+            initMap(places, true);
+            initList(places);
+        }
+    },
+    gotLocation: (err, location) =>{
+        //Calculate distances
+        console.log('Got current location');
+
+        let destinations = [];
+
+        app.state.places.forEach(place => {
+            destinations.push(new google.maps.LatLng(place.address.lat, place.address.lng))
+        });
+
+        let origin = [{lat: location.latitude, lng: location.longitude}];
+
+        let service = new google.maps.DistanceMatrixService();
+
+        service.getDistanceMatrix({
+            origins: origin,
+            destinations: destinations,
+            travelMode: google.maps.TravelMode.DRIVING,
+            unitSystem: google.maps.UnitSystem.IMPERIAL //google.maps.UnitSystem.METRIC
+        }, (response) => {
+            //Update places with distance
+            app.state.places.map((place, index)=>{
+                place.distance =  response.rows[0].elements[index].distance.text;
+            });
+
+            if(app.state.mode == app.settings.viewStates.list){
+                listView.updateDistances(app.state.filteredPlaces);
+            }
+        });
     }
 };
+
+document.addEventListener('DOMContentLoaded', () => { app.init( app.gotPlaces, app.gotLocation) });
+//setTimeout(app.init(app.gotPlaces, app.gotLocation), 250);

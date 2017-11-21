@@ -1,9 +1,12 @@
+import Handlebars from "./lib/handlebars"
+
 window.usa = {lat: 37.09024, lng: -95.712891};
 window.defaultLocation = usa;
 window.originalHeight;
 
 window.mapView = {
     settings: {
+        markerClusterer: null,
         zoomLevel: {city: 14, country: 3},
         images: {
             currentLocation: 'google_marker_blue_icon.png',
@@ -34,30 +37,58 @@ window.mapView = {
                 mapView.addMarker(map, place, mapView.settings.images.place);
             });
 
-            let clusterOptions = {
-                gridSize: 53,
-                styles: [
-                    {
-                        textColor: 'white',
-                        url: 'https://czi3m2qn.cloudimg.io/s/width/53/https://app.buildfire.com/app/media/google_marker_blue_icon2.png',
-                        height: 53,
-                        width: 53
-                    }
-                ],
-                maxZoom: 15
-            };
-
-            // Add a marker clusterer to manage the markers.
-            new MarkerClusterer(map, app.state.markers, clusterOptions);
-
+            mapView.addMarkerCluster();
             map.fitBounds(app.state.bounds);
         }
+    },
+    addMarkerCluster: () =>{
+        let clusterOptions = {
+            gridSize: 53,
+            styles: [
+                {
+                    textColor: 'white',
+                    url: 'https://czi3m2qn.cloudimg.io/s/width/53/https://app.buildfire.com/app/media/google_marker_blue_icon2.png',
+                    height: 53,
+                    width: 53
+                }
+            ],
+            maxZoom: 15
+        };
+
+        // Add a marker clusterer to manage the markers.
+        mapView.settings.markerClusterer = new MarkerClusterer(map, app.state.markers, clusterOptions);
     },
     updateMap: (newPlaces) => {
         //Add new markers
         newPlaces.forEach((place) => {
             mapView.addMarker(map, place, mapView.settings.images.place);
         });
+    },
+    filterMap: (placesToHide, placesToShow) => {
+
+        placesToHide.forEach((placeToHide) => {
+            app.state.markers = app.state.markers.filter((marker) =>{
+                let lat = marker.getPosition().lat(),
+                    lng = marker.getPosition().lng();
+
+                const isMatch  = (placeToHide.address.lat === lat && placeToHide.address.lng === lng);
+
+                if(isMatch){
+                    marker.setVisible(false);
+                }
+
+                return !isMatch;
+            })
+        });
+
+        placesToShow.forEach((place) =>{
+            mapView.addMarker(map, place, mapView.settings.images.place);
+        });
+
+        if(placesToHide || placesToShow){
+            mapView.settings.markerClusterer.clearMarkers();
+            mapView.addMarkerCluster();
+        }
     },
     centerMap: () => { window.map.setCenter(mapView.lastKnownLocation) },
     addMarker: (map, place, iconType) => {
@@ -90,52 +121,58 @@ window.mapView = {
             app.state.selectedPlace[1].marker.setIcon(mapView.createMarker(mapView.settings.images.place));
         }
 
-        let locationDetails = document.getElementById('locationDetails');
-        let titleDiv = locationDetails.querySelector('#name');
-        let addressDiv = locationDetails.querySelector('#address');
-        let distanceDiv = locationDetails.querySelector('#distance');
-        let closeDiv = locationDetails.querySelector('#close');
-        let arrowDiv = locationDetails.querySelector('#arrow');
-
-        titleDiv.innerHTML = place.title;
-
-        addressDiv.innerHTML = place.address.name;
-        addressDiv.style['font-size'] = '12px';
-
-        if((typeof place.distance !== 'undefined')){
-            distanceDiv.innerHTML = place.distance;
-            distanceDiv.style.paddingRight = '5px';
-            arrowDiv.style.visibility = 'visible';
-        }
-
-        closeDiv.innerHTML = '&times';
-
-        locationDetails.onclick = e => {
-            e.preventDefault();
-            router.navigate(app.settings.viewStates.detail);
+        let context = {
+            title: place.title,
+            address: place.address.name,
+            distance: place.distance,
         };
 
-        closeDiv.onclick = e => {
-            e.stopPropagation();
+        fetch('./templates/locationSummary.hbs')
+            .then(response => {
+                return response.text();
+            })
+            .then(response => {
 
-            titleDiv.innerHTML = '';
-            distanceDiv.innerHTML = '';
-            closeDiv.innerHTML = '';
-            locationDetails.style.height = 0;
-            mapViewDiv.style.height = `${originalHeight}px`;
-        };
+            // Compile the template
+            let theTemplate = Handlebars.compile(response);
 
-        locationDetails.style.cursor = 'pointer';
+            // Pass our data to the template
+            let theCompiledHtml = theTemplate(context);
 
-        const detailsSize = 100;
-        const mapViewDiv = document.getElementById('mapView');
+            // Add the compiled html to the page
+            let locationSummary = document.getElementById('locationSummary');
+            locationSummary.innerHTML = theCompiledHtml;
 
-        locationDetails.style.height = `${detailsSize}px`;
+            locationSummary.onclick = e => {
+                e.preventDefault();
+                router.navigate(app.settings.viewStates.detail);
+            };
 
-        if(mapViewDiv.getBoundingClientRect().height === originalHeight){
-            let newHeight = originalHeight - detailsSize;
-            mapViewDiv.style.height = `${newHeight}px`;
-        }
+            locationSummary.style.cursor = 'pointer';
+
+            const detailsSize = 100;
+
+            locationSummary.style.height = `${detailsSize}px`;
+
+            if(app.views.mapView.getBoundingClientRect().height === originalHeight){
+                let newHeight = originalHeight - detailsSize;
+                app.views.mapView.style.height = `${newHeight}px`;
+            }
+
+            let closeDiv = locationSummary.querySelector('#close');
+
+            closeDiv.onclick = e => {
+                e.stopPropagation();
+
+                locationSummary.style.height = 0;
+                app.views.mapView.style.height = `${originalHeight}px`;
+
+                //Un-select location
+                app.state.selectedPlace[0]
+                    .marker.setIcon(mapView.createMarker(mapView.settings.images.place));
+                app.state.selectedPlace.shift();
+            };
+        });
     },
     createMarker:(imageType) => {
         const iconBaseUrl = 'https://app.buildfire.com/app/media/';
@@ -169,7 +206,7 @@ window.mapView = {
             }
         };
 
-        window.map = new google.maps.Map(document.getElementById('mapView'), options);
+        window.map = new google.maps.Map(document.getElementById('googleMap'), options);
 
         app.state.bounds = new google.maps.LatLngBounds();
 
@@ -179,7 +216,6 @@ window.mapView = {
         new CenterControl(centerDiv);
         new FilterControl(filterDiv);
 
-        const mapViewDiv = document.getElementById('mapView');
-        window.originalHeight = (mapViewDiv) ? mapViewDiv.getBoundingClientRect().height: 0;
+        window.originalHeight = (app.views.mapView) ? app.views.mapView.getBoundingClientRect().height: 0;
     }
 };
