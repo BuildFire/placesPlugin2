@@ -6,7 +6,7 @@ class LocationsActionBar extends React.Component {
     super(props);
     this.state = {
       addingLocation: false
-    }
+    };
   }
 
   /**
@@ -37,7 +37,7 @@ class LocationsActionBar extends React.Component {
 
   onAddLocation() {
     this.props.onAddLocation();
-    this.setState({ addingLocation: true })
+    this.setState({ addingLocation: true });
   }
 
   onAddLocationCancel() {
@@ -46,7 +46,7 @@ class LocationsActionBar extends React.Component {
   }
 
   onFileChange() {
-    const file = this.fileInput.files[0]
+    const file = this.fileInput.files[0];
     const reader = new FileReader();
     reader.onload = e => {
       const rows = csv.parse(e.target.result);
@@ -59,13 +59,13 @@ class LocationsActionBar extends React.Component {
         }
       }));
       this.props.onMultipleSubmit(locations);
-    }
+    };
     reader.onerror = e => console.error('Error reading csv');
     reader.readAsText(file, 'UTF-8');
   }
 
   handleTemplateDownload() {
-    const rows = [['name','address_name','address_lat','address_lng']]
+    const rows = [['name','address_name','address_lat','address_lng']];
     let csvContent  = 'data:text/csv;charset=utf-8,';
     rows.forEach(row => csvContent += row.join(',') + '\r\n');
 

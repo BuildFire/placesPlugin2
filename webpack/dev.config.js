@@ -10,18 +10,18 @@ const WebpackConfig = {
   devtool: 'eval-source-map',
 
   entry: {
-    // Plugin entry points
+  // Plugin entry points
     'control/content/content': [
         'webpack-hot-middleware/client',
         'preact/devtools',
         path.join(__dirname, '../src/control/content/index.js')
       ],
-    'control/design/design': [
+      'control/design/design': [
         'webpack-hot-middleware/client',
         'preact/devtools',
         path.join(__dirname, '../src/control/design/design.js')
       ],
-    'control/settings/settings': [
+      'control/settings/settings': [
         'webpack-hot-middleware/client',
         'preact/devtools',
         path.join(__dirname, '../src/control/settings/index.js')
@@ -115,7 +115,7 @@ const WebpackConfig = {
       to: path.join(__dirname, '../fonticons'),
     }])
   ],
-
+  
   devServer: {
     port: 8080,
     hot: true,

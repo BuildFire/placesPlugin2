@@ -66,6 +66,7 @@ class Content extends React.Component {
     data.places.push(location);
     this.setState({ data });
     this.handleSave();
+    this.setState({ addingLocation: false });
   }
 
   /**
@@ -76,7 +77,7 @@ class Content extends React.Component {
   onMultipleLocationSubmit(locations) {
     const { data} = this.state;
     locations.forEach(location => data.places.push(location));
-    this.setState({ data });
+    this.setState({ data, addingLocation: false });
     this.handleSave();
   }
 
@@ -120,7 +121,7 @@ class Content extends React.Component {
               onMultipleSubmit={ (locations) => this.onMultipleLocationSubmit(locations) } />
 
             { addingLocation
-                ? <AddLocation />
+                ? <AddLocation onSubmit={ location => this.onLocationSubmit(location) } />
                 : <LocationList
                     places={ data.places }
                     handleDelete={ (index) => this.handleLocationDelete(index) }/> }
