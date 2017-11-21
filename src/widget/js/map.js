@@ -1,3 +1,6 @@
+import axios from "axios"
+import Handlebars from "./lib/handlebars"
+
 window.usa = {lat: 37.09024, lng: -95.712891};
 window.defaultLocation = usa;
 window.originalHeight;
@@ -72,9 +75,6 @@ window.mapView = {
                 const isMatch  = (placeToHide.address.lat === lat && placeToHide.address.lng === lng);
 
                 if(isMatch){
-                    console.error('Hide', placeToHide.title);
-                    //marker.setMap(null);
-                    //marker = null;
                     marker.setVisible(false);
                 }
 
@@ -82,7 +82,6 @@ window.mapView = {
             })
         });
 
-        //TODO: Test adding markers
         placesToShow.forEach((place) =>{
             mapView.addMarker(map, place, mapView.settings.images.place);
         });
@@ -123,55 +122,53 @@ window.mapView = {
             app.state.selectedPlace[1].marker.setIcon(mapView.createMarker(mapView.settings.images.place));
         }
 
-        let locationDetails = document.getElementById('locationDetails');
-        let titleDiv = locationDetails.querySelector('#name');
-        let addressDiv = locationDetails.querySelector('#address');
-        let distanceDiv = locationDetails.querySelector('#distance');
-        let closeDiv = locationDetails.querySelector('#close');
-        let arrowDiv = locationDetails.querySelector('#arrow');
-
-        titleDiv.innerHTML = place.title;
-
-        addressDiv.innerHTML = place.address.name;
-
-        if((typeof place.distance !== 'undefined')){
-            distanceDiv.innerHTML = place.distance;
-            distanceDiv.style.paddingRight = '5px';
-            arrowDiv.style.visibility = 'visible';
-        }
-
-        closeDiv.innerHTML = '&times';
-
-        locationDetails.onclick = e => {
-            e.preventDefault();
-            router.navigate(app.settings.viewStates.detail);
+        let context = {
+            title: place.title,
+            address: place.address.name,
+            distance: place.distance,
         };
 
-        closeDiv.onclick = e => {
-            e.stopPropagation();
+        axios.get('./templates/locationSummary.hbs').then(response => {
+            // Compile the template
+            let theTemplate = Handlebars.compile(response.data);
 
-            titleDiv.innerHTML = '';
-            distanceDiv.innerHTML = '';
-            closeDiv.innerHTML = '';
-            locationDetails.style.height = 0;
-            app.views.mapView.style.height = `${originalHeight}px`;
+            // Pass our data to the template
+            let theCompiledHtml = theTemplate(context);
 
-            //Un-select location
-            app.state.selectedPlace[0]
-                .marker.setIcon(mapView.createMarker(mapView.settings.images.place));
-            app.state.selectedPlace.shift();
-        };
+            // Add the compiled html to the page
+            let locationDetails = document.getElementById('locationDetails');
+            locationDetails.innerHTML = theCompiledHtml;
 
-        locationDetails.style.cursor = 'pointer';
+            locationDetails.onclick = e => {
+                e.preventDefault();
+                router.navigate(app.settings.viewStates.detail);
+            };
 
-        const detailsSize = 100;
+            locationDetails.style.cursor = 'pointer';
 
-        locationDetails.style.height = `${detailsSize}px`;
+            const detailsSize = 100;
 
-        if(app.views.mapView.getBoundingClientRect().height === originalHeight){
-            let newHeight = originalHeight - detailsSize;
-            app.views.mapView.style.height = `${newHeight}px`;
-        }
+            locationDetails.style.height = `${detailsSize}px`;
+
+            if(app.views.mapView.getBoundingClientRect().height === originalHeight){
+                let newHeight = originalHeight - detailsSize;
+                app.views.mapView.style.height = `${newHeight}px`;
+            }
+
+            let closeDiv = locationDetails.querySelector('#close');
+
+            closeDiv.onclick = e => {
+                e.stopPropagation();
+
+                locationDetails.style.height = 0;
+                app.views.mapView.style.height = `${originalHeight}px`;
+
+                //Un-select location
+                app.state.selectedPlace[0]
+                    .marker.setIcon(mapView.createMarker(mapView.settings.images.place));
+                app.state.selectedPlace.shift();
+            };
+        });
     },
     createMarker:(imageType) => {
         const iconBaseUrl = 'https://app.buildfire.com/app/media/';
