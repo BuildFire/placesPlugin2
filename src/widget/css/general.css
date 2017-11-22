@@ -79,6 +79,7 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
     right: 10px;
     text-align: center;
     margin-top: 137%;
+    scroll-behavior: smooth;
     z-index: 1;
     backface-visibility: hidden;
 }
