@@ -3,6 +3,26 @@
 #mapView #listView{
     height: 100%;
 }
+
+.animated {
+  animation-duration: 400ms;
+  animation-fill-mode: both;
+}
+
+@keyframes slideInDown {
+  from {
+    transform: translate3d(0, -100%, 0);
+  }
+
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.slideInDown {
+  animation-name: slideInDown;
+}
+
 /* Optional: Makes the sample page fill the window. */
 html, body {
     height: 100%;
@@ -93,6 +113,53 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
     transition: opacity 1s linear;
 }
 
+#locationSummary {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    background-color: rgba(255,255,255,0.75);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+}
+
+#locationSummary .name.title {
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.27;
+    margin: 0;
+}
+
+#locationSummary .name.address {
+    font-size: 11px;
+    line-height: 1.27;
+    margin: 0;
+}
+
+#locationSummary .view-more {
+    font-size: 9px;
+    font-weight: 300;
+}
+
+#locationSummary .distance-indicator {
+    padding-left: 0;
+    padding-right: 0;
+    margin-top: 15px;
+}
+
+#locationSummary #close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.gm-bundled-control {
+    // top: 60px !important;
+}
+
 @media screen and (max-height: 450px) {
     .sidenav {padding-top: 15px;}
     .sidenav a {font-size: 18px;}
@@ -105,8 +172,15 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
 }
 .detail-image{
     border-radius: 100%;
-    padding: 5px;
+    width: 90px;
+    height: 90px;
+    background-size: cover;
+    background-position: center;
+    background-color: #eee;
+    margin-top: 4px;
+    margin-left: 6px;
 }
+
 .close{
     float: right;
     padding-right: 5px;

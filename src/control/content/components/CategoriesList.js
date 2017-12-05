@@ -20,7 +20,6 @@ class CategoriesList extends React.Component {
 
   render() {
     const { categories } = this.props;
-    if (!categories) return null;
 
     return (
       <div className='col-xs-12'>
@@ -36,7 +35,7 @@ class CategoriesList extends React.Component {
           </div>
         </form>
         <br />
-        { categories.length ? (
+        { categories && categories.length ? (
           <table className='table table-striped'>
             <tbody>
               { categories.map((category, index) => (

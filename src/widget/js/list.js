@@ -16,8 +16,8 @@ window.listView = {
             listItem.onclick = e => {
                 e.preventDefault();
 
-                app.state.selectedPlace.unshift(place);
-                router.navigate(app.settings.viewStates.detail);
+                window.app.state.selectedPlace.unshift(place);
+                window.router.navigate(window.app.settings.viewStates.detail);
             };
 
             listItem.style.cursor = 'pointer';
