@@ -49,10 +49,10 @@ class Content extends React.Component {
    * @param   {Number} index Location index on places array
    */
   handleCategoryDelete(index) {
-    let { categories } = this.state.data;
-    categories = categories || [];
-    categories.splice(index, 1);
-    this.setState({ categories });
+    let { data } = this.state;
+    data.categories = data.categories || [];
+    data.categories.splice(index, 1);
+    this.setState({ data });
     this.handleSave();
   }
 
@@ -63,6 +63,7 @@ class Content extends React.Component {
    */
   onLocationSubmit(location) {
     const {data } = this.state;
+    data.places = data.places || [];
     data.places.push(location);
     this.setState({ data });
     this.handleSave();

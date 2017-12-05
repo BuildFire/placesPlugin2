@@ -125,6 +125,7 @@ window.mapView = {
             title: place.title,
             address: place.address.name,
             distance: place.distance,
+            image: place.image
         };
 
         fetch('./templates/locationSummary.hbs')
@@ -142,30 +143,22 @@ window.mapView = {
             // Add the compiled html to the page
             let locationSummary = document.getElementById('locationSummary');
             locationSummary.innerHTML = theCompiledHtml;
+            locationSummary.className = 'animated slideInDown';
+            locationSummary.style.height = '100px';
 
             locationSummary.onclick = e => {
                 e.preventDefault();
                 router.navigate(app.settings.viewStates.detail);
             };
 
-            locationSummary.style.cursor = 'pointer';
-
-            const detailsSize = 100;
-
-            locationSummary.style.height = `${detailsSize}px`;
-
-            if(app.views.mapView.getBoundingClientRect().height === originalHeight){
-                let newHeight = originalHeight - detailsSize;
-                app.views.mapView.style.height = `${newHeight}px`;
-            }
-
             let closeDiv = locationSummary.querySelector('#close');
 
             closeDiv.onclick = e => {
                 e.stopPropagation();
 
+                locationSummary.innerHTML = '';
                 locationSummary.style.height = 0;
-                app.views.mapView.style.height = `${originalHeight}px`;
+                locationSummary.className = '';
 
                 //Un-select location
                 app.state.selectedPlace[0]

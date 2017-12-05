@@ -5,8 +5,9 @@ class AddLocation extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: '',
-      location: null,
+      title: '',
+      description: '',
+      address: null,
       image: ''
     };
   }
@@ -17,24 +18,23 @@ class AddLocation extends React.Component {
     this.autocomplete.addListener('place_changed', () => this.onPlaceChanged());
   }
 
-  onNameChange(e) {
-    this.setState({ name: e.target.value });
+  onInputChange(e) {
+    const changes = {};
+    changes[e.target.name] = e.target.value;
+    this.setState(changes);
   }
 
   onPlaceChanged() {
     const place = this.autocomplete.getPlace();
     if (!place.geometry) return;
 
-    const location = {
-      title: this.state.title,
-      address: {
-        name: place.formatted_address,
-        lat: place.geometry.location.lat(),
-        lng: place.geometry.location.lng()
-      }
+    const address = {
+      name: place.formatted_address,
+      lat: place.geometry.location.lat(),
+      lng: place.geometry.location.lng()
     };
 
-    this.setState({ location });
+    this.setState({ address });
   }
 
   showImageDialog() {
@@ -58,24 +58,24 @@ class AddLocation extends React.Component {
 
   onSubmit(e) {
     e.preventDefault();
-    const data = Object.assign({}, this.state.location);
-    data.title = this.state.name;
-    data.image = this.state.image;
+    const { title, description, address, image } = this.state;
+    const data = { title, description, address, image };
     this.props.onSubmit(data);
+    this.setState({ title: '', description: '', address: null, image: '' });
   }
 
   render() {
-    const { name, location, image } = this.state;
+    const { title, description, address, image } = this.state;
 
     return (
       <form onSubmit={ e => this.onSubmit(e) }>
 
         <div className='form-group'>
-          <label htmlFor='name'>Name</label>
+          <label htmlFor='name'>Title</label>
           <input
-            onChange={ e => this.onNameChange(e) }
+            onChange={ e => this.onInputChange(e) }
+            name='title'
             type='text'
-            id='name'
             className='form-control' />
         </div>
 
@@ -84,8 +84,15 @@ class AddLocation extends React.Component {
           <input
             ref={ node => this.addressInput = node }
             type='text'
-            id='address'
             className='form-control' />
+        </div>
+
+        <div className='form-group'>
+          <label htmlFor='descritpion'>Description</label>
+          <textarea
+            onChange={ e => this.onInputChange(e) }
+            className='form-control'
+            name='description' rows='3' />
         </div>
 
         <div className='form-group'>
@@ -100,7 +107,7 @@ class AddLocation extends React.Component {
 
         <div className='form-group'>
           <button
-            disabled={ !name.length || !location }
+            disabled={ !title.length || !description.length || !address }
             type='submit'
             className='btn btn-primary'>
             Add Location
