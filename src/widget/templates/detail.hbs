@@ -1,19 +1,18 @@
-<div class="row" style="height:{{height}}px">
-    <div id="smallMap" style="height:100%"></div>
-</div>
-<div>
-    <div class="row aligner">
-        <div class="col-xs-9">
+<div class="map-holder">
+    <div id="smallMap" style="height:100%;width:100%"></div>
+    <div class="row aligner map-details">
+        <div class="col-xs-8">
             <div class="title">{{title}}</div>
-            <div>{{address}}</div>
+            <div class="address">{{address}}</div>
         </div>
-        <div class="col-xs-3">
+        <div class="col-xs-4">
             <img class="arrow" src="./images/arrow.png"> <span class="distance">{{distance}}</span>
         </div>
     </div>
 </div>
 <div class="row">
     <div class="col-xs-12">
-        <img src="https://czi3m2qn.cloudimg.io/s/width/{{width}}/https://pluginserver.buildfire.com/styles/media/{{imageName}}"/>
+        <div id="carouselView"></div>
+        <p class="description">{{description}}</p>
     </div>
 </div>
