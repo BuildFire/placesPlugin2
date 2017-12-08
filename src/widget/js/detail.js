@@ -6,16 +6,14 @@ window.detailView = {
         let view = document.getElementById('detailView');
         let screenWidth = window.innerWidth;
         const title = place.title;
-        const imageName = place.image ? place.image : 'holder-16x9.png';
 
-        //TODO:This is hacky ... come up with a better way
-        const mapHeight = 238;
+        console.log(place);
 
         let context = {
             width: screenWidth,
-            height: mapHeight,
-            imageName: imageName,
+            image: place.image,
             title: title,
+            description: place.description,
             distance: place.distance,
             address: place.address.name
         };

@@ -1,4 +1,4 @@
-import buildfire from 'buildfire';
+import buildfire, { components } from 'buildfire';
 import React from 'react';
 
 class AddLocation extends React.Component {
@@ -8,14 +8,28 @@ class AddLocation extends React.Component {
       title: '',
       description: '',
       address: null,
-      image: ''
+      image: '',
+      carousel: []
     };
   }
 
   componentDidMount() {
+    // Mount google map
     const { maps } = window.google;
     this.autocomplete = new maps.places.Autocomplete(this.addressInput);
     this.autocomplete.addListener('place_changed', () => this.onPlaceChanged());
+
+    // Mount carousel
+    this.editor = new components.carousel.editor('#carousel');
+    this.editor.onAddItems = (items) => this.updateCarouselState();
+    this.editor.onDeleteItems = (items, index) => this.updateCarouselState();
+    this.editor.onItemChange = (item) => this.updateCarouselState();
+    this.editor.onOrderChange = (item, prevIndex, newIndex) => this.updateCarouselState();
+  }
+
+  updateCarouselState() {
+    const {items } = this.editor;
+    this.setState({ carousel: items });
   }
 
   onInputChange(e) {
@@ -58,8 +72,8 @@ class AddLocation extends React.Component {
 
   onSubmit(e) {
     e.preventDefault();
-    const { title, description, address, image } = this.state;
-    const data = { title, description, address, image };
+    const { title, description, address, image, carousel } = this.state;
+    const data = { title, description, address, image, carousel };
     this.props.onSubmit(data);
     this.setState({ title: '', description: '', address: null, image: '' });
   }
@@ -93,6 +107,11 @@ class AddLocation extends React.Component {
             onChange={ e => this.onInputChange(e) }
             className='form-control'
             name='description' rows='3' />
+        </div>
+
+        <div className='form-group'>
+          <label>Images</label>
+          <div id='carousel' />
         </div>
 
         <div className='form-group'>
