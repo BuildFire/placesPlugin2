@@ -53,11 +53,13 @@ window.detailView = {
                 /**
                  * Carousel
                  */
-                let targetNode = document.getElementById('carouselView');
-                new components.carousel.view({
-                    selector: targetNode,
-                    items: place.items
-                });
+                if (place.carousel && place.carousel.length) {
+                    let targetNode = document.getElementById('carouselView');
+                    new components.carousel.view({
+                        selector: targetNode,
+                        items: place.carousel
+                    });
+                }
 
                 /**
                  * Google Maps
