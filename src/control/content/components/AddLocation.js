@@ -110,12 +110,11 @@ class AddLocation extends React.Component {
         </div>
 
         <div className='form-group'>
-          <label>Images</label>
           <div id='carousel' />
         </div>
 
         <div className='form-group'>
-          <label>Image</label>
+          <label>List Image</label>
           <div
             style={{ backgroundImage: image ? `url(${image})` : '' }}
             className='image-dialog'

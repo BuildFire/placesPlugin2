@@ -1,3 +1,4 @@
+import { components } from 'buildfire';
 import Handlebars from './lib/handlebars';
 
 window.detailView = {
@@ -48,6 +49,19 @@ window.detailView = {
                     mapTypeId: mapTypeId,
                     disableDefaultUI: true
                 };
+
+                /**
+                 * Carousel
+                 */
+                let targetNode = document.getElementById('carouselView');
+                new components.carousel.view({
+                    selector: targetNode,
+                    items: place.items
+                });
+
+                /**
+                 * Google Maps
+                 */
 
                 let map = new window.google.maps.Map(document.getElementById('smallMap'), options);
 
