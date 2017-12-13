@@ -1,4 +1,5 @@
-import Navigo from "navigo"
+import LazyLoad from 'vanilla-lazyload';
+import Navigo from 'navigo';
 
 // asyncrhonously fetch the html template partial from the file directory,
 // then set its contents to the html of the parent element
@@ -55,6 +56,7 @@ window.loadMap = function(){
 
 window.loadList = function(){
     updateView('listView');
+    new LazyLoad();
 };
 
 function updateView(activeView){
@@ -96,6 +98,7 @@ router.on({
     },
     'list': () => {
         loadList(app.state.filteredPlaces);
+        new LazyLoad();
         app.state.mode = app.settings.viewStates.list;
 
         if(!app.state.isBackNav)

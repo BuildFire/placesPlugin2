@@ -4,42 +4,42 @@ window.listView = {
             return;
         }
 
-        let screenWidth = window.innerWidth;
+        // Crop image to 16:9 aspect ratio
+        const imageWidth = Math.floor(window.innerWidth);
+        const imageHeight = Math.floor(window.innerWidth / 16 * 9);
 
-        const defaultImage = `https://czi3m2qn.cloudimg.io/s/width/${screenWidth}/https://pluginserver.buildfire.com/styles/media/holder-16x9.png`;
+        const imagePrefix = `https://czi3m2qn.cloudimg.io/s/crop/${imageWidth}x${imageHeight}/`;
+        const defaultImage = `https://pluginserver.buildfire.com/styles/media/holder-16x9.png`;
 
-        let listContainer = document.getElementById("listView");
+        const listContainer = document.getElementById("listView");
 
         places.forEach((place, index) => {
-            let listItem = document.createElement('div');
+            const listItem = document.createElement('div');
+            listItem.className = 'list-item';
 
-            listItem.onclick = e => {
+            listItem.addEventListener('click', e => {
                 e.preventDefault();
-
                 window.app.state.selectedPlace.unshift(place);
                 window.router.navigate(window.app.settings.viewStates.detail);
-            };
-
-            listItem.style.cursor = 'pointer';
+            });
 
             //Add Image
-            let image = document.createElement('img');
-            image.src = (place.src)? place.src : defaultImage;
+            const listImage = place.image ? place.image : defaultImage;
+            const image = document.createElement('img');
+            image.setAttribute('data-src', imagePrefix + listImage);
+            image.className = 'list-image';
 
-            let title = document.createElement('div');
+            const title = document.createElement('div');
+            title.className = 'list-title';
             title.innerHTML = place.title;
-            title.style.display = 'inline-block';
-            title.style.paddingLeft = '5px';
 
-            let address = document.createElement('div');
+            const address = document.createElement('div');
             address.innerHTML = place.address;
 
-            let distance = document.createElement('div');
+            const distance = document.createElement('div');
             distance.setAttribute('id', `distance${index}`);
             distance.innerHTML = (place.distance) ? place.distance : '...';
-            distance.style.display = 'inline-block';
-            distance.style.float = 'right';
-            distance.style.paddingRight = '5px';
+            distance.className = 'list-distance';
 
             listItem.appendChild(image);
             listItem.appendChild(title);
@@ -52,12 +52,11 @@ window.listView = {
     initList: (places) => {
         //Add filter control
         let filterDiv = document.getElementById('filter');
-        new FilterControl(filterDiv);
-
-        listView.addPlaces(places);
+        new window.FilterControl(filterDiv);
+        window.listView.addPlaces(places);
     },
     updateList: (newPlaces) => {
-        listView.addPlaces(newPlaces);
+        window.listView.addPlaces(newPlaces);
     },
     updateDistances: (places) => {
         places.forEach((place, index) => {
