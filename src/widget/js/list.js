@@ -29,21 +29,38 @@ window.listView = {
             image.setAttribute('data-src', imagePrefix + listImage);
             image.className = 'list-image';
 
+            const infoContainer = document.createElement('div');
+            infoContainer.className = 'list-info-container';
+
             const title = document.createElement('div');
             title.className = 'list-title';
             title.innerHTML = place.title;
+            infoContainer.appendChild(title);
+
+            const description = document.createElement('div');
+            description.className = 'list-description';
+            description.innerHTML = place.description.length > 100
+                ? place.description.substring(0, 100) + '...'
+                : place.description;
+            infoContainer.appendChild(description);
+
+            const viewBtn = document.createElement('img');
+            viewBtn.className = 'list-view-btn';
+            viewBtn.src = 'images/right-arrow.svg';
+            infoContainer.appendChild(viewBtn);
 
             const address = document.createElement('div');
             address.innerHTML = place.address;
+            // infoContainer.appendChild(address);
 
             const distance = document.createElement('div');
             distance.setAttribute('id', `distance${index}`);
             distance.innerHTML = (place.distance) ? place.distance : '...';
             distance.className = 'list-distance';
+            infoContainer.appendChild(distance);
 
             listItem.appendChild(image);
-            listItem.appendChild(title);
-            listItem.appendChild(distance);
+            listItem.appendChild(infoContainer);
             //listItem.appendChild(address);
 
             listContainer.appendChild(listItem);
@@ -56,6 +73,7 @@ window.listView = {
         window.listView.addPlaces(places);
     },
     updateList: (newPlaces) => {
+        console.log('called updateList()');
         window.listView.addPlaces(newPlaces);
     },
     updateDistances: (places) => {

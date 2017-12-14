@@ -82,6 +82,9 @@ window.app = {
                 places = data.places.sort(sortBy);
                 window.app.state.places = places;
                 window.app.state.filteredPlaces = places;
+                window.app.state.sortBy = data.sortBy;
+                window.app.state.defaultView = data.defaultView;
+                window.app.state.categories = data.categories;
             }
 
             placesCallback(null, places);
@@ -105,14 +108,19 @@ window.app = {
           if(event.tag === window.app.settings.placesTag){
 
               console.log('Got update');
+              debugger;
 
               let currentPlaces = window.app.state.places;
               let newPlaces = event.data.places;
               let currentSortOrder = window.app.state.sortBy;
               let newSortOrder = event.data.sortBy;
-              let currentViewState = window.app.state.mode;
               let newViewState = event.data.defaultView;
+              let currentDefaultView = window.app.state.defaultView;
+              let newDefaultView = event.data.defaultView;
 
+              /**
+               * SORT ORDER
+               */
               if(currentSortOrder != newSortOrder){
                   window.app.state.sortBy = newSortOrder;
                   let sortBy = PlacesSort[window.app.state.sortBy];
@@ -124,7 +132,10 @@ window.app = {
                   return;
               }
 
-              if(currentViewState != newViewState){
+              // Had:  are you on the view that the settings are set to?
+              // Need: is the default view I have in memory, different to the one that got sent now?
+
+              if (currentDefaultView !== newDefaultView) {
                   window.app.state.mode = newViewState;
                   window.router.navigate(newViewState);
                   return;
