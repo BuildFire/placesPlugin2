@@ -2,47 +2,13 @@ import React from 'react';
 import csv from 'csv-js';
 
 class LocationsActionBar extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      addingLocation: false
-    };
-  }
-
-  /**
-   * Handle changes in the location autocomplete input.
-   *
-   * @desc This function calls the 'onSubmit' property function to update
-   * its parent and handle saving
-   */
-  onPlaceChanged() {
-    const place = this.autocomplete.getPlace();
-
-    if (place.geometry) {
-
-      const location = {
-        title: this.state.title,
-        address: {
-          name: place.formatted_address,
-          lat: place.geometry.location.lat(),
-          lng: place.geometry.location.lng()
-        }
-      };
-
-      this.props.onSubmit(location);
-      this.input.value = '';
-      this.setState({ title: '' });
-    }
-  }
 
   onAddLocation() {
     this.props.onAddLocation();
-    this.setState({ addingLocation: true });
   }
 
   onAddLocationCancel() {
     this.props.onAddLocationCancel();
-    this.setState({ addingLocation: false });
   }
 
   onFileChange() {
@@ -78,12 +44,14 @@ class LocationsActionBar extends React.Component {
   }
 
   render() {
+    const { addingLocation } = this.props;
+
     return (
       <div>
         <div className='row'>
           <div className='col-xs-6'>
             <div className='button-group'>
-              { this.state.addingLocation ? (
+              { addingLocation ? (
                 <button
                   className='btn btn-danger'
                   onClick={ () => this.onAddLocationCancel() }>

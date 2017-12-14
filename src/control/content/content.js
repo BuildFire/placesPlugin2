@@ -68,6 +68,7 @@ class Content extends React.Component {
     this.setState({ data });
     this.handleSave();
     this.setState({ addingLocation: false });
+    console.log(this.state);
   }
 
   /**
@@ -117,12 +118,14 @@ class Content extends React.Component {
         <div className='row'>
           <div className='col-xs-12'>
             <LocationsActionBar
+              addingLocation={ addingLocation }
               onAddLocation={ () => this.onAddLocation() }
               onAddLocationCancel={ () => this.onAddLocationCancel() }
               onMultipleSubmit={ (locations) => this.onMultipleLocationSubmit(locations) } />
 
             { addingLocation
-                ? <AddLocation onSubmit={ location => this.onLocationSubmit(location) } />
+                ? <AddLocation
+                    onSubmit={ location => this.onLocationSubmit(location) } />
                 : <LocationList
                     places={ data.places }
                     handleDelete={ (index) => this.handleLocationDelete(index) }/> }

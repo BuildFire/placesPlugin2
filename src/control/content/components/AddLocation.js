@@ -74,8 +74,8 @@ class AddLocation extends React.Component {
     e.preventDefault();
     const { title, description, address, image, carousel } = this.state;
     const data = { title, description, address, image, carousel };
-    this.props.onSubmit(data);
     this.setState({ title: '', description: '', address: null, image: '' });
+    this.props.onSubmit(data);
   }
 
   render() {
@@ -88,6 +88,7 @@ class AddLocation extends React.Component {
           <label htmlFor='name'>Title</label>
           <input
             onChange={ e => this.onInputChange(e) }
+            value={ title }
             name='title'
             type='text'
             className='form-control' />
@@ -97,13 +98,15 @@ class AddLocation extends React.Component {
           <label htmlFor='address'>Address</label>
           <input
             ref={ node => this.addressInput = node }
+            value={ address ? address.name : '' }
             type='text'
             className='form-control' />
         </div>
 
         <div className='form-group'>
-          <label htmlFor='descritpion'>Description</label>
+          <label htmlFor='description'>Description</label>
           <textarea
+            value={ description }
             onChange={ e => this.onInputChange(e) }
             className='form-control'
             name='description' rows='3' />
