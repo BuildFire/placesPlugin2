@@ -73,7 +73,7 @@ window.listView = {
         window.listView.addPlaces(places);
     },
     updateList: (newPlaces) => {
-        console.log('called updateList()');
+        console.log('called updateList()', newPlaces);
         window.listView.addPlaces(newPlaces);
     },
     updateDistances: (places) => {
