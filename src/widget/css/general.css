@@ -247,21 +247,56 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
 .list-item {
     position: relative;
     cursor: pointer;
+    display: block;
 }
 
 .list-item .list-image {
     display: block;
-    width: 100%;
-    height: 56.25%; // 100 / 16 * 9 (16:9 Aspect Ratio)
+    height: 56.25%;
+}
+
+
+.list-item .list-info-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    color: #fff;
+    background: -moz-linear-gradient(top, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.2) 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top, rgba(0,0,0,0.65) 0%,rgba(0,0,0,0.2) 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom, rgba(0,0,0,0.65) 0%,rgba(0,0,0,0.2) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 }
 
 .list-item .list-title {
     display: inline-block;
-    padding-left: 5px;
+    padding: 15px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    font-weight: 600;
+    font-size: 17px;
+}
+
+.list-item .list-description {
+    font-size: 14px;
+    line-height: 1.2;
+    padding: 40px 15px 0;
+    font-weight: 200;
+}
+
+.list-view-btn {
+    position: absolute;
+    right: 15px;
+    bottom: 15px;
+    width: 20px;
+    opacity: 0.8;
 }
 
 .list-item .list-distance {
     display: inline-block;
-    float: right;
-    padding-right: 5px;
+    padding: 15px;
+    position: absolute;
+    top: 0;
+    right: 0;
 }
