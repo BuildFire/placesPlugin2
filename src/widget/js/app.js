@@ -72,19 +72,21 @@ window.app = {
                 data = results.data;
 
             if(data && data.places){
+              if(window.app.state.categories){
                 window.app.state.categories = data.categories.map(category => {
                     return {name: category, isActive: true};
                 });
+              }
 
-                window.app.state.mode = data.defaultView;
+              window.app.state.mode = data.defaultView;
 
-                let sortBy = PlacesSort[data.sortBy];
-                places = data.places.sort(sortBy);
-                window.app.state.places = places;
-                window.app.state.filteredPlaces = places;
-                window.app.state.sortBy = data.sortBy;
-                window.app.state.defaultView = data.defaultView;
-                window.app.state.categories = data.categories;
+              let sortBy = PlacesSort[data.sortBy];
+              places = data.places.sort(sortBy);
+              window.app.state.places = places;
+              window.app.state.filteredPlaces = places;
+              window.app.state.sortBy = data.sortBy;
+              window.app.state.defaultView = data.defaultView;
+              window.app.state.categories = data.categories;
             }
 
             placesCallback(null, places);
@@ -108,7 +110,6 @@ window.app = {
           if(event.tag === window.app.settings.placesTag){
 
               console.log('Got update');
-              debugger;
 
               let currentPlaces = window.app.state.places;
               let newPlaces = event.data.places;
