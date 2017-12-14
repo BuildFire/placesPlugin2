@@ -26,10 +26,10 @@ window.app = {
         mapInitiated: false,
         mode: null,
         activeView: null,
-        places: null,
+        places: [],
         markers: [],
         bounds: null,
-        filteredPlaces: null,
+        filteredPlaces: [],
         selectedPlace: [],
         sortBy: null,
         categories: null,
@@ -132,13 +132,15 @@ window.app = {
                   return;
               }
 
-              // Had:  are you on the view that the settings are set to?
-              // Need: is the default view I have in memory, different to the one that got sent now?
+              let defaultViewChanged = currentDefaultView !== newDefaultView;
+              let notInDefaultView = newDefaultView !== window.app.state.mode;
 
-              if (currentDefaultView !== newDefaultView) {
-                  window.app.state.mode = newViewState;
-                  window.router.navigate(newViewState);
-                  return;
+              // We want to update the widget to reflect the new default view if the setting
+              // was changed and the user is not in that view already
+              if (defaultViewChanged && notInDefaultView) {
+                window.router.navigate(newViewState);
+                window.app.state.mode = newViewState;
+                return;
               }
 
               //Do comparison to see what's changed
@@ -153,20 +155,9 @@ window.app = {
           }
         });
     },
-    gotPlaces: (err, places) => {
-        if(window.app.state.mode === window.app.settings.viewStates.list){
-            window.initList(places, true);
-            //We can not pre-init the map, as it needs to be visible
-        }
-        else{
-            window.initMap(places, true);
-            window.initList(places);
-        }
-    },
-    gotLocation: (err, location) =>{
-        //Calculate distances
-        console.log('Got current location');
-
+    gotPieceOfData() {
+      if (window.app.state.places && window.app.state.location) {
+        let { location } = window.app.state;
         let destinations = [];
 
         window.app.state.places.forEach(place => {
@@ -192,6 +183,23 @@ window.app = {
                 window.listView.updateDistances(window.app.state.filteredPlaces);
             }
         });
+      }
+    },
+    gotPlaces(err, places) {
+        if(window.app.state.mode === window.app.settings.viewStates.list){
+            window.initList(places, true);
+            //We can not pre-init the map, as it needs to be visible
+        }
+        else{
+            window.initMap(places, true);
+            window.initList(places);
+        }
+        window.app.gotPieceOfData();
+    },
+
+    gotLocation(err, location) {
+        window.app.state.location = location;
+        window.app.gotPieceOfData();
     }
 };
 
