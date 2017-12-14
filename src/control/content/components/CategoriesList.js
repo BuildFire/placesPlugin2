@@ -24,16 +24,25 @@ class CategoriesList extends React.Component {
     return (
       <div className='col-xs-12'>
         <h3>Categories</h3>
-        <form onSubmit={ (e) => this.onSubmit(e) }>
-          <div className='control-group'>
-            <input
-              onChange={ (e) => this.onChange(e) }
-              type='text'
-              value={ this.state.name }
-              className='form-control'
-              placeholder='Category Name' />
-          </div>
-        </form>
+        <div className='row'>
+          <form onSubmit={ (e) => this.onSubmit(e) }>
+            <div className='col-xs-9'>
+              <div className='control-group'>
+                <input
+                  onChange={ (e) => this.onChange(e) }
+                  type='text'
+                  value={ this.state.name }
+                  className='form-control'
+                  placeholder='Category Name' />
+              </div>
+            </div>
+            <div className='col-xs-3'>
+              <button href='#' className='btn btn-block btn-success' type='submit'>
+                Add Category
+              </button>
+            </div>
+          </form>
+        </div>
         <br />
         { categories && categories.length ? (
           <table className='table table-striped'>
