@@ -39,10 +39,12 @@ window.listView = {
             infoContainer.appendChild(title);
 
             const description = document.createElement('div');
-            description.className = 'list-description';
-            description.innerHTML = place.description && place.description.length > 100
-                ? place.description.substring(0, 100) + '...'
-                : place.description;
+            let descriptionText = (place.description && place.description.length > 100)
+                ? place.description.substring(0, 100)
+                : (place.description) ? place.description : '';
+
+                description.className = 'list-description';
+            description.innerHTML = descriptionText;
             infoContainer.appendChild(description);
 
             const viewBtn = document.createElement('img');
