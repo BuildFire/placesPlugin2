@@ -4,12 +4,15 @@ import React from 'react';
 class AddLocation extends React.Component {
   constructor(props) {
     super(props);
+    const id = Math.floor((1 + Math.random()) * 0x10000000);
+
     this.state = {
       title: '',
       description: '',
       address: null,
       image: '',
-      carousel: []
+      carousel: [],
+      id: id
     };
   }
 

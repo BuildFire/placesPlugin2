@@ -15,6 +15,7 @@ window.listView = {
 
         places.forEach((place, index) => {
             const listItem = document.createElement('div');
+            listItem.id = (place.id) ? `id_${place.id}` : '';
             listItem.className = 'list-item';
 
             listItem.addEventListener('click', e => {
