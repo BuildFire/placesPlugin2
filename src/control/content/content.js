@@ -18,6 +18,38 @@ class Content extends React.Component {
   componentWillMount() {
     buildfire.datastore.get('places', (err, result) => {
       if (err) return console.error(err);
+
+      /*
+      //Debug code ... keep until we can add categories to places
+      console.error('places', result.data.places);
+
+      result.data.places = result.data.places.map((place, i) => {
+
+        if(!place.categories){
+            place.categories = [];
+
+            if ((i % 2) == 0)
+                place.categories.push('park');
+
+            if ((i % 3) == 0)
+                place.categories.push('restaurant');
+
+            if ((i % 5) == 0)
+                place.categories.push('site');
+        }
+          if(! place.id)
+            place.id = Math.floor((1 + Math.random()) * 0x10000000);
+
+          return place;
+      });
+
+      console.error('updated places', result.data.places);
+
+      buildfire.datastore.save(result.data, 'places', (err) => {
+          if (err) console.error(err);
+      });
+      */
+
       this.setState({ data: result.data });
     });
   }

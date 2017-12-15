@@ -80,21 +80,18 @@ window.listView = {
         window.listView.addPlaces(newPlaces);
     },
     filter(placesToHide, placesToShow) {
-        console.error('placesToHide', placesToHide);
-        console.error('placesToShow', placesToShow);
-
         //Hide filtered places
         placesToHide.forEach((place) => {
             let divToHide = document.getElementById(`id_${place.id}`);
             if(divToHide)
-                divToHide.display = 'none';
+                divToHide.setAttribute('style', 'display:none !important');
         });
 
         //Show places that have been hidden
         placesToShow.forEach((place) => {
             let divToShow = document.getElementById(`id_${place.id}`);
             if(divToShow)
-                divToShow.display = 'block';
+                divToShow.setAttribute('style', 'display:block !important');
         });
     },
     updateDistances: (places) => {

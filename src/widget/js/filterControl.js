@@ -69,9 +69,9 @@ window.filterControl = {
             //Update view to reflect changes
             if(app.state.mode === app.settings.viewStates.map){
                 mapView.filter(placesToHide, placesToShow);
-            }else{
-                listView.filter(placesToHide, placesToShow);
             }
+
+            listView.filter(placesToHide, placesToShow);
         }
 
         document.getElementById("sideNav").style.height = "0";
