@@ -1,11 +1,11 @@
-import {filter, find} from 'lodash'
-import Handlebars from "./lib/handlebars"
+import {filter, find} from 'lodash';
+import Handlebars from "./lib/handlebars";
 
 window.filterControl = {
     originalPlaces: null,
     updatedPlaces: null,
     openFilter: () => {
-        filterControl.originalPlaces = app.state.filteredPlaces;
+        window.filterControl.originalPlaces = app.state.filteredPlaces;
 
         let sideNav = document.getElementById("sideNav");
         let categoriesDiv = sideNav.querySelector('#categories');
@@ -16,7 +16,7 @@ window.filterControl = {
             let context = {
                 categories: app.state.categories
             };
-            
+
             fetch('./templates/categories.hbs')
                 .then(response => {
                     return response.text();
@@ -70,7 +70,7 @@ window.filterControl = {
             if(app.state.mode === app.settings.viewStates.map){
                 mapView.filter(placesToHide, placesToShow);
             }else{
-                listView.filter(placesToHide, placesToShow);
+                listView.filter(filterControl.updatedPlaces);
             }
         }
 

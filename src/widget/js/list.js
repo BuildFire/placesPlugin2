@@ -39,7 +39,7 @@ window.listView = {
 
             const description = document.createElement('div');
             description.className = 'list-description';
-            description.innerHTML = place.description.length > 100
+            description.innerHTML = place.description && place.description.length > 100
                 ? place.description.substring(0, 100) + '...'
                 : place.description;
             infoContainer.appendChild(description);
@@ -76,9 +76,12 @@ window.listView = {
         console.log('called updateList()', newPlaces);
         window.listView.addPlaces(newPlaces);
     },
-    filter(placesToHide, placesToShow) {
-        console.error('placesToHide', placesToHide);
-        console.error('placesToShow', placesToShow);
+    filter(updatedPlaces) {
+        console.error('updatedPlaces', updatedPlaces);
+
+        //TODO: Remove temporary hack
+        document.getElementById("listView").innerHTML = '';
+        window.listView.addPlaces(updatedPlaces);
     },
     updateDistances: (places) => {
         places.forEach((place, index) => {
