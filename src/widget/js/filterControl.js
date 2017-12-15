@@ -70,7 +70,7 @@ window.filterControl = {
             if(app.state.mode === app.settings.viewStates.map){
                 mapView.filter(placesToHide, placesToShow);
             }else{
-                listView.filter(filterControl.updatedPlaces);
+                listView.filter(placesToHide, placesToShow);
             }
         }
 

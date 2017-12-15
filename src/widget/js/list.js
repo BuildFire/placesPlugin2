@@ -76,12 +76,23 @@ window.listView = {
         console.log('called updateList()', newPlaces);
         window.listView.addPlaces(newPlaces);
     },
-    filter(updatedPlaces) {
-        console.error('updatedPlaces', updatedPlaces);
+    filter(placesToHide, placesToShow) {
+        console.error('placesToHide', placesToHide);
+        console.error('placesToShow', placesToShow);
 
-        //TODO: Remove temporary hack
-        document.getElementById("listView").innerHTML = '';
-        window.listView.addPlaces(updatedPlaces);
+        //Hide filtered places
+        placesToHide.forEach((place) => {
+            let divToHide = document.getElementById(`id_${place.id}`);
+            if(divToHide)
+                divToHide.display = 'none';
+        });
+
+        //Show places that have been hidden
+        placesToShow.forEach((place) => {
+            let divToShow = document.getElementById(`id_${place.id}`);
+            if(divToShow)
+                divToShow.display = 'block';
+        });
     },
     updateDistances: (places) => {
         places.forEach((place, index) => {
