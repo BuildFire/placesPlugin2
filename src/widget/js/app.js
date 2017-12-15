@@ -32,7 +32,7 @@ window.app = {
         filteredPlaces: [],
         selectedPlace: [],
         sortBy: null,
-        categories: null,
+        categories: [],
         navHistory: [],
         isBackNav: false
     },
@@ -72,7 +72,7 @@ window.app = {
                 data = results.data;
 
             if(data && data.places){
-              if(window.app.state.categories){
+              if(data.categories){
                 window.app.state.categories = data.categories.map(category => {
                     return {name: category, isActive: true};
                 });
@@ -86,7 +86,6 @@ window.app = {
               window.app.state.filteredPlaces = places;
               window.app.state.sortBy = data.sortBy;
               window.app.state.defaultView = data.defaultView;
-              window.app.state.categories = data.categories;
             }
 
             placesCallback(null, places);

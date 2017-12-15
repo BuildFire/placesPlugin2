@@ -64,7 +64,7 @@ window.mapView = {
             mapView.addMarker(map, place, mapView.settings.images.place);
         });
     },
-    filterMap: (placesToHide, placesToShow) => {
+    filter: (placesToHide, placesToShow) => {
 
         placesToHide.forEach((placeToHide) => {
             app.state.markers = app.state.markers.filter((marker) =>{
@@ -78,7 +78,7 @@ window.mapView = {
                 }
 
                 return !isMatch;
-            })
+            });
         });
 
         placesToShow.forEach((place) =>{

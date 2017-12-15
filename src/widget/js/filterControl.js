@@ -16,7 +16,7 @@ window.filterControl = {
             let context = {
                 categories: app.state.categories
             };
-
+            
             fetch('./templates/categories.hbs')
                 .then(response => {
                     return response.text();
@@ -45,7 +45,6 @@ window.filterControl = {
         app.state.filteredPlaces = app.state.places.filter(place => {
             //If a location has no categories, we always show it
             if(typeof place.categories === 'undefined' || place.categories.length === 0){
-                console.error('No category');
                 return true;
             }
 
@@ -69,9 +68,9 @@ window.filterControl = {
 
             //Update view to reflect changes
             if(app.state.mode === app.settings.viewStates.map){
-                mapView.filterMap(placesToHide, placesToShow);
+                mapView.filter(placesToHide, placesToShow);
             }else{
-                //listView.filterMap(placesToRemove, addedPlaces);
+                listView.filter(placesToHide, placesToShow);
             }
         }
 

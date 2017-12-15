@@ -76,6 +76,10 @@ window.listView = {
         console.log('called updateList()', newPlaces);
         window.listView.addPlaces(newPlaces);
     },
+    filter(placesToHide, placesToShow) {
+        console.error('placesToHide', placesToHide);
+        console.error('placesToShow', placesToShow);
+    },
     updateDistances: (places) => {
         places.forEach((place, index) => {
             if(place.distance)
