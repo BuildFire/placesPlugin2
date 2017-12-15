@@ -67,11 +67,16 @@ window.filterControl = {
             let placesToShow = filter(updatedPlaces, (postFilteredPlace) => { return !find(originalPlaces, postFilteredPlace)});
 
             //Update view to reflect changes
-            if(app.state.mode === app.settings.viewStates.map){
-                mapView.filter(placesToHide, placesToShow);
+            const wasMapInitiated = (document.getElementById("mapView").innerHTML != '');
+
+            if(wasMapInitiated){
+                window.mapView.filter(placesToHide, placesToShow);
+            }
+            else{
+                window.app.state.pendingMapFilter = {placesToHide, placesToShow};
             }
 
-            listView.filter(placesToHide, placesToShow);
+            window.listView.filter(placesToHide, placesToShow);
         }
 
         document.getElementById("sideNav").style.height = "0";

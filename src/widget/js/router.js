@@ -88,7 +88,7 @@ router.on({
             loadMap(app.state.filteredPlaces);
         }
         else{
-            initMap(app.state.places, true)
+            initMap(app.state.places, true);
         }
 
         app.state.mode = app.settings.viewStates.map;

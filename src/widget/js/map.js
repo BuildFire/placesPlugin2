@@ -40,6 +40,14 @@ window.mapView = {
             mapView.addMarkerCluster();
             map.fitBounds(app.state.bounds);
         }
+
+        if(window.app.state.pendingMapFilter){
+            const placesToHide = window.app.state.pendingMapFilter.placesToHide,
+                placesToShow = window.app.state.pendingMapFilter.placesToShow;
+
+            window.mapView.filter(placesToHide, placesToShow);
+            window.app.state.pendingMapFilter = null;
+        }
     },
     addMarkerCluster: () =>{
         let clusterOptions = {
