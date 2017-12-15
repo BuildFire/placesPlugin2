@@ -157,6 +157,7 @@ class Content extends React.Component {
 
             { addingLocation
                 ? <AddLocation
+                    categories={ data.categories }
                     onSubmit={ location => this.onLocationSubmit(location) } />
                 : <LocationList
                     places={ data.places }

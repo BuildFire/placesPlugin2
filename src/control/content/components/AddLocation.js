@@ -83,6 +83,7 @@ class AddLocation extends React.Component {
 
   render() {
     const { title, description, address, image } = this.state;
+    const { categories } = this.props;
 
     return (
       <form onSubmit={ e => this.onSubmit(e) }>
@@ -95,6 +96,18 @@ class AddLocation extends React.Component {
             name='title'
             type='text'
             className='form-control' />
+        </div>
+
+        <div className='form-group'>
+          <label htmlFor='category'>Category</label>
+          <select name='category' className='form-control'>
+            <option selected={ true } disabled={ true }>Select...</option>
+            { categories.map((category, index) =>
+              <option key={ index } value={ category }>
+                { category }
+              </option>
+            ) }
+          </select>
         </div>
 
         <div className='form-group'>
