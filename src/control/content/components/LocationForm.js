@@ -7,11 +7,13 @@ class LocationForm extends React.Component {
     let model = {
       title: '',
       description: '',
+      category: '',
       address: null,
       image: '',
       carousel: []
     };
     this.state = Object.assign(model, props.location);
+    console.log(props.location);
   }
 
   /**
@@ -26,7 +28,9 @@ class LocationForm extends React.Component {
     this.autocomplete.addListener('place_changed', () => this.onPlaceChanged());
 
     // Mount carousel
-    this.editor = new components.carousel.editor('#carousel');
+    this.editor = new components.carousel.editor('#carousel', {
+      items: this.props.location ? this.props.location.carousel : []
+    });
     this.editor.onAddItems = (items) => this.updateCarouselState();
     this.editor.onDeleteItems = (items, index) => this.updateCarouselState();
     this.editor.onItemChange = (item) => this.updateCarouselState();
@@ -97,7 +101,7 @@ class LocationForm extends React.Component {
 
   render() {
     const { categories } = this.props;
-    const { title, address, description, image } = this.state;
+    const { title, address, description, image, category } = this.state;
 
     return (
       <form onSubmit={ e => this.onSubmit(e) }>
@@ -114,7 +118,11 @@ class LocationForm extends React.Component {
 
         <div className='form-group'>
           <label htmlFor='category'>Category</label>
-          <select name='category' className='form-control'>
+          <select
+            name='category'
+            className='form-control'
+            onChange={ e => this.onInputChange(e) }
+            value={ category }>
             <option selected={ true } disabled={ true }>Select...</option>
             { categories ? categories.map((category, index) =>
               <option key={ index } value={ category }>
@@ -161,7 +169,7 @@ class LocationForm extends React.Component {
             disabled={ !title.length || !description.length || !address }
             type='submit'
             className='btn btn-primary'>
-            Add Location
+            { this.props.location ? 'Save Location' : 'Add Location' }
           </button>
         </div>
 

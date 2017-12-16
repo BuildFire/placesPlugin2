@@ -5,13 +5,15 @@ import LocationsActionBar from './components/LocationsActionBar';
 import LocationList from './components/LocationList';
 import CategoriesList from './components/CategoriesList';
 import AddLocation from './components/AddLocation';
+import EditLocation from './components/EditLocation';
 
 class Content extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       data: {},
-      addingLocation: false
+      addingLocation: false,
+      editingLocation: false
     };
   }
 
@@ -75,6 +77,10 @@ class Content extends React.Component {
     this.handleSave();
   }
 
+  handleLocationEdit(index) {
+    this.setState({ editingLocation: index });
+  }
+
   /**
    * Handle a deletion of a category index
    *
@@ -100,7 +106,21 @@ class Content extends React.Component {
     this.setState({ data });
     this.handleSave();
     this.setState({ addingLocation: false });
-    console.log(this.state);
+  }
+
+  /**
+   * Handle a location submission of an existing location
+   *
+   * @param   {Object} location Location data
+   * @param   {Number} index    Array index of editing location
+   */
+  onLocationEdit(location, index) {
+    const { data } = this.state;
+    data.places = data.places || [];
+    data.places[index] = location;
+    this.setState({ data });
+    this.handleSave();
+    this.setState({ editingLocation: false });
   }
 
   /**
@@ -133,11 +153,14 @@ class Content extends React.Component {
   }
 
   onAddLocationCancel() {
-    this.setState({ addingLocation: false });
+    this.setState({
+      addingLocation: false,
+      editingLocation: false
+    });
   }
 
   render() {
-    const { data, addingLocation } = this.state;
+    const { data, addingLocation, editingLocation } = this.state;
 
     return (
       <div>
@@ -150,17 +173,23 @@ class Content extends React.Component {
         <div className='row'>
           <div className='col-xs-12'>
             <LocationsActionBar
-              addingLocation={ addingLocation }
+              addingLocation={ addingLocation || editingLocation !== false }
               onAddLocation={ () => this.onAddLocation() }
               onAddLocationCancel={ () => this.onAddLocationCancel() }
               onMultipleSubmit={ (locations) => this.onMultipleLocationSubmit(locations) } />
 
-            { addingLocation
-                ? <AddLocation
-                    categories={ data.categories }
-                    onSubmit={ location => this.onLocationSubmit(location) } />
+            { addingLocation || editingLocation !== false
+                ? addingLocation
+                  ? <AddLocation
+                      categories={ data.categories }
+                      onSubmit={ location => this.onLocationSubmit(location) } />
+                  : <EditLocation
+                      categories={ data.categories }
+                      location={ data.places[editingLocation] }
+                      onSubmit={ location => this.onLocationEdit(location, editingLocation) }/>
                 : <LocationList
                     places={ data.places }
+                    handleEdit={ (index) => this.handleLocationEdit(index) }
                     handleDelete={ (index) => this.handleLocationDelete(index) }/> }
           </div>
         </div>
