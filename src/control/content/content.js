@@ -173,6 +173,7 @@ class Content extends React.Component {
         <div className='row'>
           <div className='col-xs-12'>
             <LocationsActionBar
+              places={ data.places }
               addingLocation={ addingLocation || editingLocation !== false }
               onAddLocation={ () => this.onAddLocation() }
               onAddLocationCancel={ () => this.onAddLocationCancel() }

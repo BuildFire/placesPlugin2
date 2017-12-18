@@ -39,7 +39,8 @@ label[for=csv] {
 }
 
 button.template {
-  margin: 15px 0;
+  margin-left: 15px;
+  margin-right: 0;
   display: inline-block;
 }
 
