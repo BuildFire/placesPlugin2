@@ -83,7 +83,7 @@ window.filterControl = {
     },
     changeView: () => {
         app.state.mode = (app.state.mode == app.settings.viewStates.list) ? app.settings.viewStates.map : app.settings.viewStates.list;
-        
+
         let switchViewButton = document.getElementsByClassName("changeView");
         Array.prototype.map.call(switchViewButton, (image)=> {
             image.src = (image.src.includes('map')) ? image.src.replace('map', 'list') : image.src.replace('list', 'map');
@@ -108,7 +108,7 @@ window.filterControl = {
 
             controlButton.style.display = 'inline-block';
             controlButton.style.padding = button.padding;
-            controlButton.innerHTML = `<img ${changeViewClass} src="./images/${imageName}.png"></img>`;
+            controlButton.innerHTML = `<img ${changeViewClass} src="./images/${imageName}.svg"></img>`;
             if(button.action)
                 controlButton.onclick = button.action;
             container.appendChild(controlButton);
@@ -120,13 +120,13 @@ window.filterControl = {
 
 window.CenterControl = function(controlDiv) {
     filterControl.createControl(controlDiv, [
-        {name:'center', action: mapView.centerMap, padding: '10px'}
+        { name:'center', action: mapView.centerMap, padding: '10px' }
     ]);
 }
 
 window.FilterControl = function (controlDiv){
     filterControl.createControl(controlDiv, [
-        {name:'changeView', action: filterControl.changeView, padding: '14px 16px 8px 8px'},
-        {name:'filter', action: filterControl.openFilter, padding: '14px 8px 8px 16px'}
+        { name:'changeView', action: filterControl.changeView, padding: '14px 16px 8px 8px' },
+        { name:'filter', action: filterControl.openFilter, padding: '14px 8px 8px 16px' }
     ]);
 }
