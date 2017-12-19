@@ -251,11 +251,12 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
     position: relative;
     cursor: pointer;
     display: block;
+    height: 56.25vw;
 }
 
 .list-item .list-image {
     display: block;
-    height: 56.25%;
+    height: 100%;
 }
 
 
