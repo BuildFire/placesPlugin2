@@ -1,8 +1,14 @@
 import LazyLoad from 'vanilla-lazyload';
 import Navigo from 'navigo';
 
-// asyncrhonously fetch the html template partial from the file directory,
-// then set its contents to the html of the parent element
+/**
+ * Loads an html template from the target url and renders it inside
+ * a container identified by an 'id'
+ *
+ * @param   {String} url Template target url
+ * @param   {String} id  Container element's id
+ * @returns {Promise}
+ */
 function loadHTML(url, id) {
     return new Promise((resolve, reject) => {
         let req = new XMLHttpRequest();
@@ -19,32 +25,48 @@ function loadHTML(url, id) {
     });
 }
 
+/**
+ * Handles loading a controller
+ *
+ * @param   {Function} initFunction Controller function
+ * @param   {Object} data         Initialization data for controller
+ */
 function loadControl(initFunction, data){
     let view = document.getElementById('view');
     view.className = 'transition';
 
-    //Provide a delay to let the template load first
-    setTimeout( function(){
-        initFunction(data);
-        view.className = 'fade';
-        window.app.state.isBackNav = false;
-    }, 250);
+    initFunction(data);
+    view.className = 'fade';
+    window.app.state.isBackNav = false;
 }
 
+/**
+ * Initialize the map controller
+ *
+ * @param   {Object}  places   Places data
+ * @param   {Boolean} isActive Wether the map is active or not
+ */
 window.initMap = function(places, isActive){
-    if(isActive){
+    if(isActive) {
         app.state.activeView = 'mapView';
         app.views[app.state.activeView].style.display = 'block';
         app.state.navHistory.push(app.settings.viewStates.map);
     }
 
-    loadHTML('./map.html', 'mapView');
-    loadControl(mapView.initMap, places);
-    app.state.mapInitiated = true;
+    loadHTML('./map.html', 'mapView').then(() => {
+        loadControl(mapView.initMap, places);
+        app.state.mapInitiated = true;
 
-    loadMap();
+        loadMap();
+    });
 };
 
+/**
+ * Initialize the list controller
+ *
+ * @param   {Object}  places   Places data
+ * @param   {Boolean} isActive Wether the list is active or not
+ */
 window.initList = function(places, isActive){
     if(isActive){
         app.state.activeView = 'listView';
@@ -52,11 +74,11 @@ window.initList = function(places, isActive){
         app.state.navHistory.push(app.settings.viewStates.list);
     }
 
-    loadHTML('./list.html', 'listView');
-    loadControl(listView.initList, places);
+    loadHTML('./list.html', 'listView')
+        .then(() => loadControl(listView.initList, places));
 };
 
-window.loadMap = function(){
+window.loadMap = function() {
     updateView('mapView');
 };
 
@@ -85,8 +107,8 @@ function loadDetail(place){
     app.views.mapView.style.display = 'none';
     app.views.listView.style.display = 'none';
     app.views.detailView.style.display = 'block';
-    loadHTML('./detail.html', 'detailView');
-    loadControl(detailView.init, place);
+    loadHTML('./detail.html', 'detailView')
+        .then(() => loadControl(detailView.init, place));
 }
 
 // use #! to hash
