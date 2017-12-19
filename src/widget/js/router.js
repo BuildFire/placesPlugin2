@@ -29,7 +29,7 @@ window.initMap = function(places, isActive){
     if(isActive){
         app.state.activeView = 'mapView';
         app.views[app.state.activeView].style.display = 'block';
-        app.state.navHistory.push(app.settings.viewStates.map)
+        app.state.navHistory.push(app.settings.viewStates.map);
     }
 
     loadHTML('./map.html', 'mapView');
@@ -43,7 +43,7 @@ window.initList = function(places, isActive){
     if(isActive){
         app.state.activeView = 'listView';
         app.views[app.state.activeView ].style.display = 'block';
-        app.state.navHistory.push(app.settings.viewStates.list)
+        app.state.navHistory.push(app.settings.viewStates.list);
     }
 
     loadHTML('./list.html', 'listView');
