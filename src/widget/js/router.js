@@ -4,13 +4,19 @@ import Navigo from 'navigo';
 // asyncrhonously fetch the html template partial from the file directory,
 // then set its contents to the html of the parent element
 function loadHTML(url, id) {
-    fetch(url)
-        .then(response => {
-            return response.text();
-        })
-        .then(responseText => {
-            document.getElementById(id).innerHTML = responseText;
-        });
+    return new Promise((resolve, reject) => {
+        let req = new XMLHttpRequest();
+        req.open('GET', url);
+        req.send();
+        req.onload = () => {
+            let elem = document.getElementById(id);
+            elem.innerHTML = req.responseText;
+            resolve();
+        };
+        req.onerror = (err) => {
+            reject(err);
+        };
+    });
 }
 
 function loadControl(initFunction, data){
@@ -125,7 +131,7 @@ router.on(() => {
 
 // set the 404 route
 router.notFound((query) => {
-    $id('view').innerHTML = '<h3>Invalid Route</h3>';
+    document.getElementById('view').innerHTML = '<h3>Invalid Route</h3>';
 });
 
 router.resolve();
