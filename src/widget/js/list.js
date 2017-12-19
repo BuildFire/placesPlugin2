@@ -28,7 +28,7 @@ window.listView = {
             const listImage = place.image ? place.image : defaultImage;
             const image = document.createElement('img');
             image.setAttribute('data-src', imagePrefix + listImage);
-            image.className = 'list-image';
+            image.className = 'list-image lazyyload';
 
             const infoContainer = document.createElement('div');
             infoContainer.className = 'list-info-container';

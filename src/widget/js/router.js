@@ -1,5 +1,16 @@
 import LazyLoad from 'vanilla-lazyload';
 import Navigo from 'navigo';
+const {
+    $id,
+    app,
+    router,
+    initMap,
+    loadMap,
+    loadList,
+    listView,
+    mapView,
+    detailView
+} = window;
 
 // asyncrhonously fetch the html template partial from the file directory,
 // then set its contents to the html of the parent element
@@ -21,8 +32,8 @@ function loadControl(initFunction, data){
     setTimeout( function(){
         initFunction(data);
         view.className = 'fade';
-        app.state.isBackNav = false;
-    }, 250)
+        window.app.state.isBackNav = false;
+    }, 250);
 }
 
 window.initMap = function(places, isActive){
@@ -56,7 +67,9 @@ window.loadMap = function(){
 
 window.loadList = function(){
     updateView('listView');
-    new LazyLoad();
+    new LazyLoad({
+        container: document.getElementById('view')
+    });
 };
 
 function updateView(activeView){
@@ -77,7 +90,8 @@ function loadDetail(place){
     app.views.mapView.style.display = 'none';
     app.views.listView.style.display = 'none';
     app.views.detailView.style.display = 'block';
-    loadHTML('./detail.html', 'detailView'); loadControl(detailView.init, place)
+    loadHTML('./detail.html', 'detailView');
+    loadControl(detailView.init, place);
 }
 
 // use #! to hash
@@ -94,7 +108,7 @@ router.on({
         app.state.mode = app.settings.viewStates.map;
 
         if(!app.state.isBackNav)
-            app.state.navHistory.push(app.settings.viewStates.map)
+            app.state.navHistory.push(app.settings.viewStates.map);
     },
     'list': () => {
         loadList(app.state.filteredPlaces);
@@ -102,7 +116,7 @@ router.on({
         app.state.mode = app.settings.viewStates.list;
 
         if(!app.state.isBackNav)
-            app.state.navHistory.push(app.settings.viewStates.list)
+            app.state.navHistory.push(app.settings.viewStates.list);
     },
     'detail': () => {
         console.log('app.state.selectedPlace', app.state.selectedPlace[0]);
@@ -111,7 +125,7 @@ router.on({
         app.state.mode = app.settings.viewStates.detail;
 
         if(!app.state.isBackNav)
-            app.state.navHistory.push(app.settings.viewStates.detail)
+            app.state.navHistory.push(app.settings.viewStates.detail);
     },
 });
 
@@ -121,6 +135,8 @@ router.on(() => {
 });
 
 // set the 404 route
-router.notFound((query) => { $id('view').innerHTML = '<h3>Invalid Route</h3>'; })
+router.notFound((query) => {
+    $id('view').innerHTML = '<h3>Invalid Route</h3>';
+});
 
 router.resolve();
