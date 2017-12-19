@@ -36,11 +36,11 @@ window.filterControl = {
         sideNav.style.height = "100%";
     },
     filterCategory: (categoryName) => {
-        let categoryIndex = app.state.categories.findIndex(category => {return category.name === categoryName});
+        let categoryIndex = app.state.categories.findIndex(category => category.name === categoryName);
         //Switch the category's state
         app.state.categories[categoryIndex].isActive = (!app.state.categories[categoryIndex].isActive);
 
-        let activeCategories = app.state.categories.filter((category) => {return category.isActive}).map(c => c.name);
+        let activeCategories = app.state.categories.filter(category => category.isActive).map(c => c.name);
 
         app.state.filteredPlaces = app.state.places.filter(place => {
             //If a location has no categories, we always show it
