@@ -1,16 +1,5 @@
 import LazyLoad from 'vanilla-lazyload';
 import Navigo from 'navigo';
-const {
-    $id,
-    app,
-    router,
-    initMap,
-    loadMap,
-    loadList,
-    listView,
-    mapView,
-    detailView
-} = window;
 
 // asyncrhonously fetch the html template partial from the file directory,
 // then set its contents to the html of the parent element

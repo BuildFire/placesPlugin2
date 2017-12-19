@@ -176,7 +176,7 @@ window.app = {
         }, (response) => {
             //Update places with distance
             window.app.state.places.map((place, index)=>{
-                place.distance =  response.rows[0].elements[index].distance.text;
+                place.distance = response.rows[0].elements[index].distance.text;
             });
 
             if(window.app.state.mode == window.app.settings.viewStates.list){
