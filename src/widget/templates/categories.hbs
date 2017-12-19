@@ -1,7 +1,7 @@
 <div>
     <h1>Categories</h1>
     {{#each categories}}
-        <div>
+        <div class="category">
             <a href="javascript:void(0);" id="{{name}}">{{name}}</a>
             <label class="switch">
                 <input type="checkbox" onclick="filterControl.filterCategory('{{name}}')" {{#if this.isActive}}checked{{/if}}>
