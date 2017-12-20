@@ -125,7 +125,6 @@ router.on({
     },
     'list': () => {
         loadList(app.state.filteredPlaces);
-        new LazyLoad();
         app.state.mode = app.settings.viewStates.list;
 
         if(!app.state.isBackNav)
