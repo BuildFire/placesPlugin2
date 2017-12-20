@@ -60,7 +60,7 @@ window.filterControl = {
         filterControl.updatedPlaces = app.state.filteredPlaces;
     },
     closeNav: () => {
-        if(filterControl.originalPlaces != filterControl.updatedPlaces){
+        if (filterControl.updatedPlaces !== null && filterControl.originalPlaces != filterControl.updatedPlaces) {
             let originalPlaces = filterControl.originalPlaces,
                 updatedPlaces = filterControl.updatedPlaces;
 

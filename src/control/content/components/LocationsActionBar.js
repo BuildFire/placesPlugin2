@@ -32,10 +32,15 @@ class LocationsActionBar extends React.Component {
   }
 
   handleDataExport() {
-    const rows = [['name', 'address_name','address_lat','address_lng', 'category']];
+    const rows = [['name', 'address_name','address_lat','address_lng', 'category','description']];
     this.props.places.forEach(place => {
       rows.push([
-        `"${place.title}"`, `"${place.address.name}"`, place.address.lat, place.address.lng, place.category
+        `"${place.title}"`,
+        `"${place.address.name}"`,
+        place.address.lat,
+        place.address.lng,
+        place.category,
+        `"${place.description}"`
       ]);
     });
     console.log(rows);

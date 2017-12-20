@@ -8,8 +8,6 @@ window.detailView = {
         let screenWidth = window.innerWidth;
         const title = place.title;
 
-        console.log(place);
-
         let context = {
             width: screenWidth,
             image: place.image,
@@ -18,8 +16,6 @@ window.detailView = {
             distance: place.distance,
             address: place.address.name
         };
-
-        console.log('place', place);
 
         fetch('./templates/detail.hbs')
             .then(response => {
@@ -55,7 +51,8 @@ window.detailView = {
                  */
                 if (place.carousel && place.carousel.length) {
                     let targetNode = document.getElementById('carouselView');
-                    targetNode.style.height = window.innerWidth / 16 * 9 + 'px';
+                    // Set carousel's height to a 16:9 aspect ratio
+                    targetNode.style.height = `${window.innerWidth / 16 * 9}px`;
                     new components.carousel.view({
                         selector: targetNode,
                         items: place.carousel
