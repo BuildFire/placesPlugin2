@@ -1,4 +1,3 @@
-import LazyLoad from 'vanilla-lazyload';
 import Navigo from 'navigo';
 
 /**
@@ -84,9 +83,6 @@ window.loadMap = function() {
 
 window.loadList = function(){
     updateView('listView');
-    new LazyLoad({
-        container: document.getElementById('view')
-    });
 };
 
 function updateView(activeView){
