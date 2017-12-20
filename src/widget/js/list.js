@@ -27,8 +27,8 @@ window.listView = {
             //Add Image
             const listImage = place.image ? place.image : defaultImage;
             const image = document.createElement('img');
-            image.setAttribute('data-src', imagePrefix + listImage);
-            image.setAttribute('src', 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==');
+            image.setAttribute('src', imagePrefix + listImage);
+            // image.setAttribute('src', 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==');
             image.className = 'list-image lazyyload';
 
             const infoContainer = document.createElement('div');
@@ -79,6 +79,7 @@ window.listView = {
     updateList: (newPlaces) => {
         console.log('called updateList()', newPlaces);
         window.listView.addPlaces(newPlaces);
+        console.log(newPlaces);
     },
     filter(placesToHide, placesToShow) {
         //Hide filtered places
