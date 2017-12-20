@@ -13,7 +13,6 @@ class LocationForm extends React.Component {
       carousel: []
     };
     this.state = Object.assign(model, props.location);
-    console.log(props.location);
   }
 
   /**
@@ -123,7 +122,7 @@ class LocationForm extends React.Component {
             className='form-control'
             onChange={ e => this.onInputChange(e) }
             value={ category }>
-            <option selected={ true } disabled={ true }>Select...</option>
+            <option value='' selected={ true } disabled={ true }>Select...</option>
             { categories ? categories.map((category, index) =>
               <option key={ index } value={ category }>
                 { category }
