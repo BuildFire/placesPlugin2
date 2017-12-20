@@ -55,7 +55,6 @@ window.detailView = {
                  */
                 if (place.carousel && place.carousel.length) {
                     let targetNode = document.getElementById('carouselView');
-                    targetNode.style.height = window.innerWidth / 16 * 9 + 'px';
                     new components.carousel.view({
                         selector: targetNode,
                         items: place.carousel
