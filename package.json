@@ -32,13 +32,12 @@
     "zip-webpack-plugin": "^2.0.0"
   },
   "dependencies": {
-    "axios": "^0.17.0",
     "csv-js": "^1.0.0",
     "handlebars": "^4.0.11",
     "lodash": "^4.17.4",
+    "lozad": "^1.0.9",
     "navigo": "^5.3.3",
     "preact": "^8.2.6",
-    "preact-compat": "^3.17.0",
-    "vanilla-lazyload": "^8.5.2"
+    "preact-compat": "^3.17.0"
   }
 }
