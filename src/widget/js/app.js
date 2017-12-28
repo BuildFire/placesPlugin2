@@ -109,6 +109,7 @@ window.app = {
           if(event.tag === window.app.settings.placesTag){
 
               console.log('Got update');
+              location.reload(); // TEMPORARY SOLUTION FOR THE DEMO
 
               let currentPlaces = window.app.state.places;
               let newPlaces = event.data.places;
