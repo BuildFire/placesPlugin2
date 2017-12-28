@@ -7,9 +7,9 @@ class LocationForm extends React.Component {
     let model = {
       title: '',
       description: '',
-      category: '',
       address: null,
       image: '',
+      categories: [],
       carousel: []
     };
     this.state = Object.assign(model, props.location);
@@ -40,6 +40,25 @@ class LocationForm extends React.Component {
     const changes = {};
     changes[e.target.name] = e.target.value;
     this.setState(changes);
+  }
+
+  onCategoryChange(e) {
+    let { name, checked } = e.target;
+    console.log({ name, checked });
+
+    // Category was selected
+    if (checked) {
+      let { categories } = this.state;
+      categories.push(name);
+      this.setState({ categories });
+
+    // Category was unselected
+    } else {
+      let index = this.state.categories.indexOf(name);
+      let { categories } = this.state;
+      categories.splice(index, 1);
+      this.setState({ categories });
+    }
   }
 
   /**
@@ -99,8 +118,7 @@ class LocationForm extends React.Component {
   }
 
   render() {
-    const { categories } = this.props;
-    const { title, address, description, image, category } = this.state;
+    const { title, address, description, image, categories } = this.state;
 
     return (
       <form onSubmit={ e => this.onSubmit(e) }>
@@ -116,19 +134,20 @@ class LocationForm extends React.Component {
         </div>
 
         <div className='form-group'>
-          <label htmlFor='category'>Category</label>
-          <select
-            name='category'
-            className='form-control'
-            onChange={ e => this.onInputChange(e) }
-            value={ category }>
-            <option value='' selected={ true } disabled={ true }>Select...</option>
-            { categories ? categories.map((category, index) =>
-              <option key={ index } value={ category }>
-                { category }
-              </option>
-            ) : null }
-          </select>
+          <label htmlFor='category'>Categories</label>
+          <div className='row'>
+            { this.props.categories ? this.props.categories.map((category, index) => (
+              <div key={ index } className='col-xs-3'>
+                <input
+                  onChange={ e => this.onCategoryChange(e) }
+                  type='checkbox'
+                  name={ category }
+                  checked={ categories.indexOf(category) > -1 } />
+                &nbsp;
+                <label>{ category }</label>
+              </div>
+            )) : null }
+          </div>
         </div>
 
         <div className='form-group'>
