@@ -4,7 +4,7 @@
   "description": "BuildFire plugin template for Webpack",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "eslint .",
     "build": "webpack --config ./webpack/build.config.js"
   },
   "keywords": [
