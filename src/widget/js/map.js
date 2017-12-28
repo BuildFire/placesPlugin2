@@ -40,6 +40,14 @@ window.mapView = {
             mapView.addMarkerCluster();
             map.fitBounds(app.state.bounds);
         }
+
+        if(window.app.state.pendingMapFilter){
+            const placesToHide = window.app.state.pendingMapFilter.placesToHide,
+                placesToShow = window.app.state.pendingMapFilter.placesToShow;
+
+            window.mapView.filter(placesToHide, placesToShow);
+            window.app.state.pendingMapFilter = null;
+        }
     },
     addMarkerCluster: () =>{
         let clusterOptions = {
@@ -64,7 +72,7 @@ window.mapView = {
             mapView.addMarker(map, place, mapView.settings.images.place);
         });
     },
-    filterMap: (placesToHide, placesToShow) => {
+    filter: (placesToHide, placesToShow) => {
 
         placesToHide.forEach((placeToHide) => {
             app.state.markers = app.state.markers.filter((marker) =>{
@@ -78,7 +86,7 @@ window.mapView = {
                 }
 
                 return !isMatch;
-            })
+            });
         });
 
         placesToShow.forEach((place) =>{

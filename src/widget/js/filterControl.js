@@ -1,11 +1,12 @@
-import {filter, find} from 'lodash'
-import Handlebars from "./lib/handlebars"
+import filter from 'lodash/filter';
+import find from 'lodash/find';
+import Handlebars from "./lib/handlebars";
 
 window.filterControl = {
     originalPlaces: null,
     updatedPlaces: null,
     openFilter: () => {
-        filterControl.originalPlaces = app.state.filteredPlaces;
+        window.filterControl.originalPlaces = app.state.filteredPlaces;
 
         let sideNav = document.getElementById("sideNav");
         let categoriesDiv = sideNav.querySelector('#categories');
@@ -36,16 +37,15 @@ window.filterControl = {
         sideNav.style.height = "100%";
     },
     filterCategory: (categoryName) => {
-        let categoryIndex = app.state.categories.findIndex(category => {return category.name === categoryName});
+        let categoryIndex = app.state.categories.findIndex(category => category.name === categoryName);
         //Switch the category's state
         app.state.categories[categoryIndex].isActive = (!app.state.categories[categoryIndex].isActive);
 
-        let activeCategories = app.state.categories.filter((category) => {return category.isActive}).map(c => c.name);
+        let activeCategories = app.state.categories.filter(category => category.isActive).map(c => c.name);
 
         app.state.filteredPlaces = app.state.places.filter(place => {
             //If a location has no categories, we always show it
             if(typeof place.categories === 'undefined' || place.categories.length === 0){
-                console.error('No category');
                 return true;
             }
 
@@ -60,7 +60,7 @@ window.filterControl = {
         filterControl.updatedPlaces = app.state.filteredPlaces;
     },
     closeNav: () => {
-        if(filterControl.originalPlaces != filterControl.updatedPlaces){
+        if (filterControl.updatedPlaces !== null && filterControl.originalPlaces != filterControl.updatedPlaces) {
             let originalPlaces = filterControl.originalPlaces,
                 updatedPlaces = filterControl.updatedPlaces;
 
@@ -68,18 +68,23 @@ window.filterControl = {
             let placesToShow = filter(updatedPlaces, (postFilteredPlace) => { return !find(originalPlaces, postFilteredPlace)});
 
             //Update view to reflect changes
-            if(app.state.mode === app.settings.viewStates.map){
-                mapView.filterMap(placesToHide, placesToShow);
-            }else{
-                //listView.filterMap(placesToRemove, addedPlaces);
+            const wasMapInitiated = (document.getElementById("mapView").innerHTML != '');
+
+            if(wasMapInitiated){
+                window.mapView.filter(placesToHide, placesToShow);
             }
+            else{
+                window.app.state.pendingMapFilter = {placesToHide, placesToShow};
+            }
+
+            window.listView.filter(placesToHide, placesToShow);
         }
 
         document.getElementById("sideNav").style.height = "0";
     },
     changeView: () => {
         app.state.mode = (app.state.mode == app.settings.viewStates.list) ? app.settings.viewStates.map : app.settings.viewStates.list;
-        
+
         let switchViewButton = document.getElementsByClassName("changeView");
         Array.prototype.map.call(switchViewButton, (image)=> {
             image.src = (image.src.includes('map')) ? image.src.replace('map', 'list') : image.src.replace('list', 'map');
@@ -104,7 +109,7 @@ window.filterControl = {
 
             controlButton.style.display = 'inline-block';
             controlButton.style.padding = button.padding;
-            controlButton.innerHTML = `<img ${changeViewClass} src="./images/${imageName}.png"></img>`;
+            controlButton.innerHTML = `<img ${changeViewClass} src="./images/${imageName}.svg"></img>`;
             if(button.action)
                 controlButton.onclick = button.action;
             container.appendChild(controlButton);
@@ -116,13 +121,13 @@ window.filterControl = {
 
 window.CenterControl = function(controlDiv) {
     filterControl.createControl(controlDiv, [
-        {name:'center', action: mapView.centerMap, padding: '10px'}
+        { name:'center', action: mapView.centerMap, padding: '10px' }
     ]);
 }
 
 window.FilterControl = function (controlDiv){
     filterControl.createControl(controlDiv, [
-        {name:'changeView', action: filterControl.changeView, padding: '14px 16px 8px 8px'},
-        {name:'filter', action: filterControl.openFilter, padding: '14px 8px 8px 16px'}
+        { name:'changeView', action: filterControl.changeView, padding: '14px 16px 8px 8px' },
+        { name:'filter', action: filterControl.openFilter, padding: '14px 8px 8px 16px' }
     ]);
 }

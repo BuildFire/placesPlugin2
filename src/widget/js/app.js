@@ -32,7 +32,7 @@ window.app = {
         filteredPlaces: [],
         selectedPlace: [],
         sortBy: null,
-        categories: null,
+        categories: [],
         navHistory: [],
         isBackNav: false
     },
@@ -72,19 +72,20 @@ window.app = {
                 data = results.data;
 
             if(data && data.places){
+              if(data.categories){
                 window.app.state.categories = data.categories.map(category => {
                     return {name: category, isActive: true};
                 });
+              }
 
-                window.app.state.mode = data.defaultView;
+              window.app.state.mode = data.defaultView;
 
-                let sortBy = PlacesSort[data.sortBy];
-                places = data.places.sort(sortBy);
-                window.app.state.places = places;
-                window.app.state.filteredPlaces = places;
-                window.app.state.sortBy = data.sortBy;
-                window.app.state.defaultView = data.defaultView;
-                window.app.state.categories = data.categories;
+              let sortBy = PlacesSort[data.sortBy];
+              places = data.places.sort(sortBy);
+              window.app.state.places = places;
+              window.app.state.filteredPlaces = places;
+              window.app.state.sortBy = data.sortBy;
+              window.app.state.defaultView = data.defaultView;
             }
 
             placesCallback(null, places);
@@ -108,7 +109,7 @@ window.app = {
           if(event.tag === window.app.settings.placesTag){
 
               console.log('Got update');
-              debugger;
+              location.reload(); // TEMPORARY SOLUTION FOR THE DEMO
 
               let currentPlaces = window.app.state.places;
               let newPlaces = event.data.places;
@@ -176,7 +177,7 @@ window.app = {
         }, (response) => {
             //Update places with distance
             window.app.state.places.map((place, index)=>{
-                place.distance =  response.rows[0].elements[index].distance.text;
+                place.distance = response.rows[0].elements[index].distance.text;
             });
 
             if(window.app.state.mode == window.app.settings.viewStates.list){

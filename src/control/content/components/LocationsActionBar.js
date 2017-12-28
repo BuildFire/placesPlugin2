@@ -2,47 +2,13 @@ import React from 'react';
 import csv from 'csv-js';
 
 class LocationsActionBar extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      addingLocation: false
-    };
-  }
-
-  /**
-   * Handle changes in the location autocomplete input.
-   *
-   * @desc This function calls the 'onSubmit' property function to update
-   * its parent and handle saving
-   */
-  onPlaceChanged() {
-    const place = this.autocomplete.getPlace();
-
-    if (place.geometry) {
-
-      const location = {
-        title: this.state.title,
-        address: {
-          name: place.formatted_address,
-          lat: place.geometry.location.lat(),
-          lng: place.geometry.location.lng()
-        }
-      };
-
-      this.props.onSubmit(location);
-      this.input.value = '';
-      this.setState({ title: '' });
-    }
-  }
 
   onAddLocation() {
     this.props.onAddLocation();
-    this.setState({ addingLocation: true });
   }
 
   onAddLocationCancel() {
     this.props.onAddLocationCancel();
-    this.setState({ addingLocation: false });
   }
 
   onFileChange() {
@@ -56,7 +22,8 @@ class LocationsActionBar extends React.Component {
           name: row[1],
           lat: parseFloat(row[2]),
           lng: parseFloat(row[3])
-        }
+        },
+        category: row[4]
       }));
       this.props.onMultipleSubmit(locations);
     };
@@ -64,8 +31,32 @@ class LocationsActionBar extends React.Component {
     reader.readAsText(file, 'UTF-8');
   }
 
+  handleDataExport() {
+    const rows = [['name', 'address_name','address_lat','address_lng', 'category','description']];
+    this.props.places.forEach(place => {
+      rows.push([
+        `"${place.title}"`,
+        `"${place.address.name}"`,
+        place.address.lat,
+        place.address.lng,
+        place.category,
+        `"${place.description}"`
+      ]);
+    });
+    console.log(rows);
+    let csvContent = 'data:text/csv;charset=utf-8,';
+    rows.forEach(row => csvContent += row.join(',') + '\r\n');
+
+    const encodedURI = encodeURI(csvContent);
+    const link = document.createElement('a');
+    link.setAttribute('href', encodedURI);
+    link.setAttribute('download', 'places_export.csv');
+    document.body.appendChild(link);
+    link.click();
+  }
+
   handleTemplateDownload() {
-    const rows = [['name','address_name','address_lat','address_lng']];
+    const rows = [['name','address_name','address_lat','address_lng','category']];
     let csvContent  = 'data:text/csv;charset=utf-8,';
     rows.forEach(row => csvContent += row.join(',') + '\r\n');
 
@@ -78,12 +69,14 @@ class LocationsActionBar extends React.Component {
   }
 
   render() {
+    const { addingLocation } = this.props;
+
     return (
       <div>
         <div className='row'>
           <div className='col-xs-6'>
             <div className='button-group'>
-              { this.state.addingLocation ? (
+              { addingLocation ? (
                 <button
                   className='btn btn-danger'
                   onClick={ () => this.onAddLocationCancel() }>
@@ -111,6 +104,11 @@ class LocationsActionBar extends React.Component {
                 htmlFor='csv'>
                 Import CSV
               </label>
+              <button
+                onClick={ () => this.handleDataExport() }
+                className='btn btn-primary template'>
+                Export CSV
+              </button>
               <button
                 onClick={ this.handleTemplateDownload }
                 className='btn btn-primary template'>

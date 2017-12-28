@@ -5,19 +5,53 @@ import LocationsActionBar from './components/LocationsActionBar';
 import LocationList from './components/LocationList';
 import CategoriesList from './components/CategoriesList';
 import AddLocation from './components/AddLocation';
+import EditLocation from './components/EditLocation';
 
 class Content extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       data: {},
-      addingLocation: false
+      addingLocation: false,
+      editingLocation: false
     };
   }
 
   componentWillMount() {
     buildfire.datastore.get('places', (err, result) => {
       if (err) return console.error(err);
+
+      /*
+      //Debug code ... keep until we can add categories to places
+      console.error('places', result.data.places);
+
+      result.data.places = result.data.places.map((place, i) => {
+
+        if(!place.categories){
+            place.categories = [];
+
+            if ((i % 2) == 0)
+                place.categories.push('park');
+
+            if ((i % 3) == 0)
+                place.categories.push('restaurant');
+
+            if ((i % 5) == 0)
+                place.categories.push('site');
+        }
+          if(! place.id)
+            place.id = Math.floor((1 + Math.random()) * 0x10000000);
+
+          return place;
+      });
+
+      console.error('updated places', result.data.places);
+
+      buildfire.datastore.save(result.data, 'places', (err) => {
+          if (err) console.error(err);
+      });
+      */
+
       this.setState({ data: result.data });
     });
   }
@@ -41,6 +75,10 @@ class Content extends React.Component {
     places.splice(index, 1);
     this.setState({ places });
     this.handleSave();
+  }
+
+  handleLocationEdit(index) {
+    this.setState({ editingLocation: index });
   }
 
   /**
@@ -68,6 +106,21 @@ class Content extends React.Component {
     this.setState({ data });
     this.handleSave();
     this.setState({ addingLocation: false });
+  }
+
+  /**
+   * Handle a location submission of an existing location
+   *
+   * @param   {Object} location Location data
+   * @param   {Number} index    Array index of editing location
+   */
+  onLocationEdit(location, index) {
+    const { data } = this.state;
+    data.places = data.places || [];
+    data.places[index] = location;
+    this.setState({ data });
+    this.handleSave();
+    this.setState({ editingLocation: false });
   }
 
   /**
@@ -100,11 +153,14 @@ class Content extends React.Component {
   }
 
   onAddLocationCancel() {
-    this.setState({ addingLocation: false });
+    this.setState({
+      addingLocation: false,
+      editingLocation: false
+    });
   }
 
   render() {
-    const { data, addingLocation } = this.state;
+    const { data, addingLocation, editingLocation } = this.state;
 
     return (
       <div>
@@ -117,14 +173,24 @@ class Content extends React.Component {
         <div className='row'>
           <div className='col-xs-12'>
             <LocationsActionBar
+              places={ data.places }
+              addingLocation={ addingLocation || editingLocation !== false }
               onAddLocation={ () => this.onAddLocation() }
               onAddLocationCancel={ () => this.onAddLocationCancel() }
               onMultipleSubmit={ (locations) => this.onMultipleLocationSubmit(locations) } />
 
-            { addingLocation
-                ? <AddLocation onSubmit={ location => this.onLocationSubmit(location) } />
+            { addingLocation || editingLocation !== false
+                ? addingLocation
+                  ? <AddLocation
+                      categories={ data.categories }
+                      onSubmit={ location => this.onLocationSubmit(location) } />
+                  : <EditLocation
+                      categories={ data.categories }
+                      location={ data.places[editingLocation] }
+                      onSubmit={ location => this.onLocationEdit(location, editingLocation) }/>
                 : <LocationList
                     places={ data.places }
+                    handleEdit={ (index) => this.handleLocationEdit(index) }
                     handleDelete={ (index) => this.handleLocationDelete(index) }/> }
           </div>
         </div>

@@ -15,6 +15,7 @@ window.listView = {
 
         places.forEach((place, index) => {
             const listItem = document.createElement('div');
+            listItem.id = (place.id) ? `id_${place.id}` : '';
             listItem.className = 'list-item';
 
             listItem.addEventListener('click', e => {
@@ -26,8 +27,9 @@ window.listView = {
             //Add Image
             const listImage = place.image ? place.image : defaultImage;
             const image = document.createElement('img');
-            image.setAttribute('data-src', imagePrefix + listImage);
-            image.className = 'list-image';
+            image.setAttribute('src', imagePrefix + listImage);
+            // image.setAttribute('src', 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==');
+            image.className = 'list-image lazyyload';
 
             const infoContainer = document.createElement('div');
             infoContainer.className = 'list-info-container';
@@ -38,10 +40,12 @@ window.listView = {
             infoContainer.appendChild(title);
 
             const description = document.createElement('div');
-            description.className = 'list-description';
-            description.innerHTML = place.description.length > 100
-                ? place.description.substring(0, 100) + '...'
-                : place.description;
+            let descriptionText = (place.description && place.description.length > 100)
+                ? place.description.substring(0, 100)
+                : (place.description) ? place.description : '';
+
+                description.className = 'list-description';
+            description.innerHTML = descriptionText;
             infoContainer.appendChild(description);
 
             const viewBtn = document.createElement('img');
@@ -75,6 +79,22 @@ window.listView = {
     updateList: (newPlaces) => {
         console.log('called updateList()', newPlaces);
         window.listView.addPlaces(newPlaces);
+        console.log(newPlaces);
+    },
+    filter(placesToHide, placesToShow) {
+        //Hide filtered places
+        placesToHide.forEach((place) => {
+            let divToHide = document.getElementById(`id_${place.id}`);
+            if(divToHide)
+                divToHide.setAttribute('style', 'display:none !important');
+        });
+
+        //Show places that have been hidden
+        placesToShow.forEach((place) => {
+            let divToShow = document.getElementById(`id_${place.id}`);
+            if(divToShow)
+                divToShow.setAttribute('style', 'display:block !important');
+        });
     },
     updateDistances: (places) => {
         places.forEach((place, index) => {

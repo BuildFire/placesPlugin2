@@ -61,19 +61,21 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
     padding: 8px 8px 8px 32px;
     text-decoration: none;
     font-size: 17px;
-    padding-left: 42px;
     color: #818181;
     transition: 0.3s;
     vertical-align: middle;
 }
 
+.sidenav label {
+    margin-bottom: 0 !important;
+}
+
 .sidenav .closebtn {
     position: absolute;
-    top: 0;
-    right: 25px;
+    top: 5px;
+    right: 5px;
     padding-bottom: 10px;
     font-size: 36px;
-    margin-left: 50px;
 }
 
 .buttonContainer{
@@ -249,11 +251,12 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
     position: relative;
     cursor: pointer;
     display: block;
+    height: 56.25vw;
 }
 
 .list-item .list-image {
     display: block;
-    height: 56.25%;
+    height: 100%;
 }
 
 
@@ -300,4 +303,26 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
     position: absolute;
     top: 0;
     right: 0;
+}
+
+#categories h1 {
+    margin: 15px;
+}
+
+#categories .category {
+    padding: 10px 15px;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+#categories .category:last-child {
+    border-bottom: none;
+}
+
+#categories .category .switch {
+    margin-top: 4px;
+    float: right;
+}
+
+#categories a {
+    padding-left: 0;
 }
