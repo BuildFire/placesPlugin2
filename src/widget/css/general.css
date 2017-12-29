@@ -325,3 +325,9 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
 #categories a {
     padding-left: 0;
 }
+
+#mapCenter .buttonContainer div {
+    padding: 14px !important;
+    height: 44px;
+    width: 44px;
+}
