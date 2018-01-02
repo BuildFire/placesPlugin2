@@ -109,7 +109,7 @@ window.filterControl = {
 
             controlButton.style.display = 'inline-block';
             controlButton.style.padding = button.padding;
-            controlButton.innerHTML = `<img ${changeViewClass} src="./images/${imageName}.svg"></img>`;
+            controlButton.innerHTML = `<img ${changeViewClass} src="./images/${imageName}.png"></img>`;
             if(button.action)
                 controlButton.onclick = button.action;
             container.appendChild(controlButton);

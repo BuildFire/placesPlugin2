@@ -141,6 +141,9 @@ class Content extends React.Component {
    * @param   {String} category Category name
    */
   onCategorySubmit(category) {
+    category = category.trim();
+    if (!category.length) return;
+
     const { data } = this.state;
     data.categories = data.categories || [];
     data.categories.push(category);

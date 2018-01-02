@@ -55,14 +55,14 @@ class CategoriesList extends React.Component {
                       <img
                         className='delete'
                         onClick={ () => this.props.handleDelete(index) }
-                        src='assets/svg/icon.svg' />
+                        src='assets/img/cross.png' />
                     </span>
                   </td>
                 </tr>
               )) }
             </tbody>
           </table>
-        ) : <img src='assets/svg/empty.svg' className='empty-state'/> }
+        ) : <img src='assets/img/empty-wireframe.jpg' className='empty-state'/> }
       </div>
     );
   }

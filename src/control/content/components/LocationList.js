@@ -29,7 +29,7 @@ class PlacesList extends React.Component {
                     <img
                       className='delete'
                       onClick={ () => this.props.handleDelete(index) }
-                      src='assets/svg/icon.svg' />
+                      src='assets/img/cross.png' />
                   </span>
                 </td>
               </tr>
