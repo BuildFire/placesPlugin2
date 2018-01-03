@@ -36,8 +36,8 @@ window.filterControl = {
 
         sideNav.style.height = "100%";
     },
-    filterCategory: (categoryName) => {
-        let categoryIndex = app.state.categories.findIndex(category => category.name === categoryName);
+    filterCategory: (categoryId) => {
+        let categoryIndex = app.state.categories.findIndex(category => category.name.id === categoryId);
         //Switch the category's state
         app.state.categories[categoryIndex].isActive = (!app.state.categories[categoryIndex].isActive);
 
