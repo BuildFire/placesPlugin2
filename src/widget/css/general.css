@@ -84,14 +84,13 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
     border-radius: 25px;
     box-shadow: 0 1px 1.5px 0 rgba(0, 0, 0, 0.5);
     cursor: pointer;
-    margin-bottom: 30px;
 }
 
 .mapCenter{
     position: fixed;
     left: 10px;
+    bottom: 15px;
     text-align: center;
-    margin-top: 137%;
     z-index: 1;
 }
 
@@ -99,8 +98,8 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
     width: 110px;
     position: fixed;
     right: 10px;
+    bottom: 15px;
     text-align: center;
-    margin-top: 137%;
     scroll-behavior: smooth;
     z-index: 1;
     backface-visibility: hidden;
@@ -325,4 +324,10 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
 
 #categories a {
     padding-left: 0;
+}
+
+#mapCenter .buttonContainer div {
+    padding: 14px !important;
+    height: 44px;
+    width: 44px;
 }

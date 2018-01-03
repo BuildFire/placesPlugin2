@@ -50,7 +50,7 @@ window.listView = {
 
             const viewBtn = document.createElement('img');
             viewBtn.className = 'list-view-btn';
-            viewBtn.src = 'images/right-arrow.svg';
+            viewBtn.src = 'images/right-arrow.png';
             infoContainer.appendChild(viewBtn);
 
             const address = document.createElement('div');
