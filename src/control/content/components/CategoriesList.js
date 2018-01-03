@@ -49,7 +49,7 @@ class CategoriesList extends React.Component {
             <tbody>
               { categories.map((category, index) => (
                 <tr key={ index }>
-                  <td>{ category }</td>
+                  <td>{ category.name }</td>
                   <td className='action'>
                     <span>
                       <img
