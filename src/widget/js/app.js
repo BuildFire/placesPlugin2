@@ -205,4 +205,4 @@ window.app = {
 };
 
 //document.addEventListener('DOMContentLoaded', () => window.app.init( window.app.gotPlaces, window.app.gotLocation));
-setTimeout(app.init(app.gotPlaces, app.gotLocation), 500);
+setTimeout(() => app.init(app.gotPlaces, app.gotLocation), 500);
