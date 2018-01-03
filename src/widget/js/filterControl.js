@@ -41,11 +41,11 @@ window.filterControl = {
         //Switch the category's state
         app.state.categories[categoryIndex].isActive = (!app.state.categories[categoryIndex].isActive);
 
-        let activeCategories = app.state.categories.filter(category => category.isActive).map(c => c.name);
+        let activeCategories = app.state.categories.filter(category => category.isActive).map(c => c.name.id);
 
         app.state.filteredPlaces = app.state.places.filter(place => {
             //If a location has no categories, we always show it
-            if(typeof place.categories === 'undefined' || place.categories.length === 0){
+            if (typeof place.categories === 'undefined' || place.categories.length === 0) {
                 return true;
             }
 
