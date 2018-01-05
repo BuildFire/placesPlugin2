@@ -1,12 +1,14 @@
 <div>
     <h1>Categories</h1>
-    {{#each categories}}
-        <div class="category">
-            <a href="javascript:void(0);" id="{{name.id}}">{{name.name}}</a>
-            <label class="switch">
-                <input type="checkbox" onclick="filterControl.filterCategory('{{name.id}}')" {{#if this.isActive}}checked{{/if}}>
-                <span class="toggle-slider round"></span>
-            </label>
-        </div>
-    {{/each}}
+    <div class="categories-scroll-list">
+        {{#each categories}}
+            <div class="category">
+                <a href="javascript:void(0);" id="{{name.id}}">{{name.name}}</a>
+                <label class="switch">
+                    <input type="checkbox" onclick="filterControl.filterCategory('{{name.id}}')" {{#if this.isActive}}checked{{/if}}>
+                    <span class="toggle-slider round"></span>
+                </label>
+            </div>
+        {{/each}}
+    </div>
 </div>

@@ -31,10 +31,9 @@ window.filterControl = {
 
                     // Add the compiled html to the page
                     document.getElementById('categories').innerHTML = theCompiledHtml;
+                    sideNav.className += ' showing';
                 });
         }
-
-        sideNav.style.height = "100%";
     },
     filterCategory: (categoryId) => {
         let categoryIndex = app.state.categories.findIndex(category => category.name.id === categoryId);
@@ -61,6 +60,10 @@ window.filterControl = {
         filterControl.updatedPlaces = app.state.filteredPlaces;
     },
     closeNav: () => {
+
+        let sideNav = document.getElementById("sideNav");
+        sideNav.className = sideNav.className.replace('showing', '');
+
         if (filterControl.updatedPlaces !== null && filterControl.originalPlaces != filterControl.updatedPlaces) {
             let originalPlaces = filterControl.originalPlaces,
                 updatedPlaces = filterControl.updatedPlaces;
@@ -80,8 +83,6 @@ window.filterControl = {
 
             window.listView.filter(placesToHide, placesToShow);
         }
-
-        document.getElementById("sideNav").style.height = "0";
     },
     changeView: () => {
         app.state.mode = (app.state.mode == app.settings.viewStates.list) ? app.settings.viewStates.map : app.settings.viewStates.list;
