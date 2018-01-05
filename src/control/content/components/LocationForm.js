@@ -153,7 +153,8 @@ class LocationForm extends React.Component {
         <div className='form-group'>
           <label htmlFor='address'>Address</label>
           <input
-            ref={ node => this.addressInput = node }
+            key='address-input'
+            ref={ n => this.addressInput = n }
             value={ address ? address.name : '' }
             type='text'
             className='form-control' />
