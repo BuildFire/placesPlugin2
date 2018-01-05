@@ -1,3 +1,7 @@
+.lorySlides img {
+    display: block;
+    width: 100%;
+}
 
 .Rectangle-4 {
     width: 320px;
