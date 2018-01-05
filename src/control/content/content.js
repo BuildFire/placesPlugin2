@@ -64,6 +64,20 @@ class Content extends React.Component {
   }
 
   /**
+   * Handle renaming a category
+   *
+   * @param   {Number} index   The category index in the array
+   * @param   {String} newName The new category name to use
+   */
+  handleCategoryRename(index, newName) {
+    let { data } = this.state;
+    console.log(data.categories, index, newName);
+    data.categories[index].name = newName;
+    this.setState({ data });
+    this.handleSave();
+  }
+
+  /**
    * Handle a location submission and save to datastore
    *
    * @param   {Object} location Location object
@@ -145,6 +159,7 @@ class Content extends React.Component {
         <div className='row'>
           <CategoriesList
             categories={ data.categories }
+            handleRename={ (index, newName) => this.handleCategoryRename(index, newName) }
             handleDelete={ (index) => this.handleCategoryDelete(index) }
             onSubmit={ (category) => this.onCategorySubmit(category) } />
         </div>

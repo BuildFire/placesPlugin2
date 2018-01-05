@@ -8,6 +8,24 @@ table td.action {
     vertical-align: middle !important;
 }
 
+table td.action-large {
+    width: 90px;
+    padding: 0 !important;
+    vertical-align: middle !important;
+}
+
+table td.action-large a {
+  padding: 0 6px;
+}
+
+.edit-box {
+  margin: 0;
+  padding: 0 5px;
+  border: none;
+  border-radius: 4px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.1);
+}
+
 table img.delete {
     display: inline;
     vertical-align: middle;
