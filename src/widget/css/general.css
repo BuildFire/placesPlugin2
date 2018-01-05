@@ -94,7 +94,31 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
     z-index: 1;
 }
 
-.listViewFilter{
+.mapCenter .buttonContainer {
+    width: 55px;
+    height: 55px;
+    border-radius: 100%;
+    position: relative;
+    box-sizing: border-box;
+}
+
+.mapCenter div {
+    padding: 20px;
+    margin-top: 10px;
+}
+
+.mapCenter img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    width: 22px;
+    height: 22px;
+}
+
+.listViewFilter {
     width: 110px;
     position: fixed;
     right: 10px;
@@ -103,6 +127,21 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
     scroll-behavior: smooth;
     z-index: 1;
     backface-visibility: hidden;
+}
+
+.listViewFilter .buttonContainer {
+    border-radius: 100px;
+}
+
+.listViewFilter div {
+    padding: 9px 12px 6px 12px;
+    display: inline-block;
+
+}
+
+.listViewFilter img {
+    height: 18px;
+    height: 18px;
 }
 
 #view.transition{
@@ -324,10 +363,4 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
 
 #categories a {
     padding-left: 0;
-}
-
-#mapCenter .buttonContainer div {
-    padding: 14px !important;
-    height: 44px;
-    width: 44px;
 }

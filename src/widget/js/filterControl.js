@@ -109,7 +109,6 @@ window.filterControl = {
             }
 
             controlButton.style.display = 'inline-block';
-            controlButton.style.padding = button.padding;
             controlButton.innerHTML = `<img ${changeViewClass} src="./images/${imageName}.png"></img>`;
             if(button.action)
                 controlButton.onclick = button.action;
@@ -122,13 +121,13 @@ window.filterControl = {
 
 window.CenterControl = function(controlDiv) {
     filterControl.createControl(controlDiv, [
-        { name:'center', action: mapView.centerMap, padding: '10px' }
+        { name:'center', action: mapView.centerMap }
     ]);
 }
 
 window.FilterControl = function (controlDiv){
     filterControl.createControl(controlDiv, [
-        { name:'changeView', action: filterControl.changeView, padding: '14px 16px 8px 8px' },
-        { name:'filter', action: filterControl.openFilter, padding: '14px 8px 8px 16px' }
+        { name:'changeView', action: filterControl.changeView },
+        { name:'filter', action: filterControl.openFilter }
     ]);
 }

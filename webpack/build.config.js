@@ -21,7 +21,7 @@ const WebpackConfig = {
     path: path.join(__dirname, '../dist'),
     filename: '[name].js'
   },
-  
+
   externals: {
     buildfire: 'buildfire',
     angular: 'angular'
