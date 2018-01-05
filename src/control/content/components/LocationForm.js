@@ -141,10 +141,10 @@ class LocationForm extends React.Component {
                 <input
                   onChange={ e => this.onCategoryChange(e) }
                   type='checkbox'
-                  name={ category }
-                  checked={ categories.indexOf(category) > -1 } />
+                  name={ category.id }
+                  checked={ categories.indexOf(category.id) > -1 } />
                 &nbsp;
-                <label>{ category }</label>
+                <label>{ category.name }</label>
               </div>
             )) : null }
           </div>
@@ -153,7 +153,8 @@ class LocationForm extends React.Component {
         <div className='form-group'>
           <label htmlFor='address'>Address</label>
           <input
-            ref={ node => this.addressInput = node }
+            key='address-input'
+            ref={ n => this.addressInput = n }
             value={ address ? address.name : '' }
             type='text'
             className='form-control' />

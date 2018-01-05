@@ -1,4 +1,5 @@
 import React from 'react';
+import CategoryListItem from './CategoryListItem';
 
 class CategoriesList extends React.Component {
   constructor(props) {
@@ -48,17 +49,11 @@ class CategoriesList extends React.Component {
           <table className='table table-striped'>
             <tbody>
               { categories.map((category, index) => (
-                <tr key={ index }>
-                  <td>{ category.name }</td>
-                  <td className='action'>
-                    <span>
-                      <img
-                        className='delete'
-                        onClick={ () => this.props.handleDelete(index) }
-                        src='assets/img/cross.png' />
-                    </span>
-                  </td>
-                </tr>
+                <CategoryListItem
+                  handleRename={ (newValue) => this.props.handleRename(index, newValue) }
+                  handleDelete={ () => this.props.handleDelete(index) }
+                  category={ category }
+                  key={ index } />
               )) }
             </tbody>
           </table>

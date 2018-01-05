@@ -31,21 +31,21 @@ window.filterControl = {
 
                     // Add the compiled html to the page
                     document.getElementById('categories').innerHTML = theCompiledHtml;
+                    sideNav.className += ' showing';
                 });
         }
-
-        sideNav.style.height = "100%";
     },
-    filterCategory: (categoryName) => {
-        let categoryIndex = app.state.categories.findIndex(category => category.name === categoryName);
+    filterCategory: (categoryId) => {
+        let categoryIndex = app.state.categories.findIndex(category => category.name.id === categoryId);
         //Switch the category's state
         app.state.categories[categoryIndex].isActive = (!app.state.categories[categoryIndex].isActive);
 
-        let activeCategories = app.state.categories.filter(category => category.isActive).map(c => c.name);
+        let activeCategories = app.state.categories.filter(category => category.isActive).map(c => c.name.id);
+        console.log(activeCategories);
 
         app.state.filteredPlaces = app.state.places.filter(place => {
             //If a location has no categories, we always show it
-            if(typeof place.categories === 'undefined' || place.categories.length === 0){
+            if (typeof place.categories === 'undefined' || place.categories.length === 0) {
                 return true;
             }
 
@@ -60,6 +60,10 @@ window.filterControl = {
         filterControl.updatedPlaces = app.state.filteredPlaces;
     },
     closeNav: () => {
+
+        let sideNav = document.getElementById("sideNav");
+        sideNav.className = sideNav.className.replace('showing', '');
+
         if (filterControl.updatedPlaces !== null && filterControl.originalPlaces != filterControl.updatedPlaces) {
             let originalPlaces = filterControl.originalPlaces,
                 updatedPlaces = filterControl.updatedPlaces;
@@ -79,8 +83,6 @@ window.filterControl = {
 
             window.listView.filter(placesToHide, placesToShow);
         }
-
-        document.getElementById("sideNav").style.height = "0";
     },
     changeView: () => {
         app.state.mode = (app.state.mode == app.settings.viewStates.list) ? app.settings.viewStates.map : app.settings.viewStates.list;
@@ -108,7 +110,6 @@ window.filterControl = {
             }
 
             controlButton.style.display = 'inline-block';
-            controlButton.style.padding = button.padding;
             controlButton.innerHTML = `<img ${changeViewClass} src="./images/${imageName}.png"></img>`;
             if(button.action)
                 controlButton.onclick = button.action;
@@ -121,13 +122,13 @@ window.filterControl = {
 
 window.CenterControl = function(controlDiv) {
     filterControl.createControl(controlDiv, [
-        { name:'center', action: mapView.centerMap, padding: '10px' }
+        { name:'center', action: mapView.centerMap }
     ]);
 }
 
 window.FilterControl = function (controlDiv){
     filterControl.createControl(controlDiv, [
-        { name:'changeView', action: filterControl.changeView, padding: '14px 16px 8px 8px' },
-        { name:'filter', action: filterControl.openFilter, padding: '14px 8px 8px 16px' }
+        { name:'changeView', action: filterControl.changeView },
+        { name:'filter', action: filterControl.openFilter }
     ]);
 }

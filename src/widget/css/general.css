@@ -4,6 +4,34 @@
     height: 100%;
 }
 
+#mapView::-webkit-scrollbar,
+#listView::-webkit-scrollbar,
+#navView .categories-scroll-list::-webkit-scrollbar,
+#detailView::-webkit-scrollbar {
+    display: none;
+}
+
+#listView {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+
+#detailView {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
+}
+
 .animated {
   animation-duration: 400ms;
   animation-fill-mode: both;
@@ -31,6 +59,7 @@ html, body {
 }
 
 #view {
+    position: relative;
     height: 100%;
     margin: 0;
     padding: 0;
@@ -45,16 +74,39 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
 }
 
 .sidenav {
-    height: 0;
-    width: 100%;
     position: fixed;
-    z-index: 2;
+    height: 82vh;
+    left: 5px;
+    right: 5px;
     bottom: 0;
-    background-color: white;
-    overflow-x: scroll;
+    z-index: 2;
+    background-color: rgba(255,255,255,0.95);
     transition: 0.5s;
     padding-top: 0;
     text-align:left;
+    border-radius: 25px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    transform: translateY(105%);
+    -webkit-transform: translateY(105%);
+    box-shadow: 0 0 20px rgba(0,0,0,0.25);
+}
+
+.categories-scroll-list {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 70px;
+    bottom: 0;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    border-top: 1px solid rgba(0,0,0,0.06);
+    -webkit-overflow-scrolling: touch;
+}
+
+.sidenav.showing {
+    transform: translateY(0);
+    -webkit-transform: translateY(0);
 }
 
 .sidenav a {
@@ -94,7 +146,31 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
     z-index: 1;
 }
 
-.listViewFilter{
+.mapCenter .buttonContainer {
+    width: 55px;
+    height: 55px;
+    border-radius: 100%;
+    position: relative;
+    box-sizing: border-box;
+}
+
+.mapCenter div {
+    padding: 20px;
+    margin-top: 10px;
+}
+
+.mapCenter img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    width: 22px;
+    height: 22px;
+}
+
+.listViewFilter {
     width: 110px;
     position: fixed;
     right: 10px;
@@ -103,6 +179,21 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
     scroll-behavior: smooth;
     z-index: 1;
     backface-visibility: hidden;
+}
+
+.listViewFilter .buttonContainer {
+    border-radius: 100px;
+}
+
+.listViewFilter div {
+    padding: 9px 12px 6px 12px;
+    display: inline-block;
+
+}
+
+.listViewFilter img {
+    height: 18px;
+    height: 18px;
 }
 
 #view.transition{
@@ -324,10 +415,4 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
 
 #categories a {
     padding-left: 0;
-}
-
-#mapCenter .buttonContainer div {
-    padding: 14px !important;
-    height: 44px;
-    width: 44px;
 }
