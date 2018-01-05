@@ -108,47 +108,49 @@ function loadDetail(place){
 }
 
 // use #! to hash
-window.router = new Navigo(null, true);
-router.on({
-    'map': () => {
-        if(app.state.mapInitiated){
-            loadMap(app.state.filteredPlaces);
-        }
-        else{
-            initMap(app.state.places, true);
-        }
+window.runRouter = function() {
+    window.router = new Navigo(null, true);
+    router.on({
+        'map': () => {
+            if(app.state.mapInitiated){
+                loadMap(app.state.filteredPlaces);
+            }
+            else{
+                initMap(app.state.places, true);
+            }
 
-        app.state.mode = app.settings.viewStates.map;
+            app.state.mode = app.settings.viewStates.map;
 
-        if(!app.state.isBackNav)
-            app.state.navHistory.push(app.settings.viewStates.map);
-    },
-    'list': () => {
-        loadList(app.state.filteredPlaces);
-        app.state.mode = app.settings.viewStates.list;
+            if(!app.state.isBackNav)
+                app.state.navHistory.push(app.settings.viewStates.map);
+        },
+        'list': () => {
+            loadList(app.state.filteredPlaces);
+            app.state.mode = app.settings.viewStates.list;
 
-        if(!app.state.isBackNav)
-            app.state.navHistory.push(app.settings.viewStates.list);
-    },
-    'detail': () => {
-        console.log('app.state.selectedPlace', app.state.selectedPlace[0]);
+            if(!app.state.isBackNav)
+                app.state.navHistory.push(app.settings.viewStates.list);
+        },
+        'detail': () => {
+            console.log('app.state.selectedPlace', app.state.selectedPlace[0]);
 
-        loadDetail(app.state.selectedPlace[0]);
-        app.state.mode = app.settings.viewStates.detail;
+            loadDetail(app.state.selectedPlace[0]);
+            app.state.mode = app.settings.viewStates.detail;
 
-        if(!app.state.isBackNav)
-            app.state.navHistory.push(app.settings.viewStates.detail);
-    },
-});
+            if(!app.state.isBackNav)
+                app.state.navHistory.push(app.settings.viewStates.detail);
+        },
+    });
 
-// set the default route
-router.on(() => {
+    // set the default route
+    router.on(() => {
 
-});
+    });
 
-// set the 404 route
-router.notFound((query) => {
-    document.getElementById('view').innerHTML = '<h3>Invalid Route</h3>';
-});
+    // set the 404 route
+    router.notFound((query) => {
+        document.getElementById('view').innerHTML = '<h3>Invalid Route</h3>';
+    });
 
-router.resolve();
+    router.resolve();
+}

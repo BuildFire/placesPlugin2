@@ -1,3 +1,5 @@
+//import * as foo from 'lazyload';
+
 window.listView = {
     addPlaces: (places) => {
         if(!places){
@@ -27,9 +29,11 @@ window.listView = {
             //Add Image
             const listImage = place.image ? place.image : defaultImage;
             const image = document.createElement('img');
-            image.setAttribute('src', imagePrefix + listImage);
-            // image.setAttribute('src', 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==');
-            image.className = 'list-image lazyyload';
+
+            image.setAttribute('data-src', imagePrefix + listImage);
+            image.setAttribute('width', imageWidth);
+            image.setAttribute('height', imageHeight);
+            image.className = 'lazyload';
 
             const infoContainer = document.createElement('div');
             infoContainer.className = 'list-info-container';
@@ -68,6 +72,8 @@ window.listView = {
             //listItem.appendChild(address);
 
             listContainer.appendChild(listItem);
+
+            window.lazyload();
         });
     },
     initList: (places) => {
