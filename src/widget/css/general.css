@@ -4,6 +4,13 @@
     height: 100%;
 }
 
+#mapView::-webkit-scrollbar,
+#listView::-webkit-scrollbar,
+#navView .categories-scroll-list::-webkit-scrollbar,
+#detailView::-webkit-scrollbar {
+    display: none;
+}
+
 #listView {
     position: fixed;
     top: 0;
