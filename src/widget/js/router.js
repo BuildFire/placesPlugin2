@@ -108,7 +108,7 @@ function loadDetail(place){
 }
 
 // use #! to hash
-window.runRouter = function() {
+window.initRouter = function() {
     window.router = new Navigo(null, true);
     router.on({
         'map': () => {

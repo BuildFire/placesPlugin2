@@ -6,7 +6,8 @@
             <div class="address">{{address}}</div>
         </div>
         <div class="col-xs-4">
-            <img class="arrow" src="./images/arrow.png"> <span class="distance">{{distance}}</span>
+            {{#if distance }}<img class="arrow" src="./images/arrow.png"> <span class="distance">{{distance}}</span>{{/if}}
+
         </div>
     </div>
 </div>

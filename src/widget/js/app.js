@@ -206,4 +206,4 @@ window.app = {
 
 //document.addEventListener('DOMContentLoaded', () => window.app.init( window.app.gotPlaces, window.app.gotLocation));
 app.init(app.gotPlaces, app.gotLocation);
-window.runRouter();
+window.initRouter();
