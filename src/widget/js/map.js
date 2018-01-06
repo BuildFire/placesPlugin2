@@ -136,14 +136,11 @@ window.mapView = {
             image: place.image
         };
 
-        fetch('./templates/locationSummary.hbs')
-            .then(response => {
-                return response.text();
-            })
-            .then(response => {
-
-            // Compile the template
-            let theTemplate = Handlebars.compile(response);
+        let req = new XMLHttpRequest();
+        req.open('GET', './templates/locationSummary.hbs');
+        req.send();
+        req.onload = () => {
+            let theTemplate = Handlebars.compile(req.responseText);
 
             // Pass our data to the template
             let theCompiledHtml = theTemplate(context);
@@ -173,7 +170,7 @@ window.mapView = {
                     .marker.setIcon(mapView.createMarker(mapView.settings.images.place));
                 app.state.selectedPlace.shift();
             };
-        });
+        };
     },
     createMarker:(imageType) => {
         const iconBaseUrl = 'https://app.buildfire.com/app/media/';

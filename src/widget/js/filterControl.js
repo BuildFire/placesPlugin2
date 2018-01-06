@@ -18,21 +18,19 @@ window.filterControl = {
                 categories: app.state.categories
             };
 
-            fetch('./templates/categories.hbs')
-                .then(response => {
-                    return response.text();
-                })
-                .then(response => {
-                    // Compile the template
-                    let theTemplate = Handlebars.compile(response);
+            let req = new XMLHttpRequest();
+            req.open('GET', './templates/categories.hbs');
+            req.send();
+            req.onload = () => {
+                let theTemplate = Handlebars.compile(req.responseText);
 
-                    // Pass our data to the template
-                    let theCompiledHtml = theTemplate(context);
+                // Pass our data to the template
+                let theCompiledHtml = theTemplate(context);
 
-                    // Add the compiled html to the page
-                    document.getElementById('categories').innerHTML = theCompiledHtml;
-                    sideNav.className += ' showing';
-                });
+                // Add the compiled html to the page
+                document.getElementById('categories').innerHTML = theCompiledHtml;
+                sideNav.className += ' showing';
+            };
         }
     },
     filterCategory: (categoryId) => {

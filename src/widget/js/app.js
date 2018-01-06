@@ -179,10 +179,8 @@ window.app = {
             window.app.state.places.map((place, index)=>{
                 place.distance = response.rows[0].elements[index].distance.text;
             });
-
-            if(window.app.state.mode == window.app.settings.viewStates.list){
-                window.listView.updateDistances(window.app.state.filteredPlaces);
-            }
+            
+            window.listView.updateDistances(window.app.state.filteredPlaces);
         });
       }
     },
