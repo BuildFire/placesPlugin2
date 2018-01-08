@@ -80,8 +80,9 @@ window.app = {
 
               window.app.state.mode = data.defaultView;
 
-              let sortBy = PlacesSort[data.sortBy];
+              let sortBy = window.PlacesSort[data.sortBy];
               places = data.places.sort(sortBy);
+                
               window.app.state.places = places;
               window.app.state.filteredPlaces = places;
               window.app.state.sortBy = data.sortBy;
@@ -179,7 +180,7 @@ window.app = {
             window.app.state.places.map((place, index)=>{
                 place.distance = response.rows[0].elements[index].distance.text;
             });
-            
+
             window.listView.updateDistances(window.app.state.filteredPlaces);
         });
       }
