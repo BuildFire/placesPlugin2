@@ -1,16 +1,16 @@
 window.PlacesSort = {
     alpha(a, b) {
-        if(a.title < b.title)
+        if(a.title.toUpperCase() < b.title.toUpperCase())
             return -1;
-        if(a.title > b.title)
+        if(a.title.toUpperCase() > b.title.toUpperCase())
             return 1;
 
         return 0;
     },
     alphaDesc(a, b) {
-        if(a.title > b.title)
+        if(a.title.toUpperCase() > b.title.toUpperCase())
             return -1;
-        if(a.title < b.title)
+        if(a.title.toUpperCase() < b.title.toUpperCase())
             return 1;
 
         return 0;
