@@ -188,7 +188,7 @@ class LocationForm extends React.Component {
             disabled={ !title.length || !description.length || !address }
             type='submit'
             className='btn btn-primary'>
-            { this.props.location ? 'Save Location' : 'Add Location' }
+            { this.props.location ? 'Save Location' : 'Save Location' }
           </button>
         </div>
 
