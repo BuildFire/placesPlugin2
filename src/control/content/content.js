@@ -156,7 +156,7 @@ class Content extends React.Component {
 
     return (
       <div>
-        <div className='row'>
+        <div className='row category-box'>
           <CategoriesList
             categories={ data.categories }
             handleRename={ (index, newName) => this.handleCategoryRename(index, newName) }

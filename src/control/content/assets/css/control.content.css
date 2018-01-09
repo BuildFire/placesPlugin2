@@ -26,6 +26,11 @@ table td.action-large a {
   box-shadow: 0 0 5px rgba(0,0,0,0.1);
 }
 
+.category-box{
+    height: 275px;
+    overflow-y: auto;
+}
+
 table img.delete {
     display: inline;
     vertical-align: middle;
