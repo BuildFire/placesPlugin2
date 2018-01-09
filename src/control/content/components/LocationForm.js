@@ -96,7 +96,9 @@ class LocationForm extends React.Component {
    */
   onPlaceChanged() {
     const place = this.autocomplete.getPlace();
-    if (!place.geometry) return;
+    if (!place.geometry) {
+      return this.setState({ address: null });
+    }
 
     const address = {
       name: place.formatted_address,

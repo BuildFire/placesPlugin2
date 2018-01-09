@@ -16,6 +16,10 @@ class LocationsActionBar extends React.Component {
     const reader = new FileReader();
     reader.onload = e => {
       const rows = csv.parse(e.target.result);
+
+      // Remove header contents
+      rows.splice(0, 1);
+
       const locations = rows.map(row => ({
         title: row[0],
         address: {
@@ -23,7 +27,7 @@ class LocationsActionBar extends React.Component {
           lat: parseFloat(row[2]),
           lng: parseFloat(row[3])
         },
-        category: row[4]
+        description: row[4]
       }));
       this.props.onMultipleSubmit(locations);
     };
@@ -32,18 +36,17 @@ class LocationsActionBar extends React.Component {
   }
 
   handleDataExport() {
-    const rows = [['name', 'address_name','address_lat','address_lng', 'category','description']];
+    const rows = [['name', 'address_name','address_lat','address_lng','description']];
     this.props.places.forEach(place => {
       rows.push([
         `"${place.title}"`,
         `"${place.address.name}"`,
         place.address.lat,
         place.address.lng,
-        place.category,
         `"${place.description}"`
       ]);
     });
-    console.log(rows);
+
     let csvContent = 'data:text/csv;charset=utf-8,';
     rows.forEach(row => csvContent += row.join(',') + '\r\n');
 
@@ -56,7 +59,7 @@ class LocationsActionBar extends React.Component {
   }
 
   handleTemplateDownload() {
-    const rows = [['name','address_name','address_lat','address_lng','category']];
+    const rows = [['name','address_name','address_lat','address_lng','description']];
     let csvContent  = 'data:text/csv;charset=utf-8,';
     rows.forEach(row => csvContent += row.join(',') + '\r\n');
 
