@@ -44,11 +44,13 @@ function loadControl(initFunction, data){
  * @param   {Object}  places   Places data
  * @param   {Boolean} isActive Wether the map is active or not
  */
-window.initMap = function(places, isActive){
+window.initMap = function(places, isActive, noHistoryTrack){
     if(isActive) {
         app.state.activeView = 'mapView';
         app.views[app.state.activeView].style.display = 'block';
-        app.state.navHistory.push(app.settings.viewStates.map);
+
+        if(!noHistoryTrack)
+            app.state.navHistory.push(app.settings.viewStates.map);
     }
 
     loadHTML('./map.html', 'mapView').then(() => {
@@ -115,7 +117,7 @@ window.initRouter = function() {
                 loadMap(app.state.filteredPlaces);
             }
             else{
-                initMap(app.state.places, true);
+                initMap(app.state.places, true, true);
             }
 
             app.state.mode = app.settings.viewStates.map;
