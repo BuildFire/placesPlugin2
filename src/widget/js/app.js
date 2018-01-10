@@ -42,12 +42,12 @@ window.app = {
         buildfire.navigation.onBackButtonClick = function() {
             if (window.app.state.navHistory.length > 0) {
 
-                //Don't navigate to the current state (may occur when using back button)
+                //Remove the current state
                 if(window.app.state.mode === window.app.state.navHistory[window.app.state.navHistory.length-1])
                     window.app.state.navHistory.pop();
 
-                //Get previous state
-                let lastNavState = window.app.state.navHistory.pop();
+                //Navigate to the previous state
+                let lastNavState = window.app.state.navHistory[window.app.state.navHistory.length-1];
 
                 window.app.state.isBackNav = true;
 

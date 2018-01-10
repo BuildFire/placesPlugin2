@@ -36,7 +36,6 @@ function loadControl(initFunction, data){
 
     initFunction(data);
     view.className = 'fade';
-    window.app.state.isBackNav = false;
 }
 
 /**
@@ -123,6 +122,8 @@ window.initRouter = function() {
 
             if(!app.state.isBackNav)
                 app.state.navHistory.push(app.settings.viewStates.map);
+
+            window.app.state.isBackNav = false;
         },
         'list': () => {
             loadList(app.state.filteredPlaces);
@@ -130,15 +131,17 @@ window.initRouter = function() {
 
             if(!app.state.isBackNav)
                 app.state.navHistory.push(app.settings.viewStates.list);
+
+            window.app.state.isBackNav = false;
         },
         'detail': () => {
-            console.log('app.state.selectedPlace', app.state.selectedPlace[0]);
-
             loadDetail(app.state.selectedPlace[0]);
             app.state.mode = app.settings.viewStates.detail;
 
             if(!app.state.isBackNav)
                 app.state.navHistory.push(app.settings.viewStates.detail);
+
+            window.app.state.isBackNav = false;
         },
     });
 
