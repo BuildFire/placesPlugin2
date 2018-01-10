@@ -1,4 +1,4 @@
-//import lazyload from "lazyload";
+import lazyload from "lazyload";
 
 window.listView = {
     addPlaces: (places) => {
