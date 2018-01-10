@@ -84,7 +84,7 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
     transition: 0.5s;
     padding-top: 0;
     text-align:left;
-    border-radius: 25px;
+    border-radius: 12px;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
     transform: translateY(105%);
@@ -110,7 +110,7 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
 }
 
 .sidenav a {
-    padding: 8px 8px 8px 32px;
+    padding: 0 8px 8px 32px;
     text-decoration: none;
     font-size: 17px;
     color: #818181;
@@ -247,8 +247,13 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
 
 #locationSummary #close {
     position: absolute;
-    top: 10px;
+    top: 5px;
     right: 10px;
+    font-size: 30px;
+}
+
+.detail-info {
+    width: 80%;
 }
 
 .map-holder {
@@ -308,7 +313,12 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
 .aligner{
     display: flex;
     align-items: center;
-    justify-content: center;
+}
+.col-image {
+    width: 25%;
+}
+.col-title {
+    width: 52%;
 }
 .detail-image{
     border-radius: 100%;
@@ -396,6 +406,7 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
 }
 
 #categories h1 {
+    font-size: 26px;
     margin: 15px;
 }
 
