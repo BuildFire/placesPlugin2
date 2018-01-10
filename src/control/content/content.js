@@ -34,15 +34,22 @@ class Content extends React.Component {
     });
   }, 600)
 
+  updateSort(list) {
+    const { data } = this.state;
+    data.places = list;
+    this.setState({ data });
+    this.handleSave();
+  }
+
   /**
    * Handle a deletion of a location index
    *
    * @param   {Number} index Location index on places array
    */
   handleLocationDelete(index) {
-    const { places } = this.state.data;
-    places.splice(index, 1);
-    this.setState({ places });
+    const { data } = this.state;
+    data.places.splice(index, 1);
+    this.setState({ data });
     this.handleSave();
   }
 
@@ -183,6 +190,7 @@ class Content extends React.Component {
                       onSubmit={ location => this.onLocationEdit(location, editingLocation) }/>
                 : <LocationList
                     places={ data.places }
+                    updateSort={ (list) => this.updateSort(list) }
                     handleEdit={ (index) => this.handleLocationEdit(index) }
                     handleDelete={ (index) => this.handleLocationDelete(index) }/> }
           </div>
