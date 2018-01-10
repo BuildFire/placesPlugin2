@@ -135,6 +135,7 @@ window.initRouter = function() {
                 app.state.navHistory.push(app.settings.viewStates.list);
 
             window.app.state.isBackNav = false;
+            window.buildfire.appearance.titlebar.show();
         },
         'detail': () => {
             loadDetail(app.state.selectedPlace[0]);
@@ -144,6 +145,7 @@ window.initRouter = function() {
                 app.state.navHistory.push(app.settings.viewStates.detail);
 
             window.app.state.isBackNav = false;
+            window.buildfire.appearance.titlebar.show();
         },
     });
 

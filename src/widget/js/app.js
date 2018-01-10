@@ -59,6 +59,7 @@ window.app = {
         };
     },
     init: (placesCallback, positionCallback) => {
+        window.buildfire.appearance.titlebar.show();
 
         window.app.backButtonInit();
 
