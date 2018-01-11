@@ -40,8 +40,7 @@ const WebpackConfig = {
   },
 
   externals: {
-    buildfire: 'buildfire',
-    angular: 'angular'
+    buildfire: 'buildfire'
   },
 
   resolve: {
