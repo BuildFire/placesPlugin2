@@ -22,5 +22,13 @@ window.PlacesSort = {
             return 1;
 
         return 0;
+    },
+    distance(a, b) {
+        if(a.distanceInMeters < b.distanceInMeters)
+            return -1;
+        if(a.distanceInMeters > b.distanceInMeters)
+            return 1;
+
+        return 0;
     }
 };
