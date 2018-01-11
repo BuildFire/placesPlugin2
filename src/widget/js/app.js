@@ -179,7 +179,8 @@ window.app = {
         }, (response) => {
             //Update places with distance
             window.app.state.places.map((place, index)=>{
-                place.distance = response.rows[0].elements[index].distance.text;
+                if(response.rows[0].elements[index].distance)
+                    place.distance = response.rows[0].elements[index].distance.text;
             });
 
             window.listView.updateDistances(window.app.state.filteredPlaces);
