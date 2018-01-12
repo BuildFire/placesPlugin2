@@ -64,6 +64,10 @@ window.app = {
                 window.router.navigate(lastNavState);
             }
             else{
+                //If the plugin is set as the launcher plugin, we need to ensure track the state
+                if(window.location.href.includes('launcherPlugin'))
+                    window.app.state.navHistory.push(window.app.state.activeView);
+
                 window.app.goBack();
             }
         };
