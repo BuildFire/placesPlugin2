@@ -184,7 +184,7 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
     width: 110px;
     position: fixed;
     right: 10px;
-    bottom: 15px;
+    bottom: 21px;
     text-align: center;
     scroll-behavior: smooth;
     z-index: 1;
@@ -196,7 +196,7 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
 }
 
 .listViewFilter div {
-    padding: 9px 12px 6px 12px;
+    padding: 6px 12px;
     display: inline-block;
 
 }
