@@ -41,11 +41,12 @@ table td.action-large a {
 
 .sortable-item .titles {
   display: inline-block;
-  padding-left: 50px;
+  margin-left: 50px;
+  width: 20%;
 }
 
 .sortable-item .titles.secondary {
-  padding-left: 25px;
+  width: 40%;
 }
 
 .sortable-item .delete {
