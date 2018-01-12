@@ -253,7 +253,7 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
 }
 
 .detail-info {
-    width: 80%;
+    width: 70%;
 }
 
 .map-holder {
@@ -322,8 +322,8 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
 }
 .detail-image{
     border-radius: 100%;
-    width: 90px;
-    height: 90px;
+    width: 80px;
+    height: 80px;
     background-size: cover;
     background-position: center;
     background-color: #eee;
