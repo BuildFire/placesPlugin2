@@ -77,7 +77,7 @@ class LocationsActionBar extends React.Component {
     return (
       <div>
         <div className='row'>
-          <div className='col-xs-6'>
+          <div className='col-xs-4'>
             <div className='button-group'>
               { addingLocation ? (
                 <button
@@ -94,7 +94,7 @@ class LocationsActionBar extends React.Component {
               ) }
             </div>
           </div>
-          <div className='col-xs-6'>
+          <div className='col-xs-8'>
             <input
               onChange={ () => this.onFileChange() }
               ref={ n => this.fileInput = n }
