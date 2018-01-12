@@ -16,6 +16,10 @@ window.listView = {
 
         const listContainer = document.getElementById("listView");
 
+        const listScrollingContainer = document.createElement('div');
+        listScrollingContainer.className = 'list-scrolling-container';
+        listContainer.appendChild(listScrollingContainer);
+
         places.forEach((place, index) => {
             const listItem = document.createElement('div');
             listItem.id = (place.id) ? `id_${place.id}` : '';
@@ -72,7 +76,7 @@ window.listView = {
             listItem.appendChild(infoContainer);
             //listItem.appendChild(address);
 
-            listContainer.appendChild(listItem);
+            listScrollingContainer.appendChild(listItem);
 
             window.lazyload();
         });
