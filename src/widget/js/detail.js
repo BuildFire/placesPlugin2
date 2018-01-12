@@ -35,6 +35,7 @@ window.detailView = {
                 centerOn = {lat: place.address.lat, lng: place.address.lng};
 
             let options = {
+                gestureHandling: 'greedy',
                 streetViewControl: false,
                 mapTypeControl: false,
                 fullscreenControl: false,
