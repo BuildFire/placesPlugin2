@@ -1,5 +1,7 @@
 const path = require('path');
 var webpack = require('webpack');
+
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ZipWebpackPlugin = require('zip-webpack-plugin');
@@ -23,8 +25,7 @@ const WebpackConfig = {
   },
 
   externals: {
-    buildfire: 'buildfire',
-    angular: 'angular'
+    buildfire: 'buildfire'
   },
 
   resolve: {
@@ -40,6 +41,13 @@ const WebpackConfig = {
         test: /\.js$/,
         exclude: /(node_modules|bower_components)/,
         use: { loader: 'babel-loader' }
+      },
+      {
+          test: /\.css$/,
+          use: ExtractTextPlugin.extract({
+              fallback: 'style-loader',
+              use: {loader: 'css-loader', options: {minimize: true}}
+          })
       }
     ]
   },
@@ -90,6 +98,7 @@ const WebpackConfig = {
     ], {
       ignore: ['*.js', 'index.html', '*.md']
     }),
+    new ExtractTextPlugin('[name].css'),
     new ZipWebpackPlugin({
       path: path.join(__dirname, '../'),
       filename: `plugin.zip`

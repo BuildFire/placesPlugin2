@@ -10,8 +10,9 @@ window.listView = {
         const imageWidth = Math.floor(window.innerWidth);
         const imageHeight = Math.floor(window.innerWidth / 16 * 9);
 
-        const imagePrefix = `https://czi3m2qn.cloudimg.io/s/crop/${imageWidth}x${imageHeight}/`;
-        const defaultImage = `https://pluginserver.buildfire.com/styles/media/holder-16x9.png`;
+        const cloudImg = window.app.settings.cloudImg;
+        const imagePrefix = `${cloudImg.domain}${cloudImg.operations.crop}/${imageWidth}x${imageHeight}/`;
+        const defaultImage = `${cloudImg.domain}${cloudImg.operations.cdn}/https://pluginserver.buildfire.com/styles/media/holder-16x9.png`;
 
         const listContainer = document.getElementById("listView");
 
@@ -104,8 +105,12 @@ window.listView = {
     },
     updateDistances: (places) => {
         places.forEach((place, index) => {
-            if(place.distance)
-                document.getElementById(`distance${index}`).innerHTML = place.distance;
+            if(place.distance){
+                let distanceElement = document.getElementById(`distance${index}`);
+
+                if(distanceElement)
+                    distanceElement.innerHTML = place.distance;
+            }
         });
     }
 };

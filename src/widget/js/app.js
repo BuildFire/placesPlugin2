@@ -2,6 +2,8 @@ import buildfire from 'buildfire';
 import {filter, find} from 'lodash';
 import "./lib/markercluster.js";
 
+import "../css/general.css";
+import "../css/slider.css";
 import "./filterControl.js";
 import "./map.js";
 import "./list.js";
@@ -15,6 +17,14 @@ window.app = {
         viewStates: {map: 'map', list: 'list', detail: 'detail'},
         sortOptions: {alpha: 'alpha', alphaDesc: 'alphaDesc', manual: 'manual'},
         placesTag: 'places',
+        cloudImg: {
+            domain:'https://czi3m2qn.cloudimg.io',
+            operations: {
+                cdn: '/cdn/n/n',
+                width: '/s/width',
+                crop: '/s/crop'
+            }
+        }
     },
     views: {
         listView: document.getElementById('listView'),

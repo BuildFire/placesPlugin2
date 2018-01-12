@@ -50,12 +50,14 @@ window.mapView = {
         }
     },
     addMarkerCluster: () =>{
+        const cloudImg = window.app.settings.cloudImg;
+
         let clusterOptions = {
             gridSize: 53,
             styles: [
                 {
                     textColor: 'white',
-                    url: 'https://czi3m2qn.cloudimg.io/s/width/53/https://app.buildfire.com/app/media/google_marker_blue_icon2.png',
+                    url: `${cloudImg.domain}${cloudImg.operations.width}/53/https://app.buildfire.com/app/media/google_marker_blue_icon2.png`,
                     height: 53,
                     width: 53
                 }
@@ -173,10 +175,11 @@ window.mapView = {
         };
     },
     createMarker:(imageType) => {
+        const cloudImg = window.app.settings.cloudImg;
         const iconBaseUrl = 'https://app.buildfire.com/app/media/';
 
         return {
-            url: iconBaseUrl + imageType,
+            url: `${cloudImg.domain}${cloudImg.operations.cdn}/${iconBaseUrl}${imageType}`,
             // This marker is 20 pixels wide by 20 pixels high.
             scaledSize: new google.maps.Size(20, 20),
             // The origin for this image is (0, 0).
