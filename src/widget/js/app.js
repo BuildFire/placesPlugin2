@@ -50,11 +50,18 @@ window.app = {
         window.app.goBack = window.buildfire.navigation.onBackButtonClick;
 
         buildfire.navigation.onBackButtonClick = function() {
+            const isLauncher = window.location.href.includes('launcherPlugin');
+
             if (window.app.state.navHistory.length > 0) {
 
                 //Remove the current state
-                if(window.app.state.mode === window.app.state.navHistory[window.app.state.navHistory.length-1])
-                    window.app.state.navHistory.pop();
+                if(window.app.state.mode === window.app.state.navHistory[window.app.state.navHistory.length-1]){
+                    
+                    //Don't remove last state, if launcher plugin
+                    if(!isLauncher || window.app.state.navHistory.length != 1){
+                        window.app.state.navHistory.pop();
+                    }
+                }
 
                 //Navigate to the previous state
                 let lastNavState = window.app.state.navHistory[window.app.state.navHistory.length-1];
@@ -64,12 +71,7 @@ window.app = {
                 window.router.navigate(lastNavState);
             }
             else{
-                //If the plugin is set as the launcher plugin, there's no where to go back to
-                //Also, keep track of current mode, since it was already popped off the history stack
-                if(window.location.href.includes('launcherPlugin'))
-                    window.app.state.navHistory.push(window.app.state.mode);
-                else
-                    window.app.goBack();
+                window.app.goBack();
             }
         };
     },
