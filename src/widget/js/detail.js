@@ -1,4 +1,4 @@
-import { components } from 'buildfire';
+import Buildfire, { components } from 'buildfire';
 import Handlebars from './lib/handlebars';
 
 window.detailView = {
@@ -14,7 +14,9 @@ window.detailView = {
             title: title,
             description: place.description,
             distance: place.distance,
-            address: place.address.name
+            address: place.address.name,
+            lat: place.address.lat,
+            lng: place.address.lng
         };
 
         let req = new XMLHttpRequest();
@@ -44,6 +46,23 @@ window.detailView = {
                 mapTypeId: mapTypeId,
                 disableDefaultUI: true
             };
+
+            /**
+             * Get Directions
+             */
+             let directionsButton = document.getElementById('directionsBtn');
+             directionsButton.addEventListener('click', getDirections);
+
+             function getDirections() {
+                let hbsContext = context;
+                Buildfire.getContext((err, context) => {
+                    if (context && context.device && context.device.platform === 'ios') {
+                        Buildfire.navigation.openWindow(`https://maps.apple.com/?q=${hbsContext.title}&t=m&daddr=${hbsContext.lat},${hbsContext.lng}`, '_system');
+                    } else {
+                        Buildfire.navigation.openWindow(`http://maps.google.com/maps?daddr=${hbsContext.lat},${hbsContext.lng}`, '_system');
+                    }
+                });
+             }
 
             /**
              * Carousel

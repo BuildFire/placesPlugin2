@@ -284,6 +284,7 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
 }
 
 .description {
+    margin-top: 0;
     padding: 15px;
 }
 
@@ -437,4 +438,16 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
 
 #categories a {
     padding-left: 0;
+}
+
+#directionsBtn {
+    display: block;
+    width: 95%;
+    margin: 20px auto 0;
+    border: none;
+    background-color: rgb(98, 189, 58);
+    color: #fff;
+    font-size: 15px;
+    border-radius: 100px;
+    padding: 10px 0;
 }
