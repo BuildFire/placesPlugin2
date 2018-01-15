@@ -129,3 +129,12 @@ button.template {
 .image-dialog a {
   line-height: 120px;
 }
+
+.autocomplete-container {
+    position: relative;
+}
+
+.pac-container {
+  top: 61px !important;
+  left: 0 !important;
+}
