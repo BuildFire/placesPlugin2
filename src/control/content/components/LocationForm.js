@@ -125,6 +125,13 @@ class LocationForm extends React.Component {
     this.props.onSubmit(this.state);
   }
 
+  onAutoKeyUp(e) {
+    let keyCode = e.keyCode || e.which;
+    if (keyCode === 13) {
+      e.preventDefault();
+    }
+  }
+
   render() {
     const { title, address, description, image, categories } = this.state;
 
@@ -161,6 +168,7 @@ class LocationForm extends React.Component {
         <div className='form-group autocomplete-container'>
           <label htmlFor='address'>Address</label>
           <input
+            onKeyUp={ e => this.onAutoKeyUp(e) }
             key='address-input'
             ref={ n => this.addressInput = n }
             value={ address ? address.name : '' }
