@@ -120,6 +120,7 @@ class Content extends React.Component {
    */
   onMultipleLocationSubmit(locations) {
     const { data} = this.state;
+    data.places = data.places || [];
     locations.forEach(location => data.places.push(location));
     this.setState({ data, addingLocation: false });
     this.handleSave();
