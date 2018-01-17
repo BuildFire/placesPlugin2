@@ -122,6 +122,7 @@ class LocationForm extends React.Component {
    */
   onSubmit(e) {
     e.preventDefault();
+    if (typeof this.state.address !== 'object') return;
     this.props.onSubmit(this.state);
   }
 
