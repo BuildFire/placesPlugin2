@@ -14,36 +14,50 @@ class MapOptions extends React.Component {
 
   render() {
     return (
-      <div className='col-xs-6'>
+      <div className='col-xs-12'>
         <h3>Map Options</h3>
         <form>
 
-          <div className='control-group'>
-            <label>Sort Order</label>
-            <select
-              name='sortBy'
-              className='form-control'
-              value={ this.props.options.sortBy }
-              onChange={ e => this.onChange(e) }>
-              <option value='alpha'>Alphabetical</option>
-              <option value='alphaDesc'>Reverse Alphabetical</option>
-              <option value='manual'>Manual</option>
-            </select>
-          </div>
+            <div className='row'>
+              <div className='col-xs-6'>
+                <label>Sort Order</label>
+              </div>
+              <div className='col-xs-6'>
+                <div className='dropdown'>
+                  <img src='assets/img/down-chevron.png' className='chev'/>
+                  <select
+                    name='sortBy'
+                    className='form-control'
+                    value={ this.props.options.sortBy }
+                    onChange={ e => this.onChange(e) }>
+                    <option value='alpha'>Alphabetical</option>
+                    <option value='alphaDesc'>Reverse Alphabetical</option>
+                    <option value='manual'>Manual</option>
+                  </select>
+                </div>
+              </div>
+            </div>
 
           <br />
 
-          <div className='control-group'>
-            <label>Default View</label>
-            <select
-              name='defaultView'
-              value={ this.props.options.defaultView }
-              className='form-control'
-              onChange={ e => this.onChange(e) }>
-              <option value='map'>Map</option>
-              <option value='list'>List</option>
-            </select>
-          </div>
+            <div className='row'>
+              <div className='col-xs-6'>
+                <label>Default View</label>
+              </div>
+              <div className='col-xs-6'>
+                <div className='dropdown'>
+                  <img src='assets/img/down-chevron.png' className='chev'/>
+                  <select
+                    name='defaultView'
+                    value={ this.props.options.defaultView }
+                    className='form-control'
+                    onChange={ e => this.onChange(e) }>
+                    <option value='map'>Map</option>
+                    <option value='list'>List</option>
+                  </select>
+                </div>
+              </div>
+            </div>
 
         </form>
       </div>

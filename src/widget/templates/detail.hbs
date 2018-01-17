@@ -1,19 +1,22 @@
 <div class="map-holder">
     <div id="smallMap" style="height:100%;width:100%"></div>
     <div class="row aligner map-details">
-        <div class="col-xs-8">
+        <div class="detail-info">
             <div class="title">{{title}}</div>
             <div class="address">{{address}}</div>
         </div>
-        <div class="col-xs-4">
+        <div>
             {{#if distance }}<img class="arrow" src="./images/arrow.png"> <span class="distance">{{distance}}</span>{{/if}}
-
         </div>
     </div>
 </div>
 <div class="row">
     <div class="col-xs-12">
         <div id="carouselView"></div>
+        <button id="directionsBtn">
+            Get Directions
+        </button>
+        <!-- <a href="">Directions-</a> -->
         <p class="description">{{description}}</p>
     </div>
 </div>

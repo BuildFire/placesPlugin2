@@ -1,0 +1,12 @@
+.drpodown {
+  position: relative;
+}
+
+.dropdown .chev {
+  position: absolute;
+  top: 9px;
+  right: 9px;
+  width: 15px;
+  -webkit-pointer-events: none;
+  pointer-events: none;
+}

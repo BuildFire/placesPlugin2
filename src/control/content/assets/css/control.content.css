@@ -18,6 +18,54 @@ table td.action-large a {
   padding: 0 6px;
 }
 
+.sortable-item {
+  position: relative;
+  background-color: #ffffff;
+  border-radius: 5px;
+  border: 1px solid rgba(0,0,0,0.1);
+  margin: 0 0 5px;
+  padding: 10px 0;
+}
+
+.sortable-item img.handle {
+  position: absolute;
+  left: 10px;
+  top: 0;
+  width: 20px;
+  z-index: 1;
+  top: 50%;
+  margin-top: -10px;
+  opacity: 0.5;
+  cursor: ns-resize;
+}
+
+.sortable-item .titles {
+  display: inline-block;
+  margin-left: 50px;
+  width: 20%;
+}
+
+.sortable-item .titles.secondary {
+  width: 60%;
+}
+
+.sortable-item .delete {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  margin-top: -9px;
+  width: 18px;
+  cursor: pointer;
+}
+
+.sortable-item .edit {
+  display: inline-block;
+  float: right;
+  margin-right: 50px;
+  position: absolute;
+  right: -8px;
+}
+
 .edit-box {
   margin: 0;
   padding: 0 5px;
@@ -80,4 +128,13 @@ button.template {
 
 .image-dialog a {
   line-height: 120px;
+}
+
+.autocomplete-container {
+    position: relative;
+}
+
+.pac-container {
+  top: 61px !important;
+  left: 0 !important;
 }

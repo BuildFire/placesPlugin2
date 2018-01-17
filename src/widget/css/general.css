@@ -17,8 +17,19 @@
     right: 0;
     bottom: 0;
     left: 0;
-    overflow-x: hidden;
+    overflow: hidden;
+    background-color: #121212;
+}
+
+#listView .list-scrolling-container {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
     overflow-y: scroll;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
 }
 
 #detailView {
@@ -84,7 +95,7 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
     transition: 0.5s;
     padding-top: 0;
     text-align:left;
-    border-radius: 25px;
+    border-radius: 12px;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
     transform: translateY(105%);
@@ -110,7 +121,7 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
 }
 
 .sidenav a {
-    padding: 8px 8px 8px 32px;
+    padding: 0 8px 8px 32px;
     text-decoration: none;
     font-size: 17px;
     color: #818181;
@@ -174,7 +185,7 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
     width: 110px;
     position: fixed;
     right: 10px;
-    bottom: 15px;
+    bottom: 21px;
     text-align: center;
     scroll-behavior: smooth;
     z-index: 1;
@@ -186,7 +197,7 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
 }
 
 .listViewFilter div {
-    padding: 9px 12px 6px 12px;
+    padding: 6px 12px;
     display: inline-block;
 
 }
@@ -242,13 +253,18 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
 #locationSummary .distance-indicator {
     padding-left: 0;
     padding-right: 0;
-    margin-top: 15px;
+    margin-top: 0;
 }
 
 #locationSummary #close {
     position: absolute;
-    top: 10px;
+    top: 5px;
     right: 10px;
+    font-size: 30px;
+}
+
+.detail-info {
+    width: 70%;
 }
 
 .map-holder {
@@ -268,6 +284,7 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
 }
 
 .description {
+    margin-top: 0;
     padding: 15px;
 }
 
@@ -308,19 +325,24 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
 .aligner{
     display: flex;
     align-items: center;
-    justify-content: center;
+}
+.col-image {
+    width: 90px;
+    height: 90px;
+}
+.col-title {
+    width: 52%;
 }
 .detail-image{
     border-radius: 100%;
-    width: 90px;
-    height: 90px;
+    width: 80px;
+    height: 80px;
     background-size: cover;
     background-position: center;
     background-color: #eee;
-    margin-top: 5px;
+    margin-top: 8px;
     margin-left: 6px;
 }
-
 .close{
     float: right;
     padding-right: 5px;
@@ -396,6 +418,7 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
 }
 
 #categories h1 {
+    font-size: 26px;
     margin: 15px;
 }
 
@@ -415,4 +438,16 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
 
 #categories a {
     padding-left: 0;
+}
+
+#directionsBtn {
+    display: block;
+    width: 95%;
+    margin: 20px auto 0;
+    border: none;
+    background-color: rgb(98, 189, 58);
+    color: #fff;
+    font-size: 15px;
+    border-radius: 100px;
+    padding: 10px 0;
 }

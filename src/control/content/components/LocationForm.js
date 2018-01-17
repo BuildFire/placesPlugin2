@@ -25,6 +25,12 @@ class LocationForm extends React.Component {
     const { maps } = window.google;
     this.autocomplete = new maps.places.Autocomplete(this.addressInput);
     this.autocomplete.addListener('place_changed', () => this.onPlaceChanged());
+    setTimeout(() => {
+      let container = document.querySelector('.pac-container');
+      this.addressInput.parentNode.appendChild(container);
+      container.style.top = '10px';
+      container.style.left = '10px';
+    }, 400);
 
     // Mount carousel
     this.editor = new components.carousel.editor('#carousel', {
@@ -96,7 +102,9 @@ class LocationForm extends React.Component {
    */
   onPlaceChanged() {
     const place = this.autocomplete.getPlace();
-    if (!place.geometry) return;
+    if (!place.geometry) {
+      return this.setState({ address: null });
+    }
 
     const address = {
       name: place.formatted_address,
@@ -150,7 +158,7 @@ class LocationForm extends React.Component {
           </div>
         </div>
 
-        <div className='form-group'>
+        <div className='form-group autocomplete-container'>
           <label htmlFor='address'>Address</label>
           <input
             key='address-input'

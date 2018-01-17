@@ -1,13 +1,14 @@
+import buildfire from 'buildfire';
 import React from 'react';
 import debounce from './lib/debounce';
-import MapOptions from './components/MapOptions'
+import MapOptions from './components/MapOptions';
 
 class Settings extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       data: {}
-    }
+    };
   }
 
   componentWillMount() {

@@ -56,7 +56,7 @@ window.app = {
 
                 //Remove the current state
                 if(window.app.state.mode === window.app.state.navHistory[window.app.state.navHistory.length-1]){
-                    
+
                     //Don't remove last state, if launcher plugin
                     if(!isLauncher || window.app.state.navHistory.length != 1){
                         window.app.state.navHistory.pop();
@@ -196,9 +196,11 @@ window.app = {
         }, (response) => {
             //Update places with distance
             window.app.state.places.map((place, index)=>{
-                if(response.rows[0].elements[index].distance)
+                if(response.rows && response.rows[0].elements[index] && response.rows[0].elements[index].distance)
                     place.distance = response.rows[0].elements[index].distance.text;
-                    place.distanceInMeters = response.rows[0].elements[index].distance.value;
+                    place.distanceInMeters = response.rows[0].elements[index].distance
+                      ? response.rows[0].elements[index].distance.value
+                      : null;
             });
 
             window.listView.updateDistances(window.app.state.filteredPlaces);
