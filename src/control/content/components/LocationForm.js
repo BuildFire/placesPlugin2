@@ -19,7 +19,11 @@ class LocationForm extends React.Component {
     };
     let state = Object.assign(model, cloneDeep(this.props.location) || {});
     this.setState(state);
-    console.log(this.state);
+  }
+
+  componentWillUnmount() {
+    window.google.maps.event.clearInstanceListeners(this.autocomplete);
+    delete this.autocomplete;
   }
 
   /**
@@ -177,7 +181,6 @@ class LocationForm extends React.Component {
         <div className='form-group autocomplete-container'>
           <label htmlFor='address'>Address</label>
           <input
-            onKeyUp={ e => this.onAutoKeyUp(e) }
             key='address-input'
             ref={ n => this.addressInput = n }
             value={ address ? address.name : '' }
