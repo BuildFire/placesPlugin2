@@ -129,6 +129,7 @@ class LocationForm extends React.Component {
   onAutoKeyUp(e) {
     let keyCode = e.keyCode || e.which;
     if (keyCode === 13) {
+      e.stopPropagation();
       e.preventDefault();
     }
   }
@@ -137,7 +138,7 @@ class LocationForm extends React.Component {
     const { title, address, description, image, categories } = this.state;
 
     return (
-      <form onSubmit={ e => this.onSubmit(e) }>
+      <form onSubmit={ e => this.onSubmit(e) } onKeyPress={ e => this.onAutoKeyUp(e) }>
 
         <div className='form-group'>
           <label htmlFor='name'>Title</label>
