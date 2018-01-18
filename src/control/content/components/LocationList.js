@@ -8,6 +8,7 @@ class PlacesList extends React.Component {
 
   onEditDidClick(index) {
     this.props.handleEdit(index);
+    alert(index);
   }
 
   onSortEnd = ({ oldIndex, newIndex }) => {
@@ -32,7 +33,7 @@ class PlacesList extends React.Component {
         <span className='titles secondary'>{ value.place.address.name }</span>
         <span className='edit'>
           <a onClick={ () => this.onEditDidClick(value.index) }>
-            Edit
+            Edit ({ value.index })
           </a>
         </span>
         <img
