@@ -32,7 +32,7 @@ class PlacesList extends React.Component {
         <span className='titles secondary'>{ value.place.address.name }</span>
         <span className='edit'>
           <a onClick={ () => this.onEditDidClick(value.index) }>
-            Edit ({ value.index })
+            Edit
           </a>
         </span>
         <img
