@@ -105,13 +105,11 @@ class Content extends React.Component {
    * @param   {Number} index    Array index of editing location
    */
   onLocationEdit(location, index) {
-    alert(index);
     const { data } = this.state;
     data.places = data.places || [];
     data.places[index] = location;
-    this.setState({ data });
+    this.setState({ data, editingLocation: false });
     this.handleSave();
-    this.setState({ editingLocation: false });
   }
 
   /**
