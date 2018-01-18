@@ -8,7 +8,6 @@ class PlacesList extends React.Component {
 
   onEditDidClick(index) {
     this.props.handleEdit(index);
-    alert(index);
   }
 
   onSortEnd = ({ oldIndex, newIndex }) => {

@@ -1,5 +1,6 @@
 import Buildfire, { components } from 'buildfire';
 import React from 'react';
+import cloneDeep from 'lodash/cloneDeep';
 
 class LocationForm extends React.Component {
   constructor(props) {
@@ -12,7 +13,7 @@ class LocationForm extends React.Component {
       categories: [],
       carousel: []
     };
-    this.state = Object.assign(model, props.location);
+    this.state = Object.assign(model, cloneDeep(props.location));
   }
 
   /**
