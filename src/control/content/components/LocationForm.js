@@ -21,6 +21,11 @@ class LocationForm extends React.Component {
     this.setState(state);
   }
 
+  componentWillUnmount() {
+    window.google.maps.event.clearInstanceListeners(this.autocomplete);
+    delete this.autocomplete;
+  }
+
   /**
    * Handles mounting of dom dependant components
    * - Google Maps
