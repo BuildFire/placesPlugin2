@@ -105,6 +105,7 @@ class Content extends React.Component {
    * @param   {Number} index    Array index of editing location
    */
   onLocationEdit(location, index) {
+    alert(index);
     const { data } = this.state;
     data.places = data.places || [];
     data.places[index] = location;
@@ -143,7 +144,6 @@ class Content extends React.Component {
     const { data } = this.state;
     data.categories = data.categories || [];
     data.categories.push(category);
-    console.log(data.categories);
     this.setState({ data });
     this.handleSave();
   }
