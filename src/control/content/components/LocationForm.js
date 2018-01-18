@@ -5,6 +5,10 @@ import cloneDeep from 'lodash/cloneDeep';
 class LocationForm extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {};
+  }
+
+  componentWillMount() {
     let model = {
       title: '',
       description: '',
@@ -13,7 +17,9 @@ class LocationForm extends React.Component {
       categories: [],
       carousel: []
     };
-    this.state = Object.assign(model, cloneDeep(props.location));
+    let state = Object.assign(model, cloneDeep(this.props.location) || {});
+    this.setState(state);
+    console.log(this.state);
   }
 
   /**
