@@ -196,11 +196,12 @@ window.app = {
         }, (response) => {
             //Update places with distance
             window.app.state.places.map((place, index)=>{
-                if(response.rows && response.rows[0].elements[index] && response.rows[0].elements[index].distance)
-                    place.distance = response.rows[0].elements[index].distance.text;
-                    place.distanceInMeters = response.rows[0].elements[index].distance
-                      ? response.rows[0].elements[index].distance.value
-                      : null;
+                if(response.rows && response.rows[0].elements[index]){
+                    const distance = response.rows[0].elements[index].distance;
+
+                    place.distance = (distance) ? distance.text : '';
+                    place.distanceInMeters = (distance) ? distance.value : '';
+                }
             });
 
             window.listView.updateDistances(window.app.state.filteredPlaces);

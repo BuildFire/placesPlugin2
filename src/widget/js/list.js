@@ -109,12 +109,10 @@ window.listView = {
     },
     updateDistances: (places) => {
         places.forEach((place, index) => {
-            if(place.distance){
-                let distanceElement = document.getElementById(`distance${index}`);
+            let distanceElement = document.getElementById(`distance${index}`);
 
-                if(distanceElement)
-                    distanceElement.innerHTML = place.distance;
-            }
+            if(distanceElement)
+                distanceElement.innerHTML = place.distance;
         });
     }
 };
