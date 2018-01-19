@@ -1,7 +1,7 @@
 {
   "author":"BuildFire",
   "pluginName":"Places 2.0",
-  "pluginDescription":"The Places plugin allows you to include a list and GPS map directory of categorized entries with pictures, contact information, instant directions, and even embed images.",
+  "pluginDescription":"The Places 2.0 plugin is an amazing feature for showcasing multiple, categorized locations or points of interest. Your app users can view locations in a list or map view and filter based on the categories you set up and include pictures, contact information, instant directions, and even embed images and videos. Note: This plugin is not backwards compatible with Places 1.0 Keywords: restaurant, gps, navigation, franchise, pins",
   "supportEmail":"support@buildfire.com",
   "control":{
     "content":{
