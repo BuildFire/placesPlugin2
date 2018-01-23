@@ -10,7 +10,7 @@ Be sure to have the latest BuildFire CLI installed in your system.
 
 ```
 $ buildfire create
-$ cd BuildfireSDK
+$ cd Buildfire/SDK
 $ npm start
 ```
 
