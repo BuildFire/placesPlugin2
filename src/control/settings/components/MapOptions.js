@@ -15,7 +15,7 @@ class MapOptions extends React.Component {
   render() {
     return (
       <div className='col-xs-12'>
-        <h3>Map Options</h3>
+        <h3>Options</h3>
         <form>
 
             <div className='row'>
