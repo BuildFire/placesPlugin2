@@ -11,6 +11,7 @@ class LocationForm extends React.Component {
   componentWillMount() {
     let model = {
       title: '',
+      subtitle: '',
       description: '',
       address: null,
       image: '',
@@ -146,7 +147,7 @@ class LocationForm extends React.Component {
   }
 
   render() {
-    const { title, address, description, image, categories } = this.state;
+    const { title, address, description, image, categories, subtitle } = this.state;
 
     return (
       <form onSubmit={ e => this.onSubmit(e) } onKeyPress={ e => this.onAutoKeyUp(e) }>
@@ -159,6 +160,17 @@ class LocationForm extends React.Component {
             name='title'
             type='text'
             className='form-control' />
+        </div>
+
+        <div className='form-group'>
+          <label htmlFor='subtitle'>Subtitle</label>
+          <input
+            onChange={ e => this.onInputChange(e) }
+            value={ subtitle }
+            name='subtitle'
+            className='form-control'
+            placeholder='Optional'
+            type='text'/>
         </div>
 
         <div className='form-group'>

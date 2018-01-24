@@ -48,14 +48,13 @@ window.listView = {
             title.innerHTML = place.title;
             infoContainer.appendChild(title);
 
-            const description = document.createElement('div');
-            let descriptionText = (place.description && place.description.length > 100)
-                ? place.description.substring(0, 100)
-                : (place.description) ? place.description : '';
+            const subtitle = document.createElement('div');
+            let subtitleText = (place.subtitle && place.subtitle.length)
+                ? place.subtitle : '';
 
-                description.className = 'list-description';
-            description.innerHTML = descriptionText;
-            infoContainer.appendChild(description);
+            subtitle.className = 'list-description';
+            subtitle.innerHTML = subtitleText;
+            infoContainer.appendChild(subtitle);
 
             const viewBtn = document.createElement('img');
             viewBtn.className = 'list-view-btn';
