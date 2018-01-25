@@ -445,7 +445,6 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
     width: 95%;
     margin: 20px auto 0;
     border: none;
-    background-color: rgb(98, 189, 58);
     color: #fff;
     font-size: 15px;
     border-radius: 100px;

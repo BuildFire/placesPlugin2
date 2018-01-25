@@ -202,7 +202,8 @@ class LocationForm extends React.Component {
 
         <div className='form-group'>
           <label htmlFor='description'>Description</label>
-          <textarea
+          <div
+            contentEditable={ true }
             value={ description }
             onChange={ e => this.onInputChange(e) }
             className='form-control'

@@ -51,6 +51,7 @@ window.detailView = {
              * Get Directions
              */
              let directionsButton = document.getElementById('directionsBtn');
+             directionsButton.className = 'btn btn-primary';
              directionsButton.addEventListener('click', getDirections);
 
              function getDirections() {
