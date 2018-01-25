@@ -45,9 +45,8 @@ class LocationForm extends React.Component {
     }, 400);
 
     // Mount carousel
-    this.editor = new components.carousel.editor('#carousel', {
-      items: this.props.location ? this.props.location.carousel : []
-    });
+    this.editor = new components.carousel.editor('#carousel');
+    this.editor.loadItems(this.state.carousel);
     this.editor.onAddItems = (items) => this.updateCarouselState();
     this.editor.onDeleteItems = (items, index) => this.updateCarouselState();
     this.editor.onItemChange = (item) => this.updateCarouselState();
