@@ -28,8 +28,14 @@ class PlacesList extends React.Component {
     const SortableItem = SortableElement(({ value }) => (
       <div className='sortable-item'>
         <DragHandle />
-        <span className='titles'>{ value.place.title }</span>
-        <span className='titles secondary'>{ value.place.address.name }</span>
+        <span className='titles'>
+          { value.place.title.length > 17
+            ? value.place.title.substring(0, 17).trim() + '...' : value.place.title }
+        </span>
+        <span className='titles secondary'>
+          { value.place.address.name.length > 45
+            ? value.place.address.name.substring(0, 45).trim() + '...' : value.place.address.name }
+        </span>
         <span className='edit'>
           <a onClick={ () => this.onEditDidClick(value.index) }>
             Edit

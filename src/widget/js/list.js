@@ -1,4 +1,4 @@
-import lazyload from "./lib/lazyload";
+import "./lib/lazyload";
 
 window.listView = {
     addPlaces: (places) => {
@@ -22,6 +22,7 @@ window.listView = {
 
         places.forEach((place, index) => {
             const listItem = document.createElement('div');
+            listItem.setAttribute('style', `${imageHeight}px !important`);
             listItem.id = (place.id) ? `id_${place.id}` : '';
             listItem.className = 'list-item';
 
@@ -38,6 +39,7 @@ window.listView = {
             image.setAttribute('data-src', imagePrefix + listImage);
             image.setAttribute('width', imageWidth);
             image.setAttribute('height', imageHeight);
+            image.setAttribute('style', `${imageHeight}px !important`);
             image.className = 'lazyload';
 
             const infoContainer = document.createElement('div');

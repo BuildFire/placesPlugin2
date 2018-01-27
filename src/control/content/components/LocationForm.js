@@ -154,6 +154,7 @@ class LocationForm extends React.Component {
         <div className='form-group'>
           <label htmlFor='name'>Title</label>
           <input
+            maxLength={ 60 }
             onChange={ e => this.onInputChange(e) }
             value={ title }
             name='title'
@@ -164,6 +165,7 @@ class LocationForm extends React.Component {
         <div className='form-group'>
           <label htmlFor='subtitle'>Subtitle</label>
           <input
+            maxLength={ 90 }
             onChange={ e => this.onInputChange(e) }
             value={ subtitle }
             name='subtitle'
@@ -201,12 +203,12 @@ class LocationForm extends React.Component {
 
         <div className='form-group'>
           <label htmlFor='description'>Description</label>
-          <div
-            contentEditable={ true }
+          <textarea
             value={ description }
             onChange={ e => this.onInputChange(e) }
             className='form-control'
-            name='description' rows='3' />
+            name='description'
+            rows='3' />
         </div>
 
         <div className='form-group'>
