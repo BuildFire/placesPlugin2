@@ -1,5 +1,6 @@
 import buildfire from 'buildfire';
 import React from 'react';
+import orderBy from 'lodash/orderBy';
 import debounce from './lib/debounce';
 import MapOptions from './components/MapOptions';
 
@@ -35,6 +36,15 @@ class Settings extends React.Component {
   handleOptionChange = (option) => {
     const { data } = this.state;
     data[option.name] = option.value;
+
+    if (option.name === 'sortBy') {
+      if (option.value === 'alpha') {
+          data.places = orderBy(data.places, [place => place.title.toLowerCase()], 'asc');
+      } else if (option.value === 'alphaDesc') {
+        data.places = orderBy(data.places, [place => place.title.toLowerCase()], 'desc');
+      }
+    }
+
     this.setState(data);
     this.handleSave();
   }

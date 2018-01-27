@@ -11,6 +11,7 @@ class LocationForm extends React.Component {
   componentWillMount() {
     let model = {
       title: '',
+      subtitle: '',
       description: '',
       address: null,
       image: '',
@@ -44,9 +45,8 @@ class LocationForm extends React.Component {
     }, 400);
 
     // Mount carousel
-    this.editor = new components.carousel.editor('#carousel', {
-      items: this.props.location ? this.props.location.carousel : []
-    });
+    this.editor = new components.carousel.editor('#carousel');
+    this.editor.loadItems(this.state.carousel);
     this.editor.onAddItems = (items) => this.updateCarouselState();
     this.editor.onDeleteItems = (items, index) => this.updateCarouselState();
     this.editor.onItemChange = (item) => this.updateCarouselState();
@@ -146,7 +146,7 @@ class LocationForm extends React.Component {
   }
 
   render() {
-    const { title, address, description, image, categories } = this.state;
+    const { title, address, description, image, categories, subtitle } = this.state;
 
     return (
       <form onSubmit={ e => this.onSubmit(e) } onKeyPress={ e => this.onAutoKeyUp(e) }>
@@ -154,11 +154,24 @@ class LocationForm extends React.Component {
         <div className='form-group'>
           <label htmlFor='name'>Title</label>
           <input
+            maxLength={ 60 }
             onChange={ e => this.onInputChange(e) }
             value={ title }
             name='title'
             type='text'
             className='form-control' />
+        </div>
+
+        <div className='form-group'>
+          <label htmlFor='subtitle'>Subtitle</label>
+          <input
+            maxLength={ 90 }
+            onChange={ e => this.onInputChange(e) }
+            value={ subtitle }
+            name='subtitle'
+            className='form-control'
+            placeholder='Optional'
+            type='text'/>
         </div>
 
         <div className='form-group'>
@@ -194,7 +207,8 @@ class LocationForm extends React.Component {
             value={ description }
             onChange={ e => this.onInputChange(e) }
             className='form-control'
-            name='description' rows='3' />
+            name='description'
+            rows='3' />
         </div>
 
         <div className='form-group'>

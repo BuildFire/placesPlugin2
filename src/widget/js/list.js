@@ -1,4 +1,4 @@
-import lazyload from "./lib/lazyload";
+import "./lib/lazyload";
 
 window.listView = {
     addPlaces: (places) => {
@@ -22,6 +22,7 @@ window.listView = {
 
         places.forEach((place, index) => {
             const listItem = document.createElement('div');
+            listItem.setAttribute('style', `${imageHeight}px !important`);
             listItem.id = (place.id) ? `id_${place.id}` : '';
             listItem.className = 'list-item';
 
@@ -38,6 +39,7 @@ window.listView = {
             image.setAttribute('data-src', imagePrefix + listImage);
             image.setAttribute('width', imageWidth);
             image.setAttribute('height', imageHeight);
+            image.setAttribute('style', `${imageHeight}px !important`);
             image.className = 'lazyload';
 
             const infoContainer = document.createElement('div');
@@ -48,14 +50,13 @@ window.listView = {
             title.innerHTML = place.title;
             infoContainer.appendChild(title);
 
-            const description = document.createElement('div');
-            let descriptionText = (place.description && place.description.length > 100)
-                ? place.description.substring(0, 100)
-                : (place.description) ? place.description : '';
+            const subtitle = document.createElement('div');
+            let subtitleText = (place.subtitle && place.subtitle.length)
+                ? place.subtitle : '';
 
-                description.className = 'list-description';
-            description.innerHTML = descriptionText;
-            infoContainer.appendChild(description);
+            subtitle.className = 'list-description';
+            subtitle.innerHTML = subtitleText;
+            infoContainer.appendChild(subtitle);
 
             const viewBtn = document.createElement('img');
             viewBtn.className = 'list-view-btn';

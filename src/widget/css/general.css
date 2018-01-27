@@ -386,18 +386,16 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
 
 .list-item .list-title {
     display: inline-block;
-    padding: 15px;
-    position: absolute;
-    top: 0;
-    left: 0;
+    padding: 15px 15px 10px;
     font-weight: 600;
     font-size: 17px;
+    margin-right: 60px;
 }
 
 .list-item .list-description {
     font-size: 14px;
     line-height: 1.2;
-    padding: 40px 15px 0;
+    padding: 0 15px;
     font-weight: 200;
 }
 
@@ -445,7 +443,6 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
     width: 95%;
     margin: 20px auto 0;
     border: none;
-    background-color: rgb(98, 189, 58);
     color: #fff;
     font-size: 15px;
     border-radius: 100px;
