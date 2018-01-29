@@ -9,9 +9,9 @@ Be sure to have the latest BuildFire CLI installed in your system.
 ### Download the latest SDK if you haven't already and run it
 
 ```
-$ buildfire create
+$ buildfire init
 $ cd Buildfire/SDK
-$ npm start
+$ buildfire start
 ```
 
 ### Once inside the SDK's folder
