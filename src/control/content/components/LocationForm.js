@@ -48,7 +48,7 @@ class LocationForm extends React.Component {
     this.editor = new components.carousel.editor('#carousel');
     this.editor.loadItems(this.state.carousel);
     this.editor.onAddItems = (items) => this.updateCarouselState();
-    this.editor.onDeleteItems = (items, index) => this.updateCarouselState();
+    this.editor.onDeleteItem = (items, index) => this.updateCarouselState();
     this.editor.onItemChange = (item) => this.updateCarouselState();
     this.editor.onOrderChange = (item, prevIndex, newIndex) => this.updateCarouselState();
   }
@@ -82,7 +82,7 @@ class LocationForm extends React.Component {
    * Handles updating the carousel state data
    */
   updateCarouselState() {
-    const {items } = this.editor;
+    const { items } = this.editor;
     this.setState({ carousel: items });
   }
 

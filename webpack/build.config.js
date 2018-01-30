@@ -5,6 +5,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ZipWebpackPlugin = require('zip-webpack-plugin');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 const WebpackConfig = {
 
@@ -21,7 +22,7 @@ const WebpackConfig = {
 
   output: {
     path: path.join(__dirname, '../dist'),
-    filename: '[name].js'
+    filename: '[name].[chunkhash].js'
   },
 
   externals: {
@@ -53,6 +54,10 @@ const WebpackConfig = {
   },
 
   plugins: [
+    new CleanWebpackPlugin(['dist'], {
+      root: path.join(__dirname, '../'),
+      verbose: false
+    }),
     new webpack.optimize.UglifyJsPlugin({'uglifyOptions': {'mangle': false}}),
     new HtmlWebpackPlugin({
       filename: 'control/content/index.html',
