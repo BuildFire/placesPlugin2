@@ -36,13 +36,13 @@
     "zip-webpack-plugin": "^2.0.0"
   },
   "dependencies": {
-    "react-sortable-hoc": "^0.6.8",
     "csv-js": "^1.0.0",
     "handlebars": "^4.0.11",
     "lazyload": "^2.0.0-beta.2",
     "lodash": "^4.17.4",
     "navigo": "^5.3.3",
     "preact": "^8.2.6",
-    "preact-compat": "^3.17.0"
+    "preact-compat": "^3.17.0",
+    "react-sortable-hoc": "^0.6.8"
   }
 }

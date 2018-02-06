@@ -1,5 +1,6 @@
 import Buildfire, { components } from 'buildfire';
 import React from 'react';
+import ContentEditable from './ContentEditable';
 import cloneDeep from 'lodash/cloneDeep';
 
 class LocationForm extends React.Component {
@@ -57,6 +58,10 @@ class LocationForm extends React.Component {
     const changes = {};
     changes[e.target.name] = e.target.value;
     this.setState(changes);
+  }
+
+  onDescriptionChange(e) {
+    this.setState({ description: e.target.innerHTML });
   }
 
   onCategoryChange(e) {
@@ -203,12 +208,10 @@ class LocationForm extends React.Component {
 
         <div className='form-group'>
           <label htmlFor='description'>Description</label>
-          <textarea
-            value={ description }
-            onChange={ e => this.onInputChange(e) }
-            className='form-control'
-            name='description'
-            rows='3' />
+          <ContentEditable
+            html={ description }
+            onChange={ e => this.onDescriptionChange(e) }
+            className='form-control' />
         </div>
 
         <div className='form-group'>
