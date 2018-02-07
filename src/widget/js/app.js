@@ -1,5 +1,6 @@
 import buildfire from 'buildfire';
-import {filter, find} from 'lodash';
+import filter from 'lodash/filter';
+import find from 'lodash/find';
 import "./lib/markercluster.js";
 
 import "../css/general.css";
