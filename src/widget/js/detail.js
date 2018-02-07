@@ -54,6 +54,10 @@ window.detailView = {
              directionsButton.className = 'btn btn-primary';
              directionsButton.addEventListener('click', getDirections);
 
+             let contactButton = document.getElementById('contactBtn');
+             contactBtn.className = 'btn btn-success';
+             directionsButton.addEventListener('click', showContact);
+
              function getDirections() {
                 let hbsContext = context;
                 Buildfire.getContext((err, context) => {
@@ -63,6 +67,10 @@ window.detailView = {
                         Buildfire.navigation.openWindow(`http://maps.google.com/maps?daddr=${hbsContext.lat},${hbsContext.lng}`, '_system');
                     }
                 });
+             }
+
+             function showContact() {
+
              }
 
             /**

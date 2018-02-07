@@ -101,6 +101,7 @@ window.app = {
               let sortBy = window.PlacesSort[data.sortBy];
               places = data.places.sort(sortBy);
 
+              window.app.state.actionItems = data.actionItems || [];
               window.app.state.places = places;
               window.app.state.filteredPlaces = places;
               window.app.state.sortBy = data.sortBy;

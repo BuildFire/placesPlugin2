@@ -285,7 +285,7 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
 
 .description {
     margin-top: 0;
-    padding: 15px;
+    padding: 10px 15px;
 }
 
 .map-holder .map-details {
@@ -438,13 +438,42 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
     padding-left: 0;
 }
 
-#directionsBtn {
+.buttonHolder {
     display: block;
     width: 95%;
-    margin: 20px auto 0;
+    margin: 0 auto;
+    height: 60px;
+}
+
+.buttonItem {
+    width: 50%;
+    display: inline-block;
+    float: left;
+    padding: 0 10px;
+}
+
+#directionsBtn {
+    display: block;
+    width: 100%;
+    text-align: center;
+    margin: 20px 0 0;
     border: none;
     color: #fff;
     font-size: 15px;
     border-radius: 100px;
     padding: 10px 0;
+    float: left;
+}
+
+#contactBtn {
+    display: block;
+    width: 100%;
+    text-align: center;
+    margin: 20px 0 0;
+    border: none;
+    color: #fff;
+    font-size: 15px;
+    border-radius: 100px;
+    padding: 10px 0;
+    float: left;
 }
