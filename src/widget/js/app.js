@@ -37,6 +37,7 @@ window.app = {
         mapInitiated: false,
         mode: null,
         activeView: null,
+        actionItems: [],
         places: [],
         markers: [],
         bounds: null,
@@ -198,7 +199,7 @@ window.app = {
         }, (response) => {
             //Update places with distance
             window.app.state.places.map((place, index)=>{
-                if(response.rows && response.rows[0].elements[index]){
+                if(response.rows && response.rows.legnth && response.rows[0].elements[index]){
                     const distance = response.rows[0].elements[index].distance;
 
                     place.distance = (distance) ? distance.text : '';

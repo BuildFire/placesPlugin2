@@ -463,6 +463,7 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
     border-radius: 100px;
     padding: 10px 0;
     float: left;
+    cursor: pointer;
 }
 
 #contactBtn {
@@ -476,4 +477,5 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
     border-radius: 100px;
     padding: 10px 0;
     float: left;
+    cursor: pointer;
 }

@@ -55,8 +55,8 @@ window.detailView = {
              directionsButton.addEventListener('click', getDirections);
 
              let contactButton = document.getElementById('contactBtn');
-             contactBtn.className = 'btn btn-success';
-             directionsButton.addEventListener('click', showContact);
+             contactButton.className = 'btn btn-success';
+             contactButton.addEventListener('click', showContact);
 
              function getDirections() {
                 let hbsContext = context;
@@ -70,7 +70,11 @@ window.detailView = {
              }
 
              function showContact() {
-
+                const { actionItems } = window.app.state;
+                buildfire.actionItems.list(actionItems, {}, (err, actionItem) => {
+                    if (err) return console.error(err);
+                    console.log(actionItem);
+                });
              }
 
             /**
