@@ -13,7 +13,7 @@ class LocationForm extends React.Component {
       title: '',
       subtitle: '',
       description: '',
-      address: null,
+      address: {},
       image: '',
       categories: [],
       carousel: []
@@ -33,7 +33,7 @@ class LocationForm extends React.Component {
    * - Carousel
    */
   componentDidMount() {
-    // Mount google map
+    // Mount google map autocomplete
     const { maps } = window.google;
     this.autocomplete = new maps.places.Autocomplete(this.addressInput);
     this.autocomplete.addListener('place_changed', () => this.onPlaceChanged());
@@ -43,6 +43,29 @@ class LocationForm extends React.Component {
       container.style.top = '10px';
       container.style.left = '10px';
     }, 400);
+
+    // Mount google map
+    let myLatlng = new maps.LatLng(37.09024, -95.712891);
+    let mapOptions = {
+      zoom: 4,
+      center: myLatlng
+    };
+    let map = new maps.Map(this.map, mapOptions);
+
+    // Place a draggable marker on the map
+    let marker = new maps.Marker({
+        position: myLatlng,
+        map: map,
+        draggable:true,
+        title:"Drag me!"
+    });
+
+    maps.event.addListener(marker,'dragend',e => {
+        let address = this.state.address;
+        address.lat = e.latLng.lat();
+        address.lng = e.latLng.lng();
+        this.setState({ address });
+    });
 
     // Mount carousel
     this.editor = new components.carousel.editor('#carousel');
@@ -199,6 +222,10 @@ class LocationForm extends React.Component {
             value={ address ? address.name : '' }
             type='text'
             className='form-control' />
+        </div>
+
+        <div className='form-group'>
+          <div id='map' style={ { height: "300px" } } ref={n => this.map = n}></div>
         </div>
 
         <div className='form-group'>
