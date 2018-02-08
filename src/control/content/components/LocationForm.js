@@ -16,6 +16,7 @@ class LocationForm extends React.Component {
       description: '',
       address: null,
       image: '',
+      actionItems: [],
       categories: [],
       carousel: []
     };
@@ -52,6 +53,19 @@ class LocationForm extends React.Component {
     this.editor.onDeleteItem = (items, index) => this.updateCarouselState();
     this.editor.onItemChange = (item) => this.updateCarouselState();
     this.editor.onOrderChange = (item, prevIndex, newIndex) => this.updateCarouselState();
+
+    // Action items
+    let selector = '#actionItems';
+    let items = this.state.actionItems;
+    this.actions = new components.actionItems.sortableList(selector, items);
+    this.actions.onAddItems = () => this.updateActions();
+
+    document.querySelector('#actionItems .labels').innerHTML = 'Contact Information';
+    document.querySelector('#actionItems a').innerHTML = 'Add Contact Information';
+  }
+
+  updateActions() {
+    this.setState({ actionItems: this.actions.items });
   }
 
   onInputChange(e) {
@@ -66,7 +80,6 @@ class LocationForm extends React.Component {
 
   onCategoryChange(e) {
     let { name, checked } = e.target;
-    console.log({ name, checked });
 
     // Category was selected
     if (checked) {
@@ -139,6 +152,7 @@ class LocationForm extends React.Component {
   onSubmit(e) {
     e.preventDefault();
     if (typeof this.state.address !== 'object') return;
+    console.log(this.state);
     this.props.onSubmit(this.state);
   }
 
@@ -212,6 +226,10 @@ class LocationForm extends React.Component {
             html={ description }
             onChange={ e => this.onDescriptionChange(e) }
             className='form-control' />
+        </div>
+
+        <div class="form-group">
+          <div id="actionItems" />
         </div>
 
         <div className='form-group'>
