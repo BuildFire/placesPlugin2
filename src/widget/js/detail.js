@@ -71,7 +71,7 @@ window.detailView = {
 
              function showContact() {
                 const { actionItems } = place;
-                buildfire.actionItems.list(actionItems, {}, (err, actionItem) => {
+                window.buildfire.actionItems.list(actionItems, {}, (err, actionItem) => {
                     if (err) return console.error(err);
                     console.log(actionItem);
                 });
