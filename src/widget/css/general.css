@@ -458,6 +458,10 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
     box-sizing: border-box;
 }
 
+.buttonItem.long {
+    width: 100%;
+}
+
 #directionsBtn {
     display: block;
     width: 100%;

@@ -15,6 +15,7 @@ window.detailView = {
             description: place.description,
             distance: place.distance,
             address: place.address.name,
+            actionItems: place.actionItems.length > 0,
             lat: place.address.lat,
             lng: place.address.lng
         };

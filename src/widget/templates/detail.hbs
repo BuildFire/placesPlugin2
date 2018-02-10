@@ -14,6 +14,7 @@
     <div class="col-xs-12">
         <div id="carouselView"></div>
         <div class="buttonHolder">
+            {{#if actionItems}}
             <div class="buttonItem">
                 <button id="directionsBtn">
                     Get Directions
@@ -24,6 +25,13 @@
                     Contact
                 </button>
             </div>
+            {{else}}
+            <div class="buttonItem long">
+                <button id="directionsBtn">
+                    Get Directions
+                </button>
+            </div>
+            {{/if}}
         </div>
         <!-- <a href="">Directions-</a> -->
         <p class="description">{{{description}}}</p>
