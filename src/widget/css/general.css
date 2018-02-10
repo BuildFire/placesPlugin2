@@ -43,6 +43,10 @@
     -webkit-overflow-scrolling: touch;
 }
 
+#carouselView img {
+    width: 100%;
+}
+
 .animated {
   animation-duration: 400ms;
   animation-fill-mode: both;
