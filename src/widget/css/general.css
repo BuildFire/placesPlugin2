@@ -443,6 +443,7 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
     width: 95%;
     margin: 0 auto;
     height: 60px;
+    box-sizing: border-box;
 }
 
 .buttonItem {
@@ -450,6 +451,7 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
     display: inline-block;
     float: left;
     padding: 0 10px;
+    box-sizing: border-box;
 }
 
 #directionsBtn {
