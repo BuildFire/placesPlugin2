@@ -59,6 +59,9 @@ class LocationForm extends React.Component {
     let items = this.state.actionItems;
     this.actions = new components.actionItems.sortableList(selector, items);
     this.actions.onAddItems = () => this.updateActions();
+    this.actions.onDeleteItem = () => this.updateActions();
+    this.actions.onItemChange = () => this.updateActions();
+    this.actions.onOrderChange = () => this.updateActions();
 
     document.querySelector('#actionItems .labels').innerHTML = 'Contact Information';
     document.querySelector('#actionItems a').innerHTML = 'Add Contact Information';
