@@ -56,8 +56,10 @@ window.detailView = {
              directionsButton.addEventListener('click', getDirections);
 
              let contactButton = document.getElementById('contactBtn');
-             contactButton.className = 'btn btn-success';
-             contactButton.addEventListener('click', showContact);
+             if (contactButton) {
+                contactButton.className = 'btn btn-success';
+                contactButton.addEventListener('click', showContact);
+             }
 
              function getDirections() {
                 let hbsContext = context;
