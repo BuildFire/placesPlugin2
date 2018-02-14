@@ -43,6 +43,10 @@
     -webkit-overflow-scrolling: touch;
 }
 
+#carouselView img {
+    width: 100%;
+}
+
 .animated {
   animation-duration: 400ms;
   animation-fill-mode: both;
@@ -285,7 +289,7 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
 
 .description {
     margin-top: 0;
-    padding: 15px;
+    padding: 10px 15px;
 }
 
 .map-holder .map-details {
@@ -311,6 +315,7 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
     font-weight: 300;
     font-size: 11px;
     line-height: 1.3;
+    color: #121212 !important;
 }
 
 .gm-bundled-control {
@@ -354,7 +359,8 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
     font-size: 13px;
 }
 
-.title{
+.title {
+    color: #121212 !important;
     font-size: 1.1em;
     font-weight: 500;
 }
@@ -438,13 +444,50 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
     padding-left: 0;
 }
 
-#directionsBtn {
+.buttonHolder {
     display: block;
     width: 95%;
-    margin: 20px auto 0;
+    margin: 0 auto;
+    height: 60px;
+    box-sizing: border-box;
+}
+
+.buttonItem {
+    width: 50%;
+    display: inline-block;
+    float: left;
+    padding: 0 10px;
+    box-sizing: border-box;
+}
+
+.buttonItem.long {
+    width: 100%;
+}
+
+#directionsBtn {
+    display: block;
+    width: 100%;
+    text-align: center;
+    margin: 20px 0 0;
     border: none;
     color: #fff;
     font-size: 15px;
     border-radius: 100px;
     padding: 10px 0;
+    float: left;
+    cursor: pointer;
+}
+
+#contactBtn {
+    display: block;
+    width: 100%;
+    text-align: center;
+    margin: 20px 0 0;
+    border: none;
+    color: #fff;
+    font-size: 15px;
+    border-radius: 100px;
+    padding: 10px 0;
+    float: left;
+    cursor: pointer;
 }

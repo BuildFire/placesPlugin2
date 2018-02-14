@@ -1,5 +1,6 @@
 import Buildfire, { components } from 'buildfire';
 import React from 'react';
+import ContentEditable from './ContentEditable';
 import cloneDeep from 'lodash/cloneDeep';
 
 class LocationForm extends React.Component {
@@ -15,6 +16,7 @@ class LocationForm extends React.Component {
       description: '',
       address: {},
       image: '',
+      actionItems: [],
       categories: [],
       carousel: []
     };
@@ -44,29 +46,6 @@ class LocationForm extends React.Component {
       container.style.left = '10px';
     }, 400);
 
-    // Mount google map
-    let myLatlng = new maps.LatLng(37.09024, -95.712891);
-    let mapOptions = {
-      zoom: 4,
-      center: myLatlng
-    };
-    let map = new maps.Map(this.map, mapOptions);
-
-    // Place a draggable marker on the map
-    let marker = new maps.Marker({
-        position: myLatlng,
-        map: map,
-        draggable:true,
-        title:"Drag me!"
-    });
-
-    maps.event.addListener(marker,'dragend',e => {
-        let address = this.state.address;
-        address.lat = e.latLng.lat();
-        address.lng = e.latLng.lng();
-        this.setState({ address });
-    });
-
     // Mount carousel
     this.editor = new components.carousel.editor('#carousel');
     this.editor.loadItems(this.state.carousel);
@@ -74,6 +53,65 @@ class LocationForm extends React.Component {
     this.editor.onDeleteItem = (items, index) => this.updateCarouselState();
     this.editor.onItemChange = (item) => this.updateCarouselState();
     this.editor.onOrderChange = (item, prevIndex, newIndex) => this.updateCarouselState();
+
+    // Action items
+    let selector = '#actionItems';
+    let items = this.state.actionItems;
+    this.actions = new components.actionItems.sortableList(selector, items);
+    this.actions.onAddItems = () => this.updateActions();
+    this.actions.onDeleteItem = () => this.updateActions();
+    this.actions.onItemChange = () => this.updateActions();
+    this.actions.onOrderChange = () => this.updateActions();
+
+    document.querySelector('#actionItems .labels').innerHTML = 'Contact Information';
+    document.querySelector('#actionItems a').innerHTML = 'Add Contact Information';
+
+    // Set initial map height
+    this.map.style.height = 0;
+
+    // Mount map if address exists
+    if (this.state.address.lat && this.state.address.lng) {
+      this.mountMap(this.state.address);
+    }
+  }
+
+  mountMap(address) {
+    const { maps } = window.google;
+    let defaultLocation = new maps.LatLng(address.lat, address.lng);
+    let mapOptions = {
+      zoom: 16,
+      center: defaultLocation
+    };
+    this.map.style.height = '230px';
+    this.mapInstance = new maps.Map(this.map, mapOptions);
+
+    // Place a draggable marker on the map
+    this.markerInstance = new maps.Marker({
+      position: defaultLocation,
+      map: this.mapInstance,
+      draggable: true,
+      title: 'Drag to choose a location'
+    });
+
+    // Handle makre drag
+    maps.event.addListener(this.markerInstance, 'dragend', e => {
+      let address = this.state.address;
+      address.lat = e.latLng.lat();
+      address.lng = e.latLng.lng();
+      this.setState({ address });
+    });
+  }
+
+  componentWillUpdate(nextProps, nextState) {
+    const { address } = nextState;
+
+    if (address.lat && address.lng && !this.mapInstance) {
+      this.mountMap(address);
+    }
+  }
+
+  updateActions() {
+    this.setState({ actionItems: this.actions.items });
   }
 
   onInputChange(e) {
@@ -82,9 +120,12 @@ class LocationForm extends React.Component {
     this.setState(changes);
   }
 
+  onDescriptionChange(e) {
+    this.setState({ description: e.target.innerHTML });
+  }
+
   onCategoryChange(e) {
     let { name, checked } = e.target;
-    console.log({ name, checked });
 
     // Category was selected
     if (checked) {
@@ -146,7 +187,20 @@ class LocationForm extends React.Component {
       lng: place.geometry.location.lng()
     };
 
+    if (this.mapInstance && this.markerInstance) {
+      const { maps } = window.google;
+      const point = new maps.LatLng(address.lat, address.lng);
+      this.mapInstance.panTo(point);
+      this.markerInstance.setPosition(point);
+    }
+
     this.setState({ address });
+  }
+
+  onAddressChange(e) {
+    if (e.target.value === '') {
+      this.setState({ address: {} });
+    }
   }
 
   /**
@@ -157,6 +211,7 @@ class LocationForm extends React.Component {
   onSubmit(e) {
     e.preventDefault();
     if (typeof this.state.address !== 'object') return;
+    console.log(this.state);
     this.props.onSubmit(this.state);
   }
 
@@ -218,24 +273,34 @@ class LocationForm extends React.Component {
           <label htmlFor='address'>Address</label>
           <input
             key='address-input'
+            onChange={ e => this.onAddressChange(e) }
             ref={ n => this.addressInput = n }
-            value={ address ? address.name : '' }
+            value={ address.name
+              ? address.name
+              : address.lat && address.lng
+                ? `${address.lat}, ${address.lng}`
+                : '' }
             type='text'
             className='form-control' />
         </div>
 
-        <div className='form-group'>
-          <div id='map' style={ { height: "300px" } } ref={n => this.map = n}></div>
+        <div
+          className='form-group'>
+          <div
+            id='map'
+            ref={n => this.map = n} />
         </div>
 
         <div className='form-group'>
           <label htmlFor='description'>Description</label>
-          <textarea
-            value={ description }
-            onChange={ e => this.onInputChange(e) }
-            className='form-control'
-            name='description'
-            rows='3' />
+          <ContentEditable
+            html={ description }
+            onChange={ e => this.onDescriptionChange(e) }
+            className='form-control' />
+        </div>
+
+        <div className='form-group'>
+          <div id='actionItems' />
         </div>
 
         <div className='form-group'>

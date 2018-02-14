@@ -15,6 +15,7 @@ window.detailView = {
             description: place.description,
             distance: place.distance,
             address: place.address.name,
+            actionItems: place.actionItems && place.actionItems.length > 0,
             lat: place.address.lat,
             lng: place.address.lng
         };
@@ -54,6 +55,12 @@ window.detailView = {
              directionsButton.className = 'btn btn-primary';
              directionsButton.addEventListener('click', getDirections);
 
+             let contactButton = document.getElementById('contactBtn');
+             if (contactButton) {
+                contactButton.className = 'btn btn-success';
+                contactButton.addEventListener('click', showContact);
+             }
+
              function getDirections() {
                 let hbsContext = context;
                 Buildfire.getContext((err, context) => {
@@ -62,6 +69,14 @@ window.detailView = {
                     } else {
                         Buildfire.navigation.openWindow(`http://maps.google.com/maps?daddr=${hbsContext.lat},${hbsContext.lng}`, '_system');
                     }
+                });
+             }
+
+             function showContact() {
+                const { actionItems } = place;
+                window.buildfire.actionItems.list(actionItems, {}, (err, actionItem) => {
+                    if (err) return console.error(err);
+                    console.log(actionItem);
                 });
              }
 

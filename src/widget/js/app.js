@@ -1,5 +1,6 @@
 import buildfire from 'buildfire';
-import {filter, find} from 'lodash';
+import filter from 'lodash/filter';
+import find from 'lodash/find';
 import "./lib/markercluster.js";
 
 import "../css/general.css";
@@ -36,6 +37,7 @@ window.app = {
         mapInitiated: false,
         mode: null,
         activeView: null,
+        actionItems: [],
         places: [],
         markers: [],
         bounds: null,
@@ -101,6 +103,7 @@ window.app = {
               let sortBy = window.PlacesSort[data.sortBy];
               places = data.places.sort(sortBy);
 
+              window.app.state.actionItems = data.actionItems || [];
               window.app.state.places = places;
               window.app.state.filteredPlaces = places;
               window.app.state.sortBy = data.sortBy;
@@ -196,7 +199,7 @@ window.app = {
         }, (response) => {
             //Update places with distance
             window.app.state.places.map((place, index)=>{
-                if(response.rows && response.rows[0].elements[index]){
+                if(response.rows && response.rows.length > 0 && response.rows[0].elements[index]){
                     const distance = response.rows[0].elements[index].distance;
 
                     place.distance = (distance) ? distance.text : '';
