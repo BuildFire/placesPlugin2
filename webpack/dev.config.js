@@ -43,13 +43,6 @@ const WebpackConfig = {
     buildfire: 'buildfire'
   },
 
-  resolve: {
-    alias: {
-      'react': 'preact-compat',
-      'react-dom': 'preact-compat'
-    }
-  },
-
   module: {
     rules: [
       {
@@ -118,7 +111,7 @@ const WebpackConfig = {
       to: path.join(__dirname, '../fonticons'),
     }])
   ],
-  
+
   devServer: {
     port: 8080,
     hot: true,

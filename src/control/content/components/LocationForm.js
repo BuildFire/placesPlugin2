@@ -1,7 +1,7 @@
 import Buildfire, { components } from 'buildfire';
 import React from 'react';
-import ContentEditable from './ContentEditable';
 import cloneDeep from 'lodash/cloneDeep';
+import ReactQuill from 'react-quill';
 
 class LocationForm extends React.Component {
   constructor(props) {
@@ -120,8 +120,8 @@ class LocationForm extends React.Component {
     this.setState(changes);
   }
 
-  onDescriptionChange(e) {
-    this.setState({ description: e.target.innerHTML });
+  onDescriptionChange(description) {
+    this.setState({ description });
   }
 
   onCategoryChange(e) {
@@ -293,10 +293,11 @@ class LocationForm extends React.Component {
 
         <div className='form-group'>
           <label htmlFor='description'>Description</label>
-          <ContentEditable
-            html={ description }
-            onChange={ e => this.onDescriptionChange(e) }
-            className='form-control' />
+          <div className='editor' style={{ height: '300px' }}>
+            <ReactQuill
+              onChange={ value => this.onDescriptionChange(value) }
+              value={ description } />
+          </div>
         </div>
 
         <div className='form-group'>

@@ -29,13 +29,6 @@ const WebpackConfig = {
     buildfire: 'buildfire'
   },
 
-  resolve: {
-    alias: {
-      'react': 'preact-compat',
-      'react-dom': 'preact-compat'
-    }
-  },
-
   module: {
     rules: [
       {
