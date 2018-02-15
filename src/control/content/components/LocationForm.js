@@ -293,7 +293,7 @@ class LocationForm extends React.Component {
 
         <div className='form-group'>
           <label htmlFor='description'>Description</label>
-          <div className='editor' style={{ height: '300px' }}>
+          <div className='editor' style={{ height: '200px' }}>
             <ReactQuill
               onChange={ value => this.onDescriptionChange(value) }
               value={ description } />
