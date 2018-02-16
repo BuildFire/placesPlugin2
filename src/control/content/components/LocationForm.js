@@ -279,16 +279,14 @@ class LocationForm extends React.Component {
               ? address.name
               : address.lat && address.lng
                 ? `${address.lat}, ${address.lng}`
-                : '' }
+                : address.name }
             type='text'
             className='form-control' />
         </div>
 
         <div
           className='form-group'>
-          <div
-            id='map'
-            ref={n => this.map = n} />
+          <div id='map' ref={n => this.map = n} />
         </div>
 
         <div className='form-group'>
