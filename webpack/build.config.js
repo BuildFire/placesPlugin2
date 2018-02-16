@@ -96,7 +96,7 @@ const WebpackConfig = {
     ], {
       ignore: ['*.js', 'index.html', '*.md']
     }),
-    new ExtractTextPlugin('[name].css'),
+    new ExtractTextPlugin('[name].[chunkhash].css'),
     new ZipWebpackPlugin({
       path: path.join(__dirname, '../'),
       filename: `plugin.zip`

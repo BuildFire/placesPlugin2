@@ -491,7 +491,3 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
     float: left;
     cursor: pointer;
 }
-
-.quill {
-    height: 150px;
-}

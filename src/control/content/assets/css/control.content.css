@@ -138,3 +138,7 @@ button.template {
   top: 61px !important;
   left: 0 !important;
 }
+
+.quill {
+    height: 150px;
+}
