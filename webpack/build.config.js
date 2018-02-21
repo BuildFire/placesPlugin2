@@ -29,13 +29,6 @@ const WebpackConfig = {
     buildfire: 'buildfire'
   },
 
-  resolve: {
-    alias: {
-      'react': 'preact-compat',
-      'react-dom': 'preact-compat'
-    }
-  },
-
   module: {
     rules: [
       {
@@ -103,7 +96,7 @@ const WebpackConfig = {
     ], {
       ignore: ['*.js', 'index.html', '*.md']
     }),
-    new ExtractTextPlugin('[name].css'),
+    new ExtractTextPlugin('[name].[chunkhash].css'),
     new ZipWebpackPlugin({
       path: path.join(__dirname, '../'),
       filename: `plugin.zip`

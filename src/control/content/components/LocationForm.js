@@ -1,7 +1,7 @@
 import Buildfire, { components } from 'buildfire';
 import React from 'react';
-import ContentEditable from './ContentEditable';
 import cloneDeep from 'lodash/cloneDeep';
+import ReactQuill from 'react-quill';
 
 class LocationForm extends React.Component {
   constructor(props) {
@@ -120,8 +120,8 @@ class LocationForm extends React.Component {
     this.setState(changes);
   }
 
-  onDescriptionChange(e) {
-    this.setState({ description: e.target.innerHTML });
+  onDescriptionChange(description) {
+    this.setState({ description });
   }
 
   onCategoryChange(e) {
@@ -178,11 +178,11 @@ class LocationForm extends React.Component {
   onPlaceChanged() {
     const place = this.autocomplete.getPlace();
     if (!place.geometry) {
-      return this.setState({ address: null });
+      return this.setState({ address: {} });
     }
 
     const address = {
-      name: place.formatted_address,
+      name: this.addressInput.value,
       lat: place.geometry.location.lat(),
       lng: place.geometry.location.lng()
     };
@@ -279,24 +279,23 @@ class LocationForm extends React.Component {
               ? address.name
               : address.lat && address.lng
                 ? `${address.lat}, ${address.lng}`
-                : '' }
+                : address.name }
             type='text'
             className='form-control' />
         </div>
 
         <div
           className='form-group'>
-          <div
-            id='map'
-            ref={n => this.map = n} />
+          <div id='map' ref={n => this.map = n} />
         </div>
 
         <div className='form-group'>
           <label htmlFor='description'>Description</label>
-          <ContentEditable
-            html={ description }
-            onChange={ e => this.onDescriptionChange(e) }
-            className='form-control' />
+          <div className='editor' style={{ height: '200px' }}>
+            <ReactQuill
+              onChange={ value => this.onDescriptionChange(value) }
+              value={ description } />
+          </div>
         </div>
 
         <div className='form-group'>
@@ -319,7 +318,7 @@ class LocationForm extends React.Component {
 
         <div className='form-group'>
           <button
-            disabled={ !title.length || !description.length || !address }
+            disabled={ !title.length || !description.length || !address || !address.lat || !address.lng }
             type='submit'
             className='btn btn-primary'>
             { this.props.location ? 'Save Location' : 'Save Location' }

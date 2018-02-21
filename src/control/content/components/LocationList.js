@@ -29,12 +29,17 @@ class PlacesList extends React.Component {
       <div className='sortable-item'>
         <DragHandle />
         <span className='titles'>
-          { value.place.title.length > 17
-            ? value.place.title.substring(0, 17).trim() + '...' : value.place.title }
+          { value.place.title.length > 20
+            ? value.place.title.substring(0, 20).trim() + '...' : value.place.title }
         </span>
         <span className='titles secondary'>
-          { value.place.address.name.length > 45
-            ? value.place.address.name.substring(0, 45).trim() + '...' : value.place.address.name }
+          { value.place.address.name
+              ? value.place.address.name.length > 35
+                ? value.place.address.name.substring(0, 35).trim() + '...'
+                : value.place.address.name
+            : value.place.address.lat
+              ? parseFloat(value.place.address.lat.toFixed(10)) + ', ' +  parseFloat(value.place.address.lng.toFixed(10))
+              : '' }
         </span>
         <span className='edit'>
           <a onClick={ () => this.onEditDidClick(value.index) }>

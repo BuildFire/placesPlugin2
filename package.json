@@ -41,8 +41,9 @@
     "lazyload": "^2.0.0-beta.2",
     "lodash": "^4.17.4",
     "navigo": "^5.3.3",
-    "preact": "^8.2.6",
-    "preact-compat": "^3.17.0",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "react-quill": "^1.2.3",
     "react-sortable-hoc": "^0.6.8"
   }
 }
