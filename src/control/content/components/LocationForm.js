@@ -333,6 +333,8 @@ class LocationForm extends React.Component {
           </div>
         </div>
 
+        <br />
+
         <div className='form-group'>
           <div id='actionItems' />
         </div>
