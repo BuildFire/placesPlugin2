@@ -227,10 +227,11 @@ class LocationForm extends React.Component {
 
   imageHandler(image, callback) {
     const range = this.quillRef.getEditor().getSelection();
-    const value = buildfire.notifications.prompt({
+    Buildfire.notifications.prompt({
       message: 'What is the image URL'
     }, (value) => {
       if (value) {
+        value = `https://czi3m2qn.cloudimg.io/cdn/n/n/${value}`;
         this.quillRef.getEditor().insertEmbed(range.index, 'image', value, 'user');
       }
     });
@@ -241,7 +242,10 @@ class LocationForm extends React.Component {
     toolbar: {
       container: [
         [{ header: [1, 2, 3, false] }],
-        ['align'],
+        [{ align: '' }],
+        [{ align: 'right' }],
+        [{ align: 'center' }],
+        [{ align: 'justify' }],
         [{ color: [] }, { background: [] }],
         ['bold', 'italic', 'underline', 'strike', 'blockquote'],
         [{'list': 'ordered'}, {'list': 'bullet'}, {'indent': '-1'}, {'indent': '+1'}],

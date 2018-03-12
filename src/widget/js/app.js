@@ -82,7 +82,22 @@ window.app = {
 
         window.app.backButtonInit();
 
-        buildfire.datastore.get (window.app.settings.placesTag, function(err, results){
+        // var loadCount = 0;
+        // function onChunkLoaded() {
+        //     if (loadCount === 2) {
+        //       let data =  Object.assign({}, settingsData, collectionData);
+        //       window.app.state = data;
+        //     } else {
+        //       loadCount += 1;
+        //     }
+        // }
+
+        // buildfire.datastore.search({}, 'places-list', (err, data) => {
+        //   if (err) return console.error(err);
+
+        // });
+
+        buildfire.datastore.get(window.app.settings.placesTag, function(err, results){
             if(err){
               console.error('datastore.get error', err);
               return;
