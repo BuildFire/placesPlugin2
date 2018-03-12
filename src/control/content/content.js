@@ -154,11 +154,15 @@ class Content extends React.Component {
    * @param   {Number} index    Array index of editing location
    */
   onLocationEdit(location, index) {
-    const { data } = this.state;
-    data.places = data.places || [];
-    data.places[index] = location;
-    this.setState({ data, editingLocation: false });
-    this.handleSave();
+    buildfire.datastore.update(location.id, location, (err) => {
+      if (err) return console.error(err);
+
+        const { data } = this.state;
+        data.places[index] = location;
+        this.setState({ data });
+
+        this.setState({ editingLocation: false });
+    });
   }
 
   /**
