@@ -13,22 +13,18 @@ const WebpackConfig = {
   // Plugin entry points
     'control/content/content': [
         'webpack-hot-middleware/client',
-        'preact/devtools',
         path.join(__dirname, '../src/control/content/index.js')
       ],
       'control/design/design': [
         'webpack-hot-middleware/client',
-        'preact/devtools',
         path.join(__dirname, '../src/control/design/design.js')
       ],
       'control/settings/settings': [
         'webpack-hot-middleware/client',
-        'preact/devtools',
         path.join(__dirname, '../src/control/settings/index.js')
       ],
     'widget/widget': [
         'webpack-hot-middleware/client',
-        'preact/devtools',
         path.join(__dirname, '../src/widget/js/app.js')
       ]
   },
@@ -58,6 +54,10 @@ const WebpackConfig = {
   },
 
   plugins: [
+    new webpack.ProvidePlugin({
+        'window.Quill': 'quill/dist/quill.js',
+        'Quill': 'quill/dist/quill.js',
+    }),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NamedModulesPlugin(),
     new HtmlWebpackPlugin({

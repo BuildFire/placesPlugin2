@@ -47,6 +47,10 @@ const WebpackConfig = {
   },
 
   plugins: [
+    new webpack.ProvidePlugin({
+        'window.Quill': 'quill/dist/quill.js',
+        'Quill': 'quill/dist/quill.js',
+    }),
     new CleanWebpackPlugin(['dist'], {
       root: path.join(__dirname, '../'),
       verbose: false

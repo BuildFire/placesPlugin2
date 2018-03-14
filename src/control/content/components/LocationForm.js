@@ -2,6 +2,9 @@ import Buildfire, { components } from 'buildfire';
 import React from 'react';
 import cloneDeep from 'lodash/cloneDeep';
 import ReactQuill from 'react-quill';
+import ImageResize from 'quill-image-resize-module';
+
+ReactQuill.Quill.register('modules/imageResize', ImageResize);
 
 class LocationForm extends React.Component {
   constructor(props) {
@@ -211,7 +214,6 @@ class LocationForm extends React.Component {
   onSubmit(e) {
     e.preventDefault();
     if (typeof this.state.address !== 'object') return;
-    console.log(this.state);
     this.props.onSubmit(this.state);
   }
 
@@ -221,6 +223,37 @@ class LocationForm extends React.Component {
       e.stopPropagation();
       e.preventDefault();
     }
+  }
+
+  imageHandler(image, callback) {
+    const range = this.quillRef.getEditor().getSelection();
+    Buildfire.notifications.prompt({
+      message: 'What is the image URL'
+    }, (value) => {
+      if (value) {
+        this.quillRef.getEditor().insertEmbed(range.index, 'image', value, 'user');
+      }
+    });
+  }
+
+  modules = {
+    imageResize: {},
+    toolbar: {
+      container: [
+        [{ header: [1, 2, 3, false] }],
+        [{ align: '' }],
+        [{ align: 'right' }],
+        [{ align: 'center' }],
+        [{ align: 'justify' }],
+        [{ color: [] }, { background: [] }],
+        ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+        [{'list': 'ordered'}, {'list': 'bullet'}, {'indent': '-1'}, {'indent': '+1'}],
+        ['link', 'image', 'video']
+      ],
+      handlers: {
+        image: this.imageHandler.bind(this)
+      },
+    },
   }
 
   render() {
@@ -293,10 +326,14 @@ class LocationForm extends React.Component {
           <label htmlFor='description'>Description</label>
           <div className='editor' style={{ height: '200px' }}>
             <ReactQuill
+              ref={ n => this.quillRef = n }
+              modules={ this.modules }
               onChange={ value => this.onDescriptionChange(value) }
               value={ description } />
           </div>
         </div>
+
+        <br />
 
         <div className='form-group'>
           <div id='actionItems' />
