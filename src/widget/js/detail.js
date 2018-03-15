@@ -1,5 +1,6 @@
 import Buildfire, { components } from 'buildfire';
 import Handlebars from './lib/handlebars';
+import renderQuillContent from 'quill-render';
 
 window.detailView = {
     init: (place) => {
@@ -7,6 +8,12 @@ window.detailView = {
         let view = document.getElementById('detailView');
         let screenWidth = window.innerWidth;
         const title = place.title;
+
+        place.description = typeof place.description === 'string'
+            ? place.description
+            : renderQuillContent(place.description.ops);
+
+        console.log(place.description, 'DESCRIPTION');
 
         let context = {
             width: screenWidth,

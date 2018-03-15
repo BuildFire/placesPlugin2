@@ -5,6 +5,7 @@ import "./lib/markercluster.js";
 
 import "../css/general.css";
 import "../css/slider.css";
+import "../css/quill.css";
 import "./filterControl.js";
 import "./map.js";
 import "./list.js";

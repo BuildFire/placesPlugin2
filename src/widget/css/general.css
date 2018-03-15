@@ -288,8 +288,8 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
 }
 
 .description {
-    margin-top: 0;
-    padding: 10px 15px;
+    padding: 15px !important;
+    white-space: normal !important;
 }
 
 .map-holder .map-details {

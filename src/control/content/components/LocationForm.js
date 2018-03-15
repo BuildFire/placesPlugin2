@@ -124,7 +124,7 @@ class LocationForm extends React.Component {
   }
 
   onDescriptionChange(description) {
-    this.setState({ description });
+    this.setState({ description: this.quillRef.editor.getContents() });
   }
 
   onCategoryChange(e) {
@@ -329,7 +329,7 @@ class LocationForm extends React.Component {
               ref={ n => this.quillRef = n }
               modules={ this.modules }
               onChange={ value => this.onDescriptionChange(value) }
-              value={ description } />
+              defaultValue={ description } />
           </div>
         </div>
 
