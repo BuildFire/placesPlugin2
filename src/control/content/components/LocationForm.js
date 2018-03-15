@@ -124,7 +124,7 @@ class LocationForm extends React.Component {
   }
 
   onDescriptionChange(description) {
-    this.setState({ description: this.quillRef.editor.getContents() });
+    this.setState({ description });
   }
 
   onCategoryChange(e) {
@@ -241,14 +241,11 @@ class LocationForm extends React.Component {
     toolbar: {
       container: [
         [{ header: [1, 2, 3, false] }],
-        [{ align: '' }],
-        [{ align: 'right' }],
-        [{ align: 'center' }],
-        [{ align: 'justify' }],
+        [{ align: [] }],
         [{ color: [] }, { background: [] }],
         ['bold', 'italic', 'underline', 'strike', 'blockquote'],
         [{'list': 'ordered'}, {'list': 'bullet'}, {'indent': '-1'}, {'indent': '+1'}],
-        ['link', 'image', 'video']
+        ['link', 'image', 'video', 'code']
       ],
       handlers: {
         image: this.imageHandler.bind(this)

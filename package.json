@@ -42,7 +42,6 @@
     "lodash": "^4.17.4",
     "navigo": "^5.3.3",
     "quill-image-resize-module": "^3.0.0",
-    "quill-render": "^1.0.5",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-quill": "^1.2.3",
