@@ -241,13 +241,11 @@ class LocationForm extends React.Component {
     toolbar: {
       container: [
         [{ header: [1, 2, 3, false] }],
-        [{ align: '' }],
-        [{ align: 'right' }],
-        [{ align: 'center' }],
-        [{ align: 'justify' }],
-        [{ color: [] }, { background: [] }],
         ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-        [{'list': 'ordered'}, {'list': 'bullet'}, {'indent': '-1'}, {'indent': '+1'}],
+        [{'list': 'ordered'}, {'list': 'bullet'}],
+        [{ align: [] }],
+        [{'indent': '-1'}, {'indent': '+1'}],
+        [{ color: [] }, { background: [] }],
         ['link', 'image', 'video']
       ],
       handlers: {
@@ -329,7 +327,7 @@ class LocationForm extends React.Component {
               ref={ n => this.quillRef = n }
               modules={ this.modules }
               onChange={ value => this.onDescriptionChange(value) }
-              value={ description } />
+              defaultValue={ description } />
           </div>
         </div>
 
