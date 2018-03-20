@@ -241,10 +241,11 @@ class LocationForm extends React.Component {
     toolbar: {
       container: [
         [{ header: [1, 2, 3, false] }],
-        [{ align: [] }],
-        [{ color: [] }, { background: [] }],
         ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-        [{'list': 'ordered'}, {'list': 'bullet'}, {'indent': '-1'}, {'indent': '+1'}],
+        [{'list': 'ordered'}, {'list': 'bullet'}],
+        [{ align: [] }],
+        [{'indent': '-1'}, {'indent': '+1'}],
+        [{ color: [] }, { background: [] }],
         ['link', 'image', 'video']
       ],
       handlers: {
