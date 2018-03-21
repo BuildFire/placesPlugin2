@@ -82,7 +82,7 @@ window.app = {
 
         window.app.backButtonInit();
 
-        let oldPlaces, newPlaces;
+        let oldPlaces = [], newPlaces = [];
 
         var loadCount = 0;
         function onChunkLoaded() {
@@ -96,16 +96,23 @@ window.app = {
         }
 
         buildfire.datastore.search({}, 'places-list', (err, data) => {
-          if (err) return console.error(err);
+          if (err) {
+            console.log('err new chunk loaded', err);
+            onChunkLoaded();
+            return console.error(err);
+          }
           newPlaces = data.map(place => {
               place.data.id = place.id;
               return place.data;
           });
+
+          console.log('new chunk loaded', data);
           onChunkLoaded();
         });
 
         buildfire.datastore.get(window.app.settings.placesTag, function(err, results){
-          if(err) {
+          if (err) {
+            console.log('err old chunk loaded', err);
             console.error('datastore.get error', err);
             return;
           }
@@ -122,9 +129,10 @@ window.app = {
             window.app.state.sortBy = data.sortBy;
             window.app.state.actionItems = data.actionItems || [];
             window.app.state.defaultView = data.defaultView;
-
-            onChunkLoaded();
           }
+
+          console.log('old chunk loaded', results);
+          onChunkLoaded();
         });
 
         function filterPlaces(data) {
