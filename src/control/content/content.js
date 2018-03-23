@@ -21,7 +21,44 @@ class Content extends React.Component {
   componentWillMount() {
     buildfire.datastore.get('places', (err, result) => {
       if (err) return console.error(err);
-      this.setState({ data: result.data });
+
+      // we migrate old storage format to new one if needed
+      if (result.data.places && result.data.places.length) {
+        this.setState({ data: { categories: result.data.categories } });
+        this.migrate(result.data.places);
+      } else {
+        this.setState({ data: result.data });
+      }
+    });
+
+    this.getPlacesList();
+  }
+
+  migrate(places) {
+    // Clear original data.places without mutating state
+    const data = Object.assign({}, this.state.data);
+    data.places = [];
+    this.setState({ data });
+    this.handleSave();
+
+    console.warn('Migrating');
+
+    // Insert data to new format
+    buildfire.datastore.bulkInsert(places, 'places-list', (err, data) => {
+      if (err) return console.error(err);
+      this.getPlacesList();
+    });
+  }
+
+  getPlacesList() {
+    buildfire.datastore.search({}, 'places-list', (err, result) => {
+      if (err) return console.error(err);
+      const data = Object.assign({}, this.state.data);
+      data.places = result.map(place => {
+        place.data.id = place.id;
+        return place.data;
+      });
+      this.setState({ data });
     });
   }
 
@@ -29,7 +66,11 @@ class Content extends React.Component {
    * Handle state saving to the datastore
    */
   handleSave = debounce(() => {
-    buildfire.datastore.save(this.state.data, 'places', (err) => {
+    // Do not save places list on simple datastore or we run out of space
+    const dataClone = Object.assign({}, this.state.data);
+    delete dataClone.places;
+
+    buildfire.datastore.save(dataClone, 'places', (err) => {
       if (err) console.error(err);
     });
   }, 600)
@@ -48,9 +89,12 @@ class Content extends React.Component {
    */
   handleLocationDelete(index) {
     const { data } = this.state;
-    data.places.splice(index, 1);
+    let [place] = data.places.splice(index, 1);
     this.setState({ data });
-    this.handleSave();
+
+    buildfire.datastore.delete(place.id, 'places-list', (err) => {
+      if (err) return console.error(err);
+    });
   }
 
   handleLocationEdit(index) {
@@ -90,11 +134,16 @@ class Content extends React.Component {
    * @param   {Object} location Location object
    */
   onLocationSubmit(location) {
-    const {data } = this.state;
+    const { data } = this.state;
     data.places = data.places || [];
-    data.places.push(location);
-    this.setState({ data });
-    this.handleSave();
+
+    buildfire.datastore.insert(location, 'places-list', (err, result) => {
+      if (err) return console.error(err);
+        result.data.id = result.id;
+        data.places.push(result.data);
+        this.setState({ data });
+    });
+
     this.setState({ addingLocation: false });
   }
 
@@ -105,11 +154,15 @@ class Content extends React.Component {
    * @param   {Number} index    Array index of editing location
    */
   onLocationEdit(location, index) {
-    const { data } = this.state;
-    data.places = data.places || [];
-    data.places[index] = location;
-    this.setState({ data, editingLocation: false });
-    this.handleSave();
+    buildfire.datastore.update(location.id, location, (err) => {
+      if (err) return console.error(err);
+
+        const { data } = this.state;
+        data.places[index] = location;
+        this.setState({ data });
+
+        this.setState({ editingLocation: false });
+    });
   }
 
   /**

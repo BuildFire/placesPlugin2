@@ -83,36 +83,65 @@ window.app = {
 
         window.app.backButtonInit();
 
-        buildfire.datastore.get (window.app.settings.placesTag, function(err, results){
-            if(err){
-              console.error('datastore.get error', err);
-              return;
-            }
+        let oldPlaces = [], newPlaces = [];
 
-            let places,
-                data = results.data;
-
-            if(data && data.places){
-              if(data.categories){
-                window.app.state.categories = data.categories.map(category => {
-                    return {name: category, isActive: true};
-                });
-              }
-
-              window.app.state.mode = data.defaultView;
-
-              let sortBy = window.PlacesSort[data.sortBy];
-              places = data.places.sort(sortBy);
-
-              window.app.state.actionItems = data.actionItems || [];
-              window.app.state.places = places;
-              window.app.state.filteredPlaces = places;
-              window.app.state.sortBy = data.sortBy;
-              window.app.state.defaultView = data.defaultView;
-            }
-
+        var loadCount = 0;
+        function onChunkLoaded() {
+          loadCount += 1;
+          if (loadCount === 2) {
+            let places = oldPlaces.concat(newPlaces);
+            window.app.state.places = places;
+            filterPlaces({ places, sortBy: window.app.state.sortBy });
             placesCallback(null, places);
+          }
+        }
+
+        buildfire.datastore.search({}, 'places-list', (err, data) => {
+          if (err) {
+            console.log('err new chunk loaded', err);
+            onChunkLoaded();
+            return console.error(err);
+          }
+          newPlaces = data.map(place => {
+              place.data.id = place.id;
+              return place.data;
+          });
+
+          console.log('new chunk loaded', data);
+          onChunkLoaded();
         });
+
+        buildfire.datastore.get(window.app.settings.placesTag, function(err, results){
+          if (err) {
+            console.log('err old chunk loaded', err);
+            console.error('datastore.get error', err);
+            return;
+          }
+
+          let data = results.data;
+
+          if (data && data.categories) {
+            window.app.state.categories = data.categories.map(category => {
+                return { name: category, isActive: true };
+            });
+
+            oldPlaces = data.places || [];
+            window.app.state.mode = data.defaultView;
+            window.app.state.sortBy = data.sortBy;
+            window.app.state.actionItems = data.actionItems || [];
+            window.app.state.defaultView = data.defaultView;
+          }
+
+          console.log('old chunk loaded', results);
+          onChunkLoaded();
+        });
+
+        function filterPlaces(data) {
+          window.app.state.sortBy = data.sortBy;
+          let sortBy = window.PlacesSort[data.sortBy];
+          let places = window.app.state.places.sort(sortBy);
+          window.app.state.filteredPlaces = places;
+        }
 
         console.log('Calling getCurrentPosition');
 
