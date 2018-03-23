@@ -158,53 +158,50 @@ window.app = {
         });
 
         buildfire.datastore.onUpdate(function(event) {
-          if(event.tag === window.app.settings.placesTag){
+          console.log('Got update');
+          location.reload(); // TEMPORARY SOLUTION FOR THE DEMO
 
-              console.log('Got update');
-              location.reload(); // TEMPORARY SOLUTION FOR THE DEMO
+          let currentPlaces = window.app.state.places;
+          let newPlaces = event.data.places;
+          let currentSortOrder = window.app.state.sortBy;
+          let newSortOrder = event.data.sortBy;
+          let newViewState = event.data.defaultView;
+          let currentDefaultView = window.app.state.defaultView;
+          let newDefaultView = event.data.defaultView;
 
-              let currentPlaces = window.app.state.places;
-              let newPlaces = event.data.places;
-              let currentSortOrder = window.app.state.sortBy;
-              let newSortOrder = event.data.sortBy;
-              let newViewState = event.data.defaultView;
-              let currentDefaultView = window.app.state.defaultView;
-              let newDefaultView = event.data.defaultView;
+          /**
+           * SORT ORDER
+           */
+          if(currentSortOrder != newSortOrder){
+              window.app.state.sortBy = newSortOrder;
+              let sortBy = PlacesSort[window.app.state.sortBy];
+              window.app.state.places.sort(sortBy);
 
-              /**
-               * SORT ORDER
-               */
-              if(currentSortOrder != newSortOrder){
-                  window.app.state.sortBy = newSortOrder;
-                  let sortBy = PlacesSort[window.app.state.sortBy];
-                  window.app.state.places.sort(sortBy);
+              if(window.app.state.mode === window.app.settings.viewStates.list)
+                window.loadList(window.app.state.places);
 
-                  if(window.app.state.mode === window.app.settings.viewStates.list)
-                    window.loadList(window.app.state.places);
+              return;
+          }
 
-                  return;
-              }
+          let defaultViewChanged = currentDefaultView !== newDefaultView;
+          let notInDefaultView = newDefaultView !== window.app.state.mode;
 
-              let defaultViewChanged = currentDefaultView !== newDefaultView;
-              let notInDefaultView = newDefaultView !== window.app.state.mode;
+          // We want to update the widget to reflect the new default view if the setting
+          // was changed and the user is not in that view already
+          if (defaultViewChanged && notInDefaultView) {
+            window.router.navigate(newViewState);
+            window.app.state.mode = newViewState;
+            return;
+          }
 
-              // We want to update the widget to reflect the new default view if the setting
-              // was changed and the user is not in that view already
-              if (defaultViewChanged && notInDefaultView) {
-                window.router.navigate(newViewState);
-                window.app.state.mode = newViewState;
-                return;
-              }
+          //Do comparison to see what's changed
+          let updatedPlaces = filter(newPlaces, (newPlace) => { return !find(currentPlaces, newPlace)});
 
-              //Do comparison to see what's changed
-              let updatedPlaces = filter(newPlaces, (newPlace) => { return !find(currentPlaces, newPlace)});
-
-              if(window.app.state.mode === window.app.settings.viewStates.map){
-                  window.mapView.updateMap(updatedPlaces);
-              }else{
-                  //Load new items
-                  window.listView.updateList(updatedPlaces);
-              }
+          if(window.app.state.mode === window.app.settings.viewStates.map){
+              window.mapView.updateMap(updatedPlaces);
+          }else{
+              //Load new items
+              window.listView.updateList(updatedPlaces);
           }
         });
     },
