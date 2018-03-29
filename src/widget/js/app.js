@@ -98,7 +98,6 @@ window.app = {
 
         buildfire.datastore.search({}, 'places-list', (err, data) => {
           if (err) {
-            console.log('err new chunk loaded', err);
             onChunkLoaded();
             return console.error(err);
           }
@@ -107,13 +106,11 @@ window.app = {
               return place.data;
           });
 
-          console.log('new chunk loaded', data);
           onChunkLoaded();
         });
 
         buildfire.datastore.get(window.app.settings.placesTag, function(err, results){
           if (err) {
-            console.log('err old chunk loaded', err);
             console.error('datastore.get error', err);
             return;
           }
@@ -132,7 +129,6 @@ window.app = {
             window.app.state.defaultView = data.defaultView;
           }
 
-          console.log('old chunk loaded', results);
           onChunkLoaded();
         });
 
