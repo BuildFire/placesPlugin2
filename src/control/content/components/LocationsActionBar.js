@@ -1,5 +1,6 @@
 import React from 'react';
 import csv from 'csv-js';
+import CSVjs from 'comma-separated-values';
 
 class LocationsActionBar extends React.Component {
 
@@ -27,7 +28,8 @@ class LocationsActionBar extends React.Component {
           lat: parseFloat(row[2]),
           lng: parseFloat(row[3])
         },
-        description: row[4]
+        description: row[4],
+        subtitle: row[5]
       }));
       this.props.onMultipleSubmit(locations);
     };
@@ -36,19 +38,22 @@ class LocationsActionBar extends React.Component {
   }
 
   handleDataExport() {
-    const rows = [['name', 'address_name','address_lat','address_lng','description']];
+    const rows = [];
     this.props.places.forEach(place => {
-      rows.push([
-        `"${place.title}"`,
-        `"${place.address.name}"`,
-        place.address.lat,
-        place.address.lng,
-        `"${place.description}"`
-      ]);
+      rows.push({
+        title: place.title,
+        address: place.address.name,
+        lat: place.address.lat,
+        lng: place.address.lng,
+        description: place.description || '',
+        subtitle: place.subtitle || ''
+      });
     });
 
     let csvContent = 'data:text/csv;charset=utf-8,';
-    rows.forEach(row => csvContent += row.join(',') + '\r\n');
+    let encoded = new CSVjs(rows, { header: true }).encode();
+    csvContent += encoded;
+
 
     const encodedURI = encodeURI(csvContent);
     const link = document.createElement('a');

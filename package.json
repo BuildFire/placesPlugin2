@@ -36,6 +36,7 @@
     "zip-webpack-plugin": "^2.0.0"
   },
   "dependencies": {
+    "comma-separated-values": "^3.6.4",
     "csv-js": "^1.0.0",
     "handlebars": "^4.0.11",
     "lazyload": "^2.0.0-beta.2",

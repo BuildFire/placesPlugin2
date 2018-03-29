@@ -171,11 +171,15 @@ class Content extends React.Component {
    * @param   {Object} locations Locations array
    */
   onMultipleLocationSubmit(locations) {
-    const { data} = this.state;
-    data.places = data.places || [];
-    locations.forEach(location => data.places.push(location));
-    this.setState({ data, addingLocation: false });
-    this.handleSave();
+    buildfire.datastore.bulkInsert(locations, 'places-list', (err, result) => {
+      if (err) return console.error(err);
+      this.getPlacesList();
+    });
+
+    // data.places = data.places || [];
+    // locations.forEach(location => data.places.push(location));
+    // this.setState({ data, addingLocation: false });
+    // this.handleSave();
   }
 
   /**
