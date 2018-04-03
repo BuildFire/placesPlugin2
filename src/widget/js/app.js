@@ -96,18 +96,35 @@ window.app = {
           }
         }
 
-        buildfire.datastore.search({}, 'places-list', (err, data) => {
-          if (err) {
-            onChunkLoaded();
-            return console.error(err);
-          }
-          newPlaces = data.map(place => {
-              place.data.id = place.id;
-              return place.data;
-          });
+        function getPlacesList() {
+          const places = [];
+          const pageSize = 20;
+          let page = 0;
 
-          onChunkLoaded();
-        });
+          const loadPage = () => {
+            buildfire.datastore.search({ page, pageSize }, 'places-list', (err, result) => {
+              if (err) {
+                onChunkLoaded();
+                return console.error(err);
+              }
+              places.push(...result.map(place => {
+                place.data.id = place.id;
+                return place.data;
+              }));
+
+              if (result && result.length === pageSize) {
+                page += 1;
+                return loadPage();
+              }
+
+              newPlaces = places;
+              onChunkLoaded();
+            });
+          };
+
+          loadPage();
+        }
+        getPlacesList();
 
         buildfire.datastore.get(window.app.settings.placesTag, function(err, results){
           if (err) {

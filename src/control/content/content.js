@@ -51,15 +51,31 @@ class Content extends React.Component {
   }
 
   getPlacesList() {
-    buildfire.datastore.search({}, 'places-list', (err, result) => {
-      if (err) return console.error(err);
+    const places = [];
+    const pageSize = 20;
+    let page = 0;
+
+    const loadPage = () => {
+      buildfire.datastore.search({ page, pageSize }, 'places-list', (err, result) => {
+        if (err) return console.error(err);
+        places.push(...result.map(place => {
+          place.data.id = place.id;
+          return place.data;
+        }));
+
       const data = Object.assign({}, this.state.data);
-      data.places = result.map(place => {
-        place.data.id = place.id;
-        return place.data;
-      });
+      data.places = [];
+      data.places.push(...places);
       this.setState({ data });
-    });
+
+      if (result && result.length === pageSize) {
+        page += 1;
+        loadPage();
+      }
+      });
+    };
+
+    loadPage();
   }
 
   /**
