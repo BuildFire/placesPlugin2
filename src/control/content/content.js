@@ -52,7 +52,7 @@ class Content extends React.Component {
 
   getPlacesList() {
     const places = [];
-    const pageSize = 20;
+    const pageSize = 50;
     let page = 0;
 
     const loadPage = () => {
