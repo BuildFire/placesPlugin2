@@ -239,7 +239,7 @@ window.app = {
         }, (response) => {
             //Update places with distance
             window.app.state.places.map((place, index)=>{
-                if(response.rows && response.rows.length > 0 && response.rows[0].elements[index]){
+                if(response && response.rows && response.rows.length > 0 && response.rows[0].elements[index]){
                     const distance = response.rows[0].elements[index].distance;
 
                     place.distance = (distance) ? distance.text : '';
