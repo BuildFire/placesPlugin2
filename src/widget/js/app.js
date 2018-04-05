@@ -104,9 +104,9 @@ window.app = {
             buildfire.datastore.search({
               page,
               pageSize,
-              sort: {
+              sort: (window.app.state.sortBy ? ({
                 title: (window.app.state.sortBy === 'alphaDesc' ? -1 : 1)
-              }
+              }) : null)
             }, 'places-list', (err, result) => {
               console.log('search', { err, result });
 
@@ -145,10 +145,6 @@ window.app = {
                 page++;
                 console.log('loading page', page);
                 loadPage();
-              } else {
-                if (window.app.state.mapInitiated) {
-                  console.log('total places count', window.app.state.places.length);
-                }
               }
             });
           };
