@@ -37,7 +37,9 @@ window.mapView = {
                 mapView.addMarker(map, place, mapView.settings.images.place);
             });
 
-            mapView.addMarkerCluster();
+            if (places.length !== 50) {
+                mapView.addMarkerCluster();
+            }
             map.fitBounds(app.state.bounds);
         }
 

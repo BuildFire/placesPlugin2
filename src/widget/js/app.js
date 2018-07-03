@@ -90,41 +90,67 @@ window.app = {
           loadCount += 1;
           if (loadCount === 2) {
             let places = oldPlaces.concat(newPlaces);
-            window.app.state.places = places;
-            filterPlaces({ places, sortBy: window.app.state.sortBy });
+            window.app.state.places.push(...places);
+            window.app.state.filteredPlaces.push(...places);
             placesCallback(null, places);
           }
         }
 
         function getPlacesList() {
-          const places = [];
           const pageSize = 50;
           let page = 0;
 
           const loadPage = () => {
-            buildfire.datastore.search({ page, pageSize }, 'places-list', (err, result) => {
+            buildfire.datastore.search({
+              page,
+              pageSize,
+              sort: (window.app.state.sortBy ? ({
+                title: (window.app.state.sortBy === 'alphaDesc' ? -1 : 1)
+              }) : null)
+            }, 'places-list', (err, result) => {
+              console.log('search', { err, result });
+
               if (err) {
                 onChunkLoaded();
                 return console.error(err);
               }
+              const places = [];
+
               places.push(...result.map(place => {
                 place.data.id = place.id;
                 return place.data;
               }));
 
-              if (result && result.length === pageSize) {
-                page += 1;
-                return loadPage();
+              console.log('loaded page', page, { result });
+
+              // This is the first page so we initialize
+              if (result && page === 0) {
+                newPlaces.push(...places);
+                onChunkLoaded();
+
+              // This is an additional page so we only push new data
+              } else {
+                window.app.state.places.push(...places);
+                window.app.state.filteredPlaces.push(...places);
+
+                if (window.app.state.mapInitiated) {
+                  window.mapView.updateMap(places);
+                }
+
+                window.listView.updateList(places);
               }
 
-              newPlaces = places;
-              onChunkLoaded();
+              // If we have more pages we keep going
+              if (result.length === pageSize) {
+                page++;
+                console.log('loading page', page);
+                loadPage();
+              }
             });
           };
 
           loadPage();
         }
-        getPlacesList();
 
         buildfire.datastore.get(window.app.settings.placesTag, function(err, results){
           if (err) {
@@ -134,27 +160,23 @@ window.app = {
 
           let data = results.data;
 
-          if (data && data.categories) {
-            window.app.state.categories = data.categories.map(category => {
-                return { name: category, isActive: true };
-            });
-
+          if (data) {
             oldPlaces = data.places || [];
             window.app.state.mode = data.defaultView;
             window.app.state.sortBy = data.sortBy;
             window.app.state.actionItems = data.actionItems || [];
             window.app.state.defaultView = data.defaultView;
+
+            if (data.categories) {
+              window.app.state.categories = data.categories.map(category => {
+                  return { name: category, isActive: true };
+              });
+            }
           }
 
+          getPlacesList();
           onChunkLoaded();
         });
-
-        function filterPlaces(data) {
-          window.app.state.sortBy = data.sortBy;
-          let sortBy = window.PlacesSort[data.sortBy];
-          let places = window.app.state.places.sort(sortBy);
-          window.app.state.filteredPlaces = places;
-        }
 
         console.log('Calling getCurrentPosition');
 
@@ -237,9 +259,9 @@ window.app = {
             travelMode: window.google.maps.TravelMode.DRIVING,
             unitSystem: window.google.maps.UnitSystem.IMPERIAL //google.maps.UnitSystem.METRIC
         }, (response) => {
-            //Update places with distance
+            //Update places with distancexº
             window.app.state.places.map((place, index)=>{
-                if(response.rows && response.rows.length > 0 && response.rows[0].elements[index]){
+                if(response && response.rows && response.rows.length > 0 && response.rows[0].elements[index]){
                     const distance = response.rows[0].elements[index].distance;
 
                     place.distance = (distance) ? distance.text : '';

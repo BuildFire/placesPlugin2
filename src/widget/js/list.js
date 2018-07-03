@@ -1,28 +1,46 @@
 import "./lib/lazyload";
 
 window.listView = {
+    initialized: false,
+    imagePrefix: null,
+    defaultImage: null,
+    listScrollingContainer: null,
+    imageHeight: null,
+    imageWidth: null,
     addPlaces: (places) => {
         if(!places){
             return;
         }
 
-        // Crop image to 16:9 aspect ratio
-        const imageWidth = Math.floor(window.innerWidth);
-        const imageHeight = Math.floor(window.innerWidth / 16 * 9);
+        function init() {
+            console.log('Initializing list view !!!');
+            // Crop image to 16:9 aspect ratio
+            window.listView.imageWidth = Math.floor(window.innerWidth);
+            window.listView.imageHeight = Math.floor(window.innerWidth / 16 * 9);
 
-        const cloudImg = window.app.settings.cloudImg;
-        const imagePrefix = `${cloudImg.domain}${cloudImg.operations.crop}/${imageWidth}x${imageHeight}/`;
-        const defaultImage = `${cloudImg.domain}${cloudImg.operations.cdn}/https://pluginserver.buildfire.com/styles/media/holder-16x9.png`;
+            const cloudImg = window.app.settings.cloudImg;
+            window.listViewimagePrefix = `${cloudImg.domain}${cloudImg.operations.crop}/${window.listView.imageWidth}x${window.listView.imageHeight}/`;
+            window.listViewdefaultImage = `${cloudImg.domain}${cloudImg.operations.cdn}/https://pluginserver.buildfire.com/styles/media/holder-16x9.png`;
 
-        const listContainer = document.getElementById("listView");
+            const listContainer = document.getElementById("listView");
 
-        const listScrollingContainer = document.createElement('div');
-        listScrollingContainer.className = 'list-scrolling-container';
-        listContainer.appendChild(listScrollingContainer);
+            window.listView.listScrollingContainer = document.createElement('div');
+            window.listView.listScrollingContainer.className = 'list-scrolling-container';
+            listContainer.appendChild(window.listView.listScrollingContainer);
+            window.listView.initialized = true;
+        }
+
+        if (!window.listView.initialized) {
+            init();
+        }
+
+        if (places.length !== 50) {
+            window.lazyload();
+        }
 
         places.forEach((place, index) => {
             const listItem = document.createElement('div');
-            listItem.setAttribute('style', `${imageHeight}px !important`);
+            listItem.setAttribute('style', `${window.listView.imageHeight}px !important`);
             listItem.id = (place.id) ? `id_${place.id}` : '';
             listItem.className = 'list-item';
 
@@ -33,13 +51,13 @@ window.listView = {
             });
 
             //Add Image
-            const listImage = place.image ? place.image : defaultImage;
+            const listImage = place.image ? place.image : window.listView.defaultImage;
             const image = document.createElement('img');
 
-            image.setAttribute('data-src', imagePrefix + listImage);
-            image.setAttribute('width', imageWidth);
-            image.setAttribute('height', imageHeight);
-            image.setAttribute('style', `${imageHeight}px !important`);
+            image.setAttribute('data-src', window.listView.imagePrefix + listImage);
+            image.setAttribute('width', window.listView.imageWidth);
+            image.setAttribute('height', window.listView.imageHeight);
+            image.setAttribute('style', `${window.listView.imageHeight}px !important`);
             image.className = 'lazyload';
 
             const infoContainer = document.createElement('div');
@@ -77,10 +95,9 @@ window.listView = {
             listItem.appendChild(infoContainer);
             //listItem.appendChild(address);
 
-            listScrollingContainer.appendChild(listItem);
-
-            window.lazyload();
+            window.listView.listScrollingContainer.appendChild(listItem);
         });
+        window.mapView.addMarkerCluster();
     },
     initList: (places) => {
         //Add filter control
@@ -89,9 +106,8 @@ window.listView = {
         window.listView.addPlaces(places);
     },
     updateList: (newPlaces) => {
-        console.log('called updateList()', newPlaces);
+        console.log('called updateList()');
         window.listView.addPlaces(newPlaces);
-        console.log(newPlaces);
     },
     filter(placesToHide, placesToShow) {
         //Hide filtered places
