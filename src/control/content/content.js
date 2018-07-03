@@ -69,6 +69,10 @@ class Content extends React.Component {
         }));
 
       const data = Object.assign({}, this.state.data);
+      data.places.forEach((place, index) => {
+        if (!place.title) data.places.splice(index, 1);
+      });
+
       data.places = [];
       data.places.push(...places);
       this.setState({ data });
