@@ -35,17 +35,22 @@ class Content extends React.Component {
   }
 
   migrate(places) {
-    // Clear original data.places without mutating state
-    const data = Object.assign({}, this.state.data);
-    data.places = [];
-    this.setState({ data });
-    this.handleSave();
-
     console.warn('Migrating');
 
+    // Assign an index to each place
+    var index = 0;
+    places.forEach(p => p.index = index++);
+
     // Insert data to new format
-    buildfire.datastore.bulkInsert(places, 'places-list', (err, data) => {
+    buildfire.datastore.bulkInsert(places, 'places-list', (err) => {
       if (err) return console.error(err);
+
+      // Clear original data.places without mutating state
+      const data = Object.assign({}, this.state.data);
+      data.places = [];
+      this.setState({ data });
+      this.handleSave();
+
       this.getPlacesList();
     });
   }
@@ -152,6 +157,7 @@ class Content extends React.Component {
   onLocationSubmit(location) {
     const { data } = this.state;
     data.places = data.places || [];
+    location.index = data.places.length;
 
     buildfire.datastore.insert(location, 'places-list', (err, result) => {
       if (err) return console.error(err);
