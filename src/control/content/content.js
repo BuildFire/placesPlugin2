@@ -68,11 +68,12 @@ class Content extends React.Component {
           return place.data;
         }));
 
-      const data = Object.assign({}, this.state.data);
-      data.places.forEach((place, index) => {
-        if (!place.title) data.places.splice(index, 1);
+      // Remove deleted places
+      places.forEach((place, index) => {
+        if (!place.title) places.splice(index, 1);
       });
 
+      const data = Object.assign({}, this.state.data);
       data.places = [];
       data.places.push(...places);
       this.setState({ data });
