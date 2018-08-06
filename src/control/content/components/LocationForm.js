@@ -237,6 +237,11 @@ class LocationForm extends React.Component {
     });
   }
 
+  removeImage(e) {
+    this.setState({ image: '' });
+    e.preventDefault();
+  }
+
   modules = {
     imageResize: {},
     toolbar: {
@@ -350,6 +355,10 @@ class LocationForm extends React.Component {
             className='image-dialog'
             onClick={ () => this.showImageDialog() }>
             { this.state.image ? null : <a>Add Image +</a> }
+            <img
+              className='delete'
+              onClick={ e => this.removeImage(e) }
+              src='assets/img/cross.png' />
           </div>
         </div>
 

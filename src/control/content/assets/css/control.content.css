@@ -124,6 +124,7 @@ button.template {
   border-radius: 4px;
   text-align: center;
   cursor: pointer;
+  position: relative;
 }
 
 .image-dialog a {
@@ -141,4 +142,18 @@ button.template {
 
 .quill {
     height: 150px;
+}
+
+.image-dialog:hover .delete {
+  display: block;
+}
+
+.image-dialog .delete {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 15px;
+  height: 15px;
+  z-index: 100;
+  display: none;
 }
