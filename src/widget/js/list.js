@@ -19,8 +19,8 @@ window.listView = {
             window.listView.imageHeight = Math.floor(window.innerWidth / 16 * 9);
 
             const cloudImg = window.app.settings.cloudImg;
-            window.listViewimagePrefix = `${cloudImg.domain}${cloudImg.operations.crop}/${window.listView.imageWidth}x${window.listView.imageHeight}/`;
-            window.listViewdefaultImage = `${cloudImg.domain}${cloudImg.operations.cdn}/https://pluginserver.buildfire.com/styles/media/holder-16x9.png`;
+            window.listView.imagePrefix = `${cloudImg.domain}${cloudImg.operations.crop}/${window.listView.imageWidth}x${window.listView.imageHeight}/`;
+            window.listView.defaultImage = `${cloudImg.domain}${cloudImg.operations.cdn}/https://pluginserver.buildfire.com/styles/media/holder-16x9.png`;
 
             const listContainer = document.getElementById("listView");
 
@@ -34,9 +34,7 @@ window.listView = {
             init();
         }
 
-        if (places.length !== 50) {
-            window.lazyload();
-        }
+        window.lazyload();
 
         places.forEach((place, index) => {
             const listItem = document.createElement('div');
@@ -53,8 +51,13 @@ window.listView = {
             //Add Image
             const listImage = place.image ? place.image : window.listView.defaultImage;
             const image = document.createElement('img');
+            console.log(listImage);
 
+            console.log(place);
             image.setAttribute('data-src', window.listView.imagePrefix + listImage);
+            if (index <= 9) { // Load the first 10 images
+                image.setAttribute('src', window.listView.imagePrefix + listImage);
+            }
             image.setAttribute('width', window.listView.imageWidth);
             image.setAttribute('height', window.listView.imageHeight);
             image.setAttribute('style', `${window.listView.imageHeight}px !important`);
@@ -97,7 +100,10 @@ window.listView = {
 
             window.listView.listScrollingContainer.appendChild(listItem);
         });
-        window.mapView.addMarkerCluster();
+
+        if (window.map) {
+            window.mapView.addMarkerCluster();
+        }
     },
     initList: (places) => {
         //Add filter control

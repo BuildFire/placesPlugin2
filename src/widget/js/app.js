@@ -291,6 +291,6 @@ window.app = {
     }
 };
 
-//document.addEventListener('DOMContentLoaded', () => window.app.init( window.app.gotPlaces, window.app.gotLocation));
+//document.aEventListener('DOMContentLoaded', () => window.app.init( window.app.gotPlaces, window.app.gotLocation));
 app.init(app.gotPlaces, app.gotLocation);
 window.initRouter();
