@@ -89,7 +89,7 @@ window.listView = {
             // infoContainer.appendChild(address);
 
             const distance = document.createElement('div');
-            distance.setAttribute('id', `distance${index}`);
+            distance.setAttribute('id', `distance-${place.id}`);
             distance.innerHTML = (place.distance) ? place.distance : '...';
             distance.className = 'list-distance';
             infoContainer.appendChild(distance);
@@ -132,7 +132,7 @@ window.listView = {
     },
     updateDistances: (places) => {
         places.forEach((place, index) => {
-            let distanceElement = document.getElementById(`distance${index}`);
+            let distanceElement = document.getElementById(`distance-${place.id}`);
 
             if(distanceElement)
                 distanceElement.innerHTML = place.distance;

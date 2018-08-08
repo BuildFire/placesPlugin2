@@ -82,6 +82,7 @@ class Content extends React.Component {
         page += 1;
         loadPage();
       } else {
+
         if (!data.itemsOrder) { // create items order array if not yet existing
           console.log('migrated items order array');
           this.updateItemsOrder();
@@ -192,8 +193,10 @@ class Content extends React.Component {
     buildfire.datastore.insert(location, 'places-list', (err, result) => {
       if (err) return console.error(err);
         result.data.id = result.id;
+        data.itemsOrder.push(result.id);
         data.places.push(result.data);
         this.setState({ data });
+        this.handleSave();
     });
 
     this.setState({ addingLocation: false });
