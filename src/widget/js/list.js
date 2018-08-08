@@ -36,6 +36,8 @@ window.listView = {
 
         window.lazyload();
 
+        places = places.sort(window.PlacesSort[window.app.state.sortBy]);
+
         places.forEach((place, index) => {
             const listItem = document.createElement('div');
             listItem.setAttribute('style', `${window.listView.imageHeight}px !important`);
@@ -51,9 +53,7 @@ window.listView = {
             //Add Image
             const listImage = place.image ? place.image : window.listView.defaultImage;
             const image = document.createElement('img');
-            console.log(listImage);
 
-            console.log(place);
             image.setAttribute('data-src', window.listView.imagePrefix + listImage);
             if (index <= 9) { // Load the first 10 images
                 image.setAttribute('src', window.listView.imagePrefix + listImage);
