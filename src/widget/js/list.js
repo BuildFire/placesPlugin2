@@ -54,10 +54,7 @@ window.listView = {
             const listImage = place.image ? place.image : window.listView.defaultImage;
             const image = document.createElement('img');
 
-            image.setAttribute('data-src', window.listView.imagePrefix + listImage);
-            if (index <= 9) { // Load the first 10 images
-                image.setAttribute('src', window.listView.imagePrefix + listImage);
-            }
+            image.setAttribute('src', window.listView.imagePrefix + listImage);
             image.setAttribute('width', window.listView.imageWidth);
             image.setAttribute('height', window.listView.imageHeight);
             image.setAttribute('style', `${window.listView.imageHeight}px !important`);
