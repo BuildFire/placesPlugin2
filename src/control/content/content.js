@@ -49,9 +49,8 @@ class Content extends React.Component {
       const data = Object.assign({}, this.state.data);
       data.places = [];
       this.setState({ data });
-      this.handleSave();
-
       this.getPlacesList();
+      this.handleSave();
     });
   }
 
@@ -229,6 +228,7 @@ class Content extends React.Component {
     buildfire.datastore.bulkInsert(locations, 'places-list', (err, result) => {
       if (err) return console.error(err);
       this.getPlacesList();
+      this.handleSave();
     });
 
     // data.places = data.places || [];

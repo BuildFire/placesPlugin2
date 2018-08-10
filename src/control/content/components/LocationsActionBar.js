@@ -29,7 +29,8 @@ class LocationsActionBar extends React.Component {
           lng: parseFloat(row[3])
         },
         description: row[4],
-        subtitle: row[5]
+        subtitle: row[5],
+        image: row[6]
       }));
       this.props.onMultipleSubmit(locations);
     };
@@ -46,7 +47,8 @@ class LocationsActionBar extends React.Component {
         lat: place.address.lat,
         lng: place.address.lng,
         description: place.description || '',
-        subtitle: place.subtitle || ''
+        subtitle: place.subtitle || '',
+        image: place.image || ''
       });
     });
 
@@ -64,7 +66,7 @@ class LocationsActionBar extends React.Component {
   }
 
   handleTemplateDownload() {
-    const rows = [['name','address_name','address_lat','address_lng','description']];
+    const rows = [['name','address_name','address_lat','address_lng','description', 'subtitle', 'image']];
     let csvContent  = 'data:text/csv;charset=utf-8,';
     rows.forEach(row => csvContent += row.join(',') + '\r\n');
 
