@@ -117,6 +117,7 @@ window.app = {
               const places = [];
 
               places.push(...result.map(place => {
+                place.data.sort = window.app.state.itemsOrder.indexOf(place.id);
                 place.data.id = place.id;
                 return place.data;
               }));
@@ -164,6 +165,7 @@ window.app = {
             oldPlaces = data.places || [];
             window.app.state.mode = data.defaultView;
             window.app.state.sortBy = data.sortBy;
+            window.app.state.itemsOrder = data.itemsOrder;
             window.app.state.actionItems = data.actionItems || [];
             window.app.state.defaultView = data.defaultView;
 
@@ -291,6 +293,6 @@ window.app = {
     }
 };
 
-//document.addEventListener('DOMContentLoaded', () => window.app.init( window.app.gotPlaces, window.app.gotLocation));
+//document.aEventListener('DOMContentLoaded', () => window.app.init( window.app.gotPlaces, window.app.gotLocation));
 app.init(app.gotPlaces, app.gotLocation);
 window.initRouter();

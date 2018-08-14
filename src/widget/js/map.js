@@ -53,6 +53,7 @@ window.mapView = {
     },
     addMarkerCluster: () =>{
         const cloudImg = window.app.settings.cloudImg;
+        if (!map) return;
 
         let clusterOptions = {
             gridSize: 53,

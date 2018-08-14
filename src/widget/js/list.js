@@ -19,8 +19,8 @@ window.listView = {
             window.listView.imageHeight = Math.floor(window.innerWidth / 16 * 9);
 
             const cloudImg = window.app.settings.cloudImg;
-            window.listViewimagePrefix = `${cloudImg.domain}${cloudImg.operations.crop}/${window.listView.imageWidth}x${window.listView.imageHeight}/`;
-            window.listViewdefaultImage = `${cloudImg.domain}${cloudImg.operations.cdn}/https://pluginserver.buildfire.com/styles/media/holder-16x9.png`;
+            window.listView.imagePrefix = `${cloudImg.domain}${cloudImg.operations.crop}/${window.listView.imageWidth}x${window.listView.imageHeight}/`;
+            window.listView.defaultImage = `${cloudImg.domain}${cloudImg.operations.cdn}/https://pluginserver.buildfire.com/styles/media/holder-16x9.png`;
 
             const listContainer = document.getElementById("listView");
 
@@ -34,9 +34,9 @@ window.listView = {
             init();
         }
 
-        if (places.length !== 50) {
-            window.lazyload();
-        }
+        window.lazyload();
+
+        places = places.sort(window.PlacesSort[window.app.state.sortBy]);
 
         places.forEach((place, index) => {
             const listItem = document.createElement('div');
@@ -54,7 +54,7 @@ window.listView = {
             const listImage = place.image ? place.image : window.listView.defaultImage;
             const image = document.createElement('img');
 
-            image.setAttribute('data-src', window.listView.imagePrefix + listImage);
+            image.setAttribute('src', window.listView.imagePrefix + listImage);
             image.setAttribute('width', window.listView.imageWidth);
             image.setAttribute('height', window.listView.imageHeight);
             image.setAttribute('style', `${window.listView.imageHeight}px !important`);
@@ -86,7 +86,7 @@ window.listView = {
             // infoContainer.appendChild(address);
 
             const distance = document.createElement('div');
-            distance.setAttribute('id', `distance${index}`);
+            distance.setAttribute('id', `distance-${place.id}`);
             distance.innerHTML = (place.distance) ? place.distance : '...';
             distance.className = 'list-distance';
             infoContainer.appendChild(distance);
@@ -97,7 +97,10 @@ window.listView = {
 
             window.listView.listScrollingContainer.appendChild(listItem);
         });
-        window.mapView.addMarkerCluster();
+
+        if (window.map) {
+            window.mapView.addMarkerCluster();
+        }
     },
     initList: (places) => {
         //Add filter control
@@ -126,7 +129,7 @@ window.listView = {
     },
     updateDistances: (places) => {
         places.forEach((place, index) => {
-            let distanceElement = document.getElementById(`distance${index}`);
+            let distanceElement = document.getElementById(`distance-${place.id}`);
 
             if(distanceElement)
                 distanceElement.innerHTML = place.distance;

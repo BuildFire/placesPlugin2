@@ -29,9 +29,9 @@ class Content extends React.Component {
       } else {
         this.setState({ data: result.data });
       }
-    });
 
-    this.getPlacesList();
+      this.getPlacesList();
+    });
   }
 
   migrate(places) {
@@ -49,9 +49,8 @@ class Content extends React.Component {
       const data = Object.assign({}, this.state.data);
       data.places = [];
       this.setState({ data });
-      this.handleSave();
-
       this.getPlacesList();
+      this.handleSave();
     });
   }
 
@@ -68,11 +67,12 @@ class Content extends React.Component {
           return place.data;
         }));
 
-      const data = Object.assign({}, this.state.data);
-      data.places.forEach((place, index) => {
-        if (!place.title) data.places.splice(index, 1);
+      // Remove deleted places
+      places.forEach((place, index) => {
+        if (!place.title) places.splice(index, 1);
       });
 
+      const data = Object.assign({}, this.state.data);
       data.places = [];
       data.places.push(...places);
       this.setState({ data });
@@ -80,11 +80,32 @@ class Content extends React.Component {
       if (result && result.length === pageSize) {
         page += 1;
         loadPage();
+      } else {
+
+        if (!data.itemsOrder) { // create items order array if not yet existing
+          console.log('migrated items order array');
+          this.updateItemsOrder();
+        }
+
+        let sortedPlaces = data.places.map(place => {
+          place.sort = data.itemsOrder.indexOf(place.id) + 1;
+          return place;
+        });
+        data.places = sortedPlaces;
+        this.setState({ data });
       }
       });
     };
 
     loadPage();
+  }
+
+
+  updateItemsOrder() {
+    const data = Object.assign({}, this.state.data);
+    data.itemsOrder = this.state.data.places.map(item => item.id);
+    this.setState({ data });
+    this.handleSave();
   }
 
   /**
@@ -100,9 +121,14 @@ class Content extends React.Component {
     });
   }, 600)
 
+  /**
+   * Handle sort updating
+   * @param  {Object} list Places list
+   */
   updateSort(list) {
     const { data } = this.state;
     data.places = list;
+    data.itemsOrder = list.map(item => item.id);
     this.setState({ data });
     this.handleSave();
   }
@@ -166,8 +192,10 @@ class Content extends React.Component {
     buildfire.datastore.insert(location, 'places-list', (err, result) => {
       if (err) return console.error(err);
         result.data.id = result.id;
+        data.itemsOrder.push(result.id);
         data.places.push(result.data);
         this.setState({ data });
+        this.handleSave();
     });
 
     this.setState({ addingLocation: false });
@@ -200,6 +228,7 @@ class Content extends React.Component {
     buildfire.datastore.bulkInsert(locations, 'places-list', (err, result) => {
       if (err) return console.error(err);
       this.getPlacesList();
+      this.handleSave();
     });
 
     // data.places = data.places || [];

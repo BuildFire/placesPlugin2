@@ -237,6 +237,11 @@ class LocationForm extends React.Component {
     });
   }
 
+  removeImage(e) {
+    this.setState({ image: '' });
+    e.preventDefault();
+  }
+
   modules = {
     imageResize: {},
     toolbar: {
@@ -263,7 +268,7 @@ class LocationForm extends React.Component {
       <form onSubmit={ e => this.onSubmit(e) } onKeyPress={ e => this.onAutoKeyUp(e) }>
 
         <div className='form-group'>
-          <label htmlFor='name'>Title</label>
+          <label htmlFor='name'>Title*</label>
           <input
             maxLength={ 60 }
             onChange={ e => this.onInputChange(e) }
@@ -274,7 +279,7 @@ class LocationForm extends React.Component {
         </div>
 
         <div className='form-group'>
-          <label htmlFor='subtitle'>Subtitle</label>
+          <label htmlFor='subtitle'>Subtitle*</label>
           <input
             maxLength={ 90 }
             onChange={ e => this.onInputChange(e) }
@@ -303,7 +308,7 @@ class LocationForm extends React.Component {
         </div>
 
         <div className='form-group autocomplete-container'>
-          <label htmlFor='address'>Address</label>
+          <label htmlFor='address'>Address*</label>
           <input
             key='address-input'
             onChange={ e => this.onAddressChange(e) }
@@ -350,6 +355,10 @@ class LocationForm extends React.Component {
             className='image-dialog'
             onClick={ () => this.showImageDialog() }>
             { this.state.image ? null : <a>Add Image +</a> }
+            <img
+              className='delete'
+              onClick={ e => this.removeImage(e) }
+              src='assets/img/cross.png' />
           </div>
         </div>
 

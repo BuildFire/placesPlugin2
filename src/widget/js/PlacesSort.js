@@ -18,7 +18,7 @@ window.PlacesSort = {
         return 0;
     },
     manual(a, b) {
-        if (!a.sort || !b.sort) return 1;
+        if (a.sort < 0 || b.sort < 0) return 1;
         if(a.sort < b.sort)
             return -1;
         if(a.sort > b.sort)

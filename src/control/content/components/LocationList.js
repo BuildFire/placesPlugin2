@@ -54,7 +54,17 @@ class PlacesList extends React.Component {
     ));
 
     const SortableList = SortableContainer(({items}) => {
-      let list = items.map((value, index) => (
+      var manualSort = function(a, b) {
+          if (a.sort < 0 || b.sort < 0) return 1;
+          if(a.sort < b.sort)
+              return -1;
+          if(a.sort > b.sort)
+              return 1;
+
+          return 0;
+      };
+
+      let list = items.sort(manualSort).map((value, index) => (
         <SortableItem
           key={ index }
           index={ index }
