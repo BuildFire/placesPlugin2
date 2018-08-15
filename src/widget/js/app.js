@@ -251,28 +251,15 @@ window.app = {
           destinations.push(new window.google.maps.LatLng(place.address.lat, place.address.lng));
         });
 
-        let origin = [{lat: location.latitude, lng: location.longitude}];
+        let origin = {latitude: location.latitude, longitude: location.longitude};
 
-        let service = new window.google.maps.DistanceMatrixService();
-
-        service.getDistanceMatrix({
-            origins: origin,
-            destinations: destinations,
-            travelMode: window.google.maps.TravelMode.DRIVING,
-            unitSystem: window.google.maps.UnitSystem.IMPERIAL //google.maps.UnitSystem.METRIC
-        }, (response) => {
-            //Update places with distancexº
-            window.app.state.places.map((place, index)=>{
-                if(response && response.rows && response.rows.length > 0 && response.rows[0].elements[index]){
-                    const distance = response.rows[0].elements[index].distance;
-
-                    place.distance = (distance) ? distance.text : '';
-                    place.distanceInMeters = (distance) ? distance.value : '';
-                }
-            });
-
-            window.listView.updateDistances(window.app.state.filteredPlaces);
+        destinations.forEach((item, index) => {
+          var destination = { latitude: item.lat(), longitude: item.lng() };
+          var distance = buildfire.geo.calculateDistance(origin, destination);
+          window.app.state.places[index].distance = Math.ceil(distance).toLocaleString() + ' mi';
         });
+
+        window.listView.updateDistances(window.app.state.filteredPlaces);
       }
     },
     gotPlaces(err, places) {
