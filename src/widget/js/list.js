@@ -54,7 +54,7 @@ window.listView = {
             const listImage = place.image ? place.image : window.listView.defaultImage;
             const image = document.createElement('img');
 
-            image.setAttribute('src', window.listView.imagePrefix + listImage);
+            image.setAttribute('data-src', window.listView.imagePrefix + listImage);
             image.setAttribute('width', window.listView.imageWidth);
             image.setAttribute('height', window.listView.imageHeight);
             image.setAttribute('style', `${window.listView.imageHeight}px !important`);
@@ -101,6 +101,8 @@ window.listView = {
         if (window.map) {
             window.mapView.addMarkerCluster();
         }
+
+        window.lazyload();
     },
     initList: (places) => {
         //Add filter control
