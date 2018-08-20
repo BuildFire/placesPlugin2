@@ -240,6 +240,7 @@ class LocationForm extends React.Component {
   removeImage(e) {
     this.setState({ image: '' });
     e.preventDefault();
+    return false;
   }
 
   modules = {
@@ -350,11 +351,13 @@ class LocationForm extends React.Component {
 
         <div className='form-group'>
           <label>List Image</label>
-          <div
-            style={{ backgroundImage: image ? `url(${image})` : '' }}
-            className='image-dialog'
-            onClick={ () => this.showImageDialog() }>
-            { this.state.image ? null : <a>Add Image +</a> }
+          <div className="list-image-holder">
+            <div
+              style={{ backgroundImage: image ? `url(${image})` : '' }}
+              className='image-dialog'
+              onClick={ () => this.showImageDialog() }>
+              { this.state.image ? null : <a>Add Image +</a> }
+            </div>
             <img
               className='delete'
               onClick={ e => this.removeImage(e) }

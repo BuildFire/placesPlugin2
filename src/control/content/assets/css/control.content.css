@@ -144,16 +144,22 @@ button.template {
     height: 150px;
 }
 
-.image-dialog:hover .delete {
+.list-image-holder:hover .delete {
   display: block;
 }
 
-.image-dialog .delete {
+.list-image-holder {
+  position: relative;
+  width: 200px;
+}
+
+.list-image-holder .delete {
   position: absolute;
   top: 5px;
   right: 5px;
-  width: 15px;
-  height: 15px;
+  width: 20px;
+  height: 20px;
   z-index: 100;
   display: none;
+  cursor: pointer;
 }
