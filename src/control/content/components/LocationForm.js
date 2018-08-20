@@ -279,7 +279,7 @@ class LocationForm extends React.Component {
         </div>
 
         <div className='form-group'>
-          <label htmlFor='subtitle'>Subtitle*</label>
+          <label htmlFor='subtitle'>Subtitle</label>
           <input
             maxLength={ 90 }
             onChange={ e => this.onInputChange(e) }
@@ -328,7 +328,7 @@ class LocationForm extends React.Component {
         </div>
 
         <div className='form-group'>
-          <label htmlFor='description'>Description</label>
+          <label htmlFor='description'>Description*</label>
           <div className='editor' style={{ height: '200px' }}>
             <ReactQuill
               ref={ n => this.quillRef = n }
