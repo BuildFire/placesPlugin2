@@ -257,8 +257,12 @@ window.app = {
 
         destinations.forEach((item, index) => {
           var destination = { latitude: item.lat(), longitude: item.lng() };
-          var distance = buildfire.geo.calculateDistance(origin, destination);
-          window.app.state.places[index].distance = Math.ceil(distance).toLocaleString() + ' mi';
+          var distance = buildfire.geo.calculateDistance(origin, destination, { decimalPlaces: 5 });
+          if (distance < 0.5) {
+            window.app.state.places[index].distance = (Math.round(distance * 5280)).toLocaleString() + ' ft';
+          } else {
+            window.app.state.places[index].distance = (Math.round(distance)).toLocaleString() + ' mi';
+          }
         });
 
         window.listView.updateDistances(window.app.state.filteredPlaces);
