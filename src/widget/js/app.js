@@ -117,7 +117,9 @@ window.app = {
               const places = [];
 
               places.push(...result.map(place => {
-                place.data.sort = window.app.state.itemsOrder.indexOf(place.id);
+                place.data.sort = window.app.state.itemsOrder
+                ? window.app.state.itemsOrder.indexOf(place.id)
+                : 1;
                 place.data.id = place.id;
                 return place.data;
               }));

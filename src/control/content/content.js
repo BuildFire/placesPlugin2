@@ -21,6 +21,7 @@ class Content extends React.Component {
   componentWillMount() {
     buildfire.datastore.get('places', (err, result) => {
       if (err) return console.error(err);
+        result.data.itemsOrder = result.data.itemsOrder || [];
 
       // we migrate old storage format to new one if needed
       if (result.data.places && result.data.places.length) {
