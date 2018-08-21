@@ -1,3 +1,4 @@
+
 import buildfire from 'buildfire';
 import filter from 'lodash/filter';
 import find from 'lodash/find';
@@ -126,10 +127,11 @@ window.app = {
 
               console.log('loaded page', page, { result });
 
+              newPlaces.push(...places);
+              onChunkLoaded();
+
               // This is the first page so we initialize
               if (result && page === 0) {
-                newPlaces.push(...places);
-                onChunkLoaded();
 
               // This is an additional page so we only push new data
               } else {
