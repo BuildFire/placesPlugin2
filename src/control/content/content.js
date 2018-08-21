@@ -130,7 +130,6 @@ class Content extends React.Component {
     data.places = list;
     data.itemsOrder = list.map(item => item.id);
     this.setState({ data });
-    console.log(data.itemsOrder, 'new sort order');
     this.handleSave();
   }
 
