@@ -25,7 +25,8 @@ class Content extends React.Component {
 
       // we migrate old storage format to new one if needed
       if (result.data.places && result.data.places.length) {
-        this.setState({ data: { categories: result.data.categories } });
+        delete result.data.places;
+        this.setState({ data: result.data });
         this.migrate(result.data.places);
       } else {
         this.setState({ data: result.data });
@@ -63,6 +64,7 @@ class Content extends React.Component {
     const loadPage = () => {
       buildfire.datastore.search({ page, pageSize }, 'places-list', (err, result) => {
         if (err) return console.error(err);
+
         places.push(...result.map(place => {
           place.data.id = place.id;
           return place.data;
@@ -73,18 +75,15 @@ class Content extends React.Component {
         if (!place.title) places.splice(index, 1);
       });
 
-      const data = Object.assign({}, this.state.data);
-      data.places = [];
-      data.places.push(...places);
-      this.setState({ data });
-
       if (result && result.length === pageSize) {
         page += 1;
         loadPage();
       } else {
+        const data = this.state.data;
+        data.places = places;
+        this.setState({ data });
 
-        if (!data.itemsOrder) { // create items order array if not yet existing
-          console.log('migrated items order array');
+        if (!data.itemsOrder|| data.itemsOrder.length !== data.places.length) {
           this.updateItemsOrder();
         }
 
@@ -103,8 +102,8 @@ class Content extends React.Component {
 
 
   updateItemsOrder() {
-    const data = Object.assign({}, this.state.data);
-    data.itemsOrder = this.state.data.places.map(item => item.id);
+    const data = this.state.data;
+    data.itemsOrder = data.places.map(item => item.id);
     this.setState({ data });
     this.handleSave();
   }
@@ -114,10 +113,10 @@ class Content extends React.Component {
    */
   handleSave = debounce(() => {
     // Do not save places list on simple datastore or we run out of space
-    const dataClone = Object.assign({}, this.state.data);
-    delete dataClone.places;
+    const data = this.state.data;
+    delete data.places;
 
-    buildfire.datastore.save(dataClone, 'places', (err) => {
+    buildfire.datastore.save(data, 'places', (err) => {
       if (err) console.error(err);
     });
   }, 600)
@@ -127,10 +126,11 @@ class Content extends React.Component {
    * @param  {Object} list Places list
    */
   updateSort(list) {
-    const { data } = this.state;
+    const data = this.state.data;
     data.places = list;
     data.itemsOrder = list.map(item => item.id);
     this.setState({ data });
+    console.log(data.itemsOrder, 'new sort order');
     this.handleSave();
   }
 
