@@ -25,7 +25,6 @@ class Content extends React.Component {
 
       // we migrate old storage format to new one if needed
       if (result.data.places && result.data.places.length) {
-        delete result.data.places;
         this.setState({ data: result.data });
         this.migrate(result.data.places);
       } else {
@@ -34,6 +33,8 @@ class Content extends React.Component {
 
       this.getPlacesList();
     });
+
+    window.$state = this.state;
   }
 
   migrate(places) {
@@ -112,11 +113,10 @@ class Content extends React.Component {
    * Handle state saving to the datastore
    */
   handleSave = debounce(() => {
-    // Do not save places list on simple datastore or we run out of space
-    const data = this.state.data;
-    delete data.places;
+    const saveData = Object.assign({}, this.state.data);
+    delete saveData.places;
 
-    buildfire.datastore.save(data, 'places', (err) => {
+    buildfire.datastore.save(saveData, 'places', (err) => {
       if (err) console.error(err);
     });
   }, 600)
