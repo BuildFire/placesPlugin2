@@ -16,6 +16,7 @@ window.mapView = {
     },
     lastKnownLocation: defaultLocation,
     initMap: (places) => {
+
         //Create the map first (Don't wait for location)
         mapView.createMap();
 

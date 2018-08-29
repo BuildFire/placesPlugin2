@@ -22,7 +22,7 @@ const WebpackConfig = {
 
   output: {
     path: path.join(__dirname, '../dist'),
-    filename: '[name].[chunkhash].js'
+    filename: '[name].[hash].js'
   },
 
   externals: {
@@ -100,7 +100,7 @@ const WebpackConfig = {
     ], {
       ignore: ['*.js', 'index.html', '*.md']
     }),
-    new ExtractTextPlugin('[name].[chunkhash].css'),
+    new ExtractTextPlugin('[name].[hash].css'),
     new ZipWebpackPlugin({
       path: path.join(__dirname, '../'),
       filename: `plugin.zip`

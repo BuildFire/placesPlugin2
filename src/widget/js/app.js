@@ -1,3 +1,4 @@
+
 import buildfire from 'buildfire';
 import filter from 'lodash/filter';
 import find from 'lodash/find';
@@ -80,76 +81,41 @@ window.app = {
     },
     init: (placesCallback, positionCallback) => {
         window.buildfire.appearance.titlebar.show();
-
         window.app.backButtonInit();
-
-        let oldPlaces = [], newPlaces = [];
-
-        var loadCount = 0;
-        function onChunkLoaded() {
-          loadCount += 1;
-          if (loadCount === 2) {
-            let places = oldPlaces.concat(newPlaces);
-            window.app.state.places.push(...places);
-            window.app.state.filteredPlaces.push(...places);
-            placesCallback(null, places);
-          }
-        }
+        let places = [];
 
         function getPlacesList() {
           const pageSize = 50;
           let page = 0;
 
           const loadPage = () => {
-            buildfire.datastore.search({
-              page,
-              pageSize,
-              sort: (window.app.state.sortBy ? ({
+            console.log('Places - Loading Page', page);
+            buildfire.datastore.search({ page, pageSize, sort: (window.app.state.sortBy ? ({
                 title: (window.app.state.sortBy === 'alphaDesc' ? -1 : 1)
               }) : null)
             }, 'places-list', (err, result) => {
-              console.log('search', { err, result });
-
-              if (err) {
-                onChunkLoaded();
-                return console.error(err);
-              }
-              const places = [];
 
               places.push(...result.map(place => {
-                place.data.sort = window.app.state.itemsOrder.indexOf(place.id);
                 place.data.id = place.id;
+                place.data.sort = window.app.state.itemsOrder
+                  ? window.app.state.itemsOrder.indexOf(place.id)
+                  : 0;
                 return place.data;
               }));
 
-              console.log('loaded page', page, { result });
-
-              // This is the first page so we initialize
-              if (result && page === 0) {
-                newPlaces.push(...places);
-                onChunkLoaded();
-
-              // This is an additional page so we only push new data
-              } else {
-                window.app.state.places.push(...places);
-                window.app.state.filteredPlaces.push(...places);
-
-                if (window.app.state.mapInitiated) {
-                  window.mapView.updateMap(places);
-                }
-
-                window.listView.updateList(places);
-              }
+              window.app.state.places = places;
+              window.app.state.filteredPlaces = places;
 
               // If we have more pages we keep going
               if (result.length === pageSize) {
                 page++;
-                console.log('loading page', page);
                 loadPage();
+              } else {
+                console.log('Places - Done loading places - Got', places.length);
+                placesCallback(null, places);
               }
             });
           };
-
           loadPage();
         }
 
@@ -162,7 +128,7 @@ window.app = {
           let data = results.data;
 
           if (data) {
-            oldPlaces = data.places || [];
+            places = data.places || [];
             window.app.state.mode = data.defaultView;
             window.app.state.sortBy = data.sortBy;
             window.app.state.itemsOrder = data.itemsOrder;
@@ -177,25 +143,15 @@ window.app = {
           }
 
           getPlacesList();
-          onChunkLoaded();
         });
 
-        console.log('Calling getCurrentPosition');
 
         buildfire.geo.getCurrentPosition({}, (err, position) => {
-            console.log('getCurrentPosition result', err, position);
-            if(err){
-                console.error('getCurrentPosition', err);
-                return;
-            }
-
-            if(position && position.coords){
-                positionCallback(null, position.coords);
-            }
+            if (err) return; console.error('getCurrentPosition', err);
+            if (position && position.coords) positionCallback(null, position.coords);
         });
 
         buildfire.datastore.onUpdate(function(event) {
-          console.log('Got update');
           location.reload(); // TEMPORARY SOLUTION FOR THE DEMO
 
           let currentPlaces = window.app.state.places;
@@ -255,8 +211,12 @@ window.app = {
 
         destinations.forEach((item, index) => {
           var destination = { latitude: item.lat(), longitude: item.lng() };
-          var distance = buildfire.geo.calculateDistance(origin, destination);
-          window.app.state.places[index].distance = Math.ceil(distance).toLocaleString() + ' mi';
+          var distance = buildfire.geo.calculateDistance(origin, destination, { decimalPlaces: 5 });
+          if (distance < 0.5) {
+            window.app.state.places[index].distance = (Math.round(distance * 5280)).toLocaleString() + ' ft';
+          } else {
+            window.app.state.places[index].distance = (Math.round(distance)).toLocaleString() + ' mi';
+          }
         });
 
         window.listView.updateDistances(window.app.state.filteredPlaces);
