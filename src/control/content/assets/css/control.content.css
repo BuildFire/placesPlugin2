@@ -163,3 +163,7 @@ button.template {
   display: none;
   cursor: pointer;
 }
+img.delete {
+  border-radius: 100%;
+  background: #fff;
+}
