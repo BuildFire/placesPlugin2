@@ -39,6 +39,11 @@ window.listView = {
         places = places.sort(window.PlacesSort[window.app.state.sortBy]);
 
         places.forEach((place, index) => {
+
+            if (!place.address || !place.address.lat || !place.address.lng) {
+                return;
+            }
+
             const listItem = document.createElement('div');
             listItem.setAttribute('style', `${window.listView.imageHeight}px !important`);
             listItem.id = (place.id) ? `id_${place.id}` : '';
