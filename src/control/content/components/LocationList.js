@@ -18,6 +18,11 @@ class PlacesList extends React.Component {
 
   render() {
     if (!this.props.places) return null;
+    this.props.places.forEach((place, index) => {
+      if (!place.address || !place.address.lat || !place.address.lng) {
+        this.props.places.splice(index, 1);
+      }
+    });
 
     const DragHandle = SortableHandle(() =>
       <img
