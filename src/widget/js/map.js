@@ -35,7 +35,9 @@ window.mapView = {
         //TODO: If there is only one entry, it returns an object (not an array)
         if(places && places.length){
             places.forEach((place) => {
-                mapView.addMarker(map, place, mapView.settings.images.place);
+                if (place.address && place.address.lat && place.address.lng) {
+                    mapView.addMarker(map, place, mapView.settings.images.place);
+                }
             });
 
             if (places.length !== 50) {
