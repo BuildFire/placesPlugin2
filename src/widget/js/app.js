@@ -147,7 +147,7 @@ window.app = {
 
 
         buildfire.geo.getCurrentPosition({}, (err, position) => {
-            if (err) return; console.error('getCurrentPosition', err);
+            if (err) return; console.warn('getCurrentPosition', err);
             if (position && position.coords) positionCallback(null, position.coords);
         });
 

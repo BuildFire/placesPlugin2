@@ -42,7 +42,7 @@ class PlacesList extends React.Component {
               ? value.place.address.name.length > 35
                 ? value.place.address.name.substring(0, 35).trim() + '...'
                 : value.place.address.name
-            : value.place.address.lat
+            : (value.place.address.lat !== null && value.place.address.lng !== null)
               ? parseFloat(value.place.address.lat.toFixed(10)) + ', ' +  parseFloat(value.place.address.lng.toFixed(10))
               : '' }
         </span>
