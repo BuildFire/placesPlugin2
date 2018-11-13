@@ -257,7 +257,8 @@ class LocationForm extends React.Component {
         ['link', 'image', 'video']
       ],
       handlers: {
-        image: this.imageHandler.bind(this)
+        // commenting this out fixed image upload in description
+        // image: this.imageHandler.bind(this)
       },
     },
   }
