@@ -230,7 +230,7 @@ class LocationForm extends React.Component {
     buildfire.imageLib.showDialog({ showIcons: false, multiSelection: false }, (err, result) => {
       if (err) throw err;
       if (result.selectedFiles.length > 0) {
-        const value = buildfire.imageLib.resizeImage(result.selectedFiles[0], {width: 'full'});
+        const value = buildfire.imageLib.resizeImage(result.selectedFiles[0], { width: 'full' });
         this.quillRef.getEditor().insertEmbed(range.index, 'image', value, 'user');
       }
     })
