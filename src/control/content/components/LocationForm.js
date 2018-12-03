@@ -225,16 +225,15 @@ class LocationForm extends React.Component {
     }
   }
 
-  imageHandler(image, callback) {
+  imageHandler = () => {
     const range = this.quillRef.getEditor().getSelection();
-    Buildfire.notifications.prompt({
-      message: 'What is the image URL'
-    }, (value) => {
-      if (value) {
-        value = `https://czi3m2qn.cloudimg.io/cdn/n/n/${value}`;
+    buildfire.imageLib.showDialog({ showIcons: false, multiSelection: false }, (err, result) => {
+      if (err) throw err;
+      if (result.selectedFiles.length > 0) {
+        const value = `https://czi3m2qn.cloudimg.io/cdn/n/n/${result.selectedFiles[0]}`;
         this.quillRef.getEditor().insertEmbed(range.index, 'image', value, 'user');
       }
-    });
+    })
   }
 
   removeImage(e) {
@@ -257,8 +256,8 @@ class LocationForm extends React.Component {
         ['link', 'image', 'video']
       ],
       handlers: {
-        // commenting this out fixed image upload in description
-        // image: this.imageHandler.bind(this)
+        // commenting this out fixed issue with image upload in description
+        image: () => this.imageHandler()
       },
     },
   }
