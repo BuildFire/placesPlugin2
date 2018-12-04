@@ -366,7 +366,7 @@ class LocationForm extends React.Component {
 
         <div className='form-group'>
           <button
-            disabled={ !title.length || !description.length || !address || !address.lat || !address.lng }
+            disabled={ !title.length || description.replace(/(&nbsp;|<(?!img|\/img).*?>)/ig, '').length === 0 || !address || !address.lat || !address.lng }
             type='submit'
             className='btn btn-primary'>
             { this.props.location ? 'Save Location' : 'Save Location' }
