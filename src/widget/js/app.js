@@ -155,12 +155,14 @@ window.app = {
           location.reload(); // TEMPORARY SOLUTION FOR THE DEMO
 
           let currentPlaces = window.app.state.places;
-          let newPlaces = event.data.places;
+          let newPlaces = event.data && event.data.places ? event.data.places : currentPlaces;
+
           let currentSortOrder = window.app.state.sortBy;
-          let newSortOrder = event.data.sortBy;
-          let newViewState = event.data.defaultView;
+          let newSortOrder = event.data && event.data.sortBy ? event.data.sortBy : currentSortOrder;
+
           let currentDefaultView = window.app.state.defaultView;
-          let newDefaultView = event.data.defaultView;
+          let newViewState = event.data && event.data.defaultView ? event.data.defaultView : currentDefaultView;
+          let newDefaultView = event.data && event.data.defaultView ? event.data.defaultView : currentDefaultView;
 
           /**
            * SORT ORDER
@@ -241,5 +243,5 @@ window.app = {
 };
 
 //document.aEventListener('DOMContentLoaded', () => window.app.init( window.app.gotPlaces, window.app.gotLocation));
-app.init(app.gotPlaces, app.gotLocation);
+window.app.init(window.app.gotPlaces, window.app.gotLocation);
 window.initRouter();
