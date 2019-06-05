@@ -58,7 +58,7 @@ class Content extends React.Component {
   }
 
   getPlacesList() {
-    let places = [];
+    const places = [];
     const pageSize = 50;
     let page = 0;
 
@@ -69,10 +69,8 @@ class Content extends React.Component {
         places.push(...result.map(place => {
           place.data.id = place.id;
           return place.data;
-        }));
-
-      // Remove deleted places
-      places = places.filter(place => place.title);
+        }).filter(place => place.title)
+      );
 
       if (result && result.length === pageSize) {
         page += 1;

@@ -16,23 +16,59 @@ class LocationsActionBar extends React.Component {
     const file = this.fileInput.files[0];
     const reader = new FileReader();
     reader.onload = e => {
-      const rows = csv.parse(e.target.result);
+      const rows = csv.parse(e.target.result).slice(1);
 
-      // Remove header contents
-      rows.splice(0, 1);
+      const promises = [];
+      const locations = rows.map(row => {
+        if (!row[2] || !row[3]) {
+          promises.push(
+            new Promise((resolve, reject) => {
+              const formattedAddress = row[1].replace(/,/g, '').replace(/ /g, '+');
+              const url = `https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyBOp1GltsWARlkHhF1H_cb6xtdR1pvNDAk&address=${formattedAddress}`;
 
-      const locations = rows.map(row => ({
-        title: row[0],
-        address: {
-          name: row[1],
-          lat: parseFloat(row[2]),
-          lng: parseFloat(row[3])
-        },
-        description: row[4],
-        subtitle: row[5],
-        image: row[6]
-      }));
-      this.props.onMultipleSubmit(locations);
+              fetch(url).then(response => response.json()).then(data => {
+                const match = data.results[0];
+                if (!match) return reject('invalid CSV row!', { address: row[1] });
+
+                const { lat, lng } = match.geometry.location;
+                resolve({
+                  title: row[0],
+                  address: {
+                    name: row[1],
+                    lat,
+                    lng
+                  },
+                  description: row[4],
+                  subtitle: row[5],
+                  image: row[6]
+                });
+              });
+            }).catch(() => undefined)
+          );
+        } else {
+          return {
+            title: row[0],
+            address: {
+              name: row[1],
+              lat: parseFloat(row[2]),
+              lng: parseFloat(row[3])
+            },
+            description: row[4],
+            subtitle: row[5],
+            image: row[6]
+          };
+        }
+      });
+      if (!promises.length) {
+        this.props.onMultipleSubmit(locations);
+      } else {
+        Promise.all(promises)
+          .then(locs => {
+            locs = [...locs, ...locations.filter(location => location)];
+            console.warn(locs);
+            this.props.onMultipleSubmit(locs);
+          });
+      }
     };
     reader.onerror = e => console.error('Error reading csv');
     reader.readAsText(file, 'UTF-8');

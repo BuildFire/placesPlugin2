@@ -101,7 +101,8 @@ window.app = {
                   ? window.app.state.itemsOrder.indexOf(place.id)
                   : 0;
                 return place.data;
-              }));
+                }).filter(place => place.title)
+              );
 
               window.app.state.places = places;
               window.app.state.filteredPlaces = places;
