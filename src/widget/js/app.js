@@ -153,8 +153,12 @@ window.app = {
         });
 
         buildfire.datastore.onUpdate(function(event) {
-          location.reload(); // TEMPORARY SOLUTION FOR THE DEMO
-
+          if (app.state.mode === 'detail') {
+            window.router.navigate(window.app.settings.viewStates.map);
+          }
+          setTimeout(() => {
+            location.reload(); // TEMPORARY SOLUTION FOR THE DEMO
+          }, 100);
           let currentPlaces = window.app.state.places;
           let newPlaces = event.data && event.data.places ? event.data.places : currentPlaces;
 
