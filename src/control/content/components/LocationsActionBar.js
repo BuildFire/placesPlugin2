@@ -19,13 +19,17 @@ class LocationsActionBar extends React.Component {
       const rows = csv.parse(e.target.result).slice(1);
 
       const promises = [];
+      // loop through the csv rows
       const locations = rows.map((row, index) => {
+        // if a row is missing latitude or longitude
+        // use google maps api to fetch them async
+        // otherwise just return the location
         if (!row[2] || !row[3]) {
           promises.push(
             new Promise((resolve, reject) => {
               const formattedAddress = row[1].replace(/,/g, '').replace(/ /g, '+');
               const url = `https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyBOp1GltsWARlkHhF1H_cb6xtdR1pvNDAk&address=${formattedAddress}`;
-
+              // get geodata from google api
               fetch(url).then(response => response.json()).then(data => {
                 const match = data.results[0];
                 if (!match) return reject('invalid CSV row!', { address: row[1] });
@@ -61,15 +65,17 @@ class LocationsActionBar extends React.Component {
           };
         }
       });
+      // if no places were fetched async, submit
+      // otherwise, wait for complete and merge
+      // the results
       if (!promises.length) {
         this.props.onMultipleSubmit(locations);
       } else {
         Promise.all(promises)
           .then(locs => {
+            // merge locations with async locations
             locs = [...locs, ...locations.filter(location => location)];
-            const sortedLocs = locs.sort((a, b) => a.index > b.index ? 1 : -1);
             window.locs = locs;
-            console.warn(locs, sortedLocs);
             this.props.onMultipleSubmit(locs);
           });
       }
