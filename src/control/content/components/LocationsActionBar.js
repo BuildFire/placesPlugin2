@@ -21,30 +21,31 @@ class LocationsActionBar extends React.Component {
       const promises = [];
       // loop through the csv rows
       const locations = rows.map((row, index) => {
+        const [title, name, address_lat, address_lng, description, subtitle, image] = row;
         // if a row is missing latitude or longitude
         // use google maps api to fetch them async
         // otherwise just return the location
-        if (!row[2] || !row[3]) {
+        if (!address_lat || !address_lng) {
           promises.push(
             new Promise((resolve, reject) => {
-              const formattedAddress = row[1].replace(/,/g, '').replace(/ /g, '+');
+              const formattedAddress = name.replace(/,/g, '').replace(/ /g, '+');
               const url = `https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyBOp1GltsWARlkHhF1H_cb6xtdR1pvNDAk&address=${formattedAddress}`;
               // get geodata from google api
               fetch(url).then(response => response.json()).then(data => {
                 const match = data.results[0];
-                if (!match) return reject('invalid CSV row!', { address: row[1] });
+                if (!match) return reject('invalid CSV row!', { name });
 
                 const { lat, lng } = match.geometry.location;
                 resolve({
-                  title: row[0],
+                  title: typeof title === 'number' ? title.toString() : title || 'Untitled Location',
                   address: {
-                    name: row[1],
+                    name,
                     lat,
                     lng
                   },
-                  description: row[4],
-                  subtitle: row[5],
-                  image: row[6],
+                  description,
+                  subtitle,
+                  image,
                   index
                 });
               });
@@ -52,15 +53,15 @@ class LocationsActionBar extends React.Component {
           );
         } else {
           return {
-            title: row[0],
+            title: typeof title === 'number' ? title.toString() : title || 'Untitled Location',
             address: {
-              name: row[1],
-              lat: parseFloat(row[2]),
-              lng: parseFloat(row[3])
+              name,
+              lat: parseFloat(address_lat),
+              lng: parseFloat(address_lng)
             },
-            description: row[4],
-            subtitle: row[5],
-            image: row[6],
+            description,
+            subtitle,
+            image,
             index
           };
         }
@@ -112,7 +113,7 @@ class LocationsActionBar extends React.Component {
   }
 
   handleTemplateDownload() {
-    const rows = [['name','address_name','address_lat','address_lng','description', 'subtitle', 'image']];
+    const rows = [['name','name','address_lat','address_lng','description', 'subtitle', 'image']];
     let csvContent  = 'data:text/csv;charset=utf-8,';
     rows.forEach(row => csvContent += row.join(',') + '\r\n');
 
