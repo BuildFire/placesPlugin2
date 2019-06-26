@@ -58,7 +58,7 @@ class Content extends React.Component {
   }
 
   getPlacesList() {
-    const places = [];
+    let places = [];
     const pageSize = 50;
     let page = 0;
 
@@ -66,32 +66,31 @@ class Content extends React.Component {
       buildfire.datastore.search({ page, pageSize }, 'places-list', (err, result) => {
         if (err) return console.error(err);
 
-        result = result.sort((a, b) => a.data.index - b.data.index);
         places.push(...result.map(place => {
-          place.data.id = place.id;
-          return place.data;
-        }).filter(place => place.title)
-      );
+            place.data.id = place.id;
+            return place.data;
+          }).filter(place => place.title)
+        );
+        if (result && result.length === pageSize) {
+          page += 1;
+          loadPage();
+        } else {
+          const data = this.state.data;
+          places = places.sort((a, b) => a.index - b.index);
+          data.places = places;
+          this.setState({ data });
 
-      if (result && result.length === pageSize) {
-        page += 1;
-        loadPage();
-      } else {
-        const data = this.state.data;
-        data.places = places;
-        this.setState({ data });
+          if (!data.itemsOrder|| data.itemsOrder.length !== data.places.length) {
+            this.updateItemsOrder();
+          }
 
-        if (!data.itemsOrder|| data.itemsOrder.length !== data.places.length) {
-          this.updateItemsOrder();
+          let sortedPlaces = data.places.map(place => {
+            place.sort = data.itemsOrder.indexOf(place.id) + 1;
+            return place;
+          });
+          data.places = sortedPlaces;
+          this.setState({ data });
         }
-
-        let sortedPlaces = data.places.map(place => {
-          place.sort = data.itemsOrder.indexOf(place.id) + 1;
-          return place;
-        });
-        data.places = sortedPlaces;
-        this.setState({ data });
-      }
       });
     };
 

@@ -17,10 +17,10 @@ class LocationsActionBar extends React.Component {
     const reader = new FileReader();
     reader.onload = e => {
       const rows = csv.parse(e.target.result).slice(1);
-
+      const { places } = this.props;
       const promises = [];
       // loop through the csv rows
-      const locations = rows.map((row, index) => {
+      const locations = rows.map((row, i) => {
         const [title, name, address_lat, address_lng, description, subtitle, image] = row;
         // if a row is missing latitude or longitude
         // use google maps api to fetch them async
@@ -46,7 +46,7 @@ class LocationsActionBar extends React.Component {
                   description,
                   subtitle,
                   image,
-                  index
+                  index: i + places.length
                 });
               });
             }).catch(() => undefined)
@@ -62,7 +62,7 @@ class LocationsActionBar extends React.Component {
             description,
             subtitle,
             image,
-            index
+            index: i + places.length
           };
         }
       });
