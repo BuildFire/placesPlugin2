@@ -19,7 +19,7 @@ class LocationsActionBar extends React.Component {
       const rows = csv.parse(e.target.result).slice(1);
 
       const promises = [];
-      const locations = rows.map(row => {
+      const locations = rows.map((row, index) => {
         if (!row[2] || !row[3]) {
           promises.push(
             new Promise((resolve, reject) => {
@@ -40,7 +40,8 @@ class LocationsActionBar extends React.Component {
                   },
                   description: row[4],
                   subtitle: row[5],
-                  image: row[6]
+                  image: row[6],
+                  index
                 });
               });
             }).catch(() => undefined)
@@ -55,7 +56,8 @@ class LocationsActionBar extends React.Component {
             },
             description: row[4],
             subtitle: row[5],
-            image: row[6]
+            image: row[6],
+            index
           };
         }
       });
@@ -65,7 +67,9 @@ class LocationsActionBar extends React.Component {
         Promise.all(promises)
           .then(locs => {
             locs = [...locs, ...locations.filter(location => location)];
-            console.warn(locs);
+            const sortedLocs = locs.sort((a, b) => a.index > b.index ? 1 : -1);
+            window.locs = locs;
+            console.warn(locs, sortedLocs);
             this.props.onMultipleSubmit(locs);
           });
       }

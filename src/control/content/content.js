@@ -66,6 +66,7 @@ class Content extends React.Component {
       buildfire.datastore.search({ page, pageSize }, 'places-list', (err, result) => {
         if (err) return console.error(err);
 
+        result = result.sort((a, b) => a.data.index - b.data.index);
         places.push(...result.map(place => {
           place.data.id = place.id;
           return place.data;
