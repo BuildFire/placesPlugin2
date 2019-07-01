@@ -16,23 +16,70 @@ class LocationsActionBar extends React.Component {
     const file = this.fileInput.files[0];
     const reader = new FileReader();
     reader.onload = e => {
-      const rows = csv.parse(e.target.result);
+      const rows = csv.parse(e.target.result).slice(1);
+      const { places } = this.props;
+      const promises = [];
+      // loop through the csv rows
+      const locations = rows.map((row, i) => {
+        const [title, name, address_lat, address_lng, description, subtitle, image] = row;
+        // if a row is missing latitude or longitude
+        // use google maps api to fetch them async
+        // otherwise just return the location
+        if (!address_lat || !address_lng) {
+          promises.push(
+            new Promise((resolve, reject) => {
+              const formattedAddress = name.replace(/,/g, '').replace(/ /g, '+');
+              const url = `https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyBOp1GltsWARlkHhF1H_cb6xtdR1pvNDAk&address=${formattedAddress}`;
+              // get geodata from google api
+              fetch(url).then(response => response.json()).then(data => {
+                const match = data.results[0];
+                if (!match) return reject('invalid CSV row!', { name });
 
-      // Remove header contents
-      rows.splice(0, 1);
-
-      const locations = rows.map(row => ({
-        title: row[0],
-        address: {
-          name: row[1],
-          lat: parseFloat(row[2]),
-          lng: parseFloat(row[3])
-        },
-        description: row[4],
-        subtitle: row[5],
-        image: row[6]
-      }));
-      this.props.onMultipleSubmit(locations);
+                const { lat, lng } = match.geometry.location;
+                resolve({
+                  title: typeof title === 'number' ? title.toString() : title || 'Untitled Location',
+                  address: {
+                    name,
+                    lat,
+                    lng
+                  },
+                  description,
+                  subtitle,
+                  image,
+                  index: i + places.length
+                });
+              });
+            }).catch(() => undefined)
+          );
+        } else {
+          return {
+            title: typeof title === 'number' ? title.toString() : title || 'Untitled Location',
+            address: {
+              name,
+              lat: parseFloat(address_lat),
+              lng: parseFloat(address_lng)
+            },
+            description,
+            subtitle,
+            image,
+            index: i + places.length
+          };
+        }
+      });
+      // if no places were fetched async, submit
+      // otherwise, wait for complete and merge
+      // the results
+      if (!promises.length) {
+        this.props.onMultipleSubmit(locations);
+      } else {
+        Promise.all(promises)
+          .then(locs => {
+            // merge locations with async locations
+            locs = [...locs, ...locations.filter(location => location)];
+            window.locs = locs;
+            this.props.onMultipleSubmit(locs);
+          });
+      }
     };
     reader.onerror = e => console.error('Error reading csv');
     reader.readAsText(file, 'UTF-8');
@@ -66,7 +113,7 @@ class LocationsActionBar extends React.Component {
   }
 
   handleTemplateDownload() {
-    const rows = [['name','address_name','address_lat','address_lng','description', 'subtitle', 'image']];
+    const rows = [['name','name','address_lat','address_lng','description', 'subtitle', 'image']];
     let csvContent  = 'data:text/csv;charset=utf-8,';
     rows.forEach(row => csvContent += row.join(',') + '\r\n');
 

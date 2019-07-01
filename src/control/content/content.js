@@ -58,7 +58,7 @@ class Content extends React.Component {
   }
 
   getPlacesList() {
-    const places = [];
+    let places = [];
     const pageSize = 50;
     let page = 0;
 
@@ -67,34 +67,30 @@ class Content extends React.Component {
         if (err) return console.error(err);
 
         places.push(...result.map(place => {
-          place.data.id = place.id;
-          return place.data;
-        }));
+            place.data.id = place.id;
+            return place.data;
+          }).filter(place => place.title)
+        );
+        if (result && result.length === pageSize) {
+          page += 1;
+          loadPage();
+        } else {
+          const data = this.state.data;
+          places = places.sort((a, b) => a.index - b.index);
+          data.places = places;
+          this.setState({ data });
 
-      // Remove deleted places
-      places.forEach((place, index) => {
-        if (!place.title) places.splice(index, 1);
-      });
+          if (!data.itemsOrder|| data.itemsOrder.length !== data.places.length) {
+            this.updateItemsOrder();
+          }
 
-      if (result && result.length === pageSize) {
-        page += 1;
-        loadPage();
-      } else {
-        const data = this.state.data;
-        data.places = places;
-        this.setState({ data });
-
-        if (!data.itemsOrder|| data.itemsOrder.length !== data.places.length) {
-          this.updateItemsOrder();
+          let sortedPlaces = data.places.map(place => {
+            place.sort = data.itemsOrder.indexOf(place.id) + 1;
+            return place;
+          });
+          data.places = sortedPlaces;
+          this.setState({ data });
         }
-
-        let sortedPlaces = data.places.map(place => {
-          place.sort = data.itemsOrder.indexOf(place.id) + 1;
-          return place;
-        });
-        data.places = sortedPlaces;
-        this.setState({ data });
-      }
       });
     };
 
@@ -208,14 +204,14 @@ class Content extends React.Component {
    * @param   {Number} index    Array index of editing location
    */
   onLocationEdit(location, index) {
-    buildfire.datastore.update(location.id, location, (err) => {
+    buildfire.datastore.update(location.id, location, 'places-list', (err) => {
       if (err) return console.error(err);
+      
+      const { data } = this.state;
+      data.places[index] = location;
+      this.setState({ data });
 
-        const { data } = this.state;
-        data.places[index] = location;
-        this.setState({ data });
-
-        this.setState({ editingLocation: false });
+      this.setState({ editingLocation: false });
     });
   }
 
