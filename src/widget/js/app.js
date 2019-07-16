@@ -56,7 +56,7 @@ window.app = {
         buildfire.navigation.onBackButtonClick = function() {
             const isLauncher = window.location.href.includes('launcherPlugin');
 
-            if (window.app.state.navHistory.length > 0) {
+            if (window.app.state.navHistory.length > 1) {
 
                 //Remove the current state
                 if(window.app.state.mode === window.app.state.navHistory[window.app.state.navHistory.length-1]){
