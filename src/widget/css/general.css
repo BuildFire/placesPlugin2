@@ -1,6 +1,10 @@
 /* Always set the map height explicitly to define the size of the div
  * element that contains the map. */
-#mapView #listView{
+body {
+    padding-bottom: 0px !important;
+}
+
+ #mapView #listView{
     height: 100%;
 }
 
