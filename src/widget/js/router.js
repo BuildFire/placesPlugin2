@@ -122,18 +122,24 @@ window.initRouter = function() {
 
             app.state.mode = app.settings.viewStates.map;
 
-            if(!app.state.isBackNav)
-                app.state.navHistory.push(app.settings.viewStates.map);
-
+            if (!app.state.isBackNav) {
+                var lastView = app.state.navHistory.slice(-1)[0];
+                if (lastView === 'map' || lastView === 'list') {
+                    app.state.navHistory[app.state.navHistory.length - 1] = app.settings.viewStates.map;
+                }
+            }
             window.app.state.isBackNav = false;
         },
         'list': () => {
             loadList(app.state.filteredPlaces);
             app.state.mode = app.settings.viewStates.list;
 
-            if(!app.state.isBackNav)
-                app.state.navHistory.push(app.settings.viewStates.list);
-
+            if (!app.state.isBackNav) {
+                var lastView = app.state.navHistory.slice(-1)[0];
+                if (lastView === 'map' || lastView === 'list') {
+                    app.state.navHistory[app.state.navHistory.length - 1] = app.settings.viewStates.list;
+                }
+            }
             window.app.state.isBackNav = false;
             window.buildfire.appearance.titlebar.show();
         },
