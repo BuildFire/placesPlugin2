@@ -69,10 +69,20 @@ window.mapView = {
                 }
             ],
             maxZoom: 15
-        };
+        };        
 
         // Add a marker clusterer to manage the markers.
         mapView.settings.markerClusterer = new MarkerClusterer(map, app.state.markers, clusterOptions);
+
+        app.state.markers.forEach(marker=>{
+            google.maps.event.addListener(marker, 'visible_changed', function(){
+                if ( marker.getVisible() ) {
+                    mapView.settings.markerClusterer.addMarker(marker, true);
+                } else {
+                    mapView.settings.markerClusterer.removeMarker(marker, true);
+                }                   
+            });
+        });
     },
     updateMap: (newPlaces) => {
         //Add new markers
