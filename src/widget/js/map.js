@@ -81,13 +81,9 @@ window.mapView = {
         });
     },
     filter: (placesToHide, placesToShow) => {
-
         placesToHide.forEach((placeToHide) => {
             app.state.markers = app.state.markers.filter((marker) =>{
-                let lat = marker.getPosition().lat(),
-                    lng = marker.getPosition().lng();
-
-                const isMatch  = (placeToHide.address.lat === lat && placeToHide.address.lng === lng);
+                const isMatch  = placeToHide.id === marker.markerData.id;
 
                 if(isMatch){
                     marker.setVisible(false);
@@ -110,6 +106,7 @@ window.mapView = {
     addMarker: (map, place, iconType) => {
         let marker = new google.maps.Marker({
             position: place.address,
+            markerData: place,
             map: map,
             icon: mapView.createMarker(iconType)
         });
