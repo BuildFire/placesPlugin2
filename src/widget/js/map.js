@@ -83,6 +83,8 @@ window.mapView = {
                 }                   
             });
         });
+
+        mapView.settings.markerClusterer.repaint()
     },
     updateMap: (newPlaces) => {
         //Add new markers
@@ -108,9 +110,13 @@ window.mapView = {
         });
 
         if(placesToHide || placesToShow){
-            mapView.settings.markerClusterer.clearMarkers();
-            mapView.addMarkerCluster();
+            mapView.resetMarkerCluster();
         }
+    },
+    resetMarkerCluster: () => {
+        mapView.settings.markerClusterer.clearMarkers();
+        mapView.addMarkerCluster();
+  
     },
     centerMap: () => { window.map.setCenter(mapView.lastKnownLocation) },
     addMarker: (map, place, iconType) => {
@@ -233,5 +239,9 @@ window.mapView = {
         new FilterControl(filterDiv);
 
         window.originalHeight = (app.views.mapView) ? app.views.mapView.getBoundingClientRect().height: 0;
+
+        google.maps.event.addListener(map, 'zoom_changed', function() {
+            mapView.resetMarkerCluster();
+        });
     }
 };
