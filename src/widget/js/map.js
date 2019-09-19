@@ -69,10 +69,22 @@ window.mapView = {
                 }
             ],
             maxZoom: 15
-        };
+        };        
 
         // Add a marker clusterer to manage the markers.
         mapView.settings.markerClusterer = new MarkerClusterer(map, app.state.markers, clusterOptions);
+
+        app.state.markers.forEach(marker=>{
+            google.maps.event.addListener(marker, 'visible_changed', function(){
+                if ( marker.getVisible() ) {
+                    mapView.settings.markerClusterer.addMarker(marker, true);
+                } else {
+                    mapView.settings.markerClusterer.removeMarker(marker, true);
+                }                   
+            });
+        });
+
+        mapView.settings.markerClusterer.repaint()
     },
     updateMap: (newPlaces) => {
         //Add new markers
@@ -81,13 +93,9 @@ window.mapView = {
         });
     },
     filter: (placesToHide, placesToShow) => {
-
         placesToHide.forEach((placeToHide) => {
             app.state.markers = app.state.markers.filter((marker) =>{
-                let lat = marker.getPosition().lat(),
-                    lng = marker.getPosition().lng();
-
-                const isMatch  = (placeToHide.address.lat === lat && placeToHide.address.lng === lng);
+                const isMatch  = placeToHide.id === marker.markerData.id;
 
                 if(isMatch){
                     marker.setVisible(false);
@@ -102,14 +110,19 @@ window.mapView = {
         });
 
         if(placesToHide || placesToShow){
-            mapView.settings.markerClusterer.clearMarkers();
-            mapView.addMarkerCluster();
+            mapView.resetMarkerCluster();
         }
+    },
+    resetMarkerCluster: () => {
+        mapView.settings.markerClusterer.clearMarkers();
+        mapView.addMarkerCluster();
+  
     },
     centerMap: () => { window.map.setCenter(mapView.lastKnownLocation) },
     addMarker: (map, place, iconType) => {
         let marker = new google.maps.Marker({
             position: place.address,
+            markerData: place,
             map: map,
             icon: mapView.createMarker(iconType)
         });
@@ -226,5 +239,9 @@ window.mapView = {
         new FilterControl(filterDiv);
 
         window.originalHeight = (app.views.mapView) ? app.views.mapView.getBoundingClientRect().height: 0;
+
+        google.maps.event.addListener(map, 'zoom_changed', function() {
+            mapView.resetMarkerCluster();
+        });
     }
 };

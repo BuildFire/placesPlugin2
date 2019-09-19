@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from 'react-dom';
-import Settings from './Settings';
+import Settings from './settings';
 
 const container = document.getElementById('mount');
 
@@ -11,7 +11,7 @@ function renderApp() {
 // Setup HMR re-rendering
 if (module.hot) {
   module.hot.accept();
-  module.hot.accept('./Settings', renderApp);
+  module.hot.accept('./settings', renderApp);
 }
 
 // Initial render
