@@ -40,9 +40,8 @@ window.mapView = {
                 }
             });
 
-            if (places.length !== 50) {
-                mapView.addMarkerCluster();
-            }
+            mapView.addMarkerCluster();
+
             map.fitBounds(app.state.bounds);
         }
 
@@ -74,17 +73,6 @@ window.mapView = {
         // Add a marker clusterer to manage the markers.
         mapView.settings.markerClusterer = new MarkerClusterer(map, app.state.markers, clusterOptions);
 
-        app.state.markers.forEach(marker=>{
-            google.maps.event.addListener(marker, 'visible_changed', function(){
-                if ( marker.getVisible() ) {
-                    mapView.settings.markerClusterer.addMarker(marker, true);
-                } else {
-                    mapView.settings.markerClusterer.removeMarker(marker, true);
-                }                   
-            });
-        });
-
-        mapView.settings.markerClusterer.repaint()
     },
     updateMap: (newPlaces) => {
         //Add new markers
@@ -94,29 +82,28 @@ window.mapView = {
     },
     filter: (placesToHide, placesToShow) => {
         placesToHide.forEach((placeToHide) => {
-            app.state.markers = app.state.markers.filter((marker) =>{
+            app.state.markers.forEach((marker) =>{
                 const isMatch  = placeToHide.id === marker.markerData.id;
 
                 if(isMatch){
                     marker.setVisible(false);
+                    mapView.settings.markerClusterer.removeMarker(marker)
                 }
-
-                return !isMatch;
             });
         });
 
-        placesToShow.forEach((place) =>{
-            mapView.addMarker(map, place, mapView.settings.images.place);
+        placesToShow.forEach((placeToShow) =>{
+            app.state.markers.forEach((marker) =>{
+                const isMatch  = placeToShow.id === marker.markerData.id;
+
+                if(isMatch){
+                    marker.setVisible(true);
+                    mapView.settings.markerClusterer.addMarker(marker)
+                }
+
+            });
         });
 
-        if(placesToHide || placesToShow){
-            mapView.resetMarkerCluster();
-        }
-    },
-    resetMarkerCluster: () => {
-        mapView.settings.markerClusterer.clearMarkers();
-        mapView.addMarkerCluster();
-  
     },
     centerMap: () => { window.map.setCenter(mapView.lastKnownLocation) },
     addMarker: (map, place, iconType) => {
@@ -240,8 +227,5 @@ window.mapView = {
 
         window.originalHeight = (app.views.mapView) ? app.views.mapView.getBoundingClientRect().height: 0;
 
-        google.maps.event.addListener(map, 'zoom_changed', function() {
-            mapView.resetMarkerCluster();
-        });
     }
 };

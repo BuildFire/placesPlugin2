@@ -103,9 +103,6 @@ window.listView = {
             window.listView.listScrollingContainer.appendChild(listItem);
         });
 
-        if (window.map) {
-            window.mapView.addMarkerCluster();
-        }
 
         window.lazyload();
     },
