@@ -18,7 +18,7 @@ window.app = {
     goBack: null,
     settings: {
         viewStates: {map: 'map', list: 'list', detail: 'detail'},
-        sortOptions: {alpha: 'alpha', alphaDesc: 'alphaDesc', manual: 'manual'},
+        sortOptions: {alpha: 'alpha', alphaDesc: 'alphaDesc', manual: 'manual', distance: 'distance'},
         placesTag: 'places',
         cloudImg: {
             domain:'https://czi3m2qn.cloudimg.io',

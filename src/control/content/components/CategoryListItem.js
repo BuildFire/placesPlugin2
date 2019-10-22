@@ -46,20 +46,21 @@ class CategoryListItem extends React.Component {
     const { editing, newValue } = this.state;
 
     return (
-      <tr>
-        <td>
-          { editing
-            ? <input
-              onChange={ e => this.onNameChange(e) }
-              onKeyPress={ e => this.handleKeyPress(e) }
-              ref={ n => this.editNode = n }
-              className='edit-box'
-              value={ newValue }
-              type='text'/>
-            : category.name }
-        </td>
-        <td className='action-large'>
-          { editing ? (
+      <div className='__categoryListItem'>
+        <div>
+        { editing
+          ? <input
+            onChange={ e => this.onNameChange(e) }
+            onKeyPress={ e => this.handleKeyPress(e) }
+            ref={ n => this.editNode = n }
+            className='edit-box'
+            value={ newValue }
+            type='text'/>
+          : category.name }
+        </div>
+        <div>
+          <div className='action-large __categoryEditBox'>
+            { editing ? (
               <span>
                 <a onClick={ () => this.toggleEditing() }>
                   Save
@@ -74,16 +75,18 @@ class CategoryListItem extends React.Component {
                 Edit
               </a>
             ) }
-        </td>
-        <td className='action'>
-          <span>
-            <img
-              className='delete'
-              onClick={ () => this.props.handleDelete() }
-              src='assets/img/cross.png' />
-          </span>
-        </td>
-      </tr>
+          </div>
+          <div className='action'>
+            <span>
+              <img
+                className='delete'
+                onClick={ () => this.props.handleDelete() }
+                src='assets/img/cross.png' 
+              />
+            </span>
+          </div>
+        </div>
+      </div>
     );
   }
 }

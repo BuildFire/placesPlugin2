@@ -46,17 +46,15 @@ class CategoriesList extends React.Component {
         </div>
         <br />
         { categories && categories.length ? (
-          <table className='table table-striped'>
-            <tbody>
-              { categories.map((category, index) => (
-                <CategoryListItem
-                  handleRename={ (newValue) => this.props.handleRename(index, newValue) }
-                  handleDelete={ () => this.props.handleDelete(index) }
-                  category={ category }
-                  key={ index } />
-              )) }
-            </tbody>
-          </table>
+          <div className='__strippedTable'>
+            { categories.map((category, index) => (
+              <CategoryListItem
+                handleRename={ (newValue) => this.props.handleRename(index, newValue) }
+                handleDelete={ () => this.props.handleDelete(index) }
+                category={ category }
+                key={ index } />
+            )) }
+          </div>
         ) : <img src='assets/img/empty-wireframe.jpg' className='empty-state'/> }
       </div>
     );
