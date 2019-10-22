@@ -36,9 +36,29 @@ window.listView = {
 
         window.lazyload();
 
-        places = places.sort(window.PlacesSort[window.app.state.sortBy]);
+        var sortPlaces = [];
+        if (window.app.state.sortBy === 'distance') {
+            var feetPlaces = [];
+            var milesPlaces = [];
+            var noDistanceData = [];
+            places.forEach(place => {
+                if (place.distance) {
+                    if (place.distance.split(' ')[1] === 'ft')
+                        feetPlaces.push(place);
+                    else if (place.distance.split(' ')[1] === 'mi')
+                        milesPlaces.push(place);
+                } else {
+                    noDistanceData.push(place);
+                }
+            });
+            feetPlaces = feetPlaces.sort(window.PlacesSort[window.app.state.sortBy]);
+            milesPlaces = milesPlaces.sort(window.PlacesSort[window.app.state.sortBy]);
+            sortPlaces = feetPlaces.concat(milesPlaces).concat(noDistanceData);
+        } else {
+            sortPlaces = places.sort(window.PlacesSort[window.app.state.sortBy]);
+        }
 
-        places.forEach((place, index) => {
+        sortPlaces.forEach((place, index) => {
 
             if (!place.address || !place.address.lat || !place.address.lng) {
                 return;

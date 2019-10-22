@@ -294,7 +294,7 @@ class LocationForm extends React.Component {
           <label htmlFor='category'>Categories</label>
           <div className='row'>
             { this.props.categories ? this.props.categories.map((category, index) => (
-              <div key={ index } className='col-xs-3'>
+              <div key={ index } className='col-xs-3 __cpSelectCategoryBox'>
                 <input
                   onChange={ e => this.onCategoryChange(e) }
                   type='checkbox'
