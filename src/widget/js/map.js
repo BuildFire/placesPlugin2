@@ -202,7 +202,7 @@ window.mapView = {
             centerOn = (mapView.lastKnownLocation != defaultLocation) ? mapView.lastKnownLocation : defaultLocation ;
 
         let options = {
-            minZoom: 1,
+            minZoom: 3,
             gestureHandling: 'greedy',
             streetViewControl: false,
             mapTypeControl: false,
