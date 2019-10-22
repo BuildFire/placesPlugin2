@@ -28,13 +28,13 @@ window.mapView = {
                 //window.map.setCenter(mapView.lastKnownLocation);
                 //window.map.setZoom(mapView.settings.zoomLevel.city);
 
-                mapView.addMarker(map, mapView.lastKnownLocation, mapView.settings.images.currentLocation);
+                mapView.addMarker(map, { address: mapView.lastKnownLocation }, mapView.settings.images.currentLocation);
             }
         });
 
         //TODO: If there is only one entry, it returns an object (not an array)
         if(places && places.length){
-            places.forEach((place) => {
+            places.forEach((place) => {                
                 if (place.address && place.address.lat && place.address.lng) {
                     mapView.addMarker(map, place, mapView.settings.images.place);
                 }
