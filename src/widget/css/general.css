@@ -307,6 +307,8 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
     backdrop-filter: blur(8px);
     box-shadow: 0 2px 3px 0 rgba(0,0,0,0.3);
     z-index: 1;
+    display: flex;
+    justify-content: space-between;
 }
 
 .map-details .title {
@@ -498,4 +500,19 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
 
 .description {
   padding-top: 0;
+}
+
+.__categoryItemBox {
+    display: flex;
+    justify-content: space-between;
+}
+
+.__categoryItemBox a {
+    display: block;
+    width: 80%;
+    word-wrap: break-word;
+}
+
+.__categoryItemBox label {
+    display: block;
 }

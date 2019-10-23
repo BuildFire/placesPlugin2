@@ -27,12 +27,12 @@ window.PlacesSort = {
         return 0;
     },
     distance(a, b) {
-        if (!a.distanceInMeters || !b.distanceInMeters) return 1;
-        if(a.distanceInMeters < b.distanceInMeters)
+        var aDistance = parseInt(a.distance.split(' ')[0].replace(',', ''));
+        var bDistance = parseInt(b.distance.split(' ')[0].replace(',', ''));
+        if(aDistance < bDistance)
             return -1;
-        if(a.distanceInMeters > b.distanceInMeters)
+        if(aDistance > bDistance)
             return 1;
-
         return 0;
     }
 };

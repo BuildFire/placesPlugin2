@@ -33,6 +33,7 @@ class MapOptions extends React.Component {
                     <option value='alpha'>Alphabetical</option>
                     <option value='alphaDesc'>Reverse Alphabetical</option>
                     <option value='manual'>Manual</option>
+                    <option value='distance'>Nearest to current location</option>
                   </select>
                 </div>
               </div>
