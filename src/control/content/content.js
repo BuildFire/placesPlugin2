@@ -22,6 +22,7 @@ class Content extends React.Component {
     buildfire.datastore.get('places', (err, result) => {
       if (err) return console.error(err);
         result.data.itemsOrder = result.data.itemsOrder || [];
+        result.data.pointsOfInterest = result.data.pointsOfInterest || "on";
 
       // we migrate old storage format to new one if needed
       if (result.data.places && result.data.places.length) {
@@ -267,7 +268,6 @@ class Content extends React.Component {
 
   render() {
     const { data, addingLocation, editingLocation } = this.state;
-
     return (
       <div>
         <div className='row category-box'>
@@ -288,10 +288,12 @@ class Content extends React.Component {
 
             { addingLocation || editingLocation !== false
                 ? addingLocation
-                  ? <AddLocation
+                ? <AddLocation
+                      pointsOfInterest = { data.pointsOfInterest }
                       categories={ data.categories }
                       onSubmit={ location => this.onLocationSubmit(location) } />
                   : <EditLocation
+                      pointsOfInterest = { data.pointsOfInterest }
                       categories={ data.categories }
                       location={ data.places[editingLocation] }
                       onSubmit={ location => this.onLocationEdit(location, editingLocation) }/>
