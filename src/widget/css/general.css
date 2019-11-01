@@ -481,7 +481,18 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
     float: left;
     cursor: pointer;
 }
-
+#bookmarkBtn {
+    display: block;
+    width: 100%;
+    text-align: center;
+    margin: 20px 0 0;
+    border: none;
+    font-size: 15px;
+    border-radius: 100px;
+    padding: 10px 0;
+    float: left;
+    cursor: pointer;
+}
 #contactBtn {
     display: block;
     width: 100%;

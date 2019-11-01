@@ -152,6 +152,7 @@ window.initRouter = function() {
 
             window.app.state.isBackNav = false;
             window.buildfire.appearance.titlebar.show();
+            console.log("ROUTER", window.router);
         },
     });
 
@@ -166,4 +167,4 @@ window.initRouter = function() {
     });
 
     router.resolve();
-}
+};

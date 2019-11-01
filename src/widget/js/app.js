@@ -106,7 +106,7 @@ window.app = {
 
               window.app.state.places = places;
               window.app.state.filteredPlaces = places;
-
+                console.log("INIT PLACES", window.app.state.places);
               // If we have more pages we keep going
               if (result.length === pageSize) {
                 page++;
@@ -118,6 +118,8 @@ window.app = {
             });
           };
           loadPage();
+          console.log("WINDOW ROUTER", window.router);
+
         }
 
         buildfire.datastore.get(window.app.settings.placesTag, function(err, results){
@@ -195,7 +197,7 @@ window.app = {
           }
 
           //Do comparison to see what's changed
-          let updatedPlaces = filter(newPlaces, (newPlace) => { return !find(currentPlaces, newPlace)});
+          let updatedPlaces = filter(newPlaces, (newPlace) => { return !find(currentPlaces, newPlace);});
 
           if(window.app.state.mode === window.app.settings.viewStates.map){
               window.mapView.updateMap(updatedPlaces);
@@ -244,9 +246,40 @@ window.app = {
     gotLocation(err, location) {
         window.app.state.location = location;
         window.app.gotPieceOfData();
-    }
+    },
+    initDetailView: (placesCallback) => {
+      let places = [];
+      buildfire.datastore.search({}, 'places-list', (err, result) => {
+
+          places.push(...result.map(place => {
+            place.data.id = place.id;
+            place.data.sort = window.app.state.itemsOrder
+              ? window.app.state.itemsOrder.indexOf(place.id)
+              : 0;
+            return place.data;
+          }).filter(place => place.title)
+          );
+
+          window.app.state.places = places;
+          window.app.state.filteredPlaces = places;
+          console.log("INIT PLACES", window.app.state.places);
+          var queryStringObj = buildfire.parseQueryString();
+          placesCallback(null, places);
+          if (queryStringObj && queryStringObj.detail && places.length>0) {
+            console.log("detail>>>", queryStringObj.detail);
+            console.log("places>>>", window.app.state.places);
+            var detail = window.app.state.places.find(p => p.title = queryStringObj.detail);
+            window.app.state.selectedPlace.push(detail);
+            console.log("detail>>>", detail);
+            console.log("selectedPlace>>>", window.app.state.selectedPlace);
+            window.router.navigate(window.app.settings.viewStates.detail);
+            console.log("WINDOW ROUTER", window.router);
+          }
+        });
+      }
 };
 
 //document.aEventListener('DOMContentLoaded', () => window.app.init( window.app.gotPlaces, window.app.gotLocation));
 window.app.init(window.app.gotPlaces, window.app.gotLocation);
+// window.app.initDetailView(window.app.gotPlaces);
 window.initRouter();

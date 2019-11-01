@@ -78,7 +78,46 @@ window.detailView = {
                     if (err) return console.error(err);
                     console.log(actionItem);
                 });
-             }
+            }
+            
+            /**
+             * Bookmark
+             */
+            let bookmarkButton = document.getElementById('bookmarkBtn');
+            bookmarkButton.className = 'btn btn-success';
+            bookmarkButton.addEventListener('click', addBookmark);
+
+            function addBookmark() {
+                let placeContext = context;
+                let placeID = placeContext.title + Math.random();
+                let placeTitle = placeContext.title;
+                let image = placeContext.image;
+                let description = placeContext.description;
+                let address = placeContext.address;
+                let lat = placeContext.lat;
+                let lng = placeContext.lng;
+
+                let options = {
+                    id: placeID,
+                    title: placeTitle,
+                    payload: {
+                        description: description,
+                        address: address,
+                        image: image,
+                        lat: lat,
+                        lng: lng
+                    }
+                };
+                // window.buildfire.deeplink.createLink({ id: placeID });
+                console.log("deeplink", window.buildfire.deeplink.createLink({ detail: placeID }));
+                window.buildfire.bookmarks.add({ options }, function (err, data) {
+                    if (err) console.log("Bookmark err", err);
+                    console.log("Bookmark data", data);
+                    // window.buildfire.localStorage.setItem("Bookmark", { data }, function (err, data) {
+                    //     if (err) console.log(err);
+                    // });
+                });
+            }
 
             /**
              * Carousel
