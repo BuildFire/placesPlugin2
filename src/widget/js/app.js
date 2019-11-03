@@ -48,7 +48,9 @@ window.app = {
         sortBy: null,
         categories: [],
         navHistory: [],
-        isBackNav: false
+        isBackNav: false,
+        queryStringObj: {},
+        bookmarked: false
     },
     backButtonInit: () => {
         window.app.goBack = window.buildfire.navigation.onBackButtonClick;
@@ -106,7 +108,6 @@ window.app = {
 
               window.app.state.places = places;
               window.app.state.filteredPlaces = places;
-                console.log("INIT PLACES", window.app.state.places);
               // If we have more pages we keep going
               if (result.length === pageSize) {
                 page++;
@@ -118,7 +119,6 @@ window.app = {
             });
           };
           loadPage();
-          console.log("WINDOW ROUTER", window.router);
 
         }
 
@@ -247,7 +247,7 @@ window.app = {
         window.app.state.location = location;
         window.app.gotPieceOfData();
     },
-    initDetailView: (placesCallback) => {
+    initDetailView: () => {
       let places = [];
       buildfire.datastore.search({}, 'places-list', (err, result) => {
 
@@ -259,27 +259,33 @@ window.app = {
             return place.data;
           }).filter(place => place.title)
           );
-
-          window.app.state.places = places;
-          window.app.state.filteredPlaces = places;
-          console.log("INIT PLACES", window.app.state.places);
-          var queryStringObj = buildfire.parseQueryString();
-          placesCallback(null, places);
-          if (queryStringObj && queryStringObj.detail && places.length>0) {
-            console.log("detail>>>", queryStringObj.detail);
-            console.log("places>>>", window.app.state.places);
-            var detail = window.app.state.places.find(p => p.title = queryStringObj.detail);
-            window.app.state.selectedPlace.push(detail);
-            console.log("detail>>>", detail);
-            console.log("selectedPlace>>>", window.app.state.selectedPlace);
+          console.log("PLACES", places);
+          if (window.app.state.queryStringObj && window.app.state.queryStringObj.dld && places.length>0) {
+            var selectedPlace = places.find(place => place.id = window.app.state.queryStringObj.dld);
+            window.app.state.selectedPlace[0] = selectedPlace; 
+            console.log("SELECTED PLACES", window.app.state.selectedPlace);
             window.router.navigate(window.app.settings.viewStates.detail);
-            console.log("WINDOW ROUTER", window.router);
           }
         });
+        window.app.checkBookmarked(window.app.state.queryStringObj.dld);
+      },
+      checkBookmarked(id) {
+        window.buildfire.bookmarks.getAll(function(err, bookmarks) {
+          if (err) console.log(err);
+          console.log("BOOKMARKS", bookmark);
+          var bookmark = bookmarks.find(bookmark => bookmark.options.id = id);
+          if(bookmark) window.app.state.bookmarked = true;
+          else window.app.state.bookmarked = false;
+      });
       }
 };
 
 //document.aEventListener('DOMContentLoaded', () => window.app.init( window.app.gotPlaces, window.app.gotLocation));
-window.app.init(window.app.gotPlaces, window.app.gotLocation);
-// window.app.initDetailView(window.app.gotPlaces);
-window.initRouter();
+
+var queryStringObj = buildfire.parseQueryString();
+console.log("queryStringObj", queryStringObj);
+window.app.state.queryStringObj = queryStringObj;
+if(!window.app.state.queryStringObj.dld)
+  window.app.init(window.app.gotPlaces, window.app.gotLocation);
+else window.app.initDetailView(); 
+  window.initRouter();

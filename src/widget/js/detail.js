@@ -7,17 +7,18 @@ window.detailView = {
         let view = document.getElementById('detailView');
         let screenWidth = window.innerWidth;
         const title = place.title;
-
         let context = {
             width: screenWidth,
             image: place.image,
+            id: place.id,
             title: title,
             description: place.description,
             distance: place.distance,
             address: place.address.name,
             actionItems: place.actionItems && place.actionItems.length > 0,
             lat: place.address.lat,
-            lng: place.address.lng
+            lng: place.address.lng,
+            bookmarked: window.app.state.bookmarked
         };
 
         let req = new XMLHttpRequest();
@@ -84,12 +85,19 @@ window.detailView = {
              * Bookmark
              */
             let bookmarkButton = document.getElementById('bookmarkBtn');
-            bookmarkButton.className = 'btn btn-success';
-            bookmarkButton.addEventListener('click', addBookmark);
-
+            if(window.app.state.bookmarked) {
+                bookmarkButton.className = 'btn btn-primary';
+                bookmarkButton.addEventListener('click', deleteBookmark);
+                console.log("TRUE");
+            }
+            else {
+                bookmarkButton.className = 'btn btn-success';
+                bookmarkButton.addEventListener('click', addBookmark);
+                console.log("FALSE");
+            }
             function addBookmark() {
                 let placeContext = context;
-                let placeID = placeContext.title + Math.random();
+                let id = placeContext.id;
                 let placeTitle = placeContext.title;
                 let image = placeContext.image;
                 let description = placeContext.description;
@@ -98,7 +106,7 @@ window.detailView = {
                 let lng = placeContext.lng;
 
                 let options = {
-                    id: placeID,
+                    id: id,
                     title: placeTitle,
                     payload: {
                         description: description,
@@ -108,14 +116,24 @@ window.detailView = {
                         lng: lng
                     }
                 };
-                // window.buildfire.deeplink.createLink({ id: placeID });
-                console.log("deeplink", window.buildfire.deeplink.createLink({ detail: placeID }));
+                // window.buildfire.deeplink.createLink({ dld: id });
+                console.log("deeplink", window.buildfire.deeplink.createLink( id ));
                 window.buildfire.bookmarks.add({ options }, function (err, data) {
                     if (err) console.log("Bookmark err", err);
                     console.log("Bookmark data", data);
+                    window.app.state.bookmarked = true;
                     // window.buildfire.localStorage.setItem("Bookmark", { data }, function (err, data) {
                     //     if (err) console.log(err);
                     // });
+                });
+            }
+            function deleteBookmark() {
+                let placeContext = context;
+                let id = placeContext.id;
+                window.buildfire.bookmarks.delete(id, function (err, data) {
+                    if (err) console.log("Bookmark err", err);
+                    console.log("Delete bookmark", data);
+                    window.app.state.bookmarked = false;
                 });
             }
 
