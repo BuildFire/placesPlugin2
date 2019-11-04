@@ -262,7 +262,7 @@ window.app = {
           console.log("PLACES", places);
           if (window.app.state.queryStringObj && window.app.state.queryStringObj.dld && places.length>0) {
             var selectedPlace = places.find(place => place.id = window.app.state.queryStringObj.dld);
-            window.app.state.selectedPlace[0] = selectedPlace; 
+            window.app.state.selectedPlace.push(selectedPlace); 
             console.log("SELECTED PLACES", window.app.state.selectedPlace);
             window.router.navigate(window.app.settings.viewStates.detail);
           }
@@ -270,13 +270,22 @@ window.app = {
         window.app.checkBookmarked(window.app.state.queryStringObj.dld);
       },
       checkBookmarked(id) {
-        window.buildfire.bookmarks.getAll(function(err, bookmarks) {
+        window.buildfire.bookmarks.getAll(function (err, bookmarks) {
           if (err) console.log(err);
-          console.log("BOOKMARKS", bookmark);
-          var bookmark = bookmarks.find(bookmark => bookmark.options.id = id);
-          if(bookmark) window.app.state.bookmarked = true;
-          else window.app.state.bookmarked = false;
-      });
+          console.log("bookmarks", bookmarks);
+          var bookmark = bookmarks.filter(bookmark => {
+            bookmark.id = id;
+          }
+          );
+          if (bookmark) {
+            window.app.state.bookmarked = true;
+            console.log(window.app.state.bookmarked);
+          }
+          else {
+            window.app.state.bookmarked = false;
+            console.log(window.app.state.bookmarked);
+          }
+        });
       }
 };
 

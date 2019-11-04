@@ -121,20 +121,21 @@ window.detailView = {
                 window.buildfire.bookmarks.add({ options }, function (err, data) {
                     if (err) console.log("Bookmark err", err);
                     console.log("Bookmark data", data);
-                    window.app.state.bookmarked = true;
                     // window.buildfire.localStorage.setItem("Bookmark", { data }, function (err, data) {
                     //     if (err) console.log(err);
                     // });
                 });
+                window.app.checkBookmarked(id); 
             }
             function deleteBookmark() {
                 let placeContext = context;
                 let id = placeContext.id;
+                console.log("ID TO DELETE", id);
                 window.buildfire.bookmarks.delete(id, function (err, data) {
                     if (err) console.log("Bookmark err", err);
-                    console.log("Delete bookmark", data);
-                    window.app.state.bookmarked = false;
+                    console.log("Bookmark deleted", data);
                 });
+                window.app.checkBookmarked(id);
             }
 
             /**
