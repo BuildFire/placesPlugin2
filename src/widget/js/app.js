@@ -259,11 +259,9 @@ window.app = {
             return place.data;
           }).filter(place => place.title)
           );
-          console.log("PLACES", places);
           if (window.app.state.queryStringObj && window.app.state.queryStringObj.dld && places.length>0) {
             var selectedPlace = places.find(place => place.id = window.app.state.queryStringObj.dld);
             window.app.state.selectedPlace.push(selectedPlace); 
-            console.log("SELECTED PLACES", window.app.state.selectedPlace);
             window.router.navigate(window.app.settings.viewStates.detail);
           }
         });
@@ -272,18 +270,15 @@ window.app = {
       checkBookmarked(id) {
         window.buildfire.bookmarks.getAll(function (err, bookmarks) {
           if (err) console.log(err);
-          console.log("bookmarks", bookmarks);
-          var bookmark = bookmarks.filter(bookmark => {
-            bookmark.id = id;
-          }
-          );
+
+          var bookmark = bookmarks.find(bookmark => bookmark.id = id);
           if (bookmark) {
-            window.app.state.bookmarked = true;
-            console.log(window.app.state.bookmarked);
+          let bookmarked = true;
+            window.app.state.bookmarked = bookmarked;
           }
-          else {
-            window.app.state.bookmarked = false;
-            console.log(window.app.state.bookmarked);
+          else if (!bookmark) {
+            let bookmarked = false;
+            window.app.state.bookmarked = bookmarked;
           }
         });
       }
@@ -292,8 +287,8 @@ window.app = {
 //document.aEventListener('DOMContentLoaded', () => window.app.init( window.app.gotPlaces, window.app.gotLocation));
 
 var queryStringObj = buildfire.parseQueryString();
-console.log("queryStringObj", queryStringObj);
 window.app.state.queryStringObj = queryStringObj;
+
 if(!window.app.state.queryStringObj.dld)
   window.app.init(window.app.gotPlaces, window.app.gotLocation);
 else window.app.initDetailView(); 

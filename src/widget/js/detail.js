@@ -116,26 +116,28 @@ window.detailView = {
                         lng: lng
                     }
                 };
-                // window.buildfire.deeplink.createLink({ dld: id });
-                console.log("deeplink", window.buildfire.deeplink.createLink( id ));
+                window.buildfire.deeplink.createLink({ id });
                 window.buildfire.bookmarks.add({ options }, function (err, data) {
                     if (err) console.log("Bookmark err", err);
                     console.log("Bookmark data", data);
-                    // window.buildfire.localStorage.setItem("Bookmark", { data }, function (err, data) {
-                    //     if (err) console.log(err);
-                    // });
+                    window.app.checkBookmarked(data.id);
                 });
-                window.app.checkBookmarked(id); 
             }
             function deleteBookmark() {
                 let placeContext = context;
                 let id = placeContext.id;
-                console.log("ID TO DELETE", id);
-                window.buildfire.bookmarks.delete(id, function (err, data) {
-                    if (err) console.log("Bookmark err", err);
-                    console.log("Bookmark deleted", data);
-                });
-                window.app.checkBookmarked(id);
+                window.buildfire.bookmarks.getAll(function (err, bookmarks) {
+                    if (err) console.log(err);
+
+                    var bookmark = bookmarks.find(bookmark => bookmark.id = id);
+                    if (bookmark) {
+                        window.buildfire.bookmarks.delete(bookmark.title, function (err, bookmark) {
+                            if (err) console.log("Bookmark err", err);
+                            console.log("Bookmark deleted", bookmark);
+                            window.app.checkBookmarked(bookmark.id);
+                        });
+                    }
+                  });
             }
 
             /**
