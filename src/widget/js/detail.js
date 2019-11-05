@@ -81,20 +81,28 @@ window.detailView = {
                 });
             }
             
+            
+            
+            setBookmark();
+            
             /**
              * Bookmark
              */
-            let bookmarkButton = document.getElementById('bookmarkBtn');
-            if(window.app.state.bookmarked) {
-                bookmarkButton.className = 'btn btn-primary';
-                bookmarkButton.addEventListener('click', deleteBookmark);
-                console.log("TRUE");
+            function setBookmark(){
+                let bookmarkButton = document.getElementById('bookmarkBtn');
+                bookmarkButton.removeEventListener('click');
+                if(window.app.state.bookmarked) {
+                    bookmarkButton.className = 'btn btn-primary';
+                    bookmarkButton.addEventListener('click', deleteBookmark);
+                    console.log("TRUE");
+                }
+                else {
+                    bookmarkButton.className = 'btn btn-success';
+                    bookmarkButton.addEventListener('click', addBookmark);
+                    console.log("FALSE");
+                }
             }
-            else {
-                bookmarkButton.className = 'btn btn-success';
-                bookmarkButton.addEventListener('click', addBookmark);
-                console.log("FALSE");
-            }
+
             function addBookmark() {
                 let placeContext = context;
                 let id = placeContext.id;
@@ -122,6 +130,8 @@ window.detailView = {
                     console.log("Bookmark data", data);
                     window.app.checkBookmarked(data.id);
                 });
+
+                setBookmark();
             }
             function deleteBookmark() {
                 let placeContext = context;
@@ -138,6 +148,8 @@ window.detailView = {
                         });
                     }
                   });
+
+                  setBookmark();
             }
 
             /**
