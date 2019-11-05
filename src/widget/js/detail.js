@@ -81,25 +81,24 @@ window.detailView = {
                 });
             }
             
-            
-            
             setBookmark();
-            
             /**
              * Bookmark
              */
-            function setBookmark(){
+            function setBookmark() {
                 let bookmarkButton = document.getElementById('bookmarkBtn');
-                bookmarkButton.removeEventListener('click');
+
+                bookmarkButton.removeEventListener('click',deleteBookmark);
+                bookmarkButton.removeEventListener('click',addBookmark);
                 if(window.app.state.bookmarked) {
                     bookmarkButton.className = 'btn btn-primary';
                     bookmarkButton.addEventListener('click', deleteBookmark);
-                    console.log("TRUE");
+                    bookmarkButton.innerHTML = "Bookmarked";
                 }
                 else {
                     bookmarkButton.className = 'btn btn-success';
                     bookmarkButton.addEventListener('click', addBookmark);
-                    console.log("FALSE");
+                    bookmarkButton.innerHTML = "Bookmark";
                 }
             }
 
@@ -112,7 +111,6 @@ window.detailView = {
                 let address = placeContext.address;
                 let lat = placeContext.lat;
                 let lng = placeContext.lng;
-
                 let options = {
                     id: id,
                     title: placeTitle,
@@ -128,10 +126,10 @@ window.detailView = {
                 window.buildfire.bookmarks.add({ options }, function (err, data) {
                     if (err) console.log("Bookmark err", err);
                     console.log("Bookmark data", data);
-                    window.app.checkBookmarked(data.id);
+                    window.app.state.bookmarked = true;
+                    setBookmark();
                 });
 
-                setBookmark();
             }
             function deleteBookmark() {
                 let placeContext = context;
@@ -144,12 +142,11 @@ window.detailView = {
                         window.buildfire.bookmarks.delete(bookmark.title, function (err, bookmark) {
                             if (err) console.log("Bookmark err", err);
                             console.log("Bookmark deleted", bookmark);
-                            window.app.checkBookmarked(bookmark.id);
+                            window.app.state.bookmarked = false;
+                            setBookmark();
                         });
                     }
                   });
-
-                  setBookmark();
             }
 
             /**

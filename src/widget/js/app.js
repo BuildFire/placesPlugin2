@@ -251,17 +251,17 @@ window.app = {
       let places = [];
       buildfire.datastore.search({}, 'places-list', (err, result) => {
 
-          places.push(...result.map(place => {
-            place.data.id = place.id;
-            place.data.sort = window.app.state.itemsOrder
-              ? window.app.state.itemsOrder.indexOf(place.id)
-              : 0;
-            return place.data;
+        places.push(...result.map(place => {
+          place.data.id = place.id;
+          place.data.sort = window.app.state.itemsOrder
+            ? window.app.state.itemsOrder.indexOf(place.id)
+            : 0;
+          return place.data;
           }).filter(place => place.title)
-          );
+        );
           if (window.app.state.queryStringObj && window.app.state.queryStringObj.dld && places.length>0) {
-            var selectedPlace = places.find(place => place.id = window.app.state.queryStringObj.dld);
-            window.app.state.selectedPlace.push(selectedPlace); 
+            var selectedPlace = places.find(place => place.id === window.app.state.queryStringObj.dld);
+            window.app.state.selectedPlace.unshift(selectedPlace); 
             window.router.navigate(window.app.settings.viewStates.detail);
           }
         });
@@ -270,15 +270,12 @@ window.app = {
       checkBookmarked(id) {
         window.buildfire.bookmarks.getAll(function (err, bookmarks) {
           if (err) console.log(err);
-
           var bookmark = bookmarks.find(bookmark => bookmark.id = id);
           if (bookmark) {
-          let bookmarked = true;
-            window.app.state.bookmarked = bookmarked;
+            window.app.state.bookmarked = true;
           }
-          else if (!bookmark) {
-            let bookmarked = false;
-            window.app.state.bookmarked = bookmarked;
+          else {
+            window.app.state.bookmarked = false;
           }
         });
       }
