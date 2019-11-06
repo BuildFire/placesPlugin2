@@ -82,15 +82,12 @@ window.detailView = {
             }
             
             setBookmark();
-            /**
-             * Bookmark
-             */
             function setBookmark() {
                 let bookmarkButton = document.getElementById('bookmarkBtn');
 
-                bookmarkButton.removeEventListener('click',deleteBookmark);
-                bookmarkButton.removeEventListener('click',addBookmark);
-                if(window.app.state.bookmarked) {
+                bookmarkButton.removeEventListener('click', deleteBookmark);
+                bookmarkButton.removeEventListener('click', addBookmark);
+                if (window.app.state.bookmarked) {
                     bookmarkButton.className = 'btn btn-primary';
                     bookmarkButton.addEventListener('click', deleteBookmark);
                     bookmarkButton.innerHTML = "Bookmarked";
@@ -122,31 +119,28 @@ window.detailView = {
                         lng: lng
                     }
                 };
-                window.buildfire.deeplink.createLink({ id });
-                window.buildfire.bookmarks.add({ options }, function (err, data) {
+                window.buildfire.deeplink.createLink({ dld: id });
+                window.buildfire.bookmarks.add(options, function (err, data) {
                     if (err) console.log("Bookmark err", err);
-                    console.log("Bookmark data", data);
                     window.app.state.bookmarked = true;
                     setBookmark();
                 });
-
             }
             function deleteBookmark() {
                 let placeContext = context;
                 let id = placeContext.id;
                 window.buildfire.bookmarks.getAll(function (err, bookmarks) {
-                    if (err) console.log(err);
 
-                    var bookmark = bookmarks.find(bookmark => bookmark.id = id);
+                    if (err) console.log(err);
+                    var bookmark = bookmarks.find(bookmark => bookmark.id === id);
                     if (bookmark) {
-                        window.buildfire.bookmarks.delete(bookmark.title, function (err, bookmark) {
+                        window.buildfire.bookmarks.delete(bookmark.id, function (err, bookmark) {
                             if (err) console.log("Bookmark err", err);
-                            console.log("Bookmark deleted", bookmark);
                             window.app.state.bookmarked = false;
                             setBookmark();
                         });
                     }
-                  });
+                });
             }
 
             /**

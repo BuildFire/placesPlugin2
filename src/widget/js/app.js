@@ -49,8 +49,8 @@ window.app = {
         categories: [],
         navHistory: [],
         isBackNav: false,
-        queryStringObj: {},
-        bookmarked: false
+        bookmarked: false,
+        dld: null
     },
     backButtonInit: () => {
         window.app.goBack = window.buildfire.navigation.onBackButtonClick;
@@ -121,7 +121,6 @@ window.app = {
           loadPage();
 
         }
-
         buildfire.datastore.get(window.app.settings.placesTag, function(err, results){
           if (err) {
             console.error('datastore.get error', err);
@@ -248,45 +247,35 @@ window.app = {
         window.app.gotPieceOfData();
     },
     initDetailView: () => {
-      let places = [];
-      buildfire.datastore.search({}, 'places-list', (err, result) => {
-
-        places.push(...result.map(place => {
-          place.data.id = place.id;
-          place.data.sort = window.app.state.itemsOrder
-            ? window.app.state.itemsOrder.indexOf(place.id)
-            : 0;
-          return place.data;
-          }).filter(place => place.title)
-        );
-          if (window.app.state.queryStringObj && window.app.state.queryStringObj.dld && places.length>0) {
-            var selectedPlace = places.find(place => place.id === window.app.state.queryStringObj.dld);
-            window.app.state.selectedPlace.unshift(selectedPlace); 
-            window.router.navigate(window.app.settings.viewStates.detail);
-          }
+      buildfire.datastore.getById(window.app.state.dld, 'places-list', (err, result) => {
+        if (err) console.log(err);
+        let res = [];
+        res = result.data;
+        res.id = result.id;
+        window.app.state.selectedPlace.unshift(res);
+        window.router.navigate(window.app.settings.viewStates.detail);
+      });
+      window.app.checkBookmarked(window.app.state.dld);
+    },
+    checkBookmarked(id) {
+      window.buildfire.bookmarks.getAll(function (err, bookmarks) {
+        if (err) console.log(err);
+        window.app.state.bookmarked = bookmarks.find(bookmark => {
+          if (bookmark.id === id) return true;
+          else return false;
         });
-        window.app.checkBookmarked(window.app.state.queryStringObj.dld);
-      },
-      checkBookmarked(id) {
-        window.buildfire.bookmarks.getAll(function (err, bookmarks) {
-          if (err) console.log(err);
-          var bookmark = bookmarks.find(bookmark => bookmark.id = id);
-          if (bookmark) {
-            window.app.state.bookmarked = true;
-          }
-          else {
-            window.app.state.bookmarked = false;
-          }
-        });
-      }
+      });
+    }
 };
 
 //document.aEventListener('DOMContentLoaded', () => window.app.init( window.app.gotPlaces, window.app.gotLocation));
 
 var queryStringObj = buildfire.parseQueryString();
-window.app.state.queryStringObj = queryStringObj;
 
-if(!window.app.state.queryStringObj.dld)
+if (queryStringObj.dld) {
+  window.app.state.dld = queryStringObj.dld;
+  window.app.initDetailView(); 
+} else {
   window.app.init(window.app.gotPlaces, window.app.gotLocation);
-else window.app.initDetailView(); 
-  window.initRouter();
+}
+window.initRouter();
