@@ -108,18 +108,25 @@ window.detailView = {
                 let address = placeContext.address;
                 let lat = placeContext.lat;
                 let lng = placeContext.lng;
+                let actionItems = placeContext.actionItems;
+                let deeplinkUrl = window.buildfire.deeplink.createLink({ id });
                 let options = {
                     id: id,
                     title: placeTitle,
                     payload: {
-                        description: description,
-                        address: address,
-                        image: image,
-                        lat: lat,
-                        lng: lng
+                        data: {
+                            id: id,
+                            actionItems: actionItems,
+                            title: placeTitle,
+                            description: description,
+                            address: address,
+                            image: image,
+                            lat: lat,
+                            lng: lng,
+                            deeplinkUrl: deeplinkUrl
+                        }
                     }
                 };
-                window.buildfire.deeplink.createLink({ dld: id });
                 window.buildfire.bookmarks.add(options, function (err, data) {
                     if (err) console.log("Bookmark err", err);
                     window.app.state.bookmarked = true;

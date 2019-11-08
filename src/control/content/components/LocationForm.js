@@ -10,10 +10,12 @@ class LocationForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
+    console.log("PROPS", this.props);
   }
 
   componentWillMount() {
     let model = {
+      id: '',
       title: '',
       subtitle: '',
       description: '',
@@ -21,7 +23,8 @@ class LocationForm extends React.Component {
       image: '',
       actionItems: [],
       categories: [],
-      carousel: []
+      carousel: [],
+      deeplinkUrl: ''
     };
     let state = Object.assign(model, cloneDeep(this.props.location) || {});
     this.setState(state);
@@ -76,6 +79,11 @@ class LocationForm extends React.Component {
     if (this.state.address.lat && this.state.address.lng) {
       this.mountMap(this.state.address);
     }
+
+    //Load deep link url 
+    let id = this.state.id;
+    let link = Buildfire.deeplink.createLink({ id });
+    this.setState({ deeplinkUrl: link });
   }
 
   mountMap(address) {
@@ -233,7 +241,7 @@ class LocationForm extends React.Component {
         const value = buildfire.imageLib.resizeImage(result.selectedFiles[0], { width: 'full' });
         this.quillRef.getEditor().insertEmbed(range.index, 'image', value, 'user');
       }
-    })
+    });
   }
 
   removeImage(e) {
@@ -262,7 +270,7 @@ class LocationForm extends React.Component {
   }
 
   render() {
-    const { title, address, description, image, categories, subtitle } = this.state;
+    const { title, address, description, image, categories, subtitle, deeplinkUrl } = this.state;
 
     return (
       <form onSubmit={ e => this.onSubmit(e) } onKeyPress={ e => this.onAutoKeyUp(e) }>
@@ -276,6 +284,17 @@ class LocationForm extends React.Component {
             name='title'
             type='text'
             className='form-control' />
+        </div>
+
+        <div className='form-group'>
+          <label htmlFor='deeplink'>DeepLink URL</label>
+          <input
+            disabled            
+            maxLength={ 90 }
+            value={ deeplinkUrl }
+            name='deeplink'
+            className='form-control'
+            type='text'/>
         </div>
 
         <div className='form-group'>
