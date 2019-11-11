@@ -80,7 +80,6 @@ window.detailView = {
                     console.log(actionItem);
                 });
             }
-            
             setBookmark();
             function setBookmark() {
                 let bookmarkButton = document.getElementById('bookmarkBtn');
@@ -104,26 +103,13 @@ window.detailView = {
                 let id = placeContext.id;
                 let placeTitle = placeContext.title;
                 let image = placeContext.image;
-                let description = placeContext.description;
-                let address = placeContext.address;
-                let lat = placeContext.lat;
-                let lng = placeContext.lng;
-                let actionItems = placeContext.actionItems;
-                let deeplinkUrl = window.buildfire.deeplink.createLink({ id });
                 let options = {
                     id: id,
                     title: placeTitle,
+                    icon: image,
                     payload: {
                         data: {
                             id: id,
-                            actionItems: actionItems,
-                            title: placeTitle,
-                            description: description,
-                            address: address,
-                            image: image,
-                            lat: lat,
-                            lng: lng,
-                            deeplinkUrl: deeplinkUrl
                         }
                     }
                 };

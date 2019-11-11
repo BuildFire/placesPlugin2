@@ -50,7 +50,6 @@ window.app = {
         navHistory: [],
         isBackNav: false,
         bookmarked: false,
-        dld: null
     },
     backButtonInit: () => {
         window.app.goBack = window.buildfire.navigation.onBackButtonClick;
@@ -205,7 +204,6 @@ window.app = {
               window.listView.updateList(updatedPlaces);
           }
         });
-      window.app.checkBookmarked(window.app.state.dld);
     },
     gotPieceOfData() {
       if (window.app.state.places && window.app.state.location) {
@@ -248,53 +246,56 @@ window.app = {
         window.app.gotPieceOfData();
     },
     
-  initDetailView: () => {
-      buildfire.datastore.getById(window.app.state.dld, 'places-list', (err, result) => {
-        if (err) console.log(err);
-        let res = [];
-        res = result.data;
-        res.id = result.id;
-        window.app.state.selectedPlace.unshift(res);
-        console.log("res", res);
-        window.router.navigate(window.app.settings.viewStates.detail);
-        window.app.checkBookmarked(window.app.state.dld);
+    initDetailView: () => {
+      buildfire.deeplink.getData(function (data) {
+        if (data) {
+          if (data.data) {
+            let bookmarkData = data.data;
+            window.app.state.bookmarkId = bookmarkData.id;
+            buildfire.datastore.getById(bookmarkData.id, 'places-list', (err, result) => {
+              if (err) console.log(err);
+              let res = [];
+              res = result.data;
+              res.id = result.id;
+              window.app.state.selectedPlace.unshift(res);
+              window.router.navigate(window.app.settings.viewStates.detail);
+              window.app.checkBookmarked(res.id);
+            });
+          }
+          else if (data.id) {
+            buildfire.datastore.getById(data.id, 'places-list', (err, result) => {
+              if (err) console.log(err);
+              let res = [];
+              res = result.data;
+              res.id = result.id;
+              window.app.state.selectedPlace.unshift(res);
+              window.router.navigate(window.app.settings.viewStates.detail);
+              window.app.checkBookmarked(res.id);
+            });
+          }
+        }
       });
     },
     
     checkBookmarked(id) {
       window.buildfire.bookmarks.getAll(function (err, bookmarks) {
         if (err) console.log(err);
-        console.log("BOOKMARKS", bookmarks);
-        window.app.state.bookmarked = bookmarks.find(bookmark => {
-          if (bookmark.id === id) return true;
-          else return false;
+        bookmarks.find(bookmark => {
+          if (bookmark.id === id) {
+            window.app.state.bookmarked = true;
+          }
+          else {
+            window.app.state.bookmarked = false;
+          }
         });
       });
-    },
-    
-  handleBookmarkNav(bookmarkData) {
-    console.log("dtaatatat", bookmarkData);
-    buildfire.datastore.getById(bookmarkData.id, 'places-list', (err, result) => { 
-      if (err) console.log(err);
-      let res = result.data;
-      res.id = result.id;
-      window.app.state.selectedPlace.unshift(res);
-      window.router.navigate(window.app.settings.viewStates.detail);
-    });
-      
     }
 };
 
 //document.aEventListener('DOMContentLoaded', () => window.app.init( window.app.gotPlaces, window.app.gotLocation));
 
 var queryStringObj = buildfire.parseQueryString();
-buildfire.deeplink.getData(function (data) {
-  if (data) {
-    window.app.handleBookmarkNav(data.data);
-  }
-});
 if (queryStringObj.dld) {
-  window.app.state.dld = queryStringObj.dld;
   window.app.initDetailView(); 
 } else {
   window.app.init(window.app.gotPlaces, window.app.gotLocation);

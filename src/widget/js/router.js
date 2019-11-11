@@ -104,6 +104,7 @@ function loadDetail(place){
     app.views.mapView.style.display = 'none';
     app.views.listView.style.display = 'none';
     app.views.detailView.style.display = 'block';
+    window.app.checkBookmarked(window.app.state.selectedPlace[0].id);
     loadHTML('./detail.html', 'detailView')
         .then(() => loadControl(detailView.init, place));
 }
