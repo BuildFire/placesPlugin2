@@ -280,15 +280,14 @@ window.app = {
     checkBookmarked(id) {
       window.buildfire.bookmarks.getAll(function (err, bookmarks) {
         if (err) console.log(err);
-        bookmarks.find(bookmark => {
-          if (bookmark.id === id) {
+        let bookmark = bookmarks.filter(bookmark => bookmark.id === id);
+          if (bookmark.length>0) {
             window.app.state.bookmarked = true;
           }
           else {
             window.app.state.bookmarked = false;
           }
         });
-      });
     }
 };
 
