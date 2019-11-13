@@ -281,12 +281,7 @@ window.app = {
       window.buildfire.bookmarks.getAll(function (err, bookmarks) {
         if (err) console.log(err);
         let bookmark = bookmarks.filter(bookmark => bookmark.id === id);
-          if (bookmark.length>0) {
-            window.app.state.bookmarked = true;
-          }
-          else {
-            window.app.state.bookmarked = false;
-          }
+        window.app.state.bookmarked = bookmark.length > 0;
         });
     }
 };
