@@ -291,8 +291,6 @@ window.app = {
     }
 };
 
-//document.aEventListener('DOMContentLoaded', () => window.app.init( window.app.gotPlaces, window.app.gotLocation));
-
 var queryStringObj = buildfire.parseQueryString();
 if (queryStringObj.dld) {
   window.app.initDetailView(); 
