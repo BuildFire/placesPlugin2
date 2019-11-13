@@ -65,6 +65,7 @@ window.app = {
                     //Don't remove last state, if launcher plugin
                     if(!isLauncher || window.app.state.navHistory.length != 1){
                         window.app.state.navHistory.pop();
+                        window.buildfire.history.pop();
                     }
                 }
 

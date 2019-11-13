@@ -148,8 +148,11 @@ window.initRouter = function() {
             loadDetail(app.state.selectedPlace[0]);
             app.state.mode = app.settings.viewStates.detail;
 
-            if(!app.state.isBackNav)
+            if(!app.state.isBackNav) {
                 app.state.navHistory.push(app.settings.viewStates.detail);
+                window.buildfire.history.push('Detail', { showLabelInTitlebar: false });
+            }
+                
 
             window.app.state.isBackNav = false;
             window.buildfire.appearance.titlebar.show();
