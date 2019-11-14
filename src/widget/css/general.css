@@ -272,7 +272,7 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
 }
 
 .detail-info {
-    width: 70%;
+    width: 65%;
 }
 
 .map-holder {
@@ -482,16 +482,9 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
     cursor: pointer;
 }
 #bookmarkBtn {
-    display: block;
-    width: 100%;
-    text-align: center;
-    margin: 20px 0 0;
-    border: none;
-    font-size: 15px;
-    border-radius: 100px;
-    padding: 10px 0;
-    float: left;
-    cursor: pointer;
+    font-size: 22px;
+    margin: auto;
+    left: 4%;
 }
 #contactBtn {
     display: block;

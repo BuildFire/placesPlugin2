@@ -87,14 +87,12 @@ window.detailView = {
                 bookmarkButton.removeEventListener('click', deleteBookmark);
                 bookmarkButton.removeEventListener('click', addBookmark);
                 if (window.app.state.bookmarked) {
-                    bookmarkButton.className = 'btn btn-primary';
+                    bookmarkButton.className = 'glyphicon glyphicon-star';
                     bookmarkButton.addEventListener('click', deleteBookmark);
-                    bookmarkButton.innerHTML = "Bookmarked";
                 }
                 else {
-                    bookmarkButton.className = 'btn btn-success';
+                    bookmarkButton.className = 'glyphicon glyphicon-star-empty';
                     bookmarkButton.addEventListener('click', addBookmark);
-                    bookmarkButton.innerHTML = "Bookmark";
                 }
             }
 
