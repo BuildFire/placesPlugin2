@@ -362,6 +362,7 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
 }
 .distance{
     font-size: 13px;
+    margin-left: 6px;
 }
 
 .title {
@@ -485,7 +486,7 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
 #bookmarkBtn {
     font-size: 22px;
     margin: auto;
-    left: 4%;
+    left: 2%;
 }
 #contactBtn {
     display: block;
