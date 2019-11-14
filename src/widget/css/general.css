@@ -273,6 +273,7 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
 
 .detail-info {
     width: 65%;
+    padding-left: 3%;
 }
 
 .map-holder {

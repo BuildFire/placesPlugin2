@@ -258,6 +258,7 @@ window.app = {
               let res = [];
               res = result.data;
               res.id = result.id;
+              res.distance = bookmarkData.distance;
               window.app.state.selectedPlace.unshift(res);
               window.router.navigate(window.app.settings.viewStates.detail);
               window.app.checkBookmarked(res.id);

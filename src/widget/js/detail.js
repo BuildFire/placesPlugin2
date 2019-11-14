@@ -101,6 +101,7 @@ window.detailView = {
                 let id = placeContext.id;
                 let placeTitle = placeContext.title;
                 let image = placeContext.image;
+                let distance = placeContext.distance;
                 let options = {
                     id: id,
                     title: placeTitle,
@@ -108,6 +109,7 @@ window.detailView = {
                     payload: {
                         data: {
                             id: id,
+                            distance: distance
                         }
                     }
                 };
