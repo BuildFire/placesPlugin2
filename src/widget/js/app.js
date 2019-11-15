@@ -210,7 +210,7 @@ window.app = {
     },
     gotPieceOfData() {
       if (window.app.state.places && window.app.state.location) {
-        let { location } = window.app.state;
+        let { location } = window.app.state;
         let destinations = [];
 
         window.app.state.places.forEach(place => {
@@ -281,8 +281,25 @@ window.app = {
             buildfire.datastore.getById(data.id, 'places-list', (err, result) => {
               if (err) console.log(err);
               let res = [];
+              let destinations = [];
               res = result.data;
               res.id = result.id;
+
+              destinations.push(new window.google.maps.LatLng(res.address.lat, res.address.lng));
+              buildfire.geo.getCurrentPosition(null, (err, position) => {
+                if (err) console.log(err);
+                let location = position.coords;
+                let origin = { latitude: location.latitude, longitude: location.longitude };
+                destinations.forEach((item) => {
+                  var destination = { latitude: item.lat(), longitude: item.lng() };
+                  var distance = buildfire.geo.calculateDistance(origin, destination, { decimalPlaces: 5 });
+                  if (distance < 0.5) {
+                    res.distance = (Math.round(distance * 5280)).toLocaleString() + ' ft';
+                  } else {
+                    res.distance = (Math.round(distance)).toLocaleString() + ' mi';
+                  }
+                });
+              });
               window.app.state.selectedPlace.unshift(res);
               window.router.navigate(window.app.settings.viewStates.detail);
               window.app.checkBookmarked(res.id);
