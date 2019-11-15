@@ -148,9 +148,12 @@ window.initRouter = function() {
             loadDetail(app.state.selectedPlace[0]);
             app.state.mode = app.settings.viewStates.detail;
 
-            if(!app.state.isBackNav) {
+            if (!app.state.isBackNav) {
+                var lastView = app.state.navHistory.slice(-1)[0];
+                if (lastView) {
+                    window.buildfire.history.push('Detail', { showLabelInTitlebar: false });
+                }
                 app.state.navHistory.push(app.settings.viewStates.detail);
-                window.buildfire.history.push('Detail', { showLabelInTitlebar: false });
             }
                 
 

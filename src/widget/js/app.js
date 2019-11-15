@@ -251,6 +251,17 @@ window.app = {
     
     initDetailView: () => {
       buildfire.deeplink.getData(function (data) {
+        buildfire.datastore.get(window.app.settings.placesTag, function(err, results){
+          if (err) {
+            console.error('datastore.get error', err);
+            return;
+          }
+          let data = results.data;
+          if (data) {
+            window.app.state.bookmarking = data.bookmarking;
+          }
+        });
+
         if (data) {
           if (data.data) {
             let bookmarkData = data.data;
@@ -269,13 +280,9 @@ window.app = {
           else if (data.id) {
             buildfire.datastore.getById(data.id, 'places-list', (err, result) => {
               if (err) console.log(err);
-              let place = window.app.state.places.filter(place => place.id === data.id);
-              console.log(place);
-              console.log(window.app.state.places);
               let res = [];
               res = result.data;
               res.id = result.id;
-              res.distance = place.distance;
               window.app.state.selectedPlace.unshift(res);
               window.router.navigate(window.app.settings.viewStates.detail);
               window.app.checkBookmarked(res.id);
