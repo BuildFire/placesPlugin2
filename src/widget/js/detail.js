@@ -8,6 +8,7 @@ window.detailView = {
         let screenWidth = window.innerWidth;
         const title = place.title;
         let context = {
+            bookmarking: window.app.state.bookmarking,
             width: screenWidth,
             image: place.image,
             id: place.id,
@@ -80,20 +81,22 @@ window.detailView = {
                     console.log(actionItem);
                 });
             }
-            setBookmark();
+            if (context.bookmarking) {
+                setBookmark();
+            }
             function setBookmark() {
-                let bookmarkButton = document.getElementById('bookmarkBtn');
+                    let bookmarkButton = document.getElementById('bookmarkBtn');
 
-                bookmarkButton.removeEventListener('click', deleteBookmark);
-                bookmarkButton.removeEventListener('click', addBookmark);
-                if (window.app.state.bookmarked) {
-                    bookmarkButton.className = 'glyphicon glyphicon-star';
-                    bookmarkButton.addEventListener('click', deleteBookmark);
-                }
-                else {
-                    bookmarkButton.className = 'glyphicon glyphicon-star-empty';
-                    bookmarkButton.addEventListener('click', addBookmark);
-                }
+                    bookmarkButton.removeEventListener('click', deleteBookmark);
+                    bookmarkButton.removeEventListener('click', addBookmark);
+                    if (window.app.state.bookmarked) {
+                        bookmarkButton.className = 'glyphicon glyphicon-star';
+                        bookmarkButton.addEventListener('click', deleteBookmark);
+                    }
+                    else {
+                        bookmarkButton.className = 'glyphicon glyphicon-star-empty';
+                        bookmarkButton.addEventListener('click', addBookmark);
+                    }                
             }
 
             function addBookmark() {

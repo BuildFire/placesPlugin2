@@ -11,8 +11,12 @@ class MapOptions extends React.Component {
       value: e.target.value
     });
   }
+  onBookmarkChange() {
+    this.props.onBookmarkChange();
+  }
 
   render() {
+    const active = { backgroundColor: '#00a1f1', color: '#ffffff', border: 'none' };
     return (
       <div className='col-xs-12'>
         <h3>Options</h3>
@@ -58,6 +62,20 @@ class MapOptions extends React.Component {
                 </div>
               </div>
             </div>
+            
+            <br />
+
+          <div className='row'>
+            <div className='col-xs-6'>
+              <label>Bookmarking</label>
+            </div>
+            <div className='col-xs-6'>
+            <div className="Toggler">
+              <div className="Toggler__on" style={this.props.configBookmark ? active : null} onClick={() => this.onBookmarkChange()}>On</div>
+                <div className="Toggler__off" style={!this.props.configBookmark ? active : null} onClick={() => this.onBookmarkChange()}>Off</div>
+              </div>
+            </div>
+          </div>
 
         </form>
       </div>

@@ -50,6 +50,7 @@ window.app = {
         navHistory: [],
         isBackNav: false,
         bookmarked: false,
+        bookmarking: true
     },
     backButtonInit: () => {
         window.app.goBack = window.buildfire.navigation.onBackButtonClick;
@@ -136,6 +137,7 @@ window.app = {
             window.app.state.itemsOrder = data.itemsOrder;
             window.app.state.actionItems = data.actionItems || [];
             window.app.state.defaultView = data.defaultView;
+            window.app.state.bookmarking = data.bookmarking;
 
             if (data.categories) {
               window.app.state.categories = data.categories.map(category => {
@@ -267,9 +269,13 @@ window.app = {
           else if (data.id) {
             buildfire.datastore.getById(data.id, 'places-list', (err, result) => {
               if (err) console.log(err);
+              let place = window.app.state.places.filter(place => place.id === data.id);
+              console.log(place);
+              console.log(window.app.state.places);
               let res = [];
               res = result.data;
               res.id = result.id;
+              res.distance = place.distance;
               window.app.state.selectedPlace.unshift(res);
               window.router.navigate(window.app.settings.viewStates.detail);
               window.app.checkBookmarked(res.id);

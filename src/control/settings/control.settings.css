@@ -10,3 +10,29 @@
   -webkit-pointer-events: none;
   pointer-events: none;
 }
+.Toggler {
+  width: 180px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+}
+
+.Toggler__on, .Toggler__off {
+  width: 50%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #dddddd;
+  cursor: pointer;
+}
+
+.Toggler__on {
+  border-top-left-radius: 6px;
+  border-bottom-left-radius: 6px;
+}
+
+.Toggler__off {
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
+}

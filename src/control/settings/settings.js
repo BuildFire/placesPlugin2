@@ -8,7 +8,8 @@ class Settings extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: {}
+      data: {},
+      configBookmark: true
     };
   }
 
@@ -16,6 +17,7 @@ class Settings extends React.Component {
     buildfire.datastore.get('places', (err, result) => {
       if (err) return console.error(err);
       this.setState({ data: result.data });
+      this.setState({ configBookmark: result.data.bookmarking });
     });
   }
 
@@ -44,17 +46,27 @@ class Settings extends React.Component {
         data.places = orderBy(data.places, [place => place.title.toLowerCase()], 'desc');
       }
     }
-
     this.setState(data);
     this.handleSave();
+  }
+
+  handleBookmarkChange = () => {
+    const { data } = this.state;
+    this.setState({ configBookmark: !this.state.configBookmark }, () => {
+      data.bookmarking = this.state.configBookmark;
+      this.setState(data);
+      this.handleSave();
+    });
   }
 
   render() {
     return (
       <div>
         <MapOptions
-          options={ this.state.data }
-          onChange={ this.handleOptionChange } />
+          options={this.state.data}
+          onChange={this.handleOptionChange}
+          onBookmarkChange={this.handleBookmarkChange}
+          configBookmark={this.state.configBookmark} />
       </div>
     );
   }
