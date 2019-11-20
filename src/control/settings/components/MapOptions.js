@@ -59,6 +59,25 @@ class MapOptions extends React.Component {
                 </div>
               </div>
             </div>
+            <br />
+          <div className='row'>
+            <div className='col-xs-6'>
+              <label>Points of interest</label>
+            </div>
+            <div className='col-xs-6'>
+              <div className='dropdown'>
+                <img src='assets/img/down-chevron.png' className='chev' />
+                <select
+                  value={ this.props.options.pointsOfInterest }
+                  name='pointsOfInterest'
+                  className='form-control'
+                  onChange={e => this.onChange(e)}>
+                  <option value='on'>On</option>
+                  <option value='off'>Off</option>
+                </select>
+              </div>
+            </div>
+          </div>
 
         </form>
       </div>

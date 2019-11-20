@@ -48,7 +48,8 @@ window.app = {
         sortBy: null,
         categories: [],
         navHistory: [],
-        isBackNav: false
+        isBackNav: false,
+        pointsOfInterest: "on"
     },
     backButtonInit: () => {
         window.app.goBack = window.buildfire.navigation.onBackButtonClick;
@@ -140,6 +141,9 @@ window.app = {
               window.app.state.categories = data.categories.map(category => {
                   return { name: category, isActive: true };
               });
+            }
+            if (data.pointsOfInterest) {
+              window.app.state.pointsOfInterest = data.pointsOfInterest;
             }
           }
 

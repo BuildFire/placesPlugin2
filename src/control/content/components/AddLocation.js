@@ -9,6 +9,7 @@ class AddLocation extends React.Component {
 
   render() {
     return <LocationForm
+      pointsOfInterest = { this.props.pointsOfInterest }
       categories={ this.props.categories }
       onSubmit={ data => this.onSubmit(data) } />;
   }

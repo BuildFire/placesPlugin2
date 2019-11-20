@@ -80,10 +80,22 @@ class LocationForm extends React.Component {
 
   mountMap(address) {
     const { maps } = window.google;
+    const { pointsOfInterest } = this.props;
     let defaultLocation = new maps.LatLng(address.lat, address.lng);
     let mapOptions = {
       zoom: 16,
-      center: defaultLocation
+      center: defaultLocation,
+      styles: [
+        {
+          featureType: "poi.business",
+          elementType: "labels",
+          stylers: [
+            {
+              visibility: pointsOfInterest
+            }
+          ]
+        }
+      ]
     };
     this.map.style.height = '230px';
     this.mapInstance = new maps.Map(this.map, mapOptions);

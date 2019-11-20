@@ -201,6 +201,8 @@ window.mapView = {
         let zoomTo = (mapView.lastKnownLocation != defaultLocation) ? mapView.settings.zoomLevel.city : mapView.settings.zoomLevel.country,
             centerOn = (mapView.lastKnownLocation != defaultLocation) ? mapView.lastKnownLocation : defaultLocation ;
 
+        let pointsOfInterest = window.app.state.pointsOfInterest;
+        
         let options = {
             minZoom: 3,
             gestureHandling: 'greedy',
@@ -212,7 +214,18 @@ window.mapView = {
             mapTypeId: mapTypeId,
             zoomControlOptions: {
                 position: zoomPosition
-            }
+            },
+            styles: [
+                {
+                  featureType: "poi.business",
+                  elementType: "labels",
+                  stylers: [
+                    {
+                      visibility: pointsOfInterest
+                    }
+                  ]
+                }
+              ]
         };
 
         window.map = new google.maps.Map(document.getElementById('googleMap'), options);

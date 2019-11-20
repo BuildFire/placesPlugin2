@@ -44,6 +44,13 @@ class Settings extends React.Component {
         data.places = orderBy(data.places, [place => place.title.toLowerCase()], 'desc');
       }
     }
+    if (option.name === 'pointsOfInterest') {
+      if (option.value === 'off') {
+        data.pointsOfInterest = "off";
+      } else {
+        data.pointsOfInterest = "on";
+      } 
+    }
 
     this.setState(data);
     this.handleSave();
