@@ -12,6 +12,7 @@ class EditLocation extends React.Component {
 
   render() {
     return <LocationForm
+      pointsOfInterest = { this.props.pointsOfInterest }
       categories={ this.props.categories }
       location={ this.props.location }
       onSubmit={ data => this.onSubmit(data) } />;
