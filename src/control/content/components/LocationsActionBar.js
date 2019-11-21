@@ -15,14 +15,23 @@ class LocationsActionBar extends React.Component {
   onFileChange() {
     const file = this.fileInput.files[0];
     const reader = new FileReader();
+    const selectedCategory = [];
     reader.onload = e => {
       const rows = csv.parse(e.target.result).slice(1);
       const { places } = this.props;
+      const allCategories = this.props.categories;
       const promises = [];
       // loop through the csv rows
       const locations = rows.map((row, i) => {
-        const [category, title, name, address_lat, address_lng, description, subtitle, image] = row;
-        console.log("<<<CATEGORY>>>", category);
+        const [categories, title, name, address_lat, address_lng, description, subtitle, image] = row;
+        const categoryArr = categories.split(",");
+        allCategories.forEach(cat => {
+          categoryArr.forEach(categ => {
+            if (categ === cat.name) {
+              selectedCategory.push(cat.id);
+            }
+          });
+        });
         // if a row is missing latitude or longitude
         // use google maps api to fetch them async
         // otherwise just return the location
@@ -35,10 +44,9 @@ class LocationsActionBar extends React.Component {
               fetch(url).then(response => response.json()).then(data => {
                 const match = data.results[0];
                 if (!match) return reject('invalid CSV row!', { name });
-
                 const { lat, lng } = match.geometry.location;
                 resolve({
-                  category: category,
+                  categories: selectedCategory,
                   title: typeof title === 'number' ? title.toString() : title || 'Untitled Location',
                   address: {
                     name,
@@ -55,7 +63,7 @@ class LocationsActionBar extends React.Component {
           );
         } else {
           return {
-            category: category,
+            categories: selectedCategory,
             title: typeof title === 'number' ? title.toString() : title || 'Untitled Location',
             address: {
               name,
@@ -102,7 +110,7 @@ class LocationsActionBar extends React.Component {
       categories.forEach(cat => categoryNames.push(cat.name));
       
       rows.push({
-          category: categoryNames.toString() || '',
+          categories: categoryNames.toString() || '',
           title: place.title,
           address: place.address.name,
           lat: place.address.lat,

@@ -38,6 +38,13 @@ class LocationForm extends React.Component {
    * - Carousel
    */
   componentDidMount() {
+    if (this.props.location && this.props.location.categories) {
+      const category = this.props.location.categories.map(cat => cat.id);
+      if (category) {
+        this.setState({ categories: [...this.state.categories, ...category] });
+      }
+    }
+    
     // Mount google map autocomplete
     const { maps } = window.google;
     this.autocomplete = new maps.places.Autocomplete(this.addressInput);
@@ -233,7 +240,7 @@ class LocationForm extends React.Component {
         const value = buildfire.imageLib.resizeImage(result.selectedFiles[0], { width: 'full' });
         this.quillRef.getEditor().insertEmbed(range.index, 'image', value, 'user');
       }
-    })
+    });
   }
 
   removeImage(e) {

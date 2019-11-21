@@ -195,7 +195,7 @@ window.app = {
           }
 
           //Do comparison to see what's changed
-          let updatedPlaces = filter(newPlaces, (newPlace) => { return !find(currentPlaces, newPlace)});
+          let updatedPlaces = filter(newPlaces, (newPlace) => { return !find(currentPlaces, newPlace);});
 
           if(window.app.state.mode === window.app.settings.viewStates.map){
               window.mapView.updateMap(updatedPlaces);
