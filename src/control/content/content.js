@@ -144,6 +144,10 @@ class Content extends React.Component {
       if (err) return console.error(err);
     });
   }
+  handleCopyLink(id) {
+    const { data } = this.state;
+    console.log("data>>>>>>>", data);
+  }
 
   handleLocationEdit(index) {
     this.setState({ editingLocation: index });
@@ -301,7 +305,8 @@ class Content extends React.Component {
                     places={ data.places }
                     updateSort={ (list) => this.updateSort(list) }
                     handleEdit={ (index) => this.handleLocationEdit(index) }
-                    handleDelete={ (index) => this.handleLocationDelete(index) }/> }
+                    handleDelete={ (index) => this.handleLocationDelete(index) }
+                    handleCopyLink={ (id) => this.handleCopyLink(id)}/> }
           </div>
         </div>
       </div>

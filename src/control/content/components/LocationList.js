@@ -51,6 +51,8 @@ class PlacesList extends React.Component {
             Edit
           </a>
         </span>
+        <span className="copy btn-icon btn-link-icon btn-primary"
+          onClick={() => this.props.handleCopyLink(value.place.id)}/>
         <img
           className='delete'
           onClick={ () => this.props.handleDelete(value.index) }
