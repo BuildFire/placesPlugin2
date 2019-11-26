@@ -233,9 +233,20 @@ window.app = {
 
         if (currentSortOrder === 'distance') {
           window.app.state.places = window.app.state.places.sort((a, b) => {
-
-            var aDistance = parseInt(a.distance.split(' ')[0].replace(',', ''));
-            var bDistance = parseInt(b.distance.split(' ')[0].replace(',', ''));
+            var aDistance = 0;
+            var bDistance = 0;
+            const aDist = a.distance.split(' ')[0];
+            const bDist = b.distance.split(' ')[0];
+            if (aDist.includes('.')) {
+              aDistance = parseInt(a.distance.split(' ')[0].replace('.', ''));
+            } else {
+              aDistance = parseInt(a.distance.split(' ')[0].replace(',', ''));
+            }
+            if (bDist.includes('.')) {
+              bDistance = parseInt(b.distance.split(' ')[0].replace('.', ''));
+            } else {
+              bDistance = parseInt(b.distance.split(' ')[0].replace(',', ''));
+            }
 
             if (aDistance < bDistance) {
               return -1;
