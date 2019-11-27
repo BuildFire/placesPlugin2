@@ -20,6 +20,7 @@ window.app = {
         viewStates: {map: 'map', list: 'list', detail: 'detail'},
         sortOptions: {alpha: 'alpha', alphaDesc: 'alphaDesc', manual: 'manual', distance: 'distance'},
         placesTag: 'places',
+        placesListTag: 'places-list',
         cloudImg: {
             domain:'https://czi3m2qn.cloudimg.io',
             operations: {
@@ -97,7 +98,7 @@ window.app = {
             buildfire.datastore.search({ page, pageSize, sort: (window.app.state.sortBy ? ({
                 title: (window.app.state.sortBy === 'alphaDesc' ? -1 : 1)
               }) : null)
-            }, 'places-list', (err, result) => {
+            }, window.app.settings.placesListTag, (err, result) => {
 
               places.push(...result.map(place => {
                 place.data.id = place.id;
@@ -254,62 +255,18 @@ window.app = {
     },
     
     initDetailView: () => {
+      window.buildfire.appearance.titlebar.show();
+      window.app.backButtonInit();
       buildfire.deeplink.getData(function (data) {
-        buildfire.datastore.get(window.app.settings.placesTag, function(err, results){
-          if (err) {
-            console.error('datastore.get error', err);
-            return;
-          }
-          let data = results.data;
-          if (data) {
-            window.app.state.bookmarking = data.bookmarking;
-          }
-        });
-
-        if (data) {
-          if (data.data) {
-            let bookmarkData = data.data;
-            window.app.state.bookmarkId = bookmarkData.id;
-            buildfire.datastore.getById(bookmarkData.id, 'places-list', (err, result) => {
-              if (err) console.log(err);
-              let res = [];
-              res = result.data;
-              res.id = result.id;
-              res.distance = bookmarkData.distance;
-              window.app.state.selectedPlace.unshift(res);
-              window.router.navigate(window.app.settings.viewStates.detail);
-              window.app.checkBookmarked(res.id);
-            });
-          }
-          else if (data.id) {
-            buildfire.datastore.getById(data.id, 'places-list', (err, result) => {
-              if (err) console.log(err);
-              let res = [];
-              let destinations = [];
-              res = result.data;
-              res.id = result.id;
-
-              destinations.push(new window.google.maps.LatLng(res.address.lat, res.address.lng));
-              buildfire.geo.getCurrentPosition(null, (err, position) => {
-                if (err) console.log(err);
-                let location = position.coords;
-                let origin = { latitude: location.latitude, longitude: location.longitude };
-                destinations.forEach((item) => {
-                  var destination = { latitude: item.lat(), longitude: item.lng() };
-                  var distance = buildfire.geo.calculateDistance(origin, destination, { decimalPlaces: 5 });
-                  if (distance < 0.5) {
-                    res.distance = (Math.round(distance * 5280)).toLocaleString() + ' ft';
-                  } else {
-                    res.distance = (Math.round(distance)).toLocaleString() + ' mi';
-                  }
-                });
-              });
-              window.app.state.selectedPlace.unshift(res);
-              window.router.navigate(window.app.settings.viewStates.detail);
-              window.app.checkBookmarked(res.id);
-            });
-          }
-        }
+          buildfire.datastore.getById(data.id, window.app.settings.placesListTag, (err, result) => {
+            if (err) console.log(err);
+            const res = result.data;
+            res.id = result.id;
+            window.app.state.selectedPlace.unshift(res);
+            window.router.navigate(window.app.settings.viewStates.detail);
+            window.app.checkBookmarked(res.id);
+            window.app.getDistance(res);
+          });
       });
     },
     
@@ -319,10 +276,31 @@ window.app = {
         let bookmark = bookmarks.filter(bookmark => bookmark.id === id);
         window.app.state.bookmarked = bookmark.length > 0;
         });
+    },
+    
+    getDistance(result) {
+      let destinations = [];
+      destinations.push(new window.google.maps.LatLng(result.address.lat, result.address.lng));
+      buildfire.geo.getCurrentPosition(null, (err, position) => {
+        if (err) console.log(err);
+        if (position && position.coords) {
+          let location = position.coords;
+          let origin = { latitude: location.latitude, longitude: location.longitude };
+          destinations.forEach((item) => {
+            let destination = { latitude: item.lat(), longitude: item.lng() };
+            let distance = buildfire.geo.calculateDistance(origin, destination, { decimalPlaces: 5 });
+            if (distance < 0.5) {
+              result.distance = (Math.round(distance * 5280)).toLocaleString() + ' ft';
+            } else {
+              result.distance = (Math.round(distance)).toLocaleString() + ' mi';
+            }
+          });
+        }
+      });
     }
 };
 
-var queryStringObj = buildfire.parseQueryString();
+const queryStringObj = buildfire.parseQueryString();
 if (queryStringObj.dld) {
   window.app.initDetailView(); 
 } else {

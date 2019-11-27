@@ -104,16 +104,12 @@ window.detailView = {
                 let id = placeContext.id;
                 let placeTitle = placeContext.title;
                 let image = placeContext.image;
-                let distance = placeContext.distance;
                 let options = {
                     id: id,
                     title: placeTitle,
                     icon: image,
                     payload: {
-                        data: {
-                            id: id,
-                            distance: distance
-                        }
+                        id: id
                     }
                 };
                 window.buildfire.bookmarks.add(options, function (err, data) {
