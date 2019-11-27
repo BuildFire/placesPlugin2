@@ -28,21 +28,20 @@ window.mapView = {
                 //window.map.setCenter(mapView.lastKnownLocation);
                 //window.map.setZoom(mapView.settings.zoomLevel.city);
 
-                mapView.addMarker(map, mapView.lastKnownLocation, mapView.settings.images.currentLocation);
+                mapView.addMarker(map, { address: mapView.lastKnownLocation }, mapView.settings.images.currentLocation);
             }
         });
 
         //TODO: If there is only one entry, it returns an object (not an array)
         if(places && places.length){
-            places.forEach((place) => {
+            places.forEach((place) => {                
                 if (place.address && place.address.lat && place.address.lng) {
                     mapView.addMarker(map, place, mapView.settings.images.place);
                 }
             });
 
-            if (places.length !== 50) {
-                mapView.addMarkerCluster();
-            }
+            mapView.addMarkerCluster();
+
             map.fitBounds(app.state.bounds);
         }
 
@@ -74,17 +73,6 @@ window.mapView = {
         // Add a marker clusterer to manage the markers.
         mapView.settings.markerClusterer = new MarkerClusterer(map, app.state.markers, clusterOptions);
 
-        app.state.markers.forEach(marker=>{
-            google.maps.event.addListener(marker, 'visible_changed', function(){
-                if ( marker.getVisible() ) {
-                    mapView.settings.markerClusterer.addMarker(marker, true);
-                } else {
-                    mapView.settings.markerClusterer.removeMarker(marker, true);
-                }                   
-            });
-        });
-
-        mapView.settings.markerClusterer.repaint()
     },
     updateMap: (newPlaces) => {
         //Add new markers
@@ -94,29 +82,28 @@ window.mapView = {
     },
     filter: (placesToHide, placesToShow) => {
         placesToHide.forEach((placeToHide) => {
-            app.state.markers = app.state.markers.filter((marker) =>{
+            app.state.markers.forEach((marker) =>{
                 const isMatch  = placeToHide.id === marker.markerData.id;
 
                 if(isMatch){
                     marker.setVisible(false);
+                    mapView.settings.markerClusterer.removeMarker(marker)
                 }
-
-                return !isMatch;
             });
         });
 
-        placesToShow.forEach((place) =>{
-            mapView.addMarker(map, place, mapView.settings.images.place);
+        placesToShow.forEach((placeToShow) =>{
+            app.state.markers.forEach((marker) =>{
+                const isMatch  = placeToShow.id === marker.markerData.id;
+
+                if(isMatch){
+                    marker.setVisible(true);
+                    mapView.settings.markerClusterer.addMarker(marker)
+                }
+
+            });
         });
 
-        if(placesToHide || placesToShow){
-            mapView.resetMarkerCluster();
-        }
-    },
-    resetMarkerCluster: () => {
-        mapView.settings.markerClusterer.clearMarkers();
-        mapView.addMarkerCluster();
-  
     },
     centerMap: () => { window.map.setCenter(mapView.lastKnownLocation) },
     addMarker: (map, place, iconType) => {
@@ -214,8 +201,10 @@ window.mapView = {
         let zoomTo = (mapView.lastKnownLocation != defaultLocation) ? mapView.settings.zoomLevel.city : mapView.settings.zoomLevel.country,
             centerOn = (mapView.lastKnownLocation != defaultLocation) ? mapView.lastKnownLocation : defaultLocation ;
 
+        let pointsOfInterest = window.app.state.pointsOfInterest;
+        
         let options = {
-            minZoom: 1,
+            minZoom: 3,
             gestureHandling: 'greedy',
             streetViewControl: false,
             mapTypeControl: false,
@@ -225,7 +214,18 @@ window.mapView = {
             mapTypeId: mapTypeId,
             zoomControlOptions: {
                 position: zoomPosition
-            }
+            },
+            styles: [
+                {
+                  featureType: "poi.business",
+                  elementType: "labels",
+                  stylers: [
+                    {
+                      visibility: pointsOfInterest
+                    }
+                  ]
+                }
+              ]
         };
 
         window.map = new google.maps.Map(document.getElementById('googleMap'), options);
@@ -240,8 +240,5 @@ window.mapView = {
 
         window.originalHeight = (app.views.mapView) ? app.views.mapView.getBoundingClientRect().height: 0;
 
-        google.maps.event.addListener(map, 'zoom_changed', function() {
-            mapView.resetMarkerCluster();
-        });
     }
 };

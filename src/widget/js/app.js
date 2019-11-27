@@ -18,7 +18,7 @@ window.app = {
     goBack: null,
     settings: {
         viewStates: {map: 'map', list: 'list', detail: 'detail'},
-        sortOptions: {alpha: 'alpha', alphaDesc: 'alphaDesc', manual: 'manual'},
+        sortOptions: {alpha: 'alpha', alphaDesc: 'alphaDesc', manual: 'manual', distance: 'distance'},
         placesTag: 'places',
         cloudImg: {
             domain:'https://czi3m2qn.cloudimg.io',
@@ -50,7 +50,8 @@ window.app = {
         navHistory: [],
         isBackNav: false,
         bookmarked: false,
-        bookmarking: true
+        bookmarking: true,
+        pointsOfInterest: "on"
     },
     backButtonInit: () => {
         window.app.goBack = window.buildfire.navigation.onBackButtonClick;
@@ -143,6 +144,9 @@ window.app = {
               window.app.state.categories = data.categories.map(category => {
                   return { name: category, isActive: true };
               });
+            }
+            if (data.pointsOfInterest) {
+              window.app.state.pointsOfInterest = data.pointsOfInterest;
             }
           }
 

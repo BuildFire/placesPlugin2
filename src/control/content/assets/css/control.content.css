@@ -167,3 +167,64 @@ img.delete {
   border-radius: 100%;
   background: #fff;
 }
+
+.__strippedTable {
+  border: 1px solid #dddddd;
+}
+
+.__categoryListItem {
+  display: flex;
+  align-items: center;
+  border-top: 1px solid #dddddd;
+  padding: 10px;
+}
+
+.__categoryListItem input {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.__categoryListItem img {
+  width: 18px;
+  cursor: pointer;
+  position: relative;
+  top: 2px;
+}
+
+.__categoryListItem:nth-of-type(odd) {
+  background-color: #f9f9f9;
+}
+
+.__categoryListItem:first-of-type {
+  border-top: none;
+}
+
+.__categoryListItem > div:first-of-type {
+  box-sizing: border-box;
+  width: 80%;
+  padding-right: 5%;
+  word-wrap: break-word;
+}
+
+.__categoryListItem > div:last-of-type {
+  width: 20%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.__categoryListItem > div:last-of-type > div:first-of-type {
+  margin-right: 7%;
+}
+
+.__cpSelectCategoryBox label { 
+  word-wrap: break-word;
+}
+
+.__cpSelectCategoryBox input { 
+  vertical-align: top;
+}
+
+.__categoryEditBox a {
+  margin-right: 10px;
+}
