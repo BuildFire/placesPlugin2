@@ -50,6 +50,43 @@ window.detailView = {
                 disableDefaultUI: true
             };
 
+            function getDistance(place) {
+                let destinations = [];
+                destinations.push(new window.google.maps.LatLng(place.lat, place.lng));
+                window.buildfire.geo.getCurrentPosition(null, (err, position) => {
+                    if (err) console.log(err);
+                    if (position && position.coords) {
+                        let location = position.coords;
+                        let origin = { latitude: location.latitude, longitude: location.longitude };
+                        destinations.forEach((item) => {
+                            let destination = { latitude: item.lat(), longitude: item.lng() };
+                            let distance = window.buildfire.geo.calculateDistance(origin, destination, { decimalPlaces: 5 });
+                            if (distance < 0.5) {
+                                place.distance = (Math.round(distance * 5280)).toLocaleString() + ' ft';
+                            } else {
+                                place.distance = (Math.round(distance)).toLocaleString() + ' mi';
+                            }
+                        });
+                    }
+                    let distanceHolder = document.getElementById('distance-holder');
+                    let distanceEl = document.createElement('span');
+                    let imageEl = document.createElement('img');
+
+                    distanceEl.setAttribute('class','distance');
+                    imageEl.setAttribute('class','arrow');
+                    imageEl.setAttribute('src','./images/arrow.png');
+
+                    distanceEl.innerHTML = place.distance;
+                    distanceHolder.appendChild(imageEl);
+                    distanceHolder.appendChild(distanceEl);
+                });
+            }
+
+            let placeContext = context;
+            if (!placeContext.distance) {
+                getDistance(placeContext);
+            }
+
             /**
              * Get Directions
              */

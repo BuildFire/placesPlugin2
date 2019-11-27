@@ -486,9 +486,12 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
     cursor: pointer;
 }
 #bookmarkBtn {
-    font-size: 22px;
+    font-size: 7.5vw;
     margin: auto;
     left: 2%;
+}
+#distance-holder {
+    min-width: 14%;
 }
 #contactBtn {
     display: block;

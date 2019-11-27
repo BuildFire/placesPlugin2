@@ -260,30 +260,13 @@ window.app = {
       buildfire.deeplink.getData(function (data) {
         buildfire.datastore.getById(data.id, window.app.settings.placesListTag, (err, result) => {
           if (err) console.log(err);
-          let destinations = [];
+
           let res = result.data;
           res.id = result.id;
-          destinations.push(new window.google.maps.LatLng(res.address.lat, res.address.lng));
-          window.buildfire.geo.getCurrentPosition(null, (err, position) => {
-            if (err) console.log(err);
-            if (position && position.coords) {
-              let location = position.coords;
-              let origin = { latitude: location.latitude, longitude: location.longitude };
-              destinations.forEach((item) => {
-                let destination = { latitude: item.lat(), longitude: item.lng() };
-                let distance = window.buildfire.geo.calculateDistance(origin, destination, { decimalPlaces: 5 });
-                if (distance < 0.5) {
-                  res.distance = (Math.round(distance * 5280)).toLocaleString() + ' ft';
-                } else {
-                  res.distance = (Math.round(distance)).toLocaleString() + ' mi';
-                }
-              });
-            }
 
-            window.app.state.selectedPlace.unshift(res);
-            window.router.navigate(window.app.settings.viewStates.detail);
-            window.app.checkBookmarked(res.id);
-          });
+          window.app.state.selectedPlace.unshift(res);
+          window.router.navigate(window.app.settings.viewStates.detail);
+          window.app.checkBookmarked(res.id);
         });
       });
     },
