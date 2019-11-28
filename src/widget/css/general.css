@@ -486,7 +486,7 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
     cursor: pointer;
 }
 #bookmarkBtn {
-    font-size: 7.5vw;
+    font-size: 7vw;
     margin: auto;
     left: 2%;
 }

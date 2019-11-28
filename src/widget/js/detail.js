@@ -67,18 +67,18 @@ window.detailView = {
                                 place.distance = (Math.round(distance)).toLocaleString() + ' mi';
                             }
                         });
+                        let distanceHolder = document.getElementById('distance-holder');
+                        let distanceEl = document.createElement('span');
+                        let imageEl = document.createElement('img');
+
+                        distanceEl.setAttribute('class', 'distance');
+                        imageEl.setAttribute('class', 'arrow');
+                        imageEl.setAttribute('src', './images/arrow.png');
+
+                        distanceEl.innerHTML = place.distance;
+                        distanceHolder.appendChild(imageEl);
+                        distanceHolder.appendChild(distanceEl);
                     }
-                    let distanceHolder = document.getElementById('distance-holder');
-                    let distanceEl = document.createElement('span');
-                    let imageEl = document.createElement('img');
-
-                    distanceEl.setAttribute('class','distance');
-                    imageEl.setAttribute('class','arrow');
-                    imageEl.setAttribute('src','./images/arrow.png');
-
-                    distanceEl.innerHTML = place.distance;
-                    distanceHolder.appendChild(imageEl);
-                    distanceHolder.appendChild(distanceEl);
                 });
             }
 
