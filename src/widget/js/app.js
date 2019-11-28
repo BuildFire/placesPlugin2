@@ -269,6 +269,15 @@ window.app = {
           window.app.checkBookmarked(res.id);
         });
       });
+
+      buildfire.datastore.get(window.app.settings.placesTag, function(err, results){
+        if (err) console.log(err);
+
+        let data = results.data;
+        if (data) {
+          window.app.state.bookmarking = data.bookmarking;
+        }
+      });
     },
     
     checkBookmarked(id) {
