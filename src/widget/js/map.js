@@ -1,4 +1,4 @@
-import Handlebars from "./lib/handlebars"
+import Handlebars from "./lib/handlebars";
 
 window.usa = {lat: 37.09024, lng: -95.712891};
 window.defaultLocation = usa;
@@ -15,11 +15,11 @@ window.mapView = {
         }
     },
     lastKnownLocation: defaultLocation,
-    initMap: (places) => {
-
-        //Create the map first (Don't wait for location)
-        mapView.createMap();
-
+    initMap: () => {
+        //Create the map first (Don't wait for location or places)
+        window.mapView.createMap();
+    },
+    getMapData: (places) => {
         //Center map once location is obtained
         buildfire.geo.getCurrentPosition({}, (err, position) => {
             if(!err && position && position.coords){
@@ -87,7 +87,7 @@ window.mapView = {
 
                 if(isMatch){
                     marker.setVisible(false);
-                    mapView.settings.markerClusterer.removeMarker(marker)
+                    mapView.settings.markerClusterer.removeMarker(marker);
                 }
             });
         });
@@ -98,14 +98,14 @@ window.mapView = {
 
                 if(isMatch){
                     marker.setVisible(true);
-                    mapView.settings.markerClusterer.addMarker(marker)
+                    mapView.settings.markerClusterer.addMarker(marker);
                 }
 
             });
         });
 
     },
-    centerMap: () => { window.map.setCenter(mapView.lastKnownLocation) },
+    centerMap: () => { window.map.setCenter(mapView.lastKnownLocation); },
     addMarker: (map, place, iconType) => {
         let marker = new google.maps.Marker({
             position: place.address,
@@ -121,7 +121,7 @@ window.mapView = {
             app.state.markers.push(marker);
             app.state.bounds.extend({lat, lng});
 
-            marker.addListener('click', () => {mapView.markerClick(place, marker)});
+            marker.addListener('click', () => {mapView.markerClick(place, marker);});
         }
     },
     markerClick: (place, marker) => {

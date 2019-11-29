@@ -84,6 +84,7 @@ window.app = {
         window.buildfire.appearance.titlebar.show();
         window.app.backButtonInit();
         let places = [];
+        window.initMap();
 
         function getPlacesList() {
           const pageSize = 50;
@@ -199,7 +200,7 @@ window.app = {
           }
 
           //Do comparison to see what's changed
-          let updatedPlaces = filter(newPlaces, (newPlace) => { return !find(currentPlaces, newPlace)});
+          let updatedPlaces = filter(newPlaces, (newPlace) => { return !find(currentPlaces, newPlace);});
 
           if(window.app.state.mode === window.app.settings.viewStates.map){
               window.mapView.updateMap(updatedPlaces);
@@ -238,9 +239,10 @@ window.app = {
             window.initList(places, true);
             //We can not pre-init the map, as it needs to be visible
         }
-        else{
-            window.initMap(places, true);
-            window.initList(places);
+        else {
+          let mapInitiated = document.getElementById('googleMap');
+          mapInitiated && window.mapView.getMapData(places, true);
+          window.initList(places);
         }
         window.app.gotPieceOfData();
     },
