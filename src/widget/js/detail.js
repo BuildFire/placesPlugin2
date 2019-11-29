@@ -92,7 +92,7 @@ window.detailView = {
              */
              let directionsButton = document.getElementById('directionsBtn');
              directionsButton.className = 'btn btn-primary';
-             directionsButton.addEventListener('click', getDirections);
+            directionsButton.addEventListener('click', getDirections);
 
              let contactButton = document.getElementById('contactBtn');
              if (contactButton) {
@@ -119,53 +119,37 @@ window.detailView = {
                 });
             }
             if (context.bookmarking) {
+                document.getElementById('bookmarkBtn').addEventListener('click', handleBookmarkClicked);
                 setBookmark();
             }
-            function setBookmark() {
-                    let bookmarkButton = document.getElementById('bookmarkBtn');
 
-                    bookmarkButton.removeEventListener('click', deleteBookmark);
-                    bookmarkButton.removeEventListener('click', addBookmark);
-                    if (window.app.state.bookmarked) {
-                        bookmarkButton.className = 'glyphicon glyphicon-star';
-                        bookmarkButton.addEventListener('click', deleteBookmark);
-                    }
-                    else {
-                        bookmarkButton.className = 'glyphicon glyphicon-star-empty';
-                        bookmarkButton.addEventListener('click', addBookmark);
-                    }                
+            function setBookmark() { 
+                let bookmarkButton = document.getElementById('bookmarkBtn');
+                bookmarkButton.className = window.app.state.bookmarked ? 'glyphicon glyphicon-star' : 'glyphicon glyphicon-star-empty';       
             }
 
-            function addBookmark() {
-                let placeContext = context;
-                let id = placeContext.id;
-                let placeTitle = placeContext.title;
-                let image = placeContext.image;
-                let options = {
-                    id: id,
-                    title: placeTitle,
-                    icon: image,
-                    payload: {
-                        id: id
-                    }
-                };
-                window.buildfire.bookmarks.add(options, function (err, data) {
-                    if (err) console.log("Bookmark err", err);
-                    window.app.state.bookmarked = true;
-                    setBookmark();
-                });
-            }
-            function deleteBookmark() {
-                let placeContext = context;
-                let id = placeContext.id;
+            function handleBookmarkClicked() {
                 window.buildfire.bookmarks.getAll(function (err, bookmarks) {
-
                     if (err) console.log(err);
-                    var bookmark = bookmarks.find(bookmark => bookmark.id === id);
+                    let bookmark = bookmarks.find(bookmark => bookmark.id === context.id);
                     if (bookmark) {
                         window.buildfire.bookmarks.delete(bookmark.id, function (err, bookmark) {
                             if (err) console.log("Bookmark err", err);
                             window.app.state.bookmarked = false;
+                            setBookmark();
+                        });
+                    } else {
+                        let options = {
+                            id: context.id,
+                            title: context.title,
+                            icon: context.image,
+                            payload: {
+                                id: context.id
+                            }
+                        };
+                        window.buildfire.bookmarks.add(options, function (err, data) {
+                            if (err) console.log("Bookmark err", err);
+                            window.app.state.bookmarked = true;
                             setBookmark();
                         });
                     }
@@ -209,5 +193,4 @@ window.detailView = {
             });
         };
     },
-
 };
