@@ -84,7 +84,6 @@ window.app = {
         window.buildfire.appearance.titlebar.show();
         window.app.backButtonInit();
         let places = [];
-        window.initMap();
 
         function getPlacesList() {
           const pageSize = 50;
@@ -235,13 +234,19 @@ window.app = {
       }
     },
     gotPlaces(err, places) {
+      if (!window.app.state.mapInitiated) {
+        setTimeout(() => {
+          window.app.gotPlaces(err, places);
+        }, 100);
+        return;
+      }
         if(window.app.state.mode === window.app.settings.viewStates.list){
             window.initList(places, true);
             //We can not pre-init the map, as it needs to be visible
         }
         else {
-          let mapInitiated = document.getElementById('googleMap');
-          mapInitiated && window.mapView.getMapData(places, true);
+          if (window.app.state.mapInitiated)
+            window.mapView.setMapData(places);
           window.initList(places);
         }
         window.app.gotPieceOfData();
@@ -254,5 +259,6 @@ window.app = {
 };
 
 //document.aEventListener('DOMContentLoaded', () => window.app.init( window.app.gotPlaces, window.app.gotLocation));
+window.initMap();
 window.app.init(window.app.gotPlaces, window.app.gotLocation);
 window.initRouter();

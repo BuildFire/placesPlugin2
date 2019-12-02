@@ -19,7 +19,7 @@ window.mapView = {
         //Create the map first (Don't wait for location or places)
         window.mapView.createMap();
     },
-    getMapData: (places) => {
+    setMapData: (places) => {
         //Center map once location is obtained
         buildfire.geo.getCurrentPosition({}, (err, position) => {
             if(!err && position && position.coords){
@@ -239,6 +239,5 @@ window.mapView = {
         new FilterControl(filterDiv);
 
         window.originalHeight = (app.views.mapView) ? app.views.mapView.getBoundingClientRect().height: 0;
-
     }
 };
