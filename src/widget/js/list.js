@@ -34,7 +34,6 @@ window.listView = {
            init(); 
         }
         
-        window.lazyload();
         window.listView.sorting(places);
         window.lazyload();
     },

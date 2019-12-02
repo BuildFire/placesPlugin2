@@ -256,7 +256,6 @@ window.app = {
             }
             return 0;
           });
-          window.lazyload();
           window.listView.sorting(window.app.state.places);
           window.lazyload();
         }
