@@ -8,7 +8,7 @@ window.detailView = {
         let screenWidth = window.innerWidth;
         const title = place.title;
         let context = {
-            bookmarking: window.app.state.bookmarking,
+            isBookmarkingAllowed: window.app.state.isBookmarkingAllowed,
             width: screenWidth,
             image: place.image,
             id: place.id,
@@ -54,7 +54,10 @@ window.detailView = {
                 let destinations = [];
                 destinations.push(new window.google.maps.LatLng(place.lat, place.lng));
                 window.buildfire.geo.getCurrentPosition(null, (err, position) => {
-                    if (err) console.log(err);
+                    if (err) {
+                        console.log(err);
+                        return false;
+                    } 
                     if (position && position.coords) {
                         let location = position.coords;
                         let origin = { latitude: location.latitude, longitude: location.longitude };
@@ -118,7 +121,7 @@ window.detailView = {
                     console.log(actionItem);
                 });
             }
-            if (context.bookmarking) {
+            if (context.isBookmarkingAllowed) {
                 document.getElementById('bookmarkBtn').addEventListener('click', handleBookmarkClicked);
                 setBookmark();
             }

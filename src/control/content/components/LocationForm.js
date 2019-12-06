@@ -80,9 +80,11 @@ class LocationForm extends React.Component {
     }
 
     //Load deep link url 
-    let id = this.state.id;
-    let link = Buildfire.deeplink.createLink({ id });
-    this.setState({ deeplinkUrl: link });
+    if (this.state) {
+      let id = this.state.id;
+      let link = Buildfire.deeplink.createLink({ id });
+      this.setState({ deeplinkUrl: link });
+    }
   }
 
   mountMap(address) {
@@ -115,13 +117,15 @@ class LocationForm extends React.Component {
       title: 'Drag to choose a location'
     });
 
-    // Handle makre drag
-    maps.event.addListener(this.markerInstance, 'dragend', e => {
-      let address = this.state.address;
-      address.lat = e.latLng.lat();
-      address.lng = e.latLng.lng();
-      this.setState({ address });
-    });
+    // Handle marker drag if marker is created
+    if (this.markerInstance) {
+      maps.event.addListener(this.markerInstance, 'dragend', e => {
+        let address = this.state.address;
+        address.lat = e.latLng.lat();
+        address.lng = e.latLng.lng();
+        this.setState({ address });
+      });
+    }
   }
 
   componentWillUpdate(nextProps, nextState) {

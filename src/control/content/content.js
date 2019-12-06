@@ -22,7 +22,7 @@ class Content extends React.Component {
     buildfire.datastore.get('places', (err, result) => {
       if (err) return console.error(err);
         result.data.itemsOrder = result.data.itemsOrder || [];
-        result.data.bookmarking = result.data.bookmarking || true;
+        result.data.isBookmarkingAllowed = result.data.isBookmarkingAllowed || true;
         result.data.pointsOfInterest = result.data.pointsOfInterest || "on";
 
       // we migrate old storage format to new one if needed

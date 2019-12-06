@@ -17,7 +17,7 @@ class Settings extends React.Component {
     buildfire.datastore.get('places', (err, result) => {
       if (err) return console.error(err);
       this.setState({ data: result.data });
-      this.setState({ configBookmark: result.data.bookmarking });
+      this.setState({ configBookmark: result.data.isBookmarkingAllowed });
     });
   }
 
@@ -61,7 +61,7 @@ class Settings extends React.Component {
   handleBookmarkChange = () => {
     const { data } = this.state;
     this.setState({ configBookmark: !this.state.configBookmark }, () => {
-      data.bookmarking = this.state.configBookmark;
+      data.isBookmarkingAllowed = this.state.configBookmark;
       this.setState(data);
       this.handleSave();
     });

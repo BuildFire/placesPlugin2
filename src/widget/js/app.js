@@ -51,7 +51,7 @@ window.app = {
         navHistory: [],
         isBackNav: false,
         bookmarked: false,
-        bookmarking: true,
+        isBookmarkingAllowed: true,
         pointsOfInterest: "on"
     },
     backButtonInit: () => {
@@ -139,7 +139,7 @@ window.app = {
             window.app.state.itemsOrder = data.itemsOrder;
             window.app.state.actionItems = data.actionItems || [];
             window.app.state.defaultView = data.defaultView;
-            window.app.state.bookmarking = data.bookmarking;
+            window.app.state.isBookmarkingAllowed = data.isBookmarkingAllowed;
 
             if (data.categories) {
               window.app.state.categories = data.categories.map(category => {
@@ -270,19 +270,26 @@ window.app = {
         });
       });
 
+      //Check is bookmark allowed when page is open with deeplink
       buildfire.datastore.get(window.app.settings.placesTag, function(err, results){
-        if (err) console.log(err);
+        if (err) {
+          console.log(err);
+          return false;
+        } 
 
         let data = results.data;
         if (data) {
-          window.app.state.bookmarking = data.bookmarking;
+          window.app.state.isBookmarkingAllowed = data.isBookmarkingAllowed;
         }
       });
     },
     
     checkBookmarked(id) {
       window.buildfire.bookmarks.getAll(function (err, bookmarks) {
-        if (err) console.log(err);
+        if (err) {
+          console.log(err);
+          return false;
+        } 
         let bookmark = bookmarks.filter(bookmark => bookmark.id === id);
         window.app.state.bookmarked = bookmark.length > 0;
         });
