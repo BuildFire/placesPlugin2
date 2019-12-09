@@ -232,30 +232,7 @@ window.app = {
         let currentSortOrder = window.app.state.sortBy;
 
         if (currentSortOrder === 'distance') {
-          window.app.state.places = window.app.state.places.sort((a, b) => {
-            var aDistance = 0;
-            var bDistance = 0;
-            const aDist = a.distance.split(' ')[0];
-            const bDist = b.distance.split(' ')[0];
-            if (aDist.includes('.')) {
-              aDistance = parseInt(a.distance.split(' ')[0].replace('.', ''));
-            } else {
-              aDistance = parseInt(a.distance.split(' ')[0].replace(',', ''));
-            }
-            if (bDist.includes('.')) {
-              bDistance = parseInt(b.distance.split(' ')[0].replace('.', ''));
-            } else {
-              bDistance = parseInt(b.distance.split(' ')[0].replace(',', ''));
-            }
-
-            if (aDistance < bDistance) {
-              return -1;
-            }
-            if (aDistance > bDistance) {
-              return 1;
-            }
-            return 0;
-          });
+          window.app.state.places = window.app.state.places.sort(window.PlacesSort.distance);
           window.listView.sorting(window.app.state.places);
           window.lazyload();
         }

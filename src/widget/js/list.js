@@ -33,8 +33,10 @@ window.listView = {
         if (!window.listView.initialized) { 
            init(); 
         }
-        
-        window.listView.sorting(places);
+
+        let sortPlaces = []; 
+        sortPlaces = places.sort(window.PlacesSort[window.app.state.sortBy]);
+        window.listView.sorting(sortPlaces);
         window.lazyload();
     },
     sorting: (places) => {
