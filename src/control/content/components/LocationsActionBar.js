@@ -22,7 +22,7 @@ class LocationsActionBar extends React.Component {
       const promises = [];
       // loop through the csv rows
       const locations = rows.map((row, i) => {
-        const [title, categories, name, address_lat, address_lng, description, subtitle, image] = row;
+        const [title, subtitle, categories, name, address_lat, address_lng, description, image] = row;
         const selectedCategory = [];
 
         const categoryArr = categories.split(",");
@@ -48,6 +48,7 @@ class LocationsActionBar extends React.Component {
                 const { lat, lng } = match.geometry.location;
                 resolve({
                   title: typeof title === 'number' ? title.toString() : title || 'Untitled Location',
+                  subtitle,
                   categories: selectedCategory,
                   address: {
                     name,
@@ -55,7 +56,6 @@ class LocationsActionBar extends React.Component {
                     lng
                   },
                   description,
-                  subtitle,
                   image,
                   index: i + places.length
                 });
@@ -65,6 +65,7 @@ class LocationsActionBar extends React.Component {
         } else {
           return {
             title: typeof title === 'number' ? title.toString() : title || 'Untitled Location',
+            subtitle,
             categories: selectedCategory,
             address: {
               name,
@@ -72,7 +73,6 @@ class LocationsActionBar extends React.Component {
               lng: parseFloat(address_lng)
             },
             description,
-            subtitle,
             image,
             index: i + places.length
           };
@@ -112,12 +112,12 @@ class LocationsActionBar extends React.Component {
       
       rows.push({
           title: place.title,
+          subtitle: place.subtitle || '',
           categories: categoryNames.toString() || '',
           address: place.address.name,
           lat: place.address.lat,
           lng: place.address.lng,
           description: place.description || '',
-          subtitle: place.subtitle || '',
           image: place.image || ''
         });   
     });
@@ -136,7 +136,7 @@ class LocationsActionBar extends React.Component {
   }
 
   handleTemplateDownload() {
-    const rows = [['name','category','name','address_lat','address_lng','description', 'subtitle', 'image']];
+    const rows = [['title','subtitle','category','address','address_lat','address_lng','description', 'image']];
     let csvContent  = 'data:text/csv;charset=utf-8,';
     rows.forEach(row => csvContent += row.join(',') + '\r\n');
 
