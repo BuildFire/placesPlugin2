@@ -225,7 +225,16 @@ window.mapView = {
                     }
                   ]
                 }
-              ]
+            ],
+            restriction: {
+                latLngBounds: {
+                    east: 180,
+                    north: 85.050,
+                    south: -85.050,
+                    west: -180
+                },
+                strictBounds: true
+            },
         };
 
         window.map = new google.maps.Map(document.getElementById('googleMap'), options);
