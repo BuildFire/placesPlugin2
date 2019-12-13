@@ -334,7 +334,7 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
     .sidenav a {font-size: 18px;}
 }
 
-.aligner{
+.row-aligner{
     display: flex;
     align-items: center;
 }
