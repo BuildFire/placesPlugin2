@@ -24,8 +24,10 @@ class LocationsActionBar extends React.Component {
       const locations = rows.map((row, i) => {
         const [title, subtitle, categories, name, address_lat, address_lng, description, image] = row;
         const selectedCategory = [];
+        
+        const cat = categories.replace(/, /g, ',');
+        const categoryArr = cat.split(",");
 
-        const categoryArr = categories.split(",");
         allCategories.forEach(cat => {
           categoryArr.forEach(categ => {
             if (categ === cat.name) {
@@ -109,11 +111,14 @@ class LocationsActionBar extends React.Component {
       }));
       let categoryNames = [];
       categories.forEach(cat => categoryNames.push(cat.name));
-      
+
+      let names = categoryNames.toString();
+      let catNames = names.replace(/,/g, ', ');
+
       rows.push({
           title: place.title,
           subtitle: place.subtitle || '',
-          categories: categoryNames.toString() || '',
+          categories: catNames || '',
           address: place.address.name,
           lat: place.address.lat,
           lng: place.address.lng,
