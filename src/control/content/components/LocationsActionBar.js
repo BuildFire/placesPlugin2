@@ -18,10 +18,23 @@ class LocationsActionBar extends React.Component {
     reader.onload = e => {
       const rows = csv.parse(e.target.result).slice(1);
       const { places } = this.props;
+      const allCategories = this.props.categories;
       const promises = [];
       // loop through the csv rows
       const locations = rows.map((row, i) => {
-        const [title, name, address_lat, address_lng, description, subtitle, image] = row;
+        const [title, subtitle, categories, name, address_lat, address_lng, description, image] = row;
+        const selectedCategory = [];
+        
+        const cat = categories.replace(/, /g, ',');
+        const categoryArr = cat.split(",");
+
+        allCategories.forEach(cat => {
+          categoryArr.forEach(categ => {
+            if (categ === cat.name) {
+              selectedCategory.push(cat.id);
+            }
+          });
+        });
         // if a row is missing latitude or longitude
         // use google maps api to fetch them async
         // otherwise just return the location
@@ -34,17 +47,17 @@ class LocationsActionBar extends React.Component {
               fetch(url).then(response => response.json()).then(data => {
                 const match = data.results[0];
                 if (!match) return reject('invalid CSV row!', { name });
-
                 const { lat, lng } = match.geometry.location;
                 resolve({
                   title: typeof title === 'number' ? title.toString() : title || 'Untitled Location',
+                  subtitle,
+                  categories: selectedCategory,
                   address: {
                     name,
                     lat,
                     lng
                   },
                   description,
-                  subtitle,
                   image,
                   index: i + places.length
                 });
@@ -54,13 +67,14 @@ class LocationsActionBar extends React.Component {
         } else {
           return {
             title: typeof title === 'number' ? title.toString() : title || 'Untitled Location',
+            subtitle,
+            categories: selectedCategory,
             address: {
               name,
               lat: parseFloat(address_lat),
               lng: parseFloat(address_lng)
             },
             description,
-            subtitle,
             image,
             index: i + places.length
           };
@@ -88,15 +102,29 @@ class LocationsActionBar extends React.Component {
   handleDataExport() {
     const rows = [];
     this.props.places.forEach(place => {
+
+      let categories = [];
+      this.props.categories.forEach(category => place.categories.forEach(cat => {
+        if (category.id === cat) {
+          categories.push(category);
+        }
+      }));
+      let categoryNames = [];
+      categories.forEach(cat => categoryNames.push(cat.name));
+
+      let names = categoryNames.toString();
+      let catNames = names.replace(/,/g, ', ');
+
       rows.push({
-        title: place.title,
-        address: place.address.name,
-        lat: place.address.lat,
-        lng: place.address.lng,
-        description: place.description || '',
-        subtitle: place.subtitle || '',
-        image: place.image || ''
-      });
+          title: place.title,
+          subtitle: place.subtitle || '',
+          categories: catNames || '',
+          address: place.address.name,
+          lat: place.address.lat,
+          lng: place.address.lng,
+          description: place.description || '',
+          image: place.image || ''
+        });   
     });
 
     let csvContent = 'data:text/csv;charset=utf-8,';
@@ -113,7 +141,7 @@ class LocationsActionBar extends React.Component {
   }
 
   handleTemplateDownload() {
-    const rows = [['name','name','address_lat','address_lng','description', 'subtitle', 'image']];
+    const rows = [['title','subtitle','category','address','address_lat','address_lng','description', 'image']];
     let csvContent  = 'data:text/csv;charset=utf-8,';
     rows.forEach(row => csvContent += row.join(',') + '\r\n');
 
