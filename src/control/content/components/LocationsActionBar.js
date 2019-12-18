@@ -84,14 +84,20 @@ class LocationsActionBar extends React.Component {
       // otherwise, wait for complete and merge
       // the results
       if (!promises.length) {
-        this.props.onMultipleSubmit(locations);
+        while(locations.length){
+          let paginatedLocations = locations.splice(0, 500);
+          this.props.onMultipleSubmit(paginatedLocations);
+        }
       } else {
         Promise.all(promises)
           .then(locs => {
             // merge locations with async locations
             locs = [...locs, ...locations.filter(location => location)];
             window.locs = locs;
-            this.props.onMultipleSubmit(locs);
+            while(locs.length){
+              let paginatedLocations = locs.splice(0, 500);
+              this.props.onMultipleSubmit(paginatedLocations);
+            }
           });
       }
     };
