@@ -66,8 +66,8 @@ window.filterControl = {
             let originalPlaces = filterControl.originalPlaces,
                 updatedPlaces = filterControl.updatedPlaces;
 
-            let placesToHide = filter(originalPlaces, (preFilteredPlace) => { return !find(updatedPlaces, preFilteredPlace)});
-            let placesToShow = filter(updatedPlaces, (postFilteredPlace) => { return !find(originalPlaces, postFilteredPlace)});
+            let placesToHide = filter(originalPlaces, (preFilteredPlace) => { return !find(updatedPlaces, preFilteredPlace);});
+            let placesToShow = filter(updatedPlaces, (postFilteredPlace) => { return !find(originalPlaces, postFilteredPlace);});
 
             //Update view to reflect changes
             const wasMapInitiated = (document.getElementById("mapView").innerHTML != '');
@@ -122,11 +122,11 @@ window.CenterControl = function(controlDiv) {
     filterControl.createControl(controlDiv, [
         { name:'center', action: mapView.centerMap }
     ]);
-}
+};
 
 window.FilterControl = function (controlDiv){
     filterControl.createControl(controlDiv, [
         { name:'changeView', action: filterControl.changeView },
         { name:'filter', action: filterControl.openFilter }
     ]);
-}
+};

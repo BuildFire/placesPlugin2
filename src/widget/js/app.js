@@ -18,7 +18,7 @@ window.app = {
     goBack: null,
     settings: {
         viewStates: {map: 'map', list: 'list', detail: 'detail'},
-        sortOptions: {alpha: 'alpha', alphaDesc: 'alphaDesc', manual: 'manual'},
+        sortOptions: {alpha: 'alpha', alphaDesc: 'alphaDesc', manual: 'manual', distance: 'distance'},
         placesTag: 'places',
         cloudImg: {
             domain:'https://czi3m2qn.cloudimg.io',
@@ -48,7 +48,8 @@ window.app = {
         sortBy: null,
         categories: [],
         navHistory: [],
-        isBackNav: false
+        isBackNav: false,
+        pointsOfInterest: "on"
     },
     backButtonInit: () => {
         window.app.goBack = window.buildfire.navigation.onBackButtonClick;
@@ -141,6 +142,9 @@ window.app = {
                   return { name: category, isActive: true };
               });
             }
+            if (data.pointsOfInterest) {
+              window.app.state.pointsOfInterest = data.pointsOfInterest;
+            }
           }
 
           getPlacesList();
@@ -195,7 +199,7 @@ window.app = {
           }
 
           //Do comparison to see what's changed
-          let updatedPlaces = filter(newPlaces, (newPlace) => { return !find(currentPlaces, newPlace)});
+          let updatedPlaces = filter(newPlaces, (newPlace) => { return !find(currentPlaces, newPlace);});
 
           if(window.app.state.mode === window.app.settings.viewStates.map){
               window.mapView.updateMap(updatedPlaces);

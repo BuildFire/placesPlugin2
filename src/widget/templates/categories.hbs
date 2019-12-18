@@ -2,7 +2,7 @@
     <h1>Categories</h1>
     <div class="categories-scroll-list">
         {{#each categories}}
-            <div class="category">
+            <div class="category __categoryItemBox">
                 <a href="javascript:void(0);" id="{{name.id}}">{{name.name}}</a>
                 <label class="switch">
                     <input type="checkbox" onclick="filterControl.filterCategory('{{name.id}}')" {{#if this.isActive}}checked{{/if}}>

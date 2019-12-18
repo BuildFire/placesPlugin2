@@ -38,6 +38,13 @@ class LocationForm extends React.Component {
    * - Carousel
    */
   componentDidMount() {
+    if (this.props.location && this.props.location.categories) {
+      const category = this.props.location.categories.map(cat => cat.id);
+      if (category) {
+        this.setState({ categories: [...this.state.categories, ...category] });
+      }
+    }
+    
     // Mount google map autocomplete
     const { maps } = window.google;
     this.autocomplete = new maps.places.Autocomplete(this.addressInput);
@@ -80,10 +87,22 @@ class LocationForm extends React.Component {
 
   mountMap(address) {
     const { maps } = window.google;
+    const { pointsOfInterest } = this.props;
     let defaultLocation = new maps.LatLng(address.lat, address.lng);
     let mapOptions = {
       zoom: 16,
-      center: defaultLocation
+      center: defaultLocation,
+      styles: [
+        {
+          featureType: "poi.business",
+          elementType: "labels",
+          stylers: [
+            {
+              visibility: pointsOfInterest
+            }
+          ]
+        }
+      ]
     };
     this.map.style.height = '230px';
     this.mapInstance = new maps.Map(this.map, mapOptions);
@@ -233,7 +252,7 @@ class LocationForm extends React.Component {
         const value = buildfire.imageLib.resizeImage(result.selectedFiles[0], { width: 'full' });
         this.quillRef.getEditor().insertEmbed(range.index, 'image', value, 'user');
       }
-    })
+    });
   }
 
   removeImage(e) {
@@ -294,7 +313,7 @@ class LocationForm extends React.Component {
           <label htmlFor='category'>Categories</label>
           <div className='row'>
             { this.props.categories ? this.props.categories.map((category, index) => (
-              <div key={ index } className='col-xs-3'>
+              <div key={ index } className='col-xs-3 __cpSelectCategoryBox'>
                 <input
                   onChange={ e => this.onCategoryChange(e) }
                   type='checkbox'
