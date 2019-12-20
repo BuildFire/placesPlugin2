@@ -238,6 +238,7 @@ class Content extends React.Component {
    * @param   {Object} locations Locations array
    */
   onMultipleLocationSubmit(locations) {
+    locations = locations.filter(location => typeof location === 'object')
     buildfire.datastore.bulkInsert(locations, 'places-list', (err, result) => {
       if (err) return console.error(err);
       this.getPlacesList();
@@ -296,11 +297,12 @@ class Content extends React.Component {
         <div className='row'>
           <div className='col-xs-12'>
             <LocationsActionBar
+              categories={ data.categories }
               places={ data.places }
               addingLocation={ addingLocation || editingLocation !== false }
               onAddLocation={ () => this.onAddLocation() }
               onAddLocationCancel={ () => this.onAddLocationCancel() }
-              onMultipleSubmit={ (locations) => this.onMultipleLocationSubmit(locations) } />
+              onMultipleSubmit={(locations) => this.onMultipleLocationSubmit(locations)} />
 
             { addingLocation || editingLocation !== false
                 ? addingLocation
