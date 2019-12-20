@@ -27,12 +27,37 @@ window.PlacesSort = {
         return 0;
     },
     distance(a, b) {
-        var aDistance = parseInt(a.distance.split(' ')[0].replace(',', ''));
-        var bDistance = parseInt(b.distance.split(' ')[0].replace(',', ''));
-        if(aDistance < bDistance)
-            return -1;
-        if(aDistance > bDistance)
-            return 1;
-        return 0;
+        var aDistance = 0;
+        var bDistance = 0;
+        if (a.distance && b.distance) {
+            const aDist = a.distance.split(' ')[0];
+            const bDist = b.distance.split(' ')[0];
+            if (aDist.includes('.')) {
+                aDistance = parseInt(a.distance.split(' ')[0].replace('.', ''));
+            } else {
+                aDistance = parseInt(a.distance.split(' ')[0].replace(',', ''));
+            }
+            if (bDist.includes('.')) {
+                bDistance = parseInt(b.distance.split(' ')[0].replace('.', ''));
+            } else {
+                bDistance = parseInt(b.distance.split(' ')[0].replace(',', ''));
+            }
+
+            if (aDistance < bDistance) {
+                return -1;
+            }
+            if (aDistance > bDistance) {
+                return 1;
+            }
+            return 0;
+        } else {
+            if ((!a.title || !a.title.toUpperCase) || (!b.title || !b.title.toUpperCase)) return 1;
+            if(a.title.toUpperCase() < b.title.toUpperCase())
+                return -1;
+            if(a.title.toUpperCase() > b.title.toUpperCase())
+                return 1;
+    
+            return 0;
+        }
     }
 };

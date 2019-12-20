@@ -26,105 +26,86 @@ window.listView = {
 
             window.listView.listScrollingContainer = document.createElement('div');
             window.listView.listScrollingContainer.className = 'list-scrolling-container';
+            window.listView.listScrollingContainer.id = 'list--container';
             listContainer.appendChild(window.listView.listScrollingContainer);
             window.listView.initialized = true;
         }
-
-        if (!window.listView.initialized) {
-            init();
+        if (!window.listView.initialized) { 
+           init(); 
         }
 
+        let sortPlaces = []; 
+        sortPlaces = places.sort(window.PlacesSort[window.app.state.sortBy]);
+        window.listView.sorting(sortPlaces);
         window.lazyload();
+    },
+    sorting: (places) => {
+        if (typeof (window.listView.listScrollingContainer) != undefined && window.listView.listScrollingContainer != null) {
+            window.listView.listScrollingContainer.querySelectorAll('*').forEach(node => node.remove());
+        }
+            places.forEach((place, index) => {
 
-        var sortPlaces = [];
-        if (window.app.state.sortBy === 'distance') {
-            var feetPlaces = [];
-            var milesPlaces = [];
-            var noDistanceData = [];
-            places.forEach(place => {
-                if (place.distance) {
-                    if (place.distance.split(' ')[1] === 'ft')
-                        feetPlaces.push(place);
-                    else if (place.distance.split(' ')[1] === 'mi')
-                        milesPlaces.push(place);
-                } else {
-                    noDistanceData.push(place);
+                if (!place.address || !place.address.lat || !place.address.lng) {
+                    return;
+                }
+
+                const listItem = document.createElement('div');
+                listItem.setAttribute('style', `${window.listView.imageHeight}px !important`);
+                listItem.id = (place.id) ? `id_${place.id}` : '';
+                listItem.className = 'list-item';
+
+                listItem.addEventListener('click', e => {
+                    e.preventDefault();
+                    window.app.state.selectedPlace.unshift(place);
+                    window.router.navigate(window.app.settings.viewStates.detail);
+                });
+
+                //Add Image
+                const listImage = place.image ? place.image : window.listView.defaultImage;
+                const image = document.createElement('img');
+
+                image.setAttribute('data-src', window.listView.imagePrefix + listImage);
+                image.setAttribute('width', window.listView.imageWidth);
+                image.setAttribute('height', window.listView.imageHeight);
+                image.setAttribute('style', `${window.listView.imageHeight}px !important`);
+                image.className = 'lazyload';
+
+                const infoContainer = document.createElement('div');
+                infoContainer.className = 'list-info-container';
+
+                const title = document.createElement('div');
+                title.className = 'list-title';
+                title.innerHTML = place.title;
+                infoContainer.appendChild(title);
+
+                const subtitle = document.createElement('div');
+                let subtitleText = (place.subtitle && place.subtitle.length)
+                    ? place.subtitle : '';
+
+                subtitle.className = 'list-description';
+                subtitle.innerHTML = subtitleText;
+                infoContainer.appendChild(subtitle);
+
+                const viewBtn = document.createElement('img');
+                viewBtn.className = 'list-view-btn';
+                viewBtn.src = 'images/right-arrow.png';
+                infoContainer.appendChild(viewBtn);
+
+                const address = document.createElement('div');
+                address.innerHTML = place.address;
+
+                const distance = document.createElement('div');
+                distance.setAttribute('id', `distance-${place.id}`);
+                distance.innerHTML = (place.distance) ? place.distance : '...';
+                distance.className = 'list-distance';
+                infoContainer.appendChild(distance);
+
+                listItem.appendChild(image);
+                listItem.appendChild(infoContainer);
+                if (typeof (window.listView.listScrollingContainer) != undefined && window.listView.listScrollingContainer != null) {
+                    window.listView.listScrollingContainer.appendChild(listItem);
                 }
             });
-            feetPlaces = feetPlaces.sort(window.PlacesSort[window.app.state.sortBy]);
-            milesPlaces = milesPlaces.sort(window.PlacesSort[window.app.state.sortBy]);
-            sortPlaces = feetPlaces.concat(milesPlaces).concat(noDistanceData);
-        } else {
-            sortPlaces = places.sort(window.PlacesSort[window.app.state.sortBy]);
-        }
-
-        sortPlaces.forEach((place, index) => {
-
-            if (!place.address || !place.address.lat || !place.address.lng) {
-                return;
-            }
-
-            const listItem = document.createElement('div');
-            listItem.setAttribute('style', `${window.listView.imageHeight}px !important`);
-            listItem.id = (place.id) ? `id_${place.id}` : '';
-            listItem.className = 'list-item';
-
-            listItem.addEventListener('click', e => {
-                e.preventDefault();
-                window.app.state.selectedPlace.unshift(place);
-                window.router.navigate(window.app.settings.viewStates.detail);
-            });
-
-            //Add Image
-            const listImage = place.image ? place.image : window.listView.defaultImage;
-            const image = document.createElement('img');
-
-            image.setAttribute('data-src', window.listView.imagePrefix + listImage);
-            image.setAttribute('width', window.listView.imageWidth);
-            image.setAttribute('height', window.listView.imageHeight);
-            image.setAttribute('style', `${window.listView.imageHeight}px !important`);
-            image.className = 'lazyload';
-
-            const infoContainer = document.createElement('div');
-            infoContainer.className = 'list-info-container';
-
-            const title = document.createElement('div');
-            title.className = 'list-title';
-            title.innerHTML = place.title;
-            infoContainer.appendChild(title);
-
-            const subtitle = document.createElement('div');
-            let subtitleText = (place.subtitle && place.subtitle.length)
-                ? place.subtitle : '';
-
-            subtitle.className = 'list-description';
-            subtitle.innerHTML = subtitleText;
-            infoContainer.appendChild(subtitle);
-
-            const viewBtn = document.createElement('img');
-            viewBtn.className = 'list-view-btn';
-            viewBtn.src = 'images/right-arrow.png';
-            infoContainer.appendChild(viewBtn);
-
-            const address = document.createElement('div');
-            address.innerHTML = place.address;
-            // infoContainer.appendChild(address);
-
-            const distance = document.createElement('div');
-            distance.setAttribute('id', `distance-${place.id}`);
-            distance.innerHTML = (place.distance) ? place.distance : '...';
-            distance.className = 'list-distance';
-            infoContainer.appendChild(distance);
-
-            listItem.appendChild(image);
-            listItem.appendChild(infoContainer);
-            //listItem.appendChild(address);
-
-            window.listView.listScrollingContainer.appendChild(listItem);
-        });
-
-
-        window.lazyload();
     },
     initList: (places) => {
         //Add filter control

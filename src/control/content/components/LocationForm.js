@@ -40,6 +40,13 @@ class LocationForm extends React.Component {
    * - Carousel
    */
   componentDidMount() {
+    if (this.props.location && this.props.location.categories) {
+      const category = this.props.location.categories.map(cat => cat.id);
+      if (category) {
+        this.setState({ categories: [...this.state.categories, ...category] });
+      }
+    }
+    
     // Mount google map autocomplete
     const { maps } = window.google;
     this.autocomplete = new maps.places.Autocomplete(this.addressInput);
@@ -302,7 +309,7 @@ class LocationForm extends React.Component {
         </div>
 
         <div className='form-group'>
-          <label htmlFor='deeplink'>Query String URL</label>
+          <label htmlFor='deeplink'>Deep link</label>
           <input
             disabled            
             maxLength={ 90 }

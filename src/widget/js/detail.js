@@ -19,7 +19,7 @@ window.detailView = {
             actionItems: place.actionItems && place.actionItems.length > 0,
             lat: place.address.lat,
             lng: place.address.lng,
-            bookmarked: window.app.state.bookmarked
+            bookmarked: false
         };
 
         let req = new XMLHttpRequest();
@@ -128,8 +128,21 @@ window.detailView = {
 
             function setBookmark() { 
                 let bookmarkButton = document.getElementById('bookmarkBtn');
-                bookmarkButton.className = window.app.state.bookmarked ? 'glyphicon glyphicon-star' : 'glyphicon glyphicon-star-empty';       
+                bookmarkButton.className = context.bookmarked ? 'glyphicon glyphicon-star' : 'glyphicon glyphicon-star-empty';       
             }
+
+            function getBookmarks() {
+              window.buildfire.bookmarks.getAll(function (err, bookmarks) {
+                if (err) console.log(err);
+                let bookmark = bookmarks.find(bookmark => bookmark.id === context.id);
+                if (bookmark) {
+                  context.bookmarked = true;
+                  setBookmark();
+                }
+              });
+            }
+
+            getBookmarks();
 
             function handleBookmarkClicked() {
                 window.buildfire.bookmarks.getAll(function (err, bookmarks) {
@@ -138,7 +151,7 @@ window.detailView = {
                     if (bookmark) {
                         window.buildfire.bookmarks.delete(bookmark.id, function (err, bookmark) {
                             if (err) console.log("Bookmark err", err);
-                            window.app.state.bookmarked = false;
+                            context.bookmarked = false;
                             setBookmark();
                         });
                     } else {
@@ -152,7 +165,7 @@ window.detailView = {
                         };
                         window.buildfire.bookmarks.add(options, function (err, data) {
                             if (err) console.log("Bookmark err", err);
-                            window.app.state.bookmarked = true;
+                            context.bookmarked = true;
                             setBookmark();
                         });
                     }
