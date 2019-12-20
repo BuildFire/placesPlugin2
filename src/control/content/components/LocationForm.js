@@ -309,7 +309,7 @@ class LocationForm extends React.Component {
         </div>
 
         <div className='form-group'>
-          <label htmlFor='deeplink'>Query String URL</label>
+          <label htmlFor='deeplink'>Deep link</label>
           <input
             disabled            
             maxLength={ 90 }
