@@ -272,7 +272,8 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
 }
 
 .detail-info {
-    width: 70%;
+    width: 65%;
+    padding-left: 3%;
 }
 
 .map-holder {
@@ -333,7 +334,7 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
     .sidenav a {font-size: 18px;}
 }
 
-.aligner{
+.row-aligner{
     display: flex;
     align-items: center;
 }
@@ -363,6 +364,7 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
 }
 .distance{
     font-size: 13px;
+    margin-left: 6px;
 }
 
 .title {
@@ -483,7 +485,14 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
     float: left;
     cursor: pointer;
 }
-
+#bookmarkBtn {
+    font-size: 7vw;
+    margin: auto;
+    left: 2%;
+}
+#distance-holder {
+    min-width: 14%;
+}
 #contactBtn {
     display: block;
     width: 100%;

@@ -19,6 +19,7 @@ window.app = {
         viewStates: {map: 'map', list: 'list', detail: 'detail'},
         sortOptions: {alpha: 'alpha', alphaDesc: 'alphaDesc', manual: 'manual', distance: 'distance'},
         placesTag: 'places',
+        placesListTag: 'places-list',
         cloudImg: {
             domain:'https://czi3m2qn.cloudimg.io',
             operations: {
@@ -48,6 +49,8 @@ window.app = {
         categories: [],
         navHistory: [],
         isBackNav: false,
+        bookmarked: false,
+        isBookmarkingAllowed: true,
         pointsOfInterest: "on"
     },
     backButtonInit: () => {
@@ -64,6 +67,7 @@ window.app = {
                     //Don't remove last state, if launcher plugin
                     if(!isLauncher || window.app.state.navHistory.length != 1){
                         window.app.state.navHistory.pop();
+                        window.buildfire.history.pop();
                     }
                 }
 
@@ -93,7 +97,7 @@ window.app = {
             buildfire.datastore.search({ page, pageSize, sort: (window.app.state.sortBy ? ({
                 title: (window.app.state.sortBy === 'alphaDesc' ? -1 : 1)
               }) : null)
-            }, 'places-list', (err, result) => {
+            }, window.app.settings.placesListTag, (err, result) => {
 
               places.push(...result.map(place => {
                 place.data.id = place.id;
@@ -106,7 +110,6 @@ window.app = {
 
               window.app.state.places = places;
               window.app.state.filteredPlaces = places;
-
               // If we have more pages we keep going
               if (result.length === pageSize) {
                 page++;
@@ -118,8 +121,8 @@ window.app = {
             });
           };
           loadPage();
-        }
 
+        }
         buildfire.datastore.get(window.app.settings.placesTag, function(err, results){
           if (err) {
             console.error('datastore.get error', err);
@@ -135,6 +138,7 @@ window.app = {
             window.app.state.itemsOrder = data.itemsOrder;
             window.app.state.actionItems = data.actionItems || [];
             window.app.state.defaultView = data.defaultView;
+            window.app.state.isBookmarkingAllowed = data.isBookmarkingAllowed;
 
             if (data.categories) {
               window.app.state.categories = data.categories.map(category => {
@@ -253,9 +257,54 @@ window.app = {
     gotLocation(err, location) {
         window.app.state.location = location;
         window.app.gotPieceOfData();
-    }
+    },
+    
+    initDetailView: () => {
+      window.buildfire.appearance.titlebar.show();
+      window.app.backButtonInit();
+      buildfire.deeplink.getData(function (data) {
+        buildfire.datastore.getById(data.id, window.app.settings.placesListTag, (err, result) => {
+          if (err) console.log(err);
+
+          let res = result.data;
+          res.id = result.id;
+
+          window.app.state.selectedPlace.unshift(res);
+          window.router.navigate(window.app.settings.viewStates.detail);
+          window.app.checkBookmarked(res.id);
+        });
+      });
+
+      //Check is bookmark allowed when page is open with deeplink
+      buildfire.datastore.get(window.app.settings.placesTag, function(err, results){
+        if (err) {
+          console.log(err);
+          return false;
+        } 
+
+        let data = results.data;
+        if (data) {
+          window.app.state.isBookmarkingAllowed = data.isBookmarkingAllowed;
+        }
+      });
+    },
+    
+    checkBookmarked(id) {
+      window.buildfire.bookmarks.getAll(function (err, bookmarks) {
+        if (err) {
+          console.log(err);
+          return false;
+        } 
+        let bookmark = bookmarks.filter(bookmark => bookmark.id === id);
+        window.app.state.bookmarked = bookmark.length > 0;
+        });
+    },
 };
 
-//document.aEventListener('DOMContentLoaded', () => window.app.init( window.app.gotPlaces, window.app.gotLocation));
-window.app.init(window.app.gotPlaces, window.app.gotLocation);
+const queryStringObj = buildfire.parseQueryString();
+if (queryStringObj.dld) {
+  window.app.initDetailView(); 
+} else {
+  window.app.init(window.app.gotPlaces, window.app.gotLocation);
+}
 window.initRouter();

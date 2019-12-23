@@ -42,11 +42,11 @@ table td.action-large a {
 .sortable-item .titles {
   display: inline-block;
   margin-left: 50px;
-  width: 28%;
+  width: 25%;
 }
 
 .sortable-item .titles.secondary {
-  width: 52%;
+  width: 48%;
 }
 
 .sortable-item .delete {
@@ -54,14 +54,42 @@ table td.action-large a {
   top: 50%;
   right: 10px;
   margin-top: -9px;
-  width: 18px;
+  width: 20px;
   cursor: pointer;
 }
-
+.sortable-item .copy {
+  position: absolute;
+  top: 50%;
+  right: 38px;
+  margin-top: -9px;
+  width: 20px;
+  cursor: pointer;
+}
+.sortable-item .copy
+  .tooltiptext {
+    visibility: hidden;
+    width: 122px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px;
+    position: absolute;
+    z-index: 1;
+    bottom: 150%;
+    left: 50%;
+    margin-left: -75px;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+.sortable-item .copy:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+  }
 .sortable-item .edit {
   display: inline-block;
   float: right;
-  margin-right: 50px;
+  margin-right: 80px;
   position: absolute;
   right: -8px;
 }

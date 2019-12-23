@@ -22,6 +22,7 @@ class Content extends React.Component {
     buildfire.datastore.get('places', (err, result) => {
       if (err) return console.error(err);
         result.data.itemsOrder = result.data.itemsOrder || [];
+        result.data.isBookmarkingAllowed = result.data.isBookmarkingAllowed || true;
         result.data.pointsOfInterest = result.data.pointsOfInterest || "on";
 
       // we migrate old storage format to new one if needed
@@ -143,6 +144,21 @@ class Content extends React.Component {
     buildfire.datastore.delete(place.id, 'places-list', (err) => {
       if (err) return console.error(err);
     });
+  }
+  copyToClipboard(id) {
+    let queryStringURL = `?dld={"id":"${id}"}`;
+    let el = document.createElement('textarea');
+    let tooltip = document.getElementById(`tool-tip-text--${id}`);
+    el.value = queryStringURL;
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand('copy');
+    document.body.removeChild(el);
+    tooltip.innerHTML = "Copied!";
+  }
+  onHoverOut(id) {
+    let tooltip = document.getElementById(`tool-tip-text--${id}`);
+    tooltip.innerHTML = "Copy to clipboard";
   }
 
   handleLocationEdit(index) {
@@ -303,7 +319,9 @@ class Content extends React.Component {
                     places={ data.places }
                     updateSort={ (list) => this.updateSort(list) }
                     handleEdit={ (index) => this.handleLocationEdit(index) }
-                    handleDelete={ (index) => this.handleLocationDelete(index) }/> }
+                    handleDelete={ (index) => this.handleLocationDelete(index) }
+                    copyToClipboard={ (id) => this.copyToClipboard(id)}
+                    onHoverOut={ (id) => this.onHoverOut(id)}/> }
           </div>
         </div>
       </div>
