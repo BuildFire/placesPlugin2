@@ -54,7 +54,7 @@ class PlacesList extends React.Component {
         <span className="copy btn-icon btn-link-icon btn-primary"
           onClick={() => this.props.copyToClipboard(value.place.id)}
           onMouseOut={() => this.props.onHoverOut(value.place.id)}>
-          <span className="tooltiptext" id={`tool-tip-text--${value.place.id}`}>Copy to clipboard</span>
+          <span className="tooltiptext" id={`tool-tip-text--${value.place.id}`}>Copy Query String URL</span>
         </span>
         <img
           className='delete'

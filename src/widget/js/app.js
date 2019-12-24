@@ -50,7 +50,7 @@ window.app = {
         navHistory: [],
         isBackNav: false,
         bookmarked: false,
-        isBookmarkingAllowed: true,
+        isBookmarkingAllowed: false,
         pointsOfInterest: "on"
     },
     backButtonInit: () => {

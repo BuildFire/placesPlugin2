@@ -22,7 +22,7 @@ class Content extends React.Component {
     buildfire.datastore.get('places', (err, result) => {
       if (err) return console.error(err);
         result.data.itemsOrder = result.data.itemsOrder || [];
-        result.data.isBookmarkingAllowed = result.data.isBookmarkingAllowed || true;
+        result.data.isBookmarkingAllowed = result.data.isBookmarkingAllowed || false;
         result.data.pointsOfInterest = result.data.pointsOfInterest || "on";
 
       // we migrate old storage format to new one if needed
@@ -158,7 +158,7 @@ class Content extends React.Component {
   }
   onHoverOut(id) {
     let tooltip = document.getElementById(`tool-tip-text--${id}`);
-    tooltip.innerHTML = "Copy to clipboard";
+    tooltip.innerHTML = "Copy Query String URL";
   }
 
   handleLocationEdit(index) {
@@ -238,7 +238,7 @@ class Content extends React.Component {
    * @param   {Object} locations Locations array
    */
   onMultipleLocationSubmit(locations) {
-    locations = locations.filter(location => typeof location === 'object')
+    locations = locations.filter(location => typeof location === 'object');
     buildfire.datastore.bulkInsert(locations, 'places-list', (err, result) => {
       if (err) return console.error(err);
       this.getPlacesList();
