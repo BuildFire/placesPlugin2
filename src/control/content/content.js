@@ -8,13 +8,19 @@ import CategoriesList from './components/CategoriesList';
 import AddLocation from './components/AddLocation';
 import EditLocation from './components/EditLocation';
 
+const tabs = [
+  'Categories',
+  'Locations',
+];
+
 class Content extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       data: {},
       addingLocation: false,
-      editingLocation: false
+      editingLocation: false,
+      activeTab: 0
     };
   }
 
@@ -238,7 +244,7 @@ class Content extends React.Component {
    * @param   {Object} locations Locations array
    */
   onMultipleLocationSubmit(locations) {
-    locations = locations.filter(location => typeof location === 'object')
+    locations = locations.filter(location => typeof location === 'object');
     buildfire.datastore.bulkInsert(locations, 'places-list', (err, result) => {
       if (err) return console.error(err);
       this.getPlacesList();
@@ -283,47 +289,79 @@ class Content extends React.Component {
     });
   }
 
+  renderTab = () => {
+    const { data, addingLocation, editingLocation, activeTab } = this.state;
+    switch (activeTab) {
+      case 0:
+        return (
+          <div className='row category-box'>
+            <CategoriesList
+              categories={data.categories}
+              handleRename={(index, newName) => this.handleCategoryRename(index, newName)}
+              handleDelete={(index) => this.handleCategoryDelete(index)}
+              onSubmit={(category) => this.onCategorySubmit(category)} />
+          </div>
+        );
+      case 1:
+        return (
+          <div className='row'>
+            <div className='col-xs-12'>
+              <LocationsActionBar
+                categories={data.categories}
+                places={data.places}
+                addingLocation={addingLocation || editingLocation !== false}
+                onAddLocation={() => this.onAddLocation()}
+                onAddLocationCancel={() => this.onAddLocationCancel()}
+                onMultipleSubmit={(locations) => this.onMultipleLocationSubmit(locations)} />
+
+              {addingLocation || editingLocation !== false
+                ? addingLocation
+                  ? <AddLocation
+                    pointsOfInterest={data.pointsOfInterest}
+                    categories={data.categories}
+                    onSubmit={location => this.onLocationSubmit(location)} />
+                  : <EditLocation
+                    pointsOfInterest={data.pointsOfInterest}
+                    categories={data.categories}
+                    location={data.places[editingLocation]}
+                    onSubmit={location => this.onLocationEdit(location, editingLocation)} />
+                : <LocationList
+                  places={data.places}
+                  updateSort={(list) => this.updateSort(list)}
+                  handleEdit={(index) => this.handleLocationEdit(index)}
+                  handleDelete={(index) => this.handleLocationDelete(index)}
+                  copyToClipboard={(id) => this.copyToClipboard(id)}
+                  onHoverOut={(id) => this.onHoverOut(id)} />}
+            </div>
+          </div>
+        );
+    }
+  }
+
+  switchTab = (index) => {
+    const { activeTab } = this.state;
+    if (index !== activeTab) {
+      this.setState({ activeTab: index });
+    }
+  }
+
   render() {
-    const { data, addingLocation, editingLocation } = this.state;
+    const { activeTab } = this.state;
     return (
       <div>
-        <div className='row category-box'>
-          <CategoriesList
-            categories={ data.categories }
-            handleRename={ (index, newName) => this.handleCategoryRename(index, newName) }
-            handleDelete={ (index) => this.handleCategoryDelete(index) }
-            onSubmit={ (category) => this.onCategorySubmit(category) } />
-        </div>
-        <div className='row'>
-          <div className='col-xs-12'>
-            <LocationsActionBar
-              categories={ data.categories }
-              places={ data.places }
-              addingLocation={ addingLocation || editingLocation !== false }
-              onAddLocation={ () => this.onAddLocation() }
-              onAddLocationCancel={ () => this.onAddLocationCancel() }
-              onMultipleSubmit={(locations) => this.onMultipleLocationSubmit(locations)} />
-
-            { addingLocation || editingLocation !== false
-                ? addingLocation
-                ? <AddLocation
-                      pointsOfInterest = { data.pointsOfInterest }
-                      categories={ data.categories }
-                      onSubmit={ location => this.onLocationSubmit(location) } />
-                  : <EditLocation
-                      pointsOfInterest = { data.pointsOfInterest }
-                      categories={ data.categories }
-                      location={ data.places[editingLocation] }
-                      onSubmit={ location => this.onLocationEdit(location, editingLocation) }/>
-                : <LocationList
-                    places={ data.places }
-                    updateSort={ (list) => this.updateSort(list) }
-                    handleEdit={ (index) => this.handleLocationEdit(index) }
-                    handleDelete={ (index) => this.handleLocationDelete(index) }
-                    copyToClipboard={ (id) => this.copyToClipboard(id)}
-                    onHoverOut={ (id) => this.onHoverOut(id)}/> }
-          </div>
-        </div>
+        <ul id="contentTabs" className="nav nav-tabs">
+          {tabs.map((tab, ind) => (
+            <li
+              key={tab}
+              className={activeTab === ind ? 'active' : ''}
+              onClick={() => this.switchTab(ind)}
+              type='button'
+            >
+              <a href='#'>{tab}</a>
+            </li>
+          ))}
+        </ul>
+        {this.renderTab()}
       </div>
     );
   }

@@ -105,6 +105,7 @@ table td.action-large a {
 .category-box{
     height: 275px;
     overflow-y: auto;
+    margin-top: 2%;
 }
 
 table img.delete {
@@ -255,4 +256,8 @@ img.delete {
 
 .__categoryEditBox a {
   margin-right: 10px;
+}
+
+#contentTabs {
+  border: none !important;
 }

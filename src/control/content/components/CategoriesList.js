@@ -24,7 +24,6 @@ class CategoriesList extends React.Component {
 
     return (
       <div className='col-xs-12'>
-        <h3>Categories</h3>
         <div className='row'>
           <form onSubmit={ (e) => this.onSubmit(e) }>
             <div className='col-xs-9'>
