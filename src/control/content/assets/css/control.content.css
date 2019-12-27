@@ -103,8 +103,6 @@ table td.action-large a {
 }
 
 .category-box{
-    height: 275px;
-    overflow-y: auto;
     margin-top: 2%;
 }
 
@@ -260,4 +258,30 @@ img.delete {
 
 #contentTabs {
   border: none !important;
+}
+
+#contentTabs li.active > a { 
+  border-bottom: 3px solid #09a3ee !important;
+  font-size: 18px;
+}
+
+#contentTabs li > a { 
+  font-size: 18px;
+}
+.page {
+  display: none;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  background-color: white;
+}
+
+.page.activeDialog {
+  display: block;
+  width: 100%;
+  left: 0;
+  top: 0;
+}
+.tableHidden {
+  display: none;
 }

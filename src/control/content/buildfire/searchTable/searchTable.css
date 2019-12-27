@@ -1,0 +1,48 @@
+
+thead, tbody tr {
+    display:table;
+    width:100%;
+    table-layout:fixed;/* even columns width , fix width of table too*/
+}
+th{
+    padding: 15px 8px 13px;
+    line-height: 26px;
+    vertical-align: top;
+    border-bottom: 1px solid #d8d8d8;
+}
+th > span {
+    padding-left: 5px;
+    cursor: pointer;
+}
+td{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 40px;
+}
+tbody {
+    display: block;
+    max-height: 380px;
+    overflow: auto;
+}
+table tbody tr td {
+    border-top: none!important;
+    border-bottom: 1px solid #d8d8d8;
+}
+.editColumn,.deleteColumn{
+    width:40px;
+    text-align: center;
+}
+.btn-primary {
+    margin-bottom: 16px;
+}
+#searchCriteria .form-group {
+    display: flex;
+}    
+.input-group {
+    flex: auto;
+    margin-left: 8PX;
+}
+.input-group-btn > .btn:hover, .input-group-btn > .btn:focus, .input-group-btn > .btn:active {
+    z-index: 1;
+}
