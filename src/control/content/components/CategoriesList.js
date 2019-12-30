@@ -43,6 +43,7 @@ class CategoriesList extends React.Component {
       this.setState({ isEditing: true });
       this.setState({ categoryObj: obj });
       
+      this.props.handleEditCategoryBreadCrumb();
       this.showModal();
       this.setState({ name: obj.name });
 
@@ -128,7 +129,7 @@ class CategoriesList extends React.Component {
 
   handleAddItem() {
     this.setState({ isEditing: false });
-
+    this.props.handleAddCategoryBreadCrumb();
     const submitBtn = document.getElementById("submitBtn");
     submitBtn.innerHTML = "Add Category";
     this.showModal();
@@ -152,6 +153,7 @@ class CategoriesList extends React.Component {
   hideModal() {
     this.setState({ name: '' });
 
+    this.props.handleCancelCategoryBreadCrumb();
     const dialog = document.getElementById("dialog");
     dialog.classList.remove("activeDialog");
     dialog.classList.add("hide");

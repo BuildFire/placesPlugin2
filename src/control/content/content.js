@@ -20,8 +20,12 @@ class Content extends React.Component {
       data: {},
       addingLocation: false,
       editingLocation: false,
-      activeTab: 0
+      activeTab: 0,
+      breadcrumbName: ''
     };
+    this.handleCancelCategoryBreadCrumb = this.handleCancelCategoryBreadCrumb.bind(this);
+    this.handleAddCategoryBreadCrumb = this.handleAddCategoryBreadCrumb.bind(this);
+    this.handleEditCategoryBreadCrumb = this.handleEditCategoryBreadCrumb.bind(this);
   }
 
   componentWillMount() {
@@ -169,6 +173,8 @@ class Content extends React.Component {
 
   handleLocationEdit(index) {
     this.setState({ editingLocation: index });
+    let breadcrumb = "Locations > Edit location";
+    this.setState({ breadcrumbName: breadcrumb });
   }
 
   /**
@@ -198,6 +204,21 @@ class Content extends React.Component {
     this.handleSave();
   }
 
+  handleAddCategoryBreadCrumb() {
+    let breadcrumb = "Categories > Add category";
+    this.setState({ breadcrumbName: breadcrumb });
+  }
+
+  handleEditCategoryBreadCrumb() {
+    let breadcrumb = "Categories > Edit category";
+    this.setState({ breadcrumbName: breadcrumb });
+  }
+
+  handleCancelCategoryBreadCrumb() {
+    let breadcrumb = "";
+    this.setState({ breadcrumbName: breadcrumb });
+  }
+
   /**
    * Handle a location submission and save to datastore
    *
@@ -217,7 +238,9 @@ class Content extends React.Component {
         this.handleSave();
     });
 
-    this.setState({ addingLocation: false });
+    this.setState({ addingLocation: false });
+    let breadcrumb = "";
+    this.setState({ breadcrumbName: breadcrumb });
   }
 
   /**
@@ -236,6 +259,8 @@ class Content extends React.Component {
 
       this.setState({ editingLocation: false });
     });
+    let breadcrumb = "";
+    this.setState({ breadcrumbName: breadcrumb });
   }
 
   /**
@@ -280,6 +305,8 @@ class Content extends React.Component {
 
   onAddLocation() {
     this.setState({ addingLocation: true });
+    let breadcrumb = "Locations > Add location";
+    this.setState({ breadcrumbName: breadcrumb });
   }
 
   onAddLocationCancel() {
@@ -287,6 +314,8 @@ class Content extends React.Component {
       addingLocation: false,
       editingLocation: false
     });
+    let breadcrumb = "";
+    this.setState({ breadcrumbName: breadcrumb });
   }
 
   renderTab = () => {
@@ -299,7 +328,11 @@ class Content extends React.Component {
               categories={data.categories}
               handleRename={(index, newName) => this.handleCategoryRename(index, newName)}
               handleDelete={(index) => this.handleCategoryDelete(index)}
-              onSubmit={(category) => this.onCategorySubmit(category)} />
+              onSubmit={(category) => this.onCategorySubmit(category)}
+              handleAddCategoryBreadCrumb={this.handleAddCategoryBreadCrumb}
+              handleEditCategoryBreadCrumb={this.handleEditCategoryBreadCrumb}
+              handleCancelCategoryBreadCrumb={this.handleCancelCategoryBreadCrumb}
+            />
           </div>
         );
       case 1:
@@ -349,6 +382,7 @@ class Content extends React.Component {
     const { activeTab } = this.state;
     return (
       <div>
+        <h4>{this.state.breadcrumbName}</h4>
         <ul id="contentTabs" className="nav nav-tabs">
           {tabs.map((tab, ind) => (
             <li

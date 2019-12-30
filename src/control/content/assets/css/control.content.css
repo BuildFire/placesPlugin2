@@ -46,25 +46,13 @@ table td.action-large a {
 }
 
 .sortable-item .titles.secondary {
-  width: 48%;
+  width: 40%;
 }
 
 .sortable-item .delete {
-  position: absolute;
-  top: 50%;
-  right: 10px;
-  margin-top: -9px;
-  width: 20px;
-  cursor: pointer;
+  margin-left: 1%;
 }
-.sortable-item .copy {
-  position: absolute;
-  top: 50%;
-  right: 38px;
-  margin-top: -9px;
-  width: 20px;
-  cursor: pointer;
-}
+
 .sortable-item .copy
   .tooltiptext {
     visibility: hidden;
@@ -87,11 +75,7 @@ table td.action-large a {
     opacity: 1;
   }
 .sortable-item .edit {
-  display: inline-block;
-  float: right;
-  margin-right: 80px;
-  position: absolute;
-  right: -8px;
+  margin-left: 1%;
 }
 
 .edit-box {

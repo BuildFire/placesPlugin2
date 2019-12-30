@@ -46,19 +46,21 @@ class PlacesList extends React.Component {
               ? parseFloat(value.place.address.lat.toFixed(10)) + ', ' +  parseFloat(value.place.address.lng.toFixed(10))
               : '' }
         </span>
-        <span className='edit'>
-          <a onClick={ () => this.onEditDidClick(value.index) }>
-            <span className="icon icon-pencil"/>
-          </a>
-        </span>
-        <span className="copy btn-icon btn-link-icon btn-primary"
+        <button className="btn btn--icon copy glyphicon glyphicon-paperclip"
           onClick={() => this.props.copyToClipboard(value.place.id)}
           onMouseOut={() => this.props.onHoverOut(value.place.id)}>
           <span className="tooltiptext" id={`tool-tip-text--${value.place.id}`}>Copy to clipboard</span>
-        </span>
-        <span
-          className='delete icon icon-cross2'
-          onClick={ () => this.props.handleDelete(value.index) } />
+        </button>
+
+          <button className="edit btn btn--icon" onClick={ () => this.onEditDidClick(value.index) }>
+            <span className="icon icon-pencil"/>
+          </button>
+        
+        <button
+          className='delete btn btn--icon'
+          onClick={() => this.props.handleDelete(value.index)}>
+          <span className=" icon icon-cross2"></span>
+        </button>
       </div>
     ));
 
