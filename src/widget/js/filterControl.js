@@ -41,6 +41,16 @@ window.filterControl = {
         let activeCategories = app.state.categories.filter(category => category.isActive).map(c => c.name.id);
         console.log(activeCategories);
 
+        let sideNav = document.getElementById("sideNav");
+
+        if(app.state.categories.length < 4) {
+            sideNav.className += "expandMinimum";
+        } else if(app.state.categories.length > 3 || app.state.categories.length < 9) {
+            sideNav.className += "expandMedium";
+        } else {
+            sideNav.className += "expandMaximum";
+        }
+
         app.state.filteredPlaces = app.state.places.filter(place => {
             //If a location has no categories, we always show it
             if (typeof place.categories === 'undefined' || place.categories.length === 0) {

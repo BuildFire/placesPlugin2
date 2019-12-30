@@ -525,3 +525,63 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
 .__categoryItemBox label {
     display: block;
 }
+
+@media (min-width: 768px) and (max-width: 1024px) {
+    #bookmarkBtn {
+        font-size: 4vw;
+    }
+    .list-item {
+        height: 30.25vw;
+    }
+    .list-item > img {
+        height: 28.25vw !important; 
+    }
+    .detail-image {
+        width: 160px;
+        height: 160px;
+    }
+    .col-image {
+        width: 160px;
+        height: 160px;
+    }
+    .map-holder { 
+        height: 476px;
+    }
+    #locationSummary {
+        height: 180px!important;
+    }
+    #locationSummary .name.title {
+        font-size: 28px;
+    }
+    #locationSummary .name.address {
+        font-size: 22px;
+    }
+    #locationSummary .view-more {
+        font-size: 22px;
+    }
+    .distance-indicator .arrow > img {
+        height: 26px !important;
+    }
+    .distance-indicator .arrow {
+        font-size: 26px !important;
+    }
+    
+    #locationSummary #close {
+        font-size: 50px;
+    }
+    #carouselView {
+        min-height: 450px;
+        max-height: 450px;
+    }
+
+    .sidenav.expandMinimum {
+        height: 35vh;
+    }
+    .sidenav.expandMedium {
+        height: 60vh;
+    }
+    .sidenav.expandMinimum {
+        height: 75vh;
+    }
+
+}
