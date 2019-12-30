@@ -26,12 +26,14 @@ class CategoriesList extends React.Component {
     this.state = {
       name: '',
       searchText: '',
-      isEditing: true
+      isEditing: true,
+      categoryObj: {}
     };
 
     this.showModal = this.showModal.bind(this);
     this.hideModal = this.hideModal.bind(this);
     this.handleAddItem = this.handleAddItem.bind(this);
+    this.search = this.search.bind(this);
   }
 
   componentDidMount() {
@@ -39,16 +41,31 @@ class CategoriesList extends React.Component {
     
     this.searchTable.onEditRow = (obj, tr) => { 
       this.setState({ isEditing: true });
+      this.setState({ categoryObj: obj });
       
       this.showModal();
       this.setState({ name: obj.name });
 
       const submitBtn = document.getElementById("submitBtn");
       submitBtn.innerHTML = "Save changes";
+    };
 
+    this.searchTable.onRowDeleted = (obj, tr) => {
+      this.setState({ categoryObj: obj });
+
+      const { categories } = this.props;
+      categories.map((category, index) => {
+        if (this.state.categoryObj.id === category.id) {
+          this.props.handleDelete(index);
+        }
+      });
+
+      this.searchTable.search();
+      // this.search();
     };
 
     this.searchTable.onSearchResult = (results) => {
+      console.log("dasdadda", results);
       if (results && results[0].data && results[0].data.categories) {
         let categories = [];
         categories.push(...results[0].data.categories.map(res => {
@@ -67,22 +84,21 @@ class CategoriesList extends React.Component {
     // this.search();
   }
 
-  // search() {
-  //   const searchQuery = {
-  //     $and: [],
-  //   };
-
-  //   if(this.state.searchText && this.state.searchText.length > 2){
-  //     searchQuery.$and.unshift({
-  //       '$json.name': {
-  //         $regex: this.state.searchText,
-  //         $options: 'i',
-  //       },
-  //     });
-  //   }
-  //   this.searchTable.search(searchQuery);
-  //   console.log(searchQuery);
-  // }
+  search() {
+    const searchQuery = {
+      $and: [
+        {
+          '$json.name': {
+            $regex: this.state.searchText,
+            $options: 'i',
+          },
+        }
+      ],
+    };
+    this.searchTable.search(searchQuery);
+    console.log(searchQuery);
+    console.log(this.state.searchText);
+  }
   
   showModal() {
     const dialog = document.getElementById("dialog");
@@ -106,7 +122,8 @@ class CategoriesList extends React.Component {
     this.setState({ name: '' });
     
     this.hideModal();
-    this.searchTable.search();
+    // this.search();
+    // this.searchTable.search();
   }
 
   handleAddItem() {
@@ -117,10 +134,19 @@ class CategoriesList extends React.Component {
     this.showModal();
   }
 
-  handleRenameCategory() {
+  handleRenameCategory(e) {
+    e.preventDefault();
+
     const { categories } = this.props;
-    console.log(">>>>>>>>>>>>", categories);
-    // this.props.handleRename();
+    categories.map((category, index) => {
+      if (this.state.categoryObj.id === category.id) {
+        this.props.handleRename(index, this.state.name);
+      }    
+    });
+
+    this.hideModal();
+    // this.search();
+    // this.searchTable.search();
   }
 
   hideModal() {
@@ -147,7 +173,7 @@ class CategoriesList extends React.Component {
               <span className="icon icon-plus"/>Add
               </button>
             <div className="input-group">
-              <input onChange={event=> this.setState({searchText:event.currentTarget.value})} type="text" className="form-control" placeholder="Search by category name" />
+              <input onChange={event=> this.setState({searchText: event.currentTarget.value})} type="text" className="form-control" placeholder="Search by category name" />
               <span className="input-group-btn">
                 <button onClick={this.search}  className="btn btn-info"><span className="icon icon-magnifier"/></button>
               </span>
@@ -159,7 +185,7 @@ class CategoriesList extends React.Component {
         <div id="dialog" className="hide page">
           <div className='row'>
             <div className="col-xs-12">
-              <form id="submitForm" onSubmit={isEditing? () => this.handleRenameCategory : (e) => this.onSubmit(e)}>
+              <form id="submitForm" onSubmit={isEditing? (e) => this.handleRenameCategory(e) : (e) => this.onSubmit(e)}>
                 <div className='col-xs-6'>
                   <div className='control-group'>
                     <input

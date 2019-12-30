@@ -192,7 +192,7 @@ export class SearchTableHelper {
 
 					if (data.selectedButton.key == "yes") {
 						tr.classList.add("hidden");
-						buildfire.datastore.update(obj.id, { $set: { deletedOn: new Date() } }, 'places', e => {
+						t.store.update(obj.id, { $set: { deletedOn: new Date() } }, t.tag, e => {
 							if (e)
 								tr.classList.remove("hidden");
 							else

@@ -48,7 +48,7 @@ class PlacesList extends React.Component {
         </span>
         <span className='edit'>
           <a onClick={ () => this.onEditDidClick(value.index) }>
-            Edit
+            <span className="icon icon-pencil"/>
           </a>
         </span>
         <span className="copy btn-icon btn-link-icon btn-primary"
@@ -56,10 +56,9 @@ class PlacesList extends React.Component {
           onMouseOut={() => this.props.onHoverOut(value.place.id)}>
           <span className="tooltiptext" id={`tool-tip-text--${value.place.id}`}>Copy to clipboard</span>
         </span>
-        <img
-          className='delete'
-          onClick={ () => this.props.handleDelete(value.index) }
-          src='assets/img/cross.png' />
+        <span
+          className='delete icon icon-cross2'
+          onClick={ () => this.props.handleDelete(value.index) } />
       </div>
     ));
 
