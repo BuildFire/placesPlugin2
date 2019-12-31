@@ -225,7 +225,7 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
     transition: opacity 1s linear;
 }
 
-#locationSummary {
+#locationSummary.slideInDown{
     position: absolute;
     top: 0;
     left: 0;
@@ -545,9 +545,9 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
         height: 160px;
     }
     .map-holder { 
-        height: 476px;
+        height: 430px;
     }
-    #locationSummary {
+    #locationSummary.slideInDown {
         height: 180px!important;
     }
     #locationSummary .name.title {
@@ -570,18 +570,18 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
         font-size: 50px;
     }
     #carouselView {
-        min-height: 450px;
-        max-height: 450px;
+        min-height: 430px;
+        max-height: 430px;
     }
 
-    .sidenav.expandMinimum {
-        height: 35vh;
+    .expandMinimum {
+        height: 35vh !important;
     }
-    .sidenav.expandMedium {
-        height: 60vh;
+    .expandMedium {
+        height: 50vh !important;
     }
-    .sidenav.expandMinimum {
-        height: 75vh;
+    .expandMaximum {
+        height: 75vh !important;
     }
 
 }
