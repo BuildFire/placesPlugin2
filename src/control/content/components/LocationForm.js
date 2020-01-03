@@ -286,8 +286,7 @@ class LocationForm extends React.Component {
   }
 
   render() {
-    const { title, address, description, image, categories, subtitle, deeplinkUrl } = this.state;
-    console.log("categ::::::", this.state.categories);
+    const { title, address, description, image, categories, subtitle, deeplinkUrl } = this.state;
 
     return (
       <form onSubmit={ e => this.onSubmit(e) } onKeyPress={ e => this.onAutoKeyUp(e) }>
