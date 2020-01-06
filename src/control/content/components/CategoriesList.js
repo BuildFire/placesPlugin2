@@ -1,7 +1,4 @@
 import React from 'react';
-import buildfire from 'buildfire';
-
-import CategoryListItem from './CategoryListItem';
 import { SearchTableHelper } from '../buildfire/searchTable/searchTableHelper';
 
 const searchTableConfig = {
@@ -38,17 +35,16 @@ class CategoriesList extends React.Component {
 
   componentDidMount() {
     this.searchTable = new SearchTableHelper("searchResults", "places", this.searchTableConfig);
-    
     this.searchTable.onEditRow = (obj, tr) => { 
-      this.setState({ isEditing: true });
-      this.setState({ categoryObj: obj });
-      
-      this.props.handleEditCategoryBreadCrumb();
-      this.showModal();
-      this.setState({ name: obj.name });
-
       const submitBtn = document.getElementById("submitBtn");
       submitBtn.innerHTML = "Save changes";
+
+      this.showModal();
+      this.setState({ isEditing: true });
+      this.setState({ categoryObj: obj });   
+      this.setState({ name: obj.name });
+
+      this.props.handleBreadcrumb('editCategory');
     };
 
     this.searchTable.onRowDeleted = (obj, tr) => {
@@ -62,11 +58,9 @@ class CategoriesList extends React.Component {
       });
 
       this.searchTable.search();
-      // this.search();
     };
 
     this.searchTable.onSearchResult = (results) => {
-      console.log("dasdadda", results);
       if (results && results[0].data && results[0].data.categories) {
         let categories = [];
         categories.push(...results[0].data.categories.map(res => {
@@ -82,7 +76,6 @@ class CategoriesList extends React.Component {
     };
 
     this.searchTable.search();
-    // this.search();
   }
 
   search() {
@@ -123,15 +116,15 @@ class CategoriesList extends React.Component {
     this.setState({ name: '' });
     
     this.hideModal();
-    // this.search();
-    // this.searchTable.search();
+    this.searchTable.search();
   }
 
   handleAddItem() {
-    this.setState({ isEditing: false });
-    this.props.handleAddCategoryBreadCrumb();
     const submitBtn = document.getElementById("submitBtn");
     submitBtn.innerHTML = "Add Category";
+
+    this.setState({ isEditing: false });
+    this.props.handleBreadcrumb('addCategory');
     this.showModal();
   }
 
@@ -146,14 +139,13 @@ class CategoriesList extends React.Component {
     });
 
     this.hideModal();
-    // this.search();
-    // this.searchTable.search();
+    this.searchTable.search();
   }
 
   hideModal() {
     this.setState({ name: '' });
 
-    this.props.handleCancelCategoryBreadCrumb();
+    this.props.handleBreadcrumb();
     const dialog = document.getElementById("dialog");
     dialog.classList.remove("activeDialog");
     dialog.classList.add("hide");
@@ -211,38 +203,7 @@ class CategoriesList extends React.Component {
               </form>
             </div>
           </div>
-        </div>
-        {/* <div className='row'>
-          <form onSubmit={ (e) => this.onSubmit(e) }>
-            <div className='col-xs-9'>
-              <div className='control-group'>
-                <input
-                  onChange={ (e) => this.onChange(e) }
-                  type='text'
-                  value={ this.state.name }
-                  className='form-control'
-                  placeholder='Category Name' />
-              </div>
-            </div>
-            <div className='col-xs-3'>
-              <button href='#' className='btn btn-block btn-success' type='submit'>
-                Add Category
-              </button>
-            </div>
-          </form>
-        </div>
-        <br />
-        { categories && categories.length ? (
-          <div className='__strippedTable'>
-            { categories.map((category, index) => (
-              <CategoryListItem
-                handleRename={ (newValue) => this.props.handleRename(index, newValue) }
-                handleDelete={ () => this.props.handleDelete(index) }
-                category={ category }
-                key={ index } />
-            )) }
-          </div>
-        ) : <img src='assets/img/empty-wireframe.jpg' className='empty-state'/> } */}
+        </div> 
       </div>
     );
   }

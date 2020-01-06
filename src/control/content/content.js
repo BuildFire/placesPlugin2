@@ -21,11 +21,9 @@ class Content extends React.Component {
       addingLocation: false,
       editingLocation: false,
       activeTab: 0,
-      breadcrumbName: ''
+      breadcrumb: ''
     };
-    this.handleCancelCategoryBreadCrumb = this.handleCancelCategoryBreadCrumb.bind(this);
-    this.handleAddCategoryBreadCrumb = this.handleAddCategoryBreadCrumb.bind(this);
-    this.handleEditCategoryBreadCrumb = this.handleEditCategoryBreadCrumb.bind(this);
+    this.handleBreadcrumb = this.handleBreadcrumb.bind(this);
   }
 
   componentWillMount() {
@@ -171,10 +169,28 @@ class Content extends React.Component {
     tooltip.innerHTML = "Copy to clipboard";
   }
 
+  handleBreadcrumb(options) {
+    switch(options) {
+      case 'addLocation': 
+        this.setState({breadcrumb:'Locations > Add Location'});
+        return;
+      case 'editLocation':
+        this.setState({breadcrumb:'Locations > Edit Location'});
+        return;
+      case 'addCategory':
+        this.setState({breadcrumb:'Categories > Add Category'});
+        return;
+      case 'editCategory':
+        this.setState({breadcrumb:'Categories > Edit Category'});
+        return;
+      default:
+        this.setState({breadcrumb: ''});
+        return;
+    }
+  }
   handleLocationEdit(index) {
     this.setState({ editingLocation: index });
-    let breadcrumb = "Locations > Edit location";
-    this.setState({ breadcrumbName: breadcrumb });
+    this.handleBreadcrumb('editLocation');
   }
 
   /**
@@ -204,21 +220,6 @@ class Content extends React.Component {
     this.handleSave();
   }
 
-  handleAddCategoryBreadCrumb() {
-    let breadcrumb = "Categories > Add category";
-    this.setState({ breadcrumbName: breadcrumb });
-  }
-
-  handleEditCategoryBreadCrumb() {
-    let breadcrumb = "Categories > Edit category";
-    this.setState({ breadcrumbName: breadcrumb });
-  }
-
-  handleCancelCategoryBreadCrumb() {
-    let breadcrumb = "";
-    this.setState({ breadcrumbName: breadcrumb });
-  }
-
   /**
    * Handle a location submission and save to datastore
    *
@@ -239,8 +240,7 @@ class Content extends React.Component {
     });
 
     this.setState({ addingLocation: false });
-    let breadcrumb = "";
-    this.setState({ breadcrumbName: breadcrumb });
+    this.handleBreadcrumb();
   }
 
   /**
@@ -259,8 +259,7 @@ class Content extends React.Component {
 
       this.setState({ editingLocation: false });
     });
-    let breadcrumb = "";
-    this.setState({ breadcrumbName: breadcrumb });
+    this.handleBreadcrumb('editLocation');
   }
 
   /**
@@ -275,11 +274,6 @@ class Content extends React.Component {
       this.getPlacesList();
       this.handleSave();
     });
-
-    // data.places = data.places || [];
-    // locations.forEach(location => data.places.push(location));
-    // this.setState({ data, addingLocation: false });
-    // this.handleSave();
   }
 
   /**
@@ -305,8 +299,7 @@ class Content extends React.Component {
 
   onAddLocation() {
     this.setState({ addingLocation: true });
-    let breadcrumb = "Locations > Add location";
-    this.setState({ breadcrumbName: breadcrumb });
+    this.handleBreadcrumb('addLocation');
   }
 
   onAddLocationCancel() {
@@ -314,8 +307,7 @@ class Content extends React.Component {
       addingLocation: false,
       editingLocation: false
     });
-    let breadcrumb = "";
-    this.setState({ breadcrumbName: breadcrumb });
+    this.handleBreadcrumb();
   }
 
   renderTab = () => {
@@ -329,9 +321,7 @@ class Content extends React.Component {
               handleRename={(index, newName) => this.handleCategoryRename(index, newName)}
               handleDelete={(index) => this.handleCategoryDelete(index)}
               onSubmit={(category) => this.onCategorySubmit(category)}
-              handleAddCategoryBreadCrumb={this.handleAddCategoryBreadCrumb}
-              handleEditCategoryBreadCrumb={this.handleEditCategoryBreadCrumb}
-              handleCancelCategoryBreadCrumb={this.handleCancelCategoryBreadCrumb}
+              handleBreadcrumb={this.handleBreadcrumb}
             />
           </div>
         );
@@ -379,10 +369,10 @@ class Content extends React.Component {
   }
 
   render() {
-    const { activeTab } = this.state;
+    const { activeTab, breadcrumb } = this.state;
     return (
       <div>
-        <h4>{this.state.breadcrumbName}</h4>
+        <h4>{breadcrumb}</h4>
         <ul id="contentTabs" className="nav nav-tabs">
           {tabs.map((tab, ind) => (
             <li
