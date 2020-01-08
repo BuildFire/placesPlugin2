@@ -29,18 +29,7 @@ window.filterControl = {
 
                 // Add the compiled html to the page
                 document.getElementById('categories').innerHTML = theCompiledHtml;
-                sideNav.className += ' showing';
-                
-                if(sideNav.classList.contains("showing")) {
-                    if (app.state.categories.length <= 4) {
-                        sideNav.classList.add("expandMinimum");
-                    } else if (app.state.categories.length > 4 && app.state.categories.length < 9) {
-                        sideNav.classList.add("expandMedium");
-                    } else {
-                        sideNav.classList.add("expandMaximum");
-                    }
-                }
-
+                sideNav.style.display = ' block';
             };
         }
     },
@@ -72,7 +61,7 @@ window.filterControl = {
     closeNav: () => {
 
         let sideNav = document.getElementById("sideNav");
-        sideNav.className = sideNav.className.replace('showing', '');
+        sideNav.style.display = 'none';
 
         if (filterControl.updatedPlaces !== null && filterControl.originalPlaces != filterControl.updatedPlaces) {
             let originalPlaces = filterControl.originalPlaces,
