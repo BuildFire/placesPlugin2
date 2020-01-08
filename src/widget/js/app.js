@@ -51,7 +51,8 @@ window.app = {
         isBackNav: false,
         bookmarked: false,
         isBookmarkingAllowed: true,
-        pointsOfInterest: "on"
+        pointsOfInterest: "on",
+        isCategoryDeeplink: false
     },
     backButtonInit: () => {
         window.app.goBack = window.buildfire.navigation.onBackButtonClick;
@@ -139,11 +140,12 @@ window.app = {
             window.app.state.actionItems = data.actionItems || [];
             window.app.state.defaultView = data.defaultView;
             window.app.state.isBookmarkingAllowed = data.isBookmarkingAllowed;
-
-            if (data.categories) {
+            console.log("default view",window.app.state.defaultView);
+            if (data.categories && !window.app.state.isCategoryDeeplink) {
               window.app.state.categories = data.categories.map(category => {
                   return { name: category, isActive: true };
               });
+              console.log("window.app.state.categories > ", window.app.state.categories);
             }
             if (data.pointsOfInterest) {
               window.app.state.pointsOfInterest = data.pointsOfInterest;
@@ -259,7 +261,7 @@ window.app = {
         window.app.gotPieceOfData();
     },
     
-    initDetailView: () => {
+  initDetailView: () => {
       window.buildfire.appearance.titlebar.show();
       window.app.backButtonInit();
       buildfire.deeplink.getData(function (data) {
@@ -299,11 +301,48 @@ window.app = {
         window.app.state.bookmarked = bookmark.length > 0;
         });
     },
+
+  initCategoryView: (categoryId, defaultView) => {
+      window.app.state.categories.map(category => {
+        if (category.id === categoryId) {
+          return { name: category, isActive: true };
+        } else {
+          return { name: category, isActive: false };
+        }
+      });
+      console.log('window.app.state.categories > ', window.app.state.categories);
+      window.app.init(window.app.gotPlaces, window.app.gotLocation);
+    }
 };
 
 const queryStringObj = buildfire.parseQueryString();
 if (queryStringObj.dld) {
-  window.app.initDetailView(); 
+  buildfire.datastore.get(window.app.settings.placesTag, function(err, results) {
+    if (err) {
+      console.log(err);
+      return false;
+    } 
+    let deeplinkObj = JSON.parse(queryStringObj.dld);
+    console.log(deeplinkObj);
+    console.log(results);
+    window.app.state.categories = results.data.categories;
+  
+    window.app.state.categories.map(category => {
+      if (category.id === deeplinkObj.id) {
+        window.app.state.isCategoryDeeplink = true;
+      }
+    });
+    if (window.app.state.isCategoryDeeplink) {
+      results.data.defaultView = deeplinkObj.view;
+      window.app.initCategoryView(deeplinkObj.id);
+      buildfire.datastore.save(results, 'places', (err) => {
+        if (err) console.error(err);
+      });
+      window.app.state.defaultView === deeplinkObj.view;
+    } else {
+      window.app.initDetailView();
+    }
+  });
 } else {
   window.app.init(window.app.gotPlaces, window.app.gotLocation);
 }

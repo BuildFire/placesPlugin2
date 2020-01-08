@@ -52,7 +52,9 @@ class CategoriesList extends React.Component {
                 handleRename={ (newValue) => this.props.handleRename(index, newValue) }
                 handleDelete={ () => this.props.handleDelete(index) }
                 category={ category }
-                key={ index } />
+                key={index}
+                copyToClipboard={ (id) => this.props.copyToClipboard(id)}
+                onHoverOut={ (id) => this.props.onHoverOut(id)} />
             )) }
           </div>
         ) : <img src='assets/img/empty-wireframe.jpg' className='empty-state'/> }

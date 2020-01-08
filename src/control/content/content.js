@@ -14,7 +14,8 @@ class Content extends React.Component {
     this.state = {
       data: {},
       addingLocation: false,
-      editingLocation: false
+      editingLocation: false,
+      categoryDeeplink: ''
     };
   }
 
@@ -146,7 +147,7 @@ class Content extends React.Component {
     });
   }
   copyToClipboard(id) {
-    let queryStringURL = `?dld={"id":"${id}"}`;
+    let queryStringURL = `?dld={"id":"${id}", "view": "list"}`;
     let el = document.createElement('textarea');
     let tooltip = document.getElementById(`tool-tip-text--${id}`);
     el.value = queryStringURL;
@@ -238,7 +239,7 @@ class Content extends React.Component {
    * @param   {Object} locations Locations array
    */
   onMultipleLocationSubmit(locations) {
-    locations = locations.filter(location => typeof location === 'object')
+    locations = locations.filter(location => typeof location === 'object');
     buildfire.datastore.bulkInsert(locations, 'places-list', (err, result) => {
       if (err) return console.error(err);
       this.getPlacesList();
@@ -270,6 +271,10 @@ class Content extends React.Component {
     data.categories.push(category);
     this.setState({ data });
     this.handleSave();
+
+    let categoryDeeplink = buildfire.deeplink.createLink(category.id);
+    this.setState({ categoryDeeplink });
+    console.log("categoryDeeplink > ", categoryDeeplink);
   }
 
   onAddLocation() {
@@ -292,7 +297,9 @@ class Content extends React.Component {
             categories={ data.categories }
             handleRename={ (index, newName) => this.handleCategoryRename(index, newName) }
             handleDelete={ (index) => this.handleCategoryDelete(index) }
-            onSubmit={ (category) => this.onCategorySubmit(category) } />
+            onSubmit={(category) => this.onCategorySubmit(category)}
+            copyToClipboard={ (id) => this.copyToClipboard(id)}
+            onHoverOut={ (id) => this.onHoverOut(id)} />
         </div>
         <div className='row'>
           <div className='col-xs-12'>

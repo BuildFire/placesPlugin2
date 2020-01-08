@@ -57,7 +57,7 @@ table td.action-large a {
   width: 20px;
   cursor: pointer;
 }
-.sortable-item .copy {
+ .copy {
   position: absolute;
   top: 50%;
   right: 38px;
@@ -65,7 +65,7 @@ table td.action-large a {
   width: 20px;
   cursor: pointer;
 }
-.sortable-item .copy
+ .copy
   .tooltiptext {
     visibility: hidden;
     width: 122px;
@@ -82,7 +82,7 @@ table td.action-large a {
     opacity: 0;
     transition: opacity 0.3s;
   }
-.sortable-item .copy:hover .tooltiptext {
+ .copy:hover .tooltiptext {
     visibility: visible;
     opacity: 1;
   }
