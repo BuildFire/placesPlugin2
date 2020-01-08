@@ -108,7 +108,10 @@ window.app = {
                 return place.data;
                 }).filter(place => place.title)
               );
-
+              
+              if(window.app.state.isCategoryDeeplink) {
+                window.filterControl.closeNav();
+              }
               window.app.state.places = places;
               window.app.state.filteredPlaces = places;
               // If we have more pages we keep going
@@ -338,7 +341,6 @@ if (queryStringObj.dld) {
       window.app.state.defaultView = deeplinkObj.view;
       window.app.state.mode = deeplinkObj.view;
       window.filterControl.filterCategories(deeplinkObj.id);
-      window.filterControl.closeNav();
       window.app.initCategoryView(deeplinkObj.id);
     } else {
       window.app.initDetailView();
