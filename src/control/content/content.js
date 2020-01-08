@@ -238,7 +238,7 @@ class Content extends React.Component {
    * @param   {Object} locations Locations array
    */
   onMultipleLocationSubmit(locations) {
-    locations = locations.filter(location => typeof location === 'object')
+    locations = locations.filter(location => typeof location === 'object');
     buildfire.datastore.bulkInsert(locations, 'places-list', (err, result) => {
       if (err) return console.error(err);
       this.getPlacesList();
