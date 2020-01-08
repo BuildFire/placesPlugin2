@@ -56,19 +56,16 @@ class CategoryListItem extends React.Component {
             className='edit-box'
             value={ newValue }
             type='text'/>
-          : category.name }
-        </div>
-        <div>
+            : category.name}
+          <div>
             <span className="copy btn-icon btn-link-icon btn-success"
               onClick={() => this.props.copyToClipboard(category.id)}
               onMouseOut={() => this.props.onHoverOut(category.id)}>
               <span className="tooltiptext" id={`tool-tip-text--${category.id}`}>Copy to clipboard</span>
-          </span>
-          <span className="copy btn-icon btn-link-icon btn-primary"
-              onClick={() => this.props.copyToClipboard(category.id)}
-              onMouseOut={() => this.props.onHoverOut(category.id)}>
-              <span className="tooltiptext" id={`tool-tip-text--${category.id}`}>Copy to clipboard</span>
             </span>
+          </div>
+        </div>
+        <div>
           <div className='action-large __categoryEditBox'>
             { editing ? (
               <span>

@@ -134,11 +134,13 @@ window.app = {
 
           if (data) {
             places = data.places || [];
-            window.app.state.mode = data.defaultView;
             window.app.state.sortBy = data.sortBy;
             window.app.state.itemsOrder = data.itemsOrder;
             window.app.state.actionItems = data.actionItems || [];
-            window.app.state.defaultView = data.defaultView;
+            if (!window.app.state.isCategoryDeeplink) {
+              window.app.state.defaultView = data.defaultView;
+              window.app.state.mode = data.defaultView;
+            }
             window.app.state.isBookmarkingAllowed = data.isBookmarkingAllowed;
             console.log("default view",window.app.state.defaultView);
             if (data.categories && !window.app.state.isCategoryDeeplink) {
@@ -302,8 +304,8 @@ window.app = {
         });
     },
 
-  initCategoryView: (categoryId, defaultView) => {
-      window.app.state.categories.map(category => {
+  initCategoryView: (categoryId) => {
+      window.app.state.categories = window.app.state.categories.map(category => {
         if (category.id === categoryId) {
           return { name: category, isActive: true };
         } else {
@@ -333,12 +335,11 @@ if (queryStringObj.dld) {
       }
     });
     if (window.app.state.isCategoryDeeplink) {
-      results.data.defaultView = deeplinkObj.view;
+      window.app.state.defaultView = deeplinkObj.view;
+      window.app.state.mode = deeplinkObj.view;
+      window.filterControl.filterCategories(deeplinkObj.id);
+      window.filterControl.closeNav();
       window.app.initCategoryView(deeplinkObj.id);
-      buildfire.datastore.save(results, 'places', (err) => {
-        if (err) console.error(err);
-      });
-      window.app.state.defaultView === deeplinkObj.view;
     } else {
       window.app.initDetailView();
     }
