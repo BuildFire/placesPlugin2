@@ -40,12 +40,6 @@ class LocationForm extends React.Component {
    * - Carousel
    */
   componentDidMount() {
-    if (this.props.location && this.props.location.categories) {
-      const category = this.props.location.categories.map(cat => cat.id);
-      if (category) {
-        this.setState({ categories: [...this.state.categories, ...category] });
-      }
-    }
     
     // Mount google map autocomplete
     const { maps } = window.google;
@@ -158,13 +152,13 @@ class LocationForm extends React.Component {
   }
 
   onCategoryChange(e) {
-    let { name, checked } = e.target;
+    let { name, checked } = e.target;
 
     // Category was selected
     if (checked) {
-      let { categories } = this.state;
-      categories.push(name);
-      this.setState({ categories });
+      this.setState(prevState => ({
+        categories: [...prevState.categories, name]
+      }));
 
     // Category was unselected
     } else {
@@ -292,7 +286,7 @@ class LocationForm extends React.Component {
   }
 
   render() {
-    const { title, address, description, image, categories, subtitle, deeplinkUrl } = this.state;
+    const { title, address, description, image, categories, subtitle, deeplinkUrl } = this.state;
 
     return (
       <form onSubmit={ e => this.onSubmit(e) } onKeyPress={ e => this.onAutoKeyUp(e) }>
