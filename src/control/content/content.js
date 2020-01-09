@@ -147,32 +147,37 @@ class Content extends React.Component {
     });
   }
   copyToClipboard(id, defaultView) {
-    let queryStringURL = "";
-    
-    if (defaultView === "map" || defaultView === "list") {
-      queryStringURL = `?dld={"id":"${id}", "view": "${defaultView}"}`;
-    } else {
-      queryStringURL = `?dld={"id":"${id}"`;
-    }
-    
     let el = document.createElement('textarea');
-    let tooltip = document.getElementById(`tool-tip-text--${id}`);
     el.value = queryStringURL;
     document.body.appendChild(el);
     el.select();
     document.execCommand('copy');
     document.body.removeChild(el);
-    tooltip.innerHTML = "Copied!";
+    let queryStringURL = "";
+    
+    if (defaultView === "map" || defaultView === "list") {
+      queryStringURL = `?dld={"id":"${id}", "view": "${defaultView}"}`;
+      let tooltipMap = document.getElementById(`tool-tip-map-text--${id}`);
+      let tooltipList = document.getElementById(`tool-tip-list-text--${id}`);
+      tooltipMap.innerHTML = "Copied!";
+      tooltipList.innerHTML = "Copied!";
+    } else {
+      let tooltip = document.getElementById(`tool-tip-text--${id}`);
+      queryStringURL = `?dld={"id":"${id}"}`;
+      tooltip.innerHTML = "Copied!";
+    }
   }
   onHoverOut(id, defaultView) {
-    let tooltip = document.getElementById(`tool-tip-text--${id}`);
     if (defaultView === "map") {
-      tooltip.innerHTML = "Copy category map view Query String";
+      let tooltip = document.getElementById(`tool-tip-map-text--${id}`);
+      tooltip.innerHTML = "Copy map view";
     }
-    else if (defaultView === "link") {
-      tooltip.innerHTML = "Copy category list view Query String";
+    else if (defaultView === "list") {
+      let tooltip = document.getElementById(`tool-tip-list-text--${id}`);
+      tooltip.innerHTML = "Copy list view";
     }
     else {
+      let tooltip = document.getElementById(`tool-tip-text--${id}`);
       tooltip.innerHTML = "Copy to clipboard";
     }
     

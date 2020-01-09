@@ -108,12 +108,26 @@ window.app = {
                 return place.data;
                 }).filter(place => place.title)
               );
-              window.app.state.places = places;
-              window.app.state.filteredPlaces = places;
-              if (window.app.state.isCategoryDeeplink) {
-                window.filterControl.closeNav();
-                console.log("close nav is run");
+              if(!window.app.state.isCategoryDeeplink) {
+                window.app.state.places = places;
+                window.app.state.filteredPlaces = places;
+              } else {
+                let placesToHide = [];
+                window.app.state.categories.map(category => {
+                  if (category.isActive) {
+                    places.map(place => {
+                      if (place.categories.includes(category.name.id)) {
+                        window.app.state.places.push(place);
+                        window.app.state.filteredPlaces.push(place);
+                      } else {
+                        placesToHide.push(place);
+                      }
+                    });
+                  }
+                });
+                window.listView.filter(placesToHide, window.app.state.places);
               }
+              
               // If we have more pages we keep going
               if (result.length === pageSize) {
                 page++;
@@ -143,11 +157,8 @@ window.app = {
             if (!window.app.state.isCategoryDeeplink) {
               window.app.state.defaultView = data.defaultView;
               window.app.state.mode = data.defaultView;
-              console.log("statussss ");
-
             }
             window.app.state.isBookmarkingAllowed = data.isBookmarkingAllowed;
-            console.log("default view",window.app.state.defaultView);
             if (data.categories && !window.app.state.isCategoryDeeplink) {
               window.app.state.categories = data.categories.map(category => {
                   return { name: category, isActive: true };
@@ -252,12 +263,21 @@ window.app = {
     },
     gotPlaces(err, places) {
         if(window.app.state.mode === window.app.settings.viewStates.list){
-          window.initList(places, true);
+          if (!window.app.state.isCategoryDeeplink) {
+             window.initList(places, true);
             //We can not pre-init the map, as it needs to be visible
+          } else {
+            window.initList(window.app.state.places, true);
+          } 
         }
         else {
-          window.initMap(places, true);
-          window.initList(places);          
+          if (!window.app.state.isCategoryDeeplink) { 
+            window.initMap(places, true);
+            window.initList(places);
+          } else {
+            window.initMap(window.app.state.places, true);
+            window.initList(window.app.state.places); 
+          }         
         }
         window.app.gotPieceOfData();
     },
@@ -316,7 +336,6 @@ window.app = {
           return { name: category, isActive: false };
         }
       });
-
       window.app.init(window.app.gotPlaces, window.app.gotLocation);
     }
 };
@@ -339,9 +358,6 @@ if (queryStringObj.dld) {
     if (window.app.state.isCategoryDeeplink) {
       window.app.state.defaultView = deeplinkObj.view;
       window.app.state.mode = deeplinkObj.view;
-      console.log("deeplinkObj.view > ", deeplinkObj.view);
-      console.log("window.app.state.mode > ", window.app.state.mode);
-      console.log("window.app.state.defaultView > ", window.app.state.defaultView);
 
       window.app.initCategoryView(deeplinkObj.id);
     } else {

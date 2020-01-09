@@ -79,15 +79,15 @@ class CategoryListItem extends React.Component {
           <div className="copyLinkCategory">
             <span className=" btn-icon btn-link-icon btn-success"
               onClick={() => this.props.copyToClipboard(category.id, "list")}
-              onMouseOut={() => this.props.onHoverOut(category.id)}>
-              <span className="tooltiptext" id={`tool-tip-text--${category.id, "list"}`}>Copy category list view Query String</span>
+              onMouseOut={() => this.props.onHoverOut(category.id, "list")}>
+              <span className="tooltiptext" id={`tool-tip-list-text--${category.id}`}>Copy list view</span>
             </span>
           </div>
           <div className="copyLinkCategory">
             <span className=" btn-icon btn-link-icon btn-primary"
               onClick={() => this.props.copyToClipboard(category.id, "map")}
               onMouseOut={() => this.props.onHoverOut(category.id, "map")}>
-              <span className="tooltiptext" id={`tool-tip-text--${category.id}`}>Copy category map view Query String</span>
+              <span className="tooltiptext" id={`tool-tip-map-text--${category.id}`}>Copy map view</span>
             </span>
           </div>
           <div className='action'>
