@@ -37,6 +37,22 @@ class Content extends React.Component {
     });
 
     window.$state = this.state;
+    var searchData = {
+      tag: "place-data",
+      searchText: 'hr',
+      pageSize: 30,
+      pageIndex: 0,
+      preHighlightTag: "<b>",
+      postHighlightTag: "</b>"
+    };
+    buildfire.services.searchEngine.search(searchData, (err, res) => {
+      if (err) {
+        console.log(err);
+        return;
+      }
+      console.log("data fetched", res);
+    });
+
   }
 
   migrate(places) {
@@ -144,6 +160,17 @@ class Content extends React.Component {
     buildfire.datastore.delete(place.id, 'places-list', (err) => {
       if (err) return console.error(err);
     });
+    let deleteData = {
+      tag: "place-data",
+      id: place.id
+    }; 
+    buildfire.services.searchEngine.delete(deleteData, (err, response) => {
+      if (err) {
+        console.log(err);
+        return;
+      }
+    });
+
   }
   copyToClipboard(id) {
     let queryStringURL = `?dld={"id":"${id}"}`;
@@ -210,6 +237,19 @@ class Content extends React.Component {
         this.setState({ data });
         this.handleSave();
     });
+    let insertData = {
+      tag: "place-data",
+      id: location.id,
+      title: location.title,
+      description: location.description,
+      keywords: `${location.title}, ${location.subtitle}, ${location.description}`
+    }; 
+    buildfire.services.searchEngine.insert(insertData, (err, response) => {
+      if (err) {
+        console.log(err);
+        return;
+      }
+    });
 
     this.setState({ addingLocation: false });
   }
@@ -229,6 +269,18 @@ class Content extends React.Component {
       this.setState({ data });
 
       this.setState({ editingLocation: false });
+    });
+    let updateData = {
+      tag: "place-data",
+      id: location.id,
+      title: location.title,
+      description: location.description
+    }; 
+    buildfire.services.searchEngine.update(updateData, (err, response) => {
+      if (err) {
+        console.log(err);
+        return;
+      }
     });
   }
 
