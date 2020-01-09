@@ -56,6 +56,7 @@ window.filterControl = {
         });
 
         filterControl.updatedPlaces = app.state.filteredPlaces;
+        console.log("filterControl.filteredPlaces",filterControl.filteredPlaces);
     },
     closeNav: () => {
 

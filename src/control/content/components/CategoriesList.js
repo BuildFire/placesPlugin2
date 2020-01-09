@@ -53,8 +53,8 @@ class CategoriesList extends React.Component {
                 handleDelete={ () => this.props.handleDelete(index) }
                 category={ category }
                 key={index}
-                copyToClipboard={ (id) => this.props.copyToClipboard(id)}
-                onHoverOut={ (id) => this.props.onHoverOut(id)} />
+                copyToClipboard={ (id, defaultView) => this.props.copyToClipboard(id, defaultView)}
+                onHoverOut={ (id, defaultView) => this.props.onHoverOut(id, defaultView)} />
             )) }
           </div>
         ) : <img src='assets/img/empty-wireframe.jpg' className='empty-state'/> }

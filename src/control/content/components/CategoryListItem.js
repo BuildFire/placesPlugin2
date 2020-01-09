@@ -57,13 +57,6 @@ class CategoryListItem extends React.Component {
             value={ newValue }
             type='text'/>
             : category.name}
-          <div>
-            <span className="copy btn-icon btn-link-icon btn-success"
-              onClick={() => this.props.copyToClipboard(category.id)}
-              onMouseOut={() => this.props.onHoverOut(category.id)}>
-              <span className="tooltiptext" id={`tool-tip-text--${category.id}`}>Copy to clipboard</span>
-            </span>
-          </div>
         </div>
         <div>
           <div className='action-large __categoryEditBox'>
@@ -82,6 +75,20 @@ class CategoryListItem extends React.Component {
                 Edit
               </a>
             ) }
+          </div>
+          <div className="copyLinkCategory">
+            <span className=" btn-icon btn-link-icon btn-success"
+              onClick={() => this.props.copyToClipboard(category.id, "list")}
+              onMouseOut={() => this.props.onHoverOut(category.id)}>
+              <span className="tooltiptext" id={`tool-tip-text--${category.id, "list"}`}>Copy category list view Query String</span>
+            </span>
+          </div>
+          <div className="copyLinkCategory">
+            <span className=" btn-icon btn-link-icon btn-primary"
+              onClick={() => this.props.copyToClipboard(category.id, "map")}
+              onMouseOut={() => this.props.onHoverOut(category.id, "map")}>
+              <span className="tooltiptext" id={`tool-tip-text--${category.id}`}>Copy category map view Query String</span>
+            </span>
           </div>
           <div className='action'>
             <span>

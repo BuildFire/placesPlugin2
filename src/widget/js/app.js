@@ -108,12 +108,12 @@ window.app = {
                 return place.data;
                 }).filter(place => place.title)
               );
-              
-              if(window.app.state.isCategoryDeeplink) {
-                window.filterControl.closeNav();
-              }
               window.app.state.places = places;
               window.app.state.filteredPlaces = places;
+              if (window.app.state.isCategoryDeeplink) {
+                window.filterControl.closeNav();
+                console.log("close nav is run");
+              }
               // If we have more pages we keep going
               if (result.length === pageSize) {
                 page++;
@@ -143,6 +143,8 @@ window.app = {
             if (!window.app.state.isCategoryDeeplink) {
               window.app.state.defaultView = data.defaultView;
               window.app.state.mode = data.defaultView;
+              console.log("statussss ");
+
             }
             window.app.state.isBookmarkingAllowed = data.isBookmarkingAllowed;
             console.log("default view",window.app.state.defaultView);
@@ -150,7 +152,6 @@ window.app = {
               window.app.state.categories = data.categories.map(category => {
                   return { name: category, isActive: true };
               });
-              console.log("window.app.state.categories > ", window.app.state.categories);
             }
             if (data.pointsOfInterest) {
               window.app.state.pointsOfInterest = data.pointsOfInterest;
@@ -315,7 +316,7 @@ window.app = {
           return { name: category, isActive: false };
         }
       });
-      console.log('window.app.state.categories > ', window.app.state.categories);
+
       window.app.init(window.app.gotPlaces, window.app.gotLocation);
     }
 };
@@ -328,8 +329,6 @@ if (queryStringObj.dld) {
       return false;
     } 
     let deeplinkObj = JSON.parse(queryStringObj.dld);
-    console.log(deeplinkObj);
-    console.log(results);
     window.app.state.categories = results.data.categories;
   
     window.app.state.categories.map(category => {
@@ -340,7 +339,10 @@ if (queryStringObj.dld) {
     if (window.app.state.isCategoryDeeplink) {
       window.app.state.defaultView = deeplinkObj.view;
       window.app.state.mode = deeplinkObj.view;
-      window.filterControl.filterCategories(deeplinkObj.id);
+      console.log("deeplinkObj.view > ", deeplinkObj.view);
+      console.log("window.app.state.mode > ", window.app.state.mode);
+      console.log("window.app.state.defaultView > ", window.app.state.defaultView);
+
       window.app.initCategoryView(deeplinkObj.id);
     } else {
       window.app.initDetailView();

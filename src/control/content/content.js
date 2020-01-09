@@ -146,8 +146,15 @@ class Content extends React.Component {
       if (err) return console.error(err);
     });
   }
-  copyToClipboard(id) {
-    let queryStringURL = `?dld={"id":"${id}", "view": "list"}`;
+  copyToClipboard(id, defaultView) {
+    let queryStringURL = "";
+    
+    if (defaultView === "map" || defaultView === "list") {
+      queryStringURL = `?dld={"id":"${id}", "view": "${defaultView}"}`;
+    } else {
+      queryStringURL = `?dld={"id":"${id}"`;
+    }
+    
     let el = document.createElement('textarea');
     let tooltip = document.getElementById(`tool-tip-text--${id}`);
     el.value = queryStringURL;
@@ -157,9 +164,18 @@ class Content extends React.Component {
     document.body.removeChild(el);
     tooltip.innerHTML = "Copied!";
   }
-  onHoverOut(id) {
+  onHoverOut(id, defaultView) {
     let tooltip = document.getElementById(`tool-tip-text--${id}`);
-    tooltip.innerHTML = "Copy to clipboard";
+    if (defaultView === "map") {
+      tooltip.innerHTML = "Copy category map view Query String";
+    }
+    else if (defaultView === "link") {
+      tooltip.innerHTML = "Copy category list view Query String";
+    }
+    else {
+      tooltip.innerHTML = "Copy to clipboard";
+    }
+    
   }
 
   handleLocationEdit(index) {
@@ -298,8 +314,8 @@ class Content extends React.Component {
             handleRename={ (index, newName) => this.handleCategoryRename(index, newName) }
             handleDelete={ (index) => this.handleCategoryDelete(index) }
             onSubmit={(category) => this.onCategorySubmit(category)}
-            copyToClipboard={ (id) => this.copyToClipboard(id)}
-            onHoverOut={ (id) => this.onHoverOut(id)} />
+            copyToClipboard={ (id, defaultView) => this.copyToClipboard(id, defaultView)}
+            onHoverOut={ (id, defaultView) => this.onHoverOut(id, defaultView)} />
         </div>
         <div className='row'>
           <div className='col-xs-12'>
