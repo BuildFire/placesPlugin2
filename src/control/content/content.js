@@ -144,12 +144,15 @@ class Content extends React.Component {
     buildfire.datastore.delete(place.id, 'places-list', (err) => {
       if (err) return console.error(err);
 
-      let placeToDelete = place.searchData.id;
-      let deleteData = {
-        tag: "place-data",
-        id: placeToDelete,
-      };
-      SearchEngine.delete(deleteData);
+      if (place.searchData) {
+        let placeToDelete = place.searchData.id;
+        let deleteData = {
+          tag: "place-data",
+          id: placeToDelete,
+        };
+
+        SearchEngine.delete(deleteData);
+      }
     });
   }
   copyToClipboard(id) {
@@ -256,17 +259,19 @@ class Content extends React.Component {
 
       this.setState({ editingLocation: false });
 
-      let placeToUpdate = data.places[index].searchData.id;
+      if (data.places[index].searchData) {
+        let placeToUpdate = data.places[index].searchData.id;
+        let updateData = {
+          tag: "place-data",
+          id: placeToUpdate,
+          title: location.title,
+          imageUrl: location.image,
+          description: location.subtitle,
+          keywords: `${location.title}, ${location.subtitle}, ${location.description}`
+        };
 
-      let updateData = {
-        tag: "place-data",
-        id: placeToUpdate,
-        title: location.title,
-        imageUrl: location.image,
-        description: location.subtitle,
-        keywords: `${location.title}, ${location.subtitle}, ${location.description}`
-      };
-      SearchEngine.update(updateData);
+        SearchEngine.update(updateData);
+      }
     });
   }
 
