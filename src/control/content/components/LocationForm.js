@@ -85,6 +85,8 @@ class LocationForm extends React.Component {
       let id = this.state.id;
       let link = Buildfire.deeplink.createLink({ id });
       this.setState({ deeplinkUrl: link });
+      let queryString = `?dld={"id":"${id}"}`;
+      this.setState({ querystringUrl: queryString });
     }
   }
 
@@ -286,7 +288,7 @@ class LocationForm extends React.Component {
   }
 
   render() {
-    const { title, address, description, image, categories, subtitle, deeplinkUrl } = this.state;
+    const { title, address, description, image, categories, subtitle, deeplinkUrl, querystringUrl } = this.state;
 
     return (
       <form onSubmit={ e => this.onSubmit(e) } onKeyPress={ e => this.onAutoKeyUp(e) }>
@@ -300,6 +302,17 @@ class LocationForm extends React.Component {
             name='title'
             type='text'
             className='form-control' />
+        </div>
+
+        <div className='form-group'>
+          <label htmlFor='queryString'>Query String</label>
+          <input
+            disabled            
+            maxLength={ 90 }
+            value={ querystringUrl }
+            name='deeplink'
+            className='form-control'
+            type='text'/>
         </div>
 
         <div className='form-group'>
