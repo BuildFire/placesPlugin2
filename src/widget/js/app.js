@@ -112,20 +112,15 @@ window.app = {
                 window.app.state.places = places;
                 window.app.state.filteredPlaces = places;
               } else {
-                let placesToHide = [];
                 window.app.state.categories.map(category => {
-                  if (category.isActive) {
+                  category.isActive ?
                     places.map(place => {
                       if (place.categories.includes(category.name.id)) {
                         window.app.state.places.push(place);
                         window.app.state.filteredPlaces.push(place);
-                      } else {
-                        placesToHide.push(place);
                       }
-                    });
-                  }
+                    }) : null;
                 });
-                window.listView.filter(placesToHide, window.app.state.places);
               }
               
               // If we have more pages we keep going
@@ -262,24 +257,15 @@ window.app = {
       }
     },
     gotPlaces(err, places) {
-        if(window.app.state.mode === window.app.settings.viewStates.list){
-          if (!window.app.state.isCategoryDeeplink) {
-             window.initList(places, true);
-            //We can not pre-init the map, as it needs to be visible
-          } else {
-            window.initList(window.app.state.places, true);
-          } 
-        }
-        else {
-          if (!window.app.state.isCategoryDeeplink) { 
-            window.initMap(places, true);
-            window.initList(places);
-          } else {
-            window.initMap(window.app.state.places, true);
-            window.initList(window.app.state.places); 
-          }         
-        }
+      if (window.app.state.mode === window.app.settings.viewStates.list) {
+        window.app.state.isCategoryDeeplink ? window.initList(window.app.state.places, true) : window.initList(places, true);
+        //We can not pre-init the map, as it needs to be visible
+      } else {
+        window.app.state.isCategoryDeeplink ? window.initMap(window.app.state.places, true) : window.initMap(places, true);
+        window.app.state.isCategoryDeeplink ? window.initList(window.app.state.places) : window.initList(places);
+          
         window.app.gotPieceOfData();
+      }
     },
 
     gotLocation(err, location) {
@@ -342,19 +328,18 @@ window.app = {
 
 const queryStringObj = buildfire.parseQueryString();
 if (queryStringObj.dld) {
-  buildfire.datastore.get(window.app.settings.placesTag, function(err, results) {
-    if (err) {
-      console.log(err);
-      return false;
-    } 
-    let deeplinkObj = JSON.parse(queryStringObj.dld);
+  buildfire.datastore.get(window.app.settings.placesTag, (err, results) => {
+    if (err) return console.log(err);
+    
     window.app.state.categories = results.data.categories;
-  
+    let deeplinkObj = JSON.parse(queryStringObj.dld);
+    
     window.app.state.categories.map(category => {
       if (category.id === deeplinkObj.id) {
         window.app.state.isCategoryDeeplink = true;
       }
     });
+  
     if (window.app.state.isCategoryDeeplink) {
       window.app.state.defaultView = deeplinkObj.view;
       window.app.state.mode = deeplinkObj.view;
