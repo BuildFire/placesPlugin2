@@ -18,7 +18,7 @@ class LocationsActionBar extends React.Component {
     reader.onload = e => {
       const rows = csv.parse(e.target.result).slice(1);
       const { places } = this.props;
-      const allCategories = this.props.categories;
+      const allCategories = Array.isArray(this.props.categories) ? this.props.categories : [];
       const promises = [];
       // loop through the csv rows
       const locations = rows.map((row, i) => {
