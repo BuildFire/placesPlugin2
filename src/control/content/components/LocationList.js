@@ -1,5 +1,5 @@
 import React from 'react';
-import { SortableContainer, SortableElement, SortableHandle, arrayMove } from 'react-sortable-hoc';
+import { SortableContainer, SortableElement, SortableHandle, arrayMove } from 'react-sortable-hoc';
 
 class PlacesList extends React.Component {
   constructor(props) {
@@ -46,21 +46,20 @@ class PlacesList extends React.Component {
               ? parseFloat(value.place.address.lat.toFixed(10)) + ', ' +  parseFloat(value.place.address.lng.toFixed(10))
               : '' }
         </span>
-        <button className="btn btn--icon copy glyphicon glyphicon-paperclip"
+        <span className='edit'>
+          <a onClick={ () => this.onEditDidClick(value.index) }>
+            Edit
+          </a>
+        </span>
+        <span className="copy btn-icon btn-link-icon btn-primary"
           onClick={() => this.props.copyToClipboard(value.place.id)}
           onMouseOut={() => this.props.onHoverOut(value.place.id)}>
           <span className="tooltiptext" id={`tool-tip-text--${value.place.id}`}>Copy to clipboard</span>
-        </button>
-
-          <button className="edit btn btn--icon" onClick={ () => this.onEditDidClick(value.index) }>
-            <span className="icon icon-pencil"/>
-          </button>
-        
-        <button
-          className='delete btn btn--icon'
-          onClick={() => this.props.handleDelete(value.index)}>
-          <span className=" icon icon-cross2"></span>
-        </button>
+        </span>
+        <img
+          className='delete'
+          onClick={ () => this.props.handleDelete(value.index) }
+          src='assets/img/cross.png' />
       </div>
     ));
 

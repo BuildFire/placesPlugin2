@@ -177,12 +177,6 @@ class Content extends React.Component {
       case 'editLocation':
         this.setState({breadcrumb:'Locations > Edit Location'});
         return;
-      case 'addCategory':
-        this.setState({breadcrumb:'Categories > Add Category'});
-        return;
-      case 'editCategory':
-        this.setState({breadcrumb:'Categories > Edit Category'});
-        return;
       default:
         this.setState({breadcrumb: ''});
         return;
@@ -320,9 +314,7 @@ class Content extends React.Component {
               categories={data.categories}
               handleRename={(index, newName) => this.handleCategoryRename(index, newName)}
               handleDelete={(index) => this.handleCategoryDelete(index)}
-              onSubmit={(category) => this.onCategorySubmit(category)}
-              handleBreadcrumb={this.handleBreadcrumb}
-            />
+              onSubmit={(category) => this.onCategorySubmit(category)} />
           </div>
         );
       case 1:
