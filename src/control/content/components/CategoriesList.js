@@ -54,7 +54,7 @@ class CategoriesList extends React.Component {
                 key={ index } />
             )) }
           </div>
-        ) : <img src='assets/img/empty-wireframe.jpg' className='empty-state'/> }
+        ) : <img src='assets/svg/empty.svg' className='empty-state'/> }
       </div>
     );
   }

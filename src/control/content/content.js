@@ -307,6 +307,7 @@ class Content extends React.Component {
       addingLocation: false,
       editingLocation: false
     });
+    this.handleBreadcrumb();
   }
 
   renderTab = () => {
