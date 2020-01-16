@@ -264,3 +264,10 @@ img.delete {
 .__categoryEditBox a {
   margin-right: 10px;
 }
+
+.draggable-list-view.carousel-items .d-item span.title {
+  margin-left: -20px;
+}
+.draggable-list-view .d-item .media-holder {
+  width: 40px !important;
+}
