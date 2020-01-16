@@ -104,8 +104,9 @@ table td.action-large a {
 }
 
 .category-box{
-    height: 275px;
+    height: 375px;
     overflow-y: auto;
+    margin-top: 20px;
 }
 
 table img.delete {
@@ -214,7 +215,8 @@ img.delete {
 }
 
 .__categoryListItem img {
-  width: 20px;
+  width: 18px;
+  min-width: 18px;
   cursor: pointer;
   position: relative;
   top: 2px;
@@ -264,10 +266,15 @@ img.delete {
 .__categoryEditBox a {
   margin-right: 10px;
 }
-
-.draggable-list-view.carousel-items .d-item span.title {
-  margin-left: -20px;
+#contentTabs {
+  border: none !important;
 }
-.draggable-list-view .d-item .media-holder {
-  width: 40px !important;
+
+#contentTabs li.active > a { 
+  border-bottom: 3px solid #09a3ee !important;
+  font-size: 18px;
+}
+
+#contentTabs li > a { 
+  font-size: 18px;
 }
