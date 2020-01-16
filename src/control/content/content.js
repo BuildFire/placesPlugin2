@@ -139,7 +139,7 @@ class Content extends React.Component {
   handleLocationDelete(index) {
     buildfire.notifications.confirm({
       title: "Are you sure?"
-      , message: "Are you sure to delete this location?"
+      , message: "Are you sure you want to delete this location?"
       , confirmButton: { text: 'Yes', key: 'yes', type: 'danger' }
       , cancelButton: { text: 'No', key: 'no', type: 'default' }
     }, (e, res) => {
@@ -185,7 +185,7 @@ class Content extends React.Component {
   handleCategoryDelete(index) {
     buildfire.notifications.confirm({
       title: "Are you sure?"
-      , message: "Are you sure to delete this category?"
+      , message: "Are you sure you want to delete this category?"
       , confirmButton: { text: 'Yes', key: 'yes', type: 'danger' }
       , cancelButton: { text: 'No', key: 'no', type: 'default' }
     }, (e, res) => {
