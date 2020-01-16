@@ -138,13 +138,25 @@ class Content extends React.Component {
    * @param   {Number} index Location index on places array
    */
   handleLocationDelete(index) {
-    const { data } = this.state;
-    let [place] = data.places.splice(index, 1);
-    this.setState({ data });
+    buildfire.notifications.confirm({
+      title: "Are you sure?"
+      , message: "Are you sure you want to delete this location?"
+      , confirmButton: { text: 'Yes', key: 'yes', type: 'danger' }
+      , cancelButton: { text: 'No', key: 'no', type: 'default' }
+    }, (e, res) => {
+      if (e) return console.error(e);
 
-    buildfire.datastore.delete(place.id, 'places-list', (err) => {
-      if (err) return console.error(err);
+      if (res.selectedButton.key == "yes") {
+        const { data } = this.state;
+        let [place] = data.places.splice(index, 1);
+        this.setState({ data });
+
+        buildfire.datastore.delete(place.id, 'places-list', (err) => {
+          if (err) return console.error(err);
+        });
+      }
     });
+    
   }
 
   copyToClipboard(id, defaultView) {
@@ -196,11 +208,22 @@ class Content extends React.Component {
    * @param   {Number} index Location index on places array
    */
   handleCategoryDelete(index) {
-    let { data } = this.state;
-    data.categories = data.categories || [];
-    data.categories.splice(index, 1);
-    this.setState({ data });
-    this.handleSave();
+    buildfire.notifications.confirm({
+      title: "Are you sure?"
+      , message: "Are you sure you want to delete this category?"
+      , confirmButton: { text: 'Yes', key: 'yes', type: 'danger' }
+      , cancelButton: { text: 'No', key: 'no', type: 'default' }
+    }, (e, res) => {
+      if (e) return console.error(e);
+
+      if (res.selectedButton.key == "yes") {
+        let { data } = this.state;
+        data.categories = data.categories || [];
+        data.categories.splice(index, 1);
+        this.setState({ data });
+        this.handleSave();
+      }
+    });
   }
 
   /**
