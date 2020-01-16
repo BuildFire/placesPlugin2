@@ -146,15 +146,10 @@ class Content extends React.Component {
       if (err) return console.error(err);
     });
   }
+
   copyToClipboard(id, defaultView) {
-    let el = document.createElement('textarea');
-    el.value = queryStringURL;
-    document.body.appendChild(el);
-    el.select();
-    document.execCommand('copy');
-    document.body.removeChild(el);
-    let queryStringURL = "";
-    
+    let queryStringURL;
+
     if (defaultView === "map" || defaultView === "list") {
       queryStringURL = `?dld={"id":"${id}", "view": "${defaultView}"}`;
       let tooltipMap = document.getElementById(`tool-tip-map-text--${id}`);
@@ -166,7 +161,15 @@ class Content extends React.Component {
       queryStringURL = `?dld={"id":"${id}"}`;
       tooltip.innerHTML = "Copied!";
     }
+
+    let el = document.createElement('textarea');
+    el.value = queryStringURL;
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand('copy');
+    document.body.removeChild(el);
   }
+
   onHoverOut(id, defaultView) {
     if (defaultView === "map") {
       let tooltip = document.getElementById(`tool-tip-map-text--${id}`);
