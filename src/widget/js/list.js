@@ -96,7 +96,7 @@ window.listView = {
 
                 const distance = document.createElement('div');
                 distance.setAttribute('id', `distance-${place.id}`);
-                distance.innerHTML = (place.distance) ? place.distance : '...';
+                distance.innerHTML = (place.distance) ? place.distance : '';
                 distance.className = 'list-distance';
                 infoContainer.appendChild(distance);
 
