@@ -371,6 +371,8 @@ class Content extends React.Component {
               categories={data.categories}
               handleRename={(index, newName) => this.handleCategoryRename(index, newName)}
               handleDelete={(index) => this.handleCategoryDelete(index)}
+              copyToClipboard={ (id, defaultView) => this.copyToClipboard(id, defaultView)}
+              onHoverOut={ (id, defaultView) => this.onHoverOut(id, defaultView)} 
               onSubmit={(category) => this.onCategorySubmit(category)} />
           </div>
         );
@@ -412,9 +414,8 @@ class Content extends React.Component {
 
   switchTab = (index) => {
     const { activeTab } = this.state;
-    if (index !== activeTab) {
-      this.setState({ activeTab: index });
-    }
+    if(index == 0) this.setState({ activeTab: index, breadcrumb: '', addingLocation: false, editingLocation: false});
+    else this.setState({ activeTab: index });
   }
 
   render() {
