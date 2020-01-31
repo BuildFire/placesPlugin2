@@ -40,7 +40,7 @@ class LocationForm extends React.Component {
    * - Carousel
    */
   componentDidMount() {
-    
+
     // Mount google map autocomplete
     const { maps } = window.google;
     this.autocomplete = new maps.places.Autocomplete(this.addressInput);
@@ -64,7 +64,10 @@ class LocationForm extends React.Component {
     let selector = '#actionItems';
     let items = this.state.actionItems;
     this.actions = new components.actionItems.sortableList(selector, items);
-    this.actions.onAddItems = () => this.updateActions();
+    this.actions.onAddItems = (item) => {
+      if (item.action === "callNumber" && !('title' in item)) item.title = "Contact"; 
+      this.updateActions();
+    }
     this.actions.onDeleteItem = () => this.updateActions();
     this.actions.onItemChange = () => this.updateActions();
     this.actions.onOrderChange = () => this.updateActions();
@@ -132,7 +135,7 @@ class LocationForm extends React.Component {
   }
 
   componentWillUpdate(nextProps, nextState) {
-    const { address } = nextState;
+    const { address } = nextState;
 
     if (address.lat && address.lng && !this.mapInstance) {
       this.mountMap(address);
@@ -162,7 +165,7 @@ class LocationForm extends React.Component {
         categories: [...prevState.categories, name]
       }));
 
-    // Category was unselected
+      // Category was unselected
     } else {
       let index = this.state.categories.indexOf(name);
       let { categories } = this.state;
@@ -275,9 +278,9 @@ class LocationForm extends React.Component {
         [{ header: [1, 2, 3, false] }],
         [{ color: [] }, { background: [] }],
         ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-        [{'list': 'ordered'}, {'list': 'bullet'}],
+        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
         [{ align: [] }],
-        [{'indent': '-1'}, {'indent': '+1'}],
+        [{ 'indent': '-1' }, { 'indent': '+1' }],
         [{ color: [] }, { background: [] }],
         ['link', 'image', 'video']
       ],
@@ -291,14 +294,14 @@ class LocationForm extends React.Component {
     const { title, address, description, image, categories, subtitle, deeplinkUrl, querystringUrl } = this.state;
 
     return (
-      <form onSubmit={ e => this.onSubmit(e) } onKeyPress={ e => this.onAutoKeyUp(e) }>
+      <form onSubmit={e => this.onSubmit(e)} onKeyPress={e => this.onAutoKeyUp(e)}>
 
         <div className='form-group'>
           <label htmlFor='name'>Title*</label>
           <input
-            maxLength={ 60 }
-            onChange={ e => this.onInputChange(e) }
-            value={ title }
+            maxLength={60}
+            onChange={e => this.onInputChange(e)}
+            value={title}
             name='title'
             type='text'
             className='form-control' />
@@ -307,51 +310,51 @@ class LocationForm extends React.Component {
         <div className='form-group'>
           <label htmlFor='queryString'>Query String</label>
           <input
-            disabled            
-            maxLength={ 90 }
-            value={ querystringUrl }
+            disabled
+            maxLength={90}
+            value={querystringUrl}
             name='deeplink'
             className='form-control'
-            type='text'/>
+            type='text' />
         </div>
 
         <div className='form-group'>
           <label htmlFor='deeplink'>Deep link</label>
           <input
-            disabled            
-            maxLength={ 90 }
-            value={ deeplinkUrl }
+            disabled
+            maxLength={90}
+            value={deeplinkUrl}
             name='deeplink'
             className='form-control'
-            type='text'/>
+            type='text' />
         </div>
 
         <div className='form-group'>
           <label htmlFor='subtitle'>Subtitle</label>
           <input
-            maxLength={ 90 }
-            onChange={ e => this.onInputChange(e) }
-            value={ subtitle }
+            maxLength={90}
+            onChange={e => this.onInputChange(e)}
+            value={subtitle}
             name='subtitle'
             className='form-control'
             placeholder='Optional'
-            type='text'/>
+            type='text' />
         </div>
 
         <div className='form-group'>
           <label htmlFor='category'>Categories</label>
           <div className='row'>
-            { this.props.categories ? this.props.categories.map((category, index) => (
-              <div key={ index } className='col-xs-3 __cpSelectCategoryBox'>
+            {this.props.categories ? this.props.categories.map((category, index) => (
+              <div key={index} className='col-xs-3 __cpSelectCategoryBox'>
                 <input
-                  onChange={ e => this.onCategoryChange(e) }
+                  onChange={e => this.onCategoryChange(e)}
                   type='checkbox'
-                  name={ category.id }
-                  checked={ categories.indexOf(category.id) > -1 } />
+                  name={category.id}
+                  checked={categories.indexOf(category.id) > -1} />
                 &nbsp;
-                <label>{ category.name }</label>
+                <label>{category.name}</label>
               </div>
-            )) : null }
+            )) : null}
           </div>
         </div>
 
@@ -359,13 +362,13 @@ class LocationForm extends React.Component {
           <label htmlFor='address'>Address*</label>
           <input
             key='address-input'
-            onChange={ e => this.onAddressChange(e) }
-            ref={ n => this.addressInput = n }
-            value={ address.name
+            onChange={e => this.onAddressChange(e)}
+            ref={n => this.addressInput = n}
+            value={address.name
               ? address.name
               : address.lat && address.lng
                 ? `${address.lat}, ${address.lng}`
-                : address.name }
+                : address.name}
             type='text'
             className='form-control' />
         </div>
@@ -379,10 +382,10 @@ class LocationForm extends React.Component {
           <label htmlFor='description'>Description*</label>
           <div className='editor' style={{ height: '200px' }}>
             <ReactQuill
-              ref={ n => this.quillRef = n }
-              modules={ this.modules }
-              onChange={ value => this.onDescriptionChange(value) }
-              defaultValue={ description } />
+              ref={n => this.quillRef = n}
+              modules={this.modules}
+              onChange={value => this.onDescriptionChange(value)}
+              defaultValue={description} />
           </div>
         </div>
 
@@ -402,22 +405,22 @@ class LocationForm extends React.Component {
             <div
               style={{ backgroundImage: image ? `url(${image})` : '' }}
               className='image-dialog'
-              onClick={ () => this.showImageDialog() }>
-              { this.state.image ? null : <a>Add Image +</a> }
+              onClick={() => this.showImageDialog()}>
+              {this.state.image ? null : <a>Add Image +</a>}
             </div>
             <img
               className='delete'
-              onClick={ e => this.removeImage(e) }
+              onClick={e => this.removeImage(e)}
               src='assets/img/cross.png' />
           </div>
         </div>
 
         <div className='form-group'>
           <button
-            disabled={ !title.length || description.replace(/(&nbsp;|<(?!img|\/img).*?>)/ig, '').length === 0 || !address || !address.lat || !address.lng }
+            disabled={!title.length || description.replace(/(&nbsp;|<(?!img|\/img).*?>)/ig, '').length === 0 || !address || !address.lat || !address.lng}
             type='submit'
             className='btn btn-primary'>
-            { this.props.location ? 'Save Location' : 'Save Location' }
+            {this.props.location ? 'Save Location' : 'Save Location'}
           </button>
         </div>
 
