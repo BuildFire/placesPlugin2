@@ -110,11 +110,13 @@ class LocationsActionBar extends React.Component {
     this.props.places.forEach(place => {
 
       let categories = [];
-      this.props.categories.forEach(category => place.categories.forEach(cat => {
-        if (category.id === cat) {
-          categories.push(category);
-        }
-      }));
+      if (this.props.categories && Array.isArray(this.props.categories)) {
+        this.props.categories.forEach(category => place.categories.forEach(cat => {
+          if (category.id === cat) {
+            categories.push(category);
+          }
+        }));
+      }
       let categoryNames = [];
       categories.forEach(cat => categoryNames.push(cat.name));
 
