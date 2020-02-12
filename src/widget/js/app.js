@@ -112,11 +112,11 @@ window.app = {
                 window.app.state.places = places;
                 window.app.state.filteredPlaces = places;
               } else {
+                window.app.state.places = places;
                 window.app.state.categories.map(category => {
                   category.isActive ?
                     places.map(place => {
                       if (place.categories.includes(category.name.id)) {
-                        window.app.state.places.push(place);
                         window.app.state.filteredPlaces.push(place);
                       }
                     }) : null;
