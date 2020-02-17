@@ -58,7 +58,7 @@ table td.action-large a {
   width: 20px;
   cursor: pointer;
 }
-.sortable-item .copy {
+ .sortable-item .copy {
   position: absolute;
   top: 50%;
   right: 38px;
@@ -66,7 +66,7 @@ table td.action-large a {
   width: 20px;
   cursor: pointer;
 }
-.sortable-item .copy
+ .sortable-item .copy .tooltiptext, .copyLinkCategory
   .tooltiptext {
     visibility: hidden;
     width: 122px;
@@ -83,7 +83,7 @@ table td.action-large a {
     opacity: 0;
     transition: opacity 0.3s;
   }
-.sortable-item .copy:hover .tooltiptext {
+ .sortable-item .copy:hover .tooltiptext , .copyLinkCategory:hover .tooltiptext {
     visibility: visible;
     opacity: 1;
   }
@@ -214,10 +214,17 @@ img.delete {
 }
 
 .__categoryListItem img {
-  width: 18px;
+  width: 20px;
   cursor: pointer;
   position: relative;
   top: 2px;
+}
+.copyLinkCategory {
+  cursor: pointer;
+  position: relative;
+  top: 4px;
+  right: 10px;
+  padding-left: 3px;
 }
 
 .__categoryListItem:nth-of-type(odd) {
@@ -256,4 +263,11 @@ img.delete {
 
 .__categoryEditBox a {
   margin-right: 10px;
+}
+
+.draggable-list-view.carousel-items .d-item span.title {
+  margin-left: -20px;
+}
+.draggable-list-view .d-item .media-holder {
+  width: 40px !important;
 }
