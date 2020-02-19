@@ -277,7 +277,7 @@ window.app = {
       window.buildfire.appearance.titlebar.show();
       window.app.backButtonInit();
       buildfire.deeplink.getData(function (data) {
-        buildfire.datastore.getById(data.id, window.app.settings.placesListTag, (err, result) => {
+        buildfire.datastore.getById(data.placeId, window.app.settings.placesListTag, (err, result) => {
           if (err) console.log(err);
 
           let res = result.data;

@@ -158,20 +158,20 @@ class Content extends React.Component {
         let [place] = data.places.splice(index, 1);
         this.setState({ data });
 
-    buildfire.datastore.delete(place.id, 'places-list', (err) => {
-      if (err) return console.error(err);
+      buildfire.datastore.delete(place.id, 'places-list', (err) => {
+        if (err) return console.error(err);
 
-      if (place.searchData) {
-        let placeToDelete = place.searchData.id;
-        let deleteData = {
-          tag: "place-data",
-          id: placeToDelete,
-        };
+        if (place.searchData) {
+          let placeToDelete = place.searchData.id;
+          let deleteData = {
+            tag: "place-data",
+            id: placeToDelete,
+          };
 
-        SearchEngine.delete(deleteData);
-      }
-    });
-    
+          SearchEngine.delete(deleteData);
+        }
+      });
+    } });
   }
 
   copyToClipboard(id, defaultView) {
@@ -285,11 +285,13 @@ class Content extends React.Component {
       
       let insertData = {
         tag: "place-data",
-        placeId: result.id,
         title: location.title,
         description: location.subtitle,
         imageUrl: location.image,
-        keywords: `${location.title}, ${location.subtitle}, ${location.description}`
+        keywords: `${location.title}, ${location.subtitle}, ${location.description}`,
+        data: {
+          placeId: result.id
+        }
       };
 
       SearchEngine.insert(insertData, callbackData => {
@@ -336,7 +338,10 @@ class Content extends React.Component {
           title: location.title,
           imageUrl: location.image,
           description: location.subtitle,
-          keywords: `${location.title}, ${location.subtitle}, ${location.description}`
+          keywords: `${location.title}, ${location.subtitle}, ${location.description}`,
+          data: {
+            placeId: location.id,
+          }
         };
 
         SearchEngine.update(updateData);
