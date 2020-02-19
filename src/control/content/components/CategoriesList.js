@@ -51,7 +51,9 @@ class CategoriesList extends React.Component {
                 handleRename={ (newValue) => this.props.handleRename(index, newValue) }
                 handleDelete={ () => this.props.handleDelete(index) }
                 category={ category }
-                key={ index } />
+                key={index}
+                copyToClipboard={ (id, defaultView) => this.props.copyToClipboard(id, defaultView)}
+                onHoverOut={ (id, defaultView) => this.props.onHoverOut(id, defaultView)} />
             )) }
           </div>
         ) : <img src='assets/svg/empty.svg' className='empty-state'/> }

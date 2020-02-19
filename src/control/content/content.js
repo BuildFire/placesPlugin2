@@ -145,28 +145,78 @@ class Content extends React.Component {
    * @param   {Number} index Location index on places array
    */
   handleLocationDelete(index) {
-    const { data } = this.state;
-    let [place] = data.places.splice(index, 1);
-    this.setState({ data });
+    buildfire.notifications.confirm({
+      title: "Are you sure?"
+      , message: "Are you sure you want to delete this location?"
+      , confirmButton: { text: 'Yes', key: 'yes', type: 'danger' }
+      , cancelButton: { text: 'No', key: 'no', type: 'default' }
+    }, (e, res) => {
+      if (e) return console.error(e);
 
-    buildfire.datastore.delete(place.id, 'places-list', (err) => {
-      if (err) return console.error(err);
+      if (res.selectedButton.key == "yes") {
+        const { data } = this.state;
+        let [place] = data.places.splice(index, 1);
+        this.setState({ data });
+
+        buildfire.datastore.delete(place.id, 'places-list', (err) => {
+          if (err) return console.error(err);
+        });
+      }
     });
+    
   }
-  copyToClipboard(id) {
-    let queryStringURL = `?dld={"id":"${id}"}`;
+
+  copyToClipboard(id, defaultView) {
+    let queryStringURL;
+
+    if (defaultView === "map" || defaultView === "list") {
+      queryStringURL = `?dld={"id":"${id}", "view": "${defaultView}"}`;
+      let tooltipMap = document.getElementById(`tool-tip-map-text--${id}`);
+      let tooltipList = document.getElementById(`tool-tip-list-text--${id}`);
+      tooltipMap.innerHTML = "Copied!";
+      tooltipList.innerHTML = "Copied!";
+    } else {
+      let tooltip = document.getElementById(`tool-tip-text--${id}`);
+      queryStringURL = `?dld={"id":"${id}"}`;
+      tooltip.innerHTML = "Copied!";
+    }
+
     let el = document.createElement('textarea');
-    let tooltip = document.getElementById(`tool-tip-text--${id}`);
     el.value = queryStringURL;
     document.body.appendChild(el);
     el.select();
     document.execCommand('copy');
     document.body.removeChild(el);
-    tooltip.innerHTML = "Copied!";
   }
-  onHoverOut(id) {
-    let tooltip = document.getElementById(`tool-tip-text--${id}`);
-    tooltip.innerHTML = "Copy to clipboard";
+
+  onHoverOut(id, defaultView) {
+    if (defaultView === "map") {
+      let tooltip = document.getElementById(`tool-tip-map-text--${id}`);
+      tooltip.innerHTML = "Copy map view";
+    }
+    else if (defaultView === "list") {
+      let tooltip = document.getElementById(`tool-tip-list-text--${id}`);
+      tooltip.innerHTML = "Copy list view";
+    }
+    else {
+      let tooltip = document.getElementById(`tool-tip-text--${id}`);
+      tooltip.innerHTML = "Copy to clipboard";
+    }
+    
+  }
+
+  handleBreadcrumb(options) {
+    switch(options) {
+      case 'addLocation': 
+        this.setState({breadcrumb:'Locations > Add Location'});
+        return;
+      case 'editLocation':
+        this.setState({breadcrumb:'Locations > Edit Location'});
+        return;
+      default:
+        this.setState({breadcrumb: ''});
+        return;
+    }
   }
 
   handleBreadcrumb(options) {
@@ -194,11 +244,22 @@ class Content extends React.Component {
    * @param   {Number} index Location index on places array
    */
   handleCategoryDelete(index) {
-    let { data } = this.state;
-    data.categories = data.categories || [];
-    data.categories.splice(index, 1);
-    this.setState({ data });
-    this.handleSave();
+    buildfire.notifications.confirm({
+      title: "Are you sure?"
+      , message: "Are you sure you want to delete this category?"
+      , confirmButton: { text: 'Yes', key: 'yes', type: 'danger' }
+      , cancelButton: { text: 'No', key: 'no', type: 'default' }
+    }, (e, res) => {
+      if (e) return console.error(e);
+
+      if (res.selectedButton.key == "yes") {
+        let { data } = this.state;
+        data.categories = data.categories || [];
+        data.categories.splice(index, 1);
+        this.setState({ data });
+        this.handleSave();
+      }
+    });
   }
 
   /**
@@ -295,6 +356,10 @@ class Content extends React.Component {
     data.categories.push(category);
     this.setState({ data });
     this.handleSave();
+
+    let categoryDeeplink = buildfire.deeplink.createLink(category.id);
+    this.setState({ categoryDeeplink });
+    console.log("categoryDeeplink > ", categoryDeeplink);
   }
 
   onAddLocation() {
@@ -320,6 +385,8 @@ class Content extends React.Component {
               categories={data.categories}
               handleRename={(index, newName) => this.handleCategoryRename(index, newName)}
               handleDelete={(index) => this.handleCategoryDelete(index)}
+              copyToClipboard={ (id, defaultView) => this.copyToClipboard(id, defaultView)}
+              onHoverOut={ (id, defaultView) => this.onHoverOut(id, defaultView)} 
               onSubmit={(category) => this.onCategorySubmit(category)} />
           </div>
         );
@@ -361,9 +428,8 @@ class Content extends React.Component {
 
   switchTab = (index) => {
     const { activeTab } = this.state;
-    if (index !== activeTab) {
-      this.setState({ activeTab: index });
-    }
+    if(index == 0) this.setState({ activeTab: index, breadcrumb: '', addingLocation: false, editingLocation: false});
+    else this.setState({ activeTab: index });
   }
 
   render() {
