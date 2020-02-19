@@ -286,9 +286,9 @@ class Content extends React.Component {
       let insertData = {
         tag: "place-data",
         title: location.title,
-        description: location.subtitle,
+        description: location.description,
         imageUrl: location.image,
-        keywords: `${location.title}, ${location.subtitle}, ${location.description}`,
+        keywords: location.subtitle,
         data: {
           placeId: result.id
         }
@@ -337,8 +337,8 @@ class Content extends React.Component {
           id: placeToUpdate,
           title: location.title,
           imageUrl: location.image,
-          description: location.subtitle,
-          keywords: `${location.title}, ${location.subtitle}, ${location.description}`,
+          description: location.description,
+          keywords: location.subtitle,
           data: {
             placeId: location.id,
           }
