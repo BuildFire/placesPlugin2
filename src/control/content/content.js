@@ -418,23 +418,30 @@ class Content extends React.Component {
     else this.setState({ activeTab: index });
   }
 
+  renderNav() {
+    const { activeTab } = this.state;
+    return (
+      <ul id="contentTabs" className="nav nav-tabs">
+        {tabs.map((tab, ind) => (
+          <li
+            key={tab}
+            className={activeTab == ind ? 'active' : null}
+            onClick={() => this.switchTab(ind)}
+            type='button'
+          >
+            <a href='#'>{tab}</a>
+          </li>
+        ))}
+      </ul>
+    )
+  }
+
   render() {
-    const { activeTab, breadcrumb } = this.state;
+    const { breadcrumb } = this.state;
     return (
       <div>
         <h4>{breadcrumb}</h4>
-        <ul id="contentTabs" className="nav nav-tabs">
-          {tabs.map((tab, ind) => (
-            <li
-              key={tab}
-              className={activeTab === ind ? 'active' : ''}
-              onClick={() => this.switchTab(ind)}
-              type='button'
-            >
-              <a href='#'>{tab}</a>
-            </li>
-          ))}
-        </ul>
+        {this.renderNav()}
         {this.renderTab()}
       </div>
     );
