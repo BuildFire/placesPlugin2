@@ -9,6 +9,7 @@ window.detailView = {
         const title = place.title;
         let context = {
             isBookmarkingAllowed: window.app.state.isBookmarkingAllowed,
+            isCarouselSwitched: window.app.state.isCarouselSwitched,
             width: screenWidth,
             image: place.image,
             id: place.id,

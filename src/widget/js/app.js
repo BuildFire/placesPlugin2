@@ -154,6 +154,7 @@ window.app = {
               window.app.state.mode = data.defaultView;
             }
             window.app.state.isBookmarkingAllowed = data.isBookmarkingAllowed;
+            window.app.state.isCarouselSwitched = data.isCarouselSwitched;
             if (data.categories && !window.app.state.isCategoryDeeplink) {
               window.app.state.categories = data.categories.map(category => {
                   return { name: category, isActive: true };

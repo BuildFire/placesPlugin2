@@ -15,6 +15,10 @@ class MapOptions extends React.Component {
     this.props.onBookmarkChange();
   }
 
+  onCarouselChange() {
+    this.props.onCarouselChange();
+  } 
+
   render() {
     const active = { backgroundColor: '#00a1f1', color: '#ffffff', border: 'none' };
     return (
@@ -95,6 +99,20 @@ class MapOptions extends React.Component {
               <div className="Toggler">
                 <div className="Toggler__on" style={this.props.configBookmark ? active : null} onClick={() => this.onBookmarkChange()}>On</div>
                 <div className="Toggler__off" style={!this.props.configBookmark ? active : null} onClick={() => this.onBookmarkChange()}>Off</div>
+              </div>
+            </div>
+          </div>
+
+          <br />
+
+          <div className='row'>
+            <div className='col-xs-6'>
+              <label>Move image Carousel to the top of the Location's details page</label>
+            </div>
+            <div className='col-xs-6'>
+              <div className="Toggler">
+                <div className="Toggler__on" style={this.props.configCarousel ? active : null} onClick={() => this.onCarouselChange()}>On</div>
+                <div className="Toggler__off" style={!this.props.configCarousel ? active : null} onClick={() => this.onCarouselChange()}>Off</div>
               </div>
             </div>
           </div>
