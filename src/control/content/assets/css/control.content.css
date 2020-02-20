@@ -104,6 +104,7 @@ table td.action-large a {
 }
 
 .category-box{
+    margin-top: 20px;
     height: 275px;
     overflow-y: auto;
 }
@@ -254,7 +255,7 @@ img.delete {
 }
 
 .__cpSelectCategoryBox label { 
-  word-wrap: break-word;
+  display: inline;
 }
 
 .__cpSelectCategoryBox input { 
@@ -270,4 +271,10 @@ img.delete {
 }
 .draggable-list-view .d-item .media-holder {
   width: 40px !important;
+}
+
+#contentTabs { border: none !important; }
+
+.nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus, .nav-tabs > li > a.active, .nav-tabs > li > a.active:hover, .nav-tabs > li > a.active:focus {
+  border-bottom: 4px solid #09a3ee !important;
 }
