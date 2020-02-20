@@ -112,6 +112,7 @@ window.listView = {
         let filterDiv = document.getElementById('filter');
         new window.FilterControl(filterDiv);
         window.listView.addPlaces(places);
+        if(window.app.state.isCategoryDeeplink) window.listView.filter(places, window.app.state.filteredPlaces)
     },
     updateList: (newPlaces) => {
         console.log('called updateList()');

@@ -1,3 +1,58 @@
+{{#if isCarouselSwitched}}
+<div class="row">
+    <div class="col-xs-12">
+        <div id="carouselView"></div>
+        <div class="row-aligner map-details" style="padding: 10px;">
+            <div class="detail-info">
+                <div class="title">{{title}}</div>
+                <div class="address">{{address}}</div>
+            </div>
+            <div id="distance-holder">
+                {{#if distance }}<img class="arrow" src="./images/arrow.png"> <span
+                    class="distance">{{distance}}</span>{{/if}}
+            </div>
+            {{#if isBookmarkingAllowed}}
+            <div id="bookmarkBtn" class="glyphicon glyphicon-star"></div>
+            {{/if}}
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12">
+        <div class="map-holder">
+            <div id="smallMap" style="height:100%;width:100%"></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="buttonHolder">
+                {{#if actionItems}}
+                <div class="buttonItem">
+                    <button id="directionsBtn">
+                        Get Directions
+                    </button>
+                </div>
+                <div class="buttonItem">
+                    <button id="contactBtn">
+                        Contact
+                    </button>
+                </div>
+                {{else}}
+                <div class="buttonItem long">
+                    <button id="directionsBtn">
+                        Get Directions
+                    </button>
+                </div>
+                {{/if}}
+            </div>
+            <!-- <a href="">Directions-</a> -->
+            <div class="description ql-editor">
+                {{{description}}}
+            </div>
+        </div>
+    </div>
+</div>
+{{else}}
 <div class="map-holder">
     <div id="smallMap" style="height:100%;width:100%"></div>
     <div class="row-aligner map-details">
@@ -6,13 +61,15 @@
             <div class="address">{{address}}</div>
         </div>
         <div id="distance-holder">
-            {{#if distance }}<img class="arrow" src="./images/arrow.png"> <span class="distance">{{distance}}</span>{{/if}}
+            {{#if distance }}<img class="arrow" src="./images/arrow.png"> <span
+                class="distance">{{distance}}</span>{{/if}}
         </div>
         {{#if isBookmarkingAllowed}}
         <div id="bookmarkBtn" class="glyphicon glyphicon-star"></div>
         {{/if}}
     </div>
 </div>
+
 <div class="row">
     <div class="col-xs-12">
         <div id="carouselView"></div>
@@ -42,3 +99,4 @@
         </div>
     </div>
 </div>
+{{/if}}

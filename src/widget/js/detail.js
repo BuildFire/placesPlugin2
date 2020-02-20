@@ -9,6 +9,7 @@ window.detailView = {
         const title = place.title;
         let context = {
             isBookmarkingAllowed: window.app.state.isBookmarkingAllowed,
+            isCarouselSwitched: window.app.state.isCarouselSwitched,
             width: screenWidth,
             image: place.image,
             id: place.id,
@@ -21,7 +22,7 @@ window.detailView = {
             lng: place.address.lng,
             bookmarked: false
         };
-
+        console.log(context.isCarouselSwitched)
         let req = new XMLHttpRequest();
         req.open('GET', './templates/detail.hbs');
         req.send();
