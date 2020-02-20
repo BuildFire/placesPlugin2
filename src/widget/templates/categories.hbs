@@ -1,18 +1,27 @@
 <div>
     <h1>Categories</h1>
+
     <div class="categories-scroll-list">
+        <div class="category __categoryItemBox">
+            <a href="javascript:void(0);">All categories</a>
+            <label class="switch">
+                   <input type="checkbox" id="selection" onclick="filterControl.filterCategories()"> 
+                <span class="toggle-slider round"></span>
+            </label>
+        </div>
         {{#each categories}}
-            <div class="category __categoryItemBox">
-                <a href="javascript:void(0);" id="{{name.id}}">{{name.name}}</a>
-                <label class="switch">
-                    <input type="checkbox" onclick="filterControl.filterCategory('{{name.id}}')" {{#if this.isActive}}checked{{/if}}>
-                    <span class="toggle-slider round"></span>
-                </label>
-            </div>
+        <div class="category __categoryItemBox">
+            <a href="javascript:void(0);" id="{{name.id}}">{{name.name}}</a>
+            <label class="switch">
+                <input type="checkbox" id="cat_{{name.name}}" onclick="filterControl.filterCategory('{{name.id}}')"
+                    {{#if this.isActive}}checked{{/if}}>
+                <span class="toggle-slider round"></span>
+            </label>
+        </div>
         {{else}}
-            <div class="category">
-                There are no categories.
-            </div>
+        <div class="category">
+            There are no categories.
+        </div>
         {{/each}}
     </div>
 </div>
