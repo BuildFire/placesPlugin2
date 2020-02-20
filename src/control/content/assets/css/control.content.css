@@ -200,6 +200,8 @@ img.delete {
 
 .__strippedTable {
   border: 1px solid #dddddd;
+  overflow-y: auto;
+  max-height: 200px;
 }
 
 .__categoryListItem {

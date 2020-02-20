@@ -208,12 +208,15 @@ class Content extends React.Component {
   handleBreadcrumb(options) {
     switch(options) {
       case 'addLocation': 
+        buildfire.history.push('Locations > Add Location', { showLabelInTitlebar: true, elementToShow: '#breadcrumb' });
         this.setState({breadcrumb:'Locations > Add Location'});
         return;
       case 'editLocation':
+        buildfire.history.push('Locations > Edit Location', { showLabelInTitlebar: true, elementToShow: '#breadcrumb' });
         this.setState({breadcrumb:'Locations > Edit Location'});
         return;
       default:
+        buildfire.history.pop();
         this.setState({breadcrumb: ''});
         return;
     }
@@ -413,8 +416,9 @@ class Content extends React.Component {
   }
 
   switchTab = (index) => {
-    const { activeTab } = this.state;
-    if(index == 0) this.setState({ activeTab: index, breadcrumb: '', addingLocation: false, editingLocation: false});
+    if (index == 0) { this.setState({ activeTab: index, breadcrumb: '', addingLocation: false, editingLocation: false }); 
+      buildfire.history.pop();
+    }
     else this.setState({ activeTab: index });
   }
 
