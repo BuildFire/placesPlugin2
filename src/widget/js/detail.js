@@ -183,6 +183,9 @@ window.detailView = {
                     selector: targetNode,
                     items: place.carousel
                 });
+            } else {
+                let targetNode = document.getElementById('carouselView');
+                targetNode.setAttribute('style', 'display: none;')
             }
 
             /**

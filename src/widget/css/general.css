@@ -68,6 +68,11 @@ body {
 
 .slideInDown {
   animation-name: slideInDown;
+  height: 100px;
+}
+
+.slideUp {
+    height: 0px;
 }
 
 /* Optional: Makes the sample page fill the window. */
@@ -143,7 +148,7 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
 
 .sidenav .closebtn {
     position: absolute;
-    top: 5px;
+    top: 15px;
     right: 5px;
     padding-bottom: 10px;
     font-size: 36px;
@@ -524,4 +529,58 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
 
 .__categoryItemBox label {
     display: block;
+}
+
+
+@media only screen 
+and (min-device-width : 768px) 
+and (max-device-width : 1024px)
+{ 
+    #bookmarkBtn { font-size: 4vw; }
+    
+    .col-image { height: 160px; width: 160px }
+    .detail-image { width: 140px; height: 140px; }
+
+    #locationSummary .name.title { font-size: 22px; }
+    #locationSummary .name.address { font-size: 16px; }
+    #locationSummary .name.tags { color: black; }
+    #locationSummary .view-more { font-size: 16px; }
+
+    .sidenav { height: 30vh; }
+    .slideInDown { height: 155px; }
+    .map-holder { height: 400px; }
+
+    #carouselView { height: 400px !important; }
+    #carouselView img { height: 100%; }
+
+    .distance-indicator .distance { font-size: 16px; color: black; }
+    .distance-indicator .arrow { height: 30px; }
+} 
+
+@media only screen 
+and (min-device-width: 1024px) 
+and (max-device-width: 1366px) 
+and (-webkit-min-device-pixel-ratio: 2) { 
+
+    #bookmarkBtn { font-size: 4vw; }
+
+    .col-image { height: 180px; width: 180px }
+    .detail-image { width: 160px; height: 160px; }
+
+    #locationSummary .name.title { font-size: 28px; }
+    #locationSummary .name.address { font-size: 20px; }
+    #locationSummary .name.tags { color: black; }
+    #locationSummary .view-more { font-size: 20px; }
+
+    .sidenav { height: 30vh; }
+    .map-holder { height: 400px; }
+
+    #carouselView { height: 400px !important; }
+    #carouselView img { height: 100%; }
+
+    .slideInDown { height: 175px; }
+    .loryFrame { height: inherit; }
+
+    .distance-indicator .distance { font-size: 16px; color: black; }
+    .distance-indicator .arrow { height: 30px; }
 }
