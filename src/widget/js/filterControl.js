@@ -37,6 +37,7 @@ window.filterControl = {
                 document.getElementById('categories').innerHTML = theCompiledHtml;
                 sideNav.className += ' showing';
                 document.getElementById("selection").checked = context.selection;
+                sideNav.style.display = ' block';
             };
         }
     },
@@ -94,7 +95,7 @@ window.filterControl = {
     closeNav: () => {
 
         let sideNav = document.getElementById("sideNav");
-        sideNav.className = sideNav.className.replace('showing', '');
+        sideNav.style.display = 'none';
 
         if (filterControl.updatedPlaces !== null && filterControl.originalPlaces != filterControl.updatedPlaces) {
             let originalPlaces = filterControl.originalPlaces,

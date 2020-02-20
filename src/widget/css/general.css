@@ -93,39 +93,32 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
 }
 
 .sidenav {
-    position: fixed;
-    height: 82vh;
+    position: absolute;
+    overflow: auto;
+    max-height: 79vh;
     left: 5px;
     right: 5px;
-    bottom: 0;
     z-index: 2;
+    top: 123px;
     background-color: rgba(255,255,255,0.95);
     transition: 0.5s;
     padding-top: 0;
     text-align:left;
     border-radius: 12px;
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
     transform: translateY(105%);
     -webkit-transform: translateY(105%);
     box-shadow: 0 0 20px rgba(0,0,0,0.25);
+    -webkit-overflow-scrolling: touch;
+    transform: translateY(0);
+    -webkit-transform: translateY(0);
 }
 
 .categories-scroll-list {
-    position: absolute;
-    left: 0;
     right: 0;
     top: 70px;
     bottom: 0;
     overflow-x: hidden;
     overflow-y: scroll;
-    border-top: 1px solid rgba(0,0,0,0.06);
-    -webkit-overflow-scrolling: touch;
-}
-
-.sidenav.showing {
-    transform: translateY(0);
-    -webkit-transform: translateY(0);
 }
 
 .sidenav a {
@@ -225,7 +218,7 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
     transition: opacity 1s linear;
 }
 
-#locationSummary {
+#locationSummary.slideInDown{
     position: absolute;
     top: 0;
     left: 0;
@@ -326,7 +319,7 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
 }
 
 .gm-bundled-control {
-    // top: 60px !important;
+    top: 60px !important;
 }
 
 @media screen and (max-height: 450px) {
@@ -524,4 +517,53 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
 
 .__categoryItemBox label {
     display: block;
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+    #bookmarkBtn {
+        font-size: 4vw;
+    }
+    .list-item {
+        height: 30.25vw;
+    }
+    .list-item > img {
+        height: 28.25vw !important; 
+    }
+    .detail-image {
+        width: 160px;
+        height: 160px;
+    }
+    .col-image {
+        width: 160px;
+        height: 160px;
+    }
+    .map-holder { 
+        height: 430px;
+    }
+    #locationSummary.slideInDown {
+        height: 180px!important;
+    }
+    #locationSummary .name.title {
+        font-size: 28px;
+    }
+    #locationSummary .name.address {
+        font-size: 22px;
+    }
+    #locationSummary .view-more {
+        font-size: 22px;
+    }
+    .distance-indicator .arrow > img {
+        height: 26px !important;
+    }
+    .distance-indicator .arrow {
+        font-size: 26px !important;
+    }
+    
+    #locationSummary #close {
+        font-size: 50px;
+    }
+    #carouselView img{
+        min-height: 430px;
+        max-height: 430px;
+    }
 }
