@@ -23,12 +23,11 @@ class MapOptions extends React.Component {
     const active = { backgroundColor: '#00a1f1', color: '#ffffff', border: 'none' };
     return (
       <div className='col-xs-12'>
-        <h3>Options</h3>
         <form>
 
           <div className='row'>
             <div className='col-xs-6'>
-              <label>Sort Order</label>
+              <label>Sort Places By</label>
             </div>
             <div className='col-xs-6'>
               <div className='dropdown'>
@@ -51,7 +50,7 @@ class MapOptions extends React.Component {
 
           <div className='row'>
             <div className='col-xs-6'>
-              <label>Default View</label>
+              <label>Set Default View</label>
             </div>
             <div className='col-xs-6'>
               <div className='dropdown'>
@@ -72,7 +71,7 @@ class MapOptions extends React.Component {
 
           <div className='row'>
             <div className='col-xs-6'>
-              <label>Points of interest</label>
+              <label>Show Points of Interest on Map</label>
             </div>
             <div className='col-xs-6'>
               <div className='dropdown'>
@@ -93,7 +92,7 @@ class MapOptions extends React.Component {
 
           <div className='row'>
             <div className='col-xs-6'>
-              <label>Bookmarking</label>
+              <label>Allow Users to Bookmark Places</label>
             </div>
             <div className='col-xs-6'>
               <div className="Toggler">

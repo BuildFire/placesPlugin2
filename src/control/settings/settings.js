@@ -9,8 +9,7 @@ class Settings extends React.Component {
     super(props);
     this.state = {
       data: {},
-      configBookmark: false,
-      configCarousel: false,
+      configBookmark: false
     };
   }
 
