@@ -157,7 +157,6 @@ window.mapView = {
             let locationSummary = document.getElementById('locationSummary');
             locationSummary.innerHTML = theCompiledHtml;
             locationSummary.className = 'animated slideInDown';
-            locationSummary.style.height = '100px';
 
             locationSummary.onclick = e => {
                 e.preventDefault();
@@ -170,8 +169,8 @@ window.mapView = {
                 e.stopPropagation();
 
                 locationSummary.innerHTML = '';
-                locationSummary.style.height = 0;
-                locationSummary.className = '';
+                locationSummary.className = 'slideUp';
+
 
                 //Un-select location
                 app.state.selectedPlace[0]
