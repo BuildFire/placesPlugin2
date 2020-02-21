@@ -258,6 +258,7 @@ img.delete {
 
 .__cpSelectCategoryBox label { 
   display: inline;
+  word-break: break-all;
 }
 
 .__cpSelectCategoryBox input { 
