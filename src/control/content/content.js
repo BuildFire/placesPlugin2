@@ -7,6 +7,7 @@ import LocationList from './components/LocationList';
 import CategoriesList from './components/CategoriesList';
 import AddLocation from './components/AddLocation';
 import EditLocation from './components/EditLocation';
+import SearchEngine from './components/SearchEngine';
 
 const tabs = [
   'Categories',
@@ -75,7 +76,6 @@ class Content extends React.Component {
     const loadPage = () => {
       buildfire.datastore.search({ page, pageSize }, 'places-list', (err, result) => {
         if (err) return console.error(err);
-
         places.push(...result.map(place => {
             place.data.id = place.id;
             return place.data;
@@ -88,7 +88,7 @@ class Content extends React.Component {
           const data = this.state.data;
           places = places.sort((a, b) => a.index - b.index);
           data.places = places;
-          this.setState({ data });
+          this.setState({ data });
 
           if (!data.itemsOrder|| data.itemsOrder.length !== data.places.length) {
             this.updateItemsOrder();
@@ -158,12 +158,20 @@ class Content extends React.Component {
         let [place] = data.places.splice(index, 1);
         this.setState({ data });
 
-        buildfire.datastore.delete(place.id, 'places-list', (err) => {
-          if (err) return console.error(err);
-        });
-      }
-    });
-    
+      buildfire.datastore.delete(place.id, 'places-list', (err) => {
+        if (err) return console.error(err);
+
+        if (place.searchData) {
+          let placeToDelete = place.searchData.id;
+          let deleteData = {
+            tag: "place-data",
+            id: placeToDelete,
+          };
+
+          SearchEngine.delete(deleteData);
+        }
+      });
+    } });
   }
 
   copyToClipboard(id, defaultView) {
@@ -277,12 +285,33 @@ class Content extends React.Component {
 
     buildfire.datastore.insert(location, 'places-list', (err, result) => {
       if (err) return console.error(err);
+      
+      let insertData = {
+        tag: "place-data",
+        title: location.title,
+        description: location.description,
+        imageUrl: location.image,
+        keywords: location.subtitle,
+        data: {
+          placeId: result.id
+        }
+      };
+
+      SearchEngine.insert(insertData, callbackData => {
+        let searchPlace = {
+          placeId: result.id,
+          id: callbackData.id
+        };
+
         result.data.id = result.id;
+        result.data.searchData = searchPlace;
         data.itemsOrder.push(result.id);
         data.places.push(result.data);
-        this.setState({ data });
-        this.handleSave();
-    });
+        this.setState({ data }, () => {
+          this.handleSave();
+        });
+      });
+    });    
 
     this.setState({ addingLocation: false });
     this.handleBreadcrumb();
@@ -303,6 +332,23 @@ class Content extends React.Component {
       this.setState({ data });
       
       this.setState({ editingLocation: false });
+      
+      if (data.places[index].searchData) {
+        let placeToUpdate = data.places[index].searchData.id;
+        let updateData = {
+          tag: "place-data",
+          id: placeToUpdate,
+          title: location.title,
+          imageUrl: location.image,
+          description: location.description,
+          keywords: location.subtitle,
+          data: {
+            placeId: location.id,
+          }
+        };
+
+        SearchEngine.update(updateData);
+      }
       this.handleBreadcrumb('editLocation');
     });
   }
