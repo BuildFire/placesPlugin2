@@ -136,10 +136,14 @@ window.mapView = {
         if(app.state.selectedPlace.length > 1 && app.state.selectedPlace[1].marker){
             app.state.selectedPlace[1].marker.setIcon(mapView.createMarker(mapView.settings.images.place));
         }
-
+        let categories = [];
+        if (place.hasOwnProperty('categories')) place.categories.map(item => {
+            categories.push(app.state.categories.filter(category => category.name.id === item).map(c => c.name.name))
+        })
         let context = {
             title: place.title,
             address: place.address.name,
+            categories: categories,
             distance: place.distance,
             image: place.image
         };

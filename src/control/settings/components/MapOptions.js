@@ -19,6 +19,10 @@ class MapOptions extends React.Component {
     this.props.onCarouselChange();
   } 
 
+  onCategoriesChange() {
+    this.props.onCategoriesChange();
+  }
+
   render() {
     const active = { backgroundColor: '#00a1f1', color: '#ffffff', border: 'none' };
     return (
@@ -113,6 +117,20 @@ class MapOptions extends React.Component {
               <div className="Toggler">
                 <div className="Toggler__on" style={this.props.configCarousel ? active : null} onClick={() => this.onCarouselChange()}>On</div>
                 <div className="Toggler__off" style={!this.props.configCarousel ? active : null} onClick={() => this.onCarouselChange()}>Off</div>
+              </div>
+            </div>
+          </div>
+
+          <br />
+
+          <div className='row'>
+            <div className='col-xs-6'>
+              <label>Show Category on Places Details Page</label>
+            </div>
+            <div className='col-xs-6'>
+              <div className="Toggler">
+                <div className="Toggler__on" style={this.props.configCategories ? active : null} onClick={() => this.onCategoriesChange()}>On</div>
+                <div className="Toggler__off" style={!this.props.configCategories ? active : null} onClick={() => this.onCategoriesChange()}>Off</div>
               </div>
             </div>
           </div>

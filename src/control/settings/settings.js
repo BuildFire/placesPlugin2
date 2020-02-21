@@ -9,16 +9,17 @@ class Settings extends React.Component {
     super(props);
     this.state = {
       data: {},
-      configBookmark: false
+      configBookmark: false,
+      configCarousel: false,
+      configCategories: false,
     };
   }
 
   componentWillMount() {
     buildfire.datastore.get('places', (err, result) => {
       if (err) return console.error(err);
-      this.setState({ data: result.data });
-      this.setState({ configBookmark: result.data.isBookmarkingAllowed, configCarousel: result.data.isCarouselSwitched});
-      console.log(result.data)
+      this.setState({ data: result.data, configBookmark: result.data.isBookmarkingAllowed, 
+        configCarousel: result.data.isCarouselSwitched, configCategories: result.data.configCategories });
     });
   }
 
@@ -77,6 +78,17 @@ class Settings extends React.Component {
     });
   }
 
+  handleCategoriesChange = () => {
+    const { data } = this.state;
+    this.setState({ configCategories: !this.state.configCategories }, () => {
+      data.configCategories = this.state.configCategories;
+      console.log("AAA", this.state.configCategories)
+
+      this.setState(data);
+      this.handleSave();
+    });
+  }
+
   render() {
     return (
       <div>
@@ -85,8 +97,10 @@ class Settings extends React.Component {
           onChange={this.handleOptionChange}
           onBookmarkChange={this.handleBookmarkChange}
           onCarouselChange={this.handleCarouselChange}
+          onCategoriesChange={this.handleCategoriesChange}
           configBookmark={this.state.configBookmark} 
-          configCarousel={this.state.configCarousel} />
+          configCarousel={this.state.configCarousel} 
+          configCategories={this.state.configCategories} />
       </div>
     );
   }
