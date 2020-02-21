@@ -99,12 +99,11 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
 
 .sidenav {
     position: absolute;
-    overflow: auto;
-    max-height: 79vh;
+    height: 82vh;
     left: 5px;
     right: 5px;
     z-index: 2;
-    top: 123px;
+    bottom: 0;
     background-color: rgba(255,255,255,0.95);
     transition: 0.5s;
     padding-top: 0;
@@ -124,6 +123,7 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
     bottom: 0;
     overflow-x: hidden;
     overflow-y: scroll;
+    position: absolute;
 }
 
 .sidenav a {
