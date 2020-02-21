@@ -4,6 +4,10 @@ import Handlebars from './lib/handlebars';
 window.detailView = {
     init: (place) => {
         //Add filter control
+        let categories = [];
+        if (place.hasOwnProperty('categories') && window.app.state.configCategories == true) place.categories.map(item => {
+            categories.push(app.state.categories.filter(category => category.name.id === item).map(c => c.name.name))
+        });
         let view = document.getElementById('detailView');
         let screenWidth = window.innerWidth;
         const title = place.title;
@@ -20,9 +24,10 @@ window.detailView = {
             actionItems: place.actionItems && place.actionItems.length > 0,
             lat: place.address.lat,
             lng: place.address.lng,
-            bookmarked: false
+            bookmarked: false,
+            categories: categories
         };
-        console.log(context.isCarouselSwitched)
+
         let req = new XMLHttpRequest();
         req.open('GET', './templates/detail.hbs');
         req.send();

@@ -249,6 +249,10 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
     line-height: 1.27;
     margin: 0;
     color: #000;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 20vh;
 }
 
 #locationSummary .view-more {
@@ -524,6 +528,12 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
     display: block;
 }
 
+.categories {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-left: 15px;
+}
 
 @media only screen 
 and (min-device-width : 768px) 
