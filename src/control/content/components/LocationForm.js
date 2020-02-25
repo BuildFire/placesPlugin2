@@ -64,6 +64,7 @@ class LocationForm extends React.Component {
     let selector = '#actionItems';
     let items = this.state.actionItems;
     this.actions = new components.actionItems.sortableList(selector, items);
+    this.actions.dialogOptions = { showIcon: false }
     this.actions.onAddItems = (item) => {
       if (item.action === "callNumber" && !('title' in item)) item.title = "Contact"; 
       this.updateActions();
