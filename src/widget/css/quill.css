@@ -37,6 +37,9 @@
   white-space: pre-wrap;
   word-wrap: break-word;
 }
+.ql-editor p{
+  padding-left: 15px !important;
+}
 .ql-editor p,
 .ql-editor ol,
 .ql-editor ul,

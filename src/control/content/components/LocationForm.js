@@ -154,6 +154,7 @@ class LocationForm extends React.Component {
   }
 
   onDescriptionChange(description) {
+    description = description.replace("<p>", "").replace("</p>", "");
     this.setState({ description });
   }
 
