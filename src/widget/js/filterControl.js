@@ -73,15 +73,12 @@ window.filterControl = {
         let categoryIndex = app.state.categories.findIndex(category => category.name.id === categoryId);
         //Switch the category's state
         app.state.categories[categoryIndex].isActive = (!app.state.categories[categoryIndex].isActive);
+        
         let activeCategories = app.state.categories.filter(category => category.isActive).map(c => c.name.id);
-        if(activeCategories.length === app.state.categories.length) document.getElementById("selection").checked = true;
+        if(activeCategories.length === app.state.categories.length) return filterControl.filterCategories()
         else document.getElementById("selection").checked = false;
-        app.state.filteredPlaces = app.state.places.filter(place => {
-            //If a location has no categories, we always show it
-            if (typeof place.categories === 'undefined' || place.categories.length === 0) {
-                return true;
-            }
 
+        app.state.filteredPlaces = app.state.places.filter(place => {
             //Does the place include any of the active categories
             let isMatch = place.categories.some(placeCategory => {
                 return activeCategories.includes(placeCategory);

@@ -76,20 +76,21 @@ class CategoryListItem extends React.Component {
               </a>
             ) }
           </div>
-          <div className="copyLinkCategory">
-            <span className=" btn-icon btn-link-icon btn-success"
+          <div className="categoryTooltip">
+          <span className=" btn-icon btn-link-icon btn-success"
               onClick={() => this.props.copyToClipboard(category.id, "list")}
               onMouseOut={() => this.props.onHoverOut(category.id, "list")}>
-              <span className="tooltiptext" id={`tool-tip-list-text--${category.id}`}>Copy list view</span>
+              <span className="categoryTooltiptext" id={`tool-tip-list-text--${category.id}`}>Copy list view</span>
             </span>
-          </div>
-          <div className="copyLinkCategory">
-            <span className=" btn-icon btn-link-icon btn-primary"
+        </div>
+        <div className="categoryTooltip">
+        <span className=" btn-icon btn-link-icon btn-primary"
               onClick={() => this.props.copyToClipboard(category.id, "map")}
               onMouseOut={() => this.props.onHoverOut(category.id, "map")}>
-              <span className="tooltiptext" id={`tool-tip-map-text--${category.id}`}>Copy map view</span>
+              <span className="categoryTooltiptext" id={`tool-tip-map-text--${category.id}`}>Copy map view</span>
             </span>
-          </div>
+        </div>
+
           <div className='action'>
             <span>
               <img

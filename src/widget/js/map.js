@@ -39,10 +39,16 @@ window.mapView = {
                     mapView.addMarker(map, place, mapView.settings.images.place);
                 }
             });
-
+            
             mapView.addMarkerCluster();
-
             map.fitBounds(app.state.bounds);
+
+            if(places.length == 1) {
+                google.maps.event.addListenerOnce(map, 'bounds_changed', function(event) {
+                if (this.getZoom())
+                   this.setZoom(mapView.settings.zoomLevel.city);
+                });
+            }
         }
 
         if(window.app.state.pendingMapFilter){
@@ -208,6 +214,7 @@ window.mapView = {
         
         let options = {
             minZoom: 3,
+            maxZoom: 22,
             gestureHandling: 'greedy',
             streetViewControl: false,
             mapTypeControl: false,

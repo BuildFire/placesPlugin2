@@ -119,6 +119,7 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
 
 .categories-scroll-list {
     right: 0;
+    left: 0;
     top: 70px;
     bottom: 0;
     overflow-x: hidden;

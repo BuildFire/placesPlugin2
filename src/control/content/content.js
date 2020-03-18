@@ -217,11 +217,11 @@ class Content extends React.Component {
   handleBreadcrumb(options) {
     switch(options) {
       case 'addLocation': 
-        buildfire.history.push('Locations > Add Location', { showLabelInTitlebar: true, elementToShow: '#breadcrumb' });
+        buildfire.history.push('Locations > Add Location', { elementToShow: '#breadcrumb' });
         this.setState({breadcrumb:'Locations > Add Location'});
         return;
       case 'editLocation':
-        buildfire.history.push('Locations > Edit Location', { showLabelInTitlebar: true, elementToShow: '#breadcrumb' });
+        buildfire.history.push('Locations > Edit Location', { elementToShow: '#breadcrumb' });
         this.setState({breadcrumb:'Locations > Edit Location'});
         return;
       default:
@@ -350,7 +350,7 @@ class Content extends React.Component {
 
         SearchEngine.update(updateData);
       }
-      this.handleBreadcrumb('editLocation');
+      this.handleBreadcrumb();
     });
   }
 
