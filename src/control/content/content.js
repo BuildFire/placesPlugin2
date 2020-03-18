@@ -7,6 +7,7 @@ import LocationList from './components/LocationList';
 import CategoriesList from './components/CategoriesList';
 import AddLocation from './components/AddLocation';
 import EditLocation from './components/EditLocation';
+import SearchEngine from './components/SearchEngine';
 
 const tabs = [
   'Categories',
@@ -29,8 +30,9 @@ class Content extends React.Component {
   componentWillMount() {
     buildfire.datastore.get('places', (err, result) => {
       if (err) return console.error(err);
+  
         result.data.itemsOrder = result.data.itemsOrder || [];
-        result.data.isBookmarkingAllowed = result.data.isBookmarkingAllowed || true;
+        result.data.isBookmarkingAllowed = result.data.isBookmarkingAllowed || false;
         result.data.pointsOfInterest = result.data.pointsOfInterest || "on";
 
       // we migrate old storage format to new one if needed
@@ -75,7 +77,6 @@ class Content extends React.Component {
     const loadPage = () => {
       buildfire.datastore.search({ page, pageSize }, 'places-list', (err, result) => {
         if (err) return console.error(err);
-
         places.push(...result.map(place => {
             place.data.id = place.id;
             return place.data;
@@ -88,7 +89,7 @@ class Content extends React.Component {
           const data = this.state.data;
           places = places.sort((a, b) => a.index - b.index);
           data.places = places;
-          this.setState({ data });
+          this.setState({ data });
 
           if (!data.itemsOrder|| data.itemsOrder.length !== data.places.length) {
             this.updateItemsOrder();
@@ -158,12 +159,20 @@ class Content extends React.Component {
         let [place] = data.places.splice(index, 1);
         this.setState({ data });
 
-        buildfire.datastore.delete(place.id, 'places-list', (err) => {
-          if (err) return console.error(err);
-        });
-      }
-    });
-    
+      buildfire.datastore.delete(place.id, 'places-list', (err) => {
+        if (err) return console.error(err);
+
+        if (place.searchData) {
+          let placeToDelete = place.searchData.id;
+          let deleteData = {
+            tag: "place-data",
+            id: placeToDelete,
+          };
+
+          SearchEngine.delete(deleteData);
+        }
+      });
+    } });
   }
 
   copyToClipboard(id, defaultView) {
@@ -208,12 +217,15 @@ class Content extends React.Component {
   handleBreadcrumb(options) {
     switch(options) {
       case 'addLocation': 
+        buildfire.history.push('Locations > Add Location', { elementToShow: '#breadcrumb' });
         this.setState({breadcrumb:'Locations > Add Location'});
         return;
       case 'editLocation':
+        buildfire.history.push('Locations > Edit Location', { elementToShow: '#breadcrumb' });
         this.setState({breadcrumb:'Locations > Edit Location'});
         return;
       default:
+        buildfire.history.pop();
         this.setState({breadcrumb: ''});
         return;
     }
@@ -274,12 +286,33 @@ class Content extends React.Component {
 
     buildfire.datastore.insert(location, 'places-list', (err, result) => {
       if (err) return console.error(err);
+      
+      let insertData = {
+        tag: "place-data",
+        title: location.title,
+        description: location.description,
+        imageUrl: location.image,
+        keywords: location.subtitle,
+        data: {
+          placeId: result.id
+        }
+      };
+
+      SearchEngine.insert(insertData, callbackData => {
+        let searchPlace = {
+          placeId: result.id,
+          id: callbackData.id
+        };
+
         result.data.id = result.id;
+        result.data.searchData = searchPlace;
         data.itemsOrder.push(result.id);
         data.places.push(result.data);
-        this.setState({ data });
-        this.handleSave();
-    });
+        this.setState({ data }, () => {
+          this.handleSave();
+        });
+      });
+    });    
 
     this.setState({ addingLocation: false });
     this.handleBreadcrumb();
@@ -300,7 +333,24 @@ class Content extends React.Component {
       this.setState({ data });
       
       this.setState({ editingLocation: false });
-      this.handleBreadcrumb('editLocation');
+      
+      if (data.places[index].searchData) {
+        let placeToUpdate = data.places[index].searchData.id;
+        let updateData = {
+          tag: "place-data",
+          id: placeToUpdate,
+          title: location.title,
+          imageUrl: location.image,
+          description: location.description,
+          keywords: location.subtitle,
+          data: {
+            placeId: location.id,
+          }
+        };
+
+        SearchEngine.update(updateData);
+      }
+      this.handleBreadcrumb();
     });
   }
 
@@ -413,28 +463,36 @@ class Content extends React.Component {
   }
 
   switchTab = (index) => {
-    const { activeTab } = this.state;
-    if(index == 0) this.setState({ activeTab: index, breadcrumb: '', addingLocation: false, editingLocation: false});
+    if (index == 0) { this.setState({ activeTab: index, breadcrumb: '', addingLocation: false, editingLocation: false }); 
+      buildfire.history.pop();
+    }
     else this.setState({ activeTab: index });
   }
 
+  renderNav() {
+    const { activeTab } = this.state;
+    return (
+      <ul id="contentTabs" className="nav nav-tabs">
+        {tabs.map((tab, ind) => (
+          <li
+            key={tab}
+            className={activeTab == ind ? 'active' : null}
+            onClick={() => this.switchTab(ind)}
+            type='button'
+          >
+            <a href='#'>{tab}</a>
+          </li>
+        ))}
+      </ul>
+    )
+  }
+
   render() {
-    const { activeTab, breadcrumb } = this.state;
+    const { breadcrumb } = this.state;
     return (
       <div>
         <h4>{breadcrumb}</h4>
-        <ul id="contentTabs" className="nav nav-tabs">
-          {tabs.map((tab, ind) => (
-            <li
-              key={tab}
-              className={activeTab === ind ? 'active' : ''}
-              onClick={() => this.switchTab(ind)}
-              type='button'
-            >
-              <a href='#'>{tab}</a>
-            </li>
-          ))}
-        </ul>
+        {this.renderNav()}
         {this.renderTab()}
       </div>
     );

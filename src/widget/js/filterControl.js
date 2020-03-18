@@ -5,8 +5,13 @@ import Handlebars from "./lib/handlebars";
 window.filterControl = {
     originalPlaces: null,
     updatedPlaces: null,
+    toggleSelection: false,
+
     openFilter: () => {
         window.filterControl.originalPlaces = app.state.filteredPlaces;
+        let activeCategories = app.state.categories.filter(category => category.isActive).map(c => c.name.id);
+        if(activeCategories.length === app.state.categories.length)  filterControl.toggleSelection = true;
+        else if(activeCategories.length !== app.state.categories.length)  filterControl.toggleSelection = false;
 
         let sideNav = document.getElementById("sideNav");
         let categoriesDiv = sideNav.querySelector('#categories');
@@ -15,7 +20,8 @@ window.filterControl = {
 
         if(app.state.categories){
             let context = {
-                categories: app.state.categories
+                categories: app.state.categories,
+                selection: filterControl.toggleSelection
             };
 
             let req = new XMLHttpRequest();
@@ -30,21 +36,49 @@ window.filterControl = {
                 // Add the compiled html to the page
                 document.getElementById('categories').innerHTML = theCompiledHtml;
                 sideNav.className += ' showing';
+                document.getElementById("selection").checked = context.selection;
+                sideNav.style.display = ' block';
             };
         }
     },
+    filterCategories: () => {
+        filterControl.toggleSelection = !filterControl.toggleSelection;
+        let selection = filterControl.toggleSelection;
+        app.state.categories.map(item => {
+            item.isActive = selection;
+            document.getElementById('cat_' + item.name.name).checked = selection;
+        })
+        document.getElementById("selection").checked = selection;
+        if (!selection) {
+            app.state.filteredPlaces = [];
+        } else {
+            let activeCategories = app.state.categories.filter(category => category.isActive).map(c => c.name.id);
+            app.state.filteredPlaces = app.state.places.filter(place => {
+                //If a location has no categories, we always show it
+                if (typeof place.categories === 'undefined' || place.categories.length === 0) {
+                    return true;
+                }
+
+                //Does the place include any of the active categories
+                let isMatch = place.categories.some(placeCategory => {
+                    return activeCategories.includes(placeCategory);
+                });
+
+                return isMatch;
+            });
+        }
+        filterControl.updatedPlaces = app.state.filteredPlaces;
+    },    
     filterCategory: (categoryId) => {
         let categoryIndex = app.state.categories.findIndex(category => category.name.id === categoryId);
         //Switch the category's state
         app.state.categories[categoryIndex].isActive = (!app.state.categories[categoryIndex].isActive);
+        
         let activeCategories = app.state.categories.filter(category => category.isActive).map(c => c.name.id);
+        if(activeCategories.length === app.state.categories.length) return filterControl.filterCategories()
+        else document.getElementById("selection").checked = false;
 
         app.state.filteredPlaces = app.state.places.filter(place => {
-            //If a location has no categories, we always show it
-            if (typeof place.categories === 'undefined' || place.categories.length === 0) {
-                return true;
-            }
-
             //Does the place include any of the active categories
             let isMatch = place.categories.some(placeCategory => {
                 return activeCategories.includes(placeCategory);
@@ -58,7 +92,7 @@ window.filterControl = {
     closeNav: () => {
 
         let sideNav = document.getElementById("sideNav");
-        sideNav.className = sideNav.className.replace('showing', '');
+        sideNav.style.display = 'none';
 
         if (filterControl.updatedPlaces !== null && filterControl.originalPlaces != filterControl.updatedPlaces) {
             let originalPlaces = filterControl.originalPlaces,

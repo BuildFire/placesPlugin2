@@ -4,11 +4,16 @@ import Handlebars from './lib/handlebars';
 window.detailView = {
     init: (place) => {
         //Add filter control
+        let categories = [];
+        if (place.hasOwnProperty('categories') && window.app.state.configCategories == true) place.categories.map(item => {
+            categories.push(app.state.categories.filter(category => category.name.id === item).map(c => c.name.name))
+        });
         let view = document.getElementById('detailView');
         let screenWidth = window.innerWidth;
         const title = place.title;
         let context = {
             isBookmarkingAllowed: window.app.state.isBookmarkingAllowed,
+            isCarouselSwitched: window.app.state.isCarouselSwitched,
             width: screenWidth,
             image: place.image,
             id: place.id,
@@ -19,7 +24,8 @@ window.detailView = {
             actionItems: place.actionItems && place.actionItems.length > 0,
             lat: place.address.lat,
             lng: place.address.lng,
-            bookmarked: false
+            bookmarked: false,
+            categories: categories
         };
 
         let req = new XMLHttpRequest();
@@ -183,6 +189,9 @@ window.detailView = {
                     selector: targetNode,
                     items: place.carousel
                 });
+            } else {
+                let targetNode = document.getElementById('carouselView');
+                targetNode.setAttribute('style', 'display: none;')
             }
 
             /**

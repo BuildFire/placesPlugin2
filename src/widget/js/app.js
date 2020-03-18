@@ -112,11 +112,11 @@ window.app = {
                 window.app.state.places = places;
                 window.app.state.filteredPlaces = places;
               } else {
+                window.app.state.places = places;
                 window.app.state.categories.map(category => {
                   category.isActive ?
                     places.map(place => {
                       if (place.categories.includes(category.name.id)) {
-                        window.app.state.places.push(place);
                         window.app.state.filteredPlaces.push(place);
                       }
                     }) : null;
@@ -154,6 +154,8 @@ window.app = {
               window.app.state.mode = data.defaultView;
             }
             window.app.state.isBookmarkingAllowed = data.isBookmarkingAllowed;
+            window.app.state.isCarouselSwitched = data.isCarouselSwitched;
+            window.app.state.configCategories = data.configCategories;
             if (data.categories && !window.app.state.isCategoryDeeplink) {
               window.app.state.categories = data.categories.map(category => {
                   return { name: category, isActive: true };
@@ -277,7 +279,7 @@ window.app = {
       window.buildfire.appearance.titlebar.show();
       window.app.backButtonInit();
       buildfire.deeplink.getData(function (data) {
-        buildfire.datastore.getById(data.id, window.app.settings.placesListTag, (err, result) => {
+        buildfire.datastore.getById(data.placeId, window.app.settings.placesListTag, (err, result) => {
           if (err) console.log(err);
 
           let res = result.data;

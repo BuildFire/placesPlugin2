@@ -64,6 +64,7 @@ class LocationForm extends React.Component {
     let selector = '#actionItems';
     let items = this.state.actionItems;
     this.actions = new components.actionItems.sortableList(selector, items);
+    this.actions.dialogOptions = { showIcon: false }
     this.actions.onAddItems = (item) => {
       if (item.action === "callNumber" && !('title' in item)) item.title = "Contact"; 
       this.updateActions();
@@ -153,6 +154,7 @@ class LocationForm extends React.Component {
   }
 
   onDescriptionChange(description) {
+    description = description.replace("<p>", "").replace("</p>", "");
     this.setState({ description });
   }
 
@@ -399,27 +401,31 @@ class LocationForm extends React.Component {
           <div id='carousel' />
         </div>
 
-        <div className='form-group'>
-          <label>List Image</label>
-          <div className="list-image-holder">
-            <div
-              style={{ backgroundImage: image ? `url(${image})` : '' }}
-              className='image-dialog'
-              onClick={() => this.showImageDialog()}>
-              {this.state.image ? null : <a>Add Image +</a>}
+        <div className="item clearfix row">
+          <span className="labels col-md-3 padding-right-zero pull-left">List Image</span>
+            <div className="main col-md-9 pull-right">
+            <div className="clearfix">
+              <div className="list-image-holder">
+                  <div
+                    style={{ backgroundImage: image ? `url(${image})` : '' }}
+                    className='image-dialog'
+                    onClick={() => this.showImageDialog()}>
+                    {this.state.image ? null : <a>Add Image +</a>}
+                  </div>
+                  <img
+                    className='delete'
+                    onClick={e => this.removeImage(e)}
+                    src='assets/img/cross.png' />
+                </div>
+              </div>
             </div>
-            <img
-              className='delete'
-              onClick={e => this.removeImage(e)}
-              src='assets/img/cross.png' />
           </div>
-        </div>
 
         <div className='form-group'>
           <button
             disabled={!title.length || description.replace(/(&nbsp;|<(?!img|\/img).*?>)/ig, '').length === 0 || !address || !address.lat || !address.lng}
             type='submit'
-            className='btn btn-primary'>
+            className='btn btn-success'>
             {this.props.location ? 'Save Location' : 'Save Location'}
           </button>
         </div>

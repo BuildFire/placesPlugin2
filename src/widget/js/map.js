@@ -39,10 +39,16 @@ window.mapView = {
                     mapView.addMarker(map, place, mapView.settings.images.place);
                 }
             });
-
+            
             mapView.addMarkerCluster();
-
             map.fitBounds(app.state.bounds);
+
+            if(places.length == 1) {
+                google.maps.event.addListenerOnce(map, 'bounds_changed', function(event) {
+                if (this.getZoom())
+                   this.setZoom(mapView.settings.zoomLevel.city);
+                });
+            }
         }
 
         if(window.app.state.pendingMapFilter){
@@ -136,10 +142,14 @@ window.mapView = {
         if(app.state.selectedPlace.length > 1 && app.state.selectedPlace[1].marker){
             app.state.selectedPlace[1].marker.setIcon(mapView.createMarker(mapView.settings.images.place));
         }
-
+        let categories = [];
+        if (place.hasOwnProperty('categories')) place.categories.map(item => {
+            categories.push(app.state.categories.filter(category => category.name.id === item).map(c => c.name.name))
+        })
         let context = {
             title: place.title,
             address: place.address.name,
+            categories: categories,
             distance: place.distance,
             image: place.image
         };
@@ -157,7 +167,6 @@ window.mapView = {
             let locationSummary = document.getElementById('locationSummary');
             locationSummary.innerHTML = theCompiledHtml;
             locationSummary.className = 'animated slideInDown';
-            locationSummary.style.height = '100px';
 
             locationSummary.onclick = e => {
                 e.preventDefault();
@@ -170,8 +179,8 @@ window.mapView = {
                 e.stopPropagation();
 
                 locationSummary.innerHTML = '';
-                locationSummary.style.height = 0;
-                locationSummary.className = '';
+                locationSummary.className = 'slideUp';
+
 
                 //Un-select location
                 app.state.selectedPlace[0]
@@ -205,6 +214,7 @@ window.mapView = {
         
         let options = {
             minZoom: 3,
+            maxZoom: 22,
             gestureHandling: 'greedy',
             streetViewControl: false,
             mapTypeControl: false,
