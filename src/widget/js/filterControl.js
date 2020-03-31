@@ -10,7 +10,7 @@ window.filterControl = {
     openFilter: () => {
         window.filterControl.originalPlaces = app.state.filteredPlaces;
         let activeCategories = app.state.categories.filter(category => category.isActive).map(c => c.name.id);
-        if(activeCategories.length === app.state.categories.length)  filterControl.toggleSelection = true;
+        if(activeCategories.length && activeCategories.length === app.state.categories.length)  filterControl.toggleSelection = true;
         else if(activeCategories.length !== app.state.categories.length)  filterControl.toggleSelection = false;
 
         let sideNav = document.getElementById("sideNav");
@@ -70,6 +70,7 @@ window.filterControl = {
         filterControl.updatedPlaces = app.state.filteredPlaces;
     },    
     filterCategory: (categoryId) => {
+        console.log("FILTER CATEGORY")
         let categoryIndex = app.state.categories.findIndex(category => category.name.id === categoryId);
         //Switch the category's state
         app.state.categories[categoryIndex].isActive = (!app.state.categories[categoryIndex].isActive);
