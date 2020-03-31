@@ -160,7 +160,6 @@ window.app = {
               window.app.state.categories = data.categories.map(category => {
                   return { name: category, isActive: true };
               });
-              if(window.app.state.categories.length) window.app.state.categories.push({ name: { name: "Others", id: "other" }, isActive: true })
             }
             if (data.pointsOfInterest) {
               window.app.state.pointsOfInterest = data.pointsOfInterest;
