@@ -25,15 +25,10 @@ class LocationsActionBar extends React.Component {
         const [title, subtitle, categories, name, address_lat, address_lng, description, image] = row;
         const selectedCategory = [];
         
-        const cat = categories.replace(/, /g, ',');
-        const categoryArr = cat.split(",");
-
         allCategories.forEach(cat => {
-          categoryArr.forEach(categ => {
-            if (categ === cat.name) {
+            if (categories === cat.name) {
               selectedCategory.push(cat.id);
             }
-          });
         });
         // if a row is missing latitude or longitude
         // use google maps api to fetch them async
@@ -110,11 +105,13 @@ class LocationsActionBar extends React.Component {
     this.props.places.forEach(place => {
 
       let categories = [];
-      this.props.categories.forEach(category => place.categories.forEach(cat => {
-        if (category.id === cat) {
-          categories.push(category);
-        }
-      }));
+      if (this.props.categories && Array.isArray(this.props.categories)) {
+        this.props.categories.forEach(category => place.categories.forEach(cat => {
+          if (category.id === cat) {
+            categories.push(category);
+          }
+        }));
+      }
       let categoryNames = [];
       categories.forEach(cat => categoryNames.push(cat.name));
 

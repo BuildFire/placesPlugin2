@@ -43,6 +43,21 @@ window.listView = {
         if (typeof (window.listView.listScrollingContainer) != undefined && window.listView.listScrollingContainer != null) {
             window.listView.listScrollingContainer.querySelectorAll('*').forEach(node => node.remove());
         }
+
+            const emptyItem = document.createElement('div');
+            emptyItem.id = "emptyItem";
+            emptyItem.setAttribute('style', `display: none !important;`);
+
+            const emptyItemImage = document.createElement('img');
+            emptyItemImage.setAttribute('src', "images/emptyItem.svg");
+            emptyItemImage.setAttribute('style', `height: auto; padding-top: 10vh;`);
+            emptyItem.appendChild(emptyItemImage);
+
+            const emptyItemText = document.createElement('span');
+            emptyItemText.innerText = "There are no places in this category";
+            emptyItemText.setAttribute('style', `display: block; font-size: 16px; padding-top: 2vh; font-weight: bold;`);
+            emptyItem.appendChild(emptyItemText);
+
             places.forEach((place, index) => {
 
                 if (!place.address || !place.address.lat || !place.address.lng) {
@@ -96,7 +111,7 @@ window.listView = {
 
                 const distance = document.createElement('div');
                 distance.setAttribute('id', `distance-${place.id}`);
-                distance.innerHTML = (place.distance) ? place.distance : '...';
+                distance.innerHTML = (place.distance) ? place.distance : '';
                 distance.className = 'list-distance';
                 infoContainer.appendChild(distance);
 
@@ -106,12 +121,15 @@ window.listView = {
                     window.listView.listScrollingContainer.appendChild(listItem);
                 }
             });
+            window.listView.listScrollingContainer.appendChild(emptyItem);
+
     },
     initList: (places) => {
         //Add filter control
         let filterDiv = document.getElementById('filter');
         new window.FilterControl(filterDiv);
         window.listView.addPlaces(places);
+        if(window.app.state.isCategoryDeeplink) window.listView.filter(places, window.app.state.filteredPlaces)
     },
     updateList: (newPlaces) => {
         console.log('called updateList()');
@@ -131,6 +149,9 @@ window.listView = {
             if(divToShow)
                 divToShow.setAttribute('style', 'display:block !important');
         });
+
+        if (!window.app.state.filteredPlaces.length) document.getElementById("emptyItem").setAttribute('style', 'display: block; text-align: center;');
+        else document.getElementById("emptyItem").setAttribute('style', 'display: none !important;');
     },
     updateDistances: (places) => {
         places.forEach((place, index) => {

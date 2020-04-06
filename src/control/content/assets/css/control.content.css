@@ -58,7 +58,7 @@ table td.action-large a {
   width: 20px;
   cursor: pointer;
 }
-.sortable-item .copy {
+ .sortable-item .copy {
   position: absolute;
   top: 50%;
   right: 38px;
@@ -66,27 +66,37 @@ table td.action-large a {
   width: 20px;
   cursor: pointer;
 }
-.sortable-item .copy
+ .sortable-item .copy .tooltiptext, .copyLinkCategory
   .tooltiptext {
     visibility: hidden;
-    width: 122px;
-    background-color: #555;
+    width: 120px;
+    background-color: black;
     color: #fff;
     text-align: center;
     border-radius: 6px;
-    padding: 5px;
+    padding: 5px 0;
     position: absolute;
     z-index: 1;
-    bottom: 150%;
-    left: 50%;
-    margin-left: -75px;
-    opacity: 0;
-    transition: opacity 0.3s;
+    top: -5px;
+    right: 150%;
   }
-.sortable-item .copy:hover .tooltiptext {
+
+ .sortable-item .copy:hover .tooltiptext , .copyLinkCategory:hover .tooltiptext {
     visibility: visible;
     opacity: 1;
   }
+
+  .sortable-item .copy .tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 100%;
+    margin-top: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent transparent black;
+  }
+
 .sortable-item .edit {
   display: inline-block;
   float: right;
@@ -104,6 +114,7 @@ table td.action-large a {
 }
 
 .category-box{
+    margin-top: 20px;
     height: 275px;
     overflow-y: auto;
 }
@@ -199,6 +210,8 @@ img.delete {
 
 .__strippedTable {
   border: 1px solid #dddddd;
+  overflow-y: auto;
+  max-height: 200px;
 }
 
 .__categoryListItem {
@@ -214,10 +227,17 @@ img.delete {
 }
 
 .__categoryListItem img {
-  width: 18px;
+  width: 20px;
   cursor: pointer;
   position: relative;
   top: 2px;
+}
+.copyLinkCategory {
+  cursor: pointer;
+  position: relative;
+  top: 4px;
+  right: 10px;
+  padding-left: 3px;
 }
 
 .__categoryListItem:nth-of-type(odd) {
@@ -247,7 +267,8 @@ img.delete {
 }
 
 .__cpSelectCategoryBox label { 
-  word-wrap: break-word;
+  display: inline;
+  word-break: break-all;
 }
 
 .__cpSelectCategoryBox input { 
@@ -256,4 +277,55 @@ img.delete {
 
 .__categoryEditBox a {
   margin-right: 10px;
+}
+
+.draggable-list-view.carousel-items .d-item span.title {
+  margin-left: -20px;
+}
+.draggable-list-view .d-item .media-holder {
+  width: 40px !important;
+}
+
+#contentTabs { border: none !important; }
+
+.nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus, .nav-tabs > li > a.active, .nav-tabs > li > a.active:hover, .nav-tabs > li > a.active:focus {
+  border-bottom: 4px solid #09a3ee !important;
+}
+
+.categoryTooltip {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  top: 4px;
+  right: 10px;
+  padding-left: 3px;
+}
+
+.categoryTooltip .categoryTooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+  top: -5px;
+  right: 150%;
+}
+
+.categoryTooltip .categoryTooltiptext::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 100%;
+  margin-top: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent transparent black;
+}
+
+.categoryTooltip:hover .categoryTooltiptext {
+  visibility: visible;
 }

@@ -7,6 +7,12 @@ import LocationList from './components/LocationList';
 import CategoriesList from './components/CategoriesList';
 import AddLocation from './components/AddLocation';
 import EditLocation from './components/EditLocation';
+import SearchEngine from './components/SearchEngine';
+
+const tabs = [
+  'Categories',
+  'Locations',
+];
 
 class Content extends React.Component {
   constructor(props) {
@@ -14,15 +20,19 @@ class Content extends React.Component {
     this.state = {
       data: {},
       addingLocation: false,
-      editingLocation: false
+      editingLocation: false,
+      activeTab: 0,
+      breadcrumb: ''
     };
+    this.handleBreadcrumb = this.handleBreadcrumb.bind(this);
   }
 
   componentWillMount() {
     buildfire.datastore.get('places', (err, result) => {
       if (err) return console.error(err);
+  
         result.data.itemsOrder = result.data.itemsOrder || [];
-        result.data.isBookmarkingAllowed = result.data.isBookmarkingAllowed || true;
+        result.data.isBookmarkingAllowed = result.data.isBookmarkingAllowed || false;
         result.data.pointsOfInterest = result.data.pointsOfInterest || "on";
 
       // we migrate old storage format to new one if needed
@@ -67,7 +77,6 @@ class Content extends React.Component {
     const loadPage = () => {
       buildfire.datastore.search({ page, pageSize }, 'places-list', (err, result) => {
         if (err) return console.error(err);
-
         places.push(...result.map(place => {
             place.data.id = place.id;
             return place.data;
@@ -80,7 +89,7 @@ class Content extends React.Component {
           const data = this.state.data;
           places = places.sort((a, b) => a.index - b.index);
           data.places = places;
-          this.setState({ data });
+          this.setState({ data });
 
           if (!data.itemsOrder|| data.itemsOrder.length !== data.places.length) {
             this.updateItemsOrder();
@@ -137,32 +146,94 @@ class Content extends React.Component {
    * @param   {Number} index Location index on places array
    */
   handleLocationDelete(index) {
-    const { data } = this.state;
-    let [place] = data.places.splice(index, 1);
-    this.setState({ data });
+    buildfire.notifications.confirm({
+      title: "Are you sure?"
+      , message: "Are you sure you want to delete this location?"
+      , confirmButton: { text: 'Yes', key: 'yes', type: 'danger' }
+      , cancelButton: { text: 'No', key: 'no', type: 'default' }
+    }, (e, res) => {
+      if (e) return console.error(e);
 
-    buildfire.datastore.delete(place.id, 'places-list', (err) => {
-      if (err) return console.error(err);
-    });
+      if (res.selectedButton.key == "yes") {
+        const { data } = this.state;
+        let [place] = data.places.splice(index, 1);
+        this.setState({ data });
+
+      buildfire.datastore.delete(place.id, 'places-list', (err) => {
+        if (err) return console.error(err);
+
+        if (place.searchData) {
+          let placeToDelete = place.searchData.id;
+          let deleteData = {
+            tag: "place-data",
+            id: placeToDelete,
+          };
+
+          SearchEngine.delete(deleteData);
+        }
+      });
+    } });
   }
-  copyToClipboard(id) {
-    let queryStringURL = `?dld={"id":"${id}"}`;
+
+  copyToClipboard(id, defaultView) {
+    let queryStringURL;
+
+    if (defaultView === "map" || defaultView === "list") {
+      queryStringURL = `?dld={"id":"${id}", "view": "${defaultView}"}`;
+      let tooltipMap = document.getElementById(`tool-tip-map-text--${id}`);
+      let tooltipList = document.getElementById(`tool-tip-list-text--${id}`);
+      tooltipMap.innerHTML = "Copied!";
+      tooltipList.innerHTML = "Copied!";
+    } else {
+      let tooltip = document.getElementById(`tool-tip-text--${id}`);
+      queryStringURL = `?dld={"id":"${id}"}`;
+      tooltip.innerHTML = "Copied!";
+    }
+
     let el = document.createElement('textarea');
-    let tooltip = document.getElementById(`tool-tip-text--${id}`);
     el.value = queryStringURL;
     document.body.appendChild(el);
     el.select();
     document.execCommand('copy');
     document.body.removeChild(el);
-    tooltip.innerHTML = "Copied!";
   }
-  onHoverOut(id) {
-    let tooltip = document.getElementById(`tool-tip-text--${id}`);
-    tooltip.innerHTML = "Copy to clipboard";
+
+  onHoverOut(id, defaultView) {
+    if (defaultView === "map") {
+      let tooltip = document.getElementById(`tool-tip-map-text--${id}`);
+      tooltip.innerHTML = "Copy map view";
+    }
+    else if (defaultView === "list") {
+      let tooltip = document.getElementById(`tool-tip-list-text--${id}`);
+      tooltip.innerHTML = "Copy list view";
+    }
+    else {
+      let tooltip = document.getElementById(`tool-tip-text--${id}`);
+      tooltip.innerHTML = "Copy to clipboard";
+    }
+    
+  }
+
+  handleBreadcrumb(options) {
+    switch(options) {
+      case 'addLocation': 
+        buildfire.history.push('Locations > Add Location', { elementToShow: '#breadcrumb' });
+        this.setState({breadcrumb:'Locations > Add Location'});
+        return;
+      case 'editLocation':
+        buildfire.history.push('Locations > Edit Location', { elementToShow: '#breadcrumb' });
+        this.setState({breadcrumb:'Locations > Edit Location'});
+        return;
+      default:
+        buildfire.history.pop();
+        this.setState({breadcrumb: ''});
+        return;
+    }
   }
 
   handleLocationEdit(index) {
     this.setState({ editingLocation: index });
+    this.handleBreadcrumb('editLocation');
   }
 
   /**
@@ -171,11 +242,22 @@ class Content extends React.Component {
    * @param   {Number} index Location index on places array
    */
   handleCategoryDelete(index) {
-    let { data } = this.state;
-    data.categories = data.categories || [];
-    data.categories.splice(index, 1);
-    this.setState({ data });
-    this.handleSave();
+    buildfire.notifications.confirm({
+      title: "Are you sure?"
+      , message: "Are you sure you want to delete this category?"
+      , confirmButton: { text: 'Yes', key: 'yes', type: 'danger' }
+      , cancelButton: { text: 'No', key: 'no', type: 'default' }
+    }, (e, res) => {
+      if (e) return console.error(e);
+
+      if (res.selectedButton.key == "yes") {
+        let { data } = this.state;
+        data.categories = data.categories || [];
+        data.categories.splice(index, 1);
+        this.setState({ data });
+        this.handleSave();
+      }
+    });
   }
 
   /**
@@ -204,14 +286,36 @@ class Content extends React.Component {
 
     buildfire.datastore.insert(location, 'places-list', (err, result) => {
       if (err) return console.error(err);
+      
+      let insertData = {
+        tag: "place-data",
+        title: location.title,
+        description: location.description,
+        imageUrl: location.image,
+        keywords: location.subtitle,
+        data: {
+          placeId: result.id
+        }
+      };
+
+      SearchEngine.insert(insertData, callbackData => {
+        let searchPlace = {
+          placeId: result.id,
+          id: callbackData.id
+        };
+
         result.data.id = result.id;
+        result.data.searchData = searchPlace;
         data.itemsOrder.push(result.id);
         data.places.push(result.data);
-        this.setState({ data });
-        this.handleSave();
-    });
+        this.setState({ data }, () => {
+          this.handleSave();
+        });
+      });
+    });    
 
     this.setState({ addingLocation: false });
+    this.handleBreadcrumb();
   }
 
   /**
@@ -227,8 +331,26 @@ class Content extends React.Component {
       const { data } = this.state;
       data.places[index] = location;
       this.setState({ data });
-
+      
       this.setState({ editingLocation: false });
+      
+      if (data.places[index].searchData) {
+        let placeToUpdate = data.places[index].searchData.id;
+        let updateData = {
+          tag: "place-data",
+          id: placeToUpdate,
+          title: location.title,
+          imageUrl: location.image,
+          description: location.description,
+          keywords: location.subtitle,
+          data: {
+            placeId: location.id,
+          }
+        };
+
+        SearchEngine.update(updateData);
+      }
+      this.handleBreadcrumb();
     });
   }
 
@@ -270,10 +392,15 @@ class Content extends React.Component {
     data.categories.push(category);
     this.setState({ data });
     this.handleSave();
+
+    let categoryDeeplink = buildfire.deeplink.createLink(category.id);
+    this.setState({ categoryDeeplink });
+    console.log("categoryDeeplink > ", categoryDeeplink);
   }
 
   onAddLocation() {
     this.setState({ addingLocation: true });
+    this.handleBreadcrumb('addLocation');
   }
 
   onAddLocationCancel() {
@@ -281,49 +408,92 @@ class Content extends React.Component {
       addingLocation: false,
       editingLocation: false
     });
+    this.handleBreadcrumb();
+  }
+
+  renderTab = () => {
+    const { data, addingLocation, editingLocation, activeTab } = this.state;
+    switch (activeTab) {
+      case 0:
+        return (
+          <div className='row category-box'>
+            <CategoriesList
+              categories={data.categories}
+              handleRename={(index, newName) => this.handleCategoryRename(index, newName)}
+              handleDelete={(index) => this.handleCategoryDelete(index)}
+              copyToClipboard={ (id, defaultView) => this.copyToClipboard(id, defaultView)}
+              onHoverOut={ (id, defaultView) => this.onHoverOut(id, defaultView)} 
+              onSubmit={(category) => this.onCategorySubmit(category)} />
+          </div>
+        );
+      case 1:
+        return (
+          <div className='row'>
+            <div className='col-xs-12'>
+              <LocationsActionBar
+                categories={data.categories}
+                places={data.places}
+                addingLocation={addingLocation || editingLocation !== false}
+                onAddLocation={() => this.onAddLocation()}
+                onAddLocationCancel={() => this.onAddLocationCancel()}
+                onMultipleSubmit={(locations) => this.onMultipleLocationSubmit(locations)} />
+
+              {addingLocation || editingLocation !== false
+                ? addingLocation
+                  ? <AddLocation
+                    pointsOfInterest={data.pointsOfInterest}
+                    categories={data.categories}
+                    onSubmit={location => this.onLocationSubmit(location)} />
+                  : <EditLocation
+                    pointsOfInterest={data.pointsOfInterest}
+                    categories={data.categories}
+                    location={data.places[editingLocation]}
+                    onSubmit={location => this.onLocationEdit(location, editingLocation)} />
+                : <LocationList
+                  places={data.places}
+                  updateSort={(list) => this.updateSort(list)}
+                  handleEdit={(index) => this.handleLocationEdit(index)}
+                  handleDelete={(index) => this.handleLocationDelete(index)}
+                  copyToClipboard={(id) => this.copyToClipboard(id)}
+                  onHoverOut={(id) => this.onHoverOut(id)} />}
+            </div>
+          </div>
+        );
+    }
+  }
+
+  switchTab = (index) => {
+    if (index == 0) { this.setState({ activeTab: index, breadcrumb: '', addingLocation: false, editingLocation: false }); 
+      buildfire.history.pop();
+    }
+    else this.setState({ activeTab: index });
+  }
+
+  renderNav() {
+    const { activeTab } = this.state;
+    return (
+      <ul id="contentTabs" className="nav nav-tabs">
+        {tabs.map((tab, ind) => (
+          <li
+            key={tab}
+            className={activeTab == ind ? 'active' : null}
+            onClick={() => this.switchTab(ind)}
+            type='button'
+          >
+            <a href='#'>{tab}</a>
+          </li>
+        ))}
+      </ul>
+    )
   }
 
   render() {
-    const { data, addingLocation, editingLocation } = this.state;
+    const { breadcrumb } = this.state;
     return (
       <div>
-        <div className='row category-box'>
-          <CategoriesList
-            categories={ data.categories }
-            handleRename={ (index, newName) => this.handleCategoryRename(index, newName) }
-            handleDelete={ (index) => this.handleCategoryDelete(index) }
-            onSubmit={ (category) => this.onCategorySubmit(category) } />
-        </div>
-        <div className='row'>
-          <div className='col-xs-12'>
-            <LocationsActionBar
-              categories={ data.categories }
-              places={ data.places }
-              addingLocation={ addingLocation || editingLocation !== false }
-              onAddLocation={ () => this.onAddLocation() }
-              onAddLocationCancel={ () => this.onAddLocationCancel() }
-              onMultipleSubmit={(locations) => this.onMultipleLocationSubmit(locations)} />
-
-            { addingLocation || editingLocation !== false
-                ? addingLocation
-                ? <AddLocation
-                      pointsOfInterest = { data.pointsOfInterest }
-                      categories={ data.categories }
-                      onSubmit={ location => this.onLocationSubmit(location) } />
-                  : <EditLocation
-                      pointsOfInterest = { data.pointsOfInterest }
-                      categories={ data.categories }
-                      location={ data.places[editingLocation] }
-                      onSubmit={ location => this.onLocationEdit(location, editingLocation) }/>
-                : <LocationList
-                    places={ data.places }
-                    updateSort={ (list) => this.updateSort(list) }
-                    handleEdit={ (index) => this.handleLocationEdit(index) }
-                    handleDelete={ (index) => this.handleLocationDelete(index) }
-                    copyToClipboard={ (id) => this.copyToClipboard(id)}
-                    onHoverOut={ (id) => this.onHoverOut(id)}/> }
-          </div>
-        </div>
+        <h4>{breadcrumb}</h4>
+        {this.renderNav()}
+        {this.renderTab()}
       </div>
     );
   }

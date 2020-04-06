@@ -51,7 +51,8 @@ window.app = {
         isBackNav: false,
         bookmarked: false,
         isBookmarkingAllowed: true,
-        pointsOfInterest: "on"
+        pointsOfInterest: "on",
+        isCategoryDeeplink: false
     },
     backButtonInit: () => {
         window.app.goBack = window.buildfire.navigation.onBackButtonClick;
@@ -107,9 +108,21 @@ window.app = {
                 return place.data;
                 }).filter(place => place.title)
               );
-
-              window.app.state.places = places;
-              window.app.state.filteredPlaces = places;
+              if(!window.app.state.isCategoryDeeplink) {
+                window.app.state.places = places;
+                window.app.state.filteredPlaces = places;
+              } else {
+                window.app.state.places = places;
+                window.app.state.categories.map(category => {
+                  category.isActive ?
+                    places.map(place => {
+                      if (place.categories.includes(category.name.id)) {
+                        window.app.state.filteredPlaces.push(place);
+                      }
+                    }) : null;
+                });
+              }
+              
               // If we have more pages we keep going
               if (result.length === pageSize) {
                 page++;
@@ -133,14 +146,17 @@ window.app = {
 
           if (data) {
             places = data.places || [];
-            window.app.state.mode = data.defaultView;
             window.app.state.sortBy = data.sortBy;
             window.app.state.itemsOrder = data.itemsOrder;
             window.app.state.actionItems = data.actionItems || [];
-            window.app.state.defaultView = data.defaultView;
+            if (!window.app.state.isCategoryDeeplink) {
+              window.app.state.defaultView = data.defaultView;
+              window.app.state.mode = data.defaultView;
+            }
             window.app.state.isBookmarkingAllowed = data.isBookmarkingAllowed;
-
-            if (data.categories) {
+            window.app.state.isCarouselSwitched = data.isCarouselSwitched;
+            window.app.state.configCategories = data.configCategories;
+            if (data.categories && !window.app.state.isCategoryDeeplink) {
               window.app.state.categories = data.categories.map(category => {
                   return { name: category, isActive: true };
               });
@@ -243,15 +259,15 @@ window.app = {
       }
     },
     gotPlaces(err, places) {
-        if(window.app.state.mode === window.app.settings.viewStates.list){
-          window.initList(places, true);
-            //We can not pre-init the map, as it needs to be visible
-        }
-        else {
-          window.initMap(places, true);
-          window.initList(places);          
-        }
+      if (window.app.state.mode === window.app.settings.viewStates.list) {
+        window.app.state.isCategoryDeeplink ? window.initList(window.app.state.places, true) : window.initList(places, true);
+        //We can not pre-init the map, as it needs to be visible
+      } else {
+        window.app.state.isCategoryDeeplink ? window.initMap(window.app.state.places, true) : window.initMap(places, true);
+        window.app.state.isCategoryDeeplink ? window.initList(window.app.state.places) : window.initList(places);
+          
         window.app.gotPieceOfData();
+      }
     },
 
     gotLocation(err, location) {
@@ -259,11 +275,11 @@ window.app = {
         window.app.gotPieceOfData();
     },
     
-    initDetailView: () => {
+  initDetailView: () => {
       window.buildfire.appearance.titlebar.show();
       window.app.backButtonInit();
       buildfire.deeplink.getData(function (data) {
-        buildfire.datastore.getById(data.id, window.app.settings.placesListTag, (err, result) => {
+        buildfire.datastore.getById(data.placeId, window.app.settings.placesListTag, (err, result) => {
           if (err) console.log(err);
 
           let res = result.data;
@@ -299,11 +315,42 @@ window.app = {
         window.app.state.bookmarked = bookmark.length > 0;
         });
     },
+
+  initCategoryView: (categoryId) => {
+      window.app.state.categories = window.app.state.categories.map(category => {
+        if (category.id === categoryId) {
+          return { name: category, isActive: true };
+        } else {
+          return { name: category, isActive: false };
+        }
+      });
+      window.app.init(window.app.gotPlaces, window.app.gotLocation);
+    }
 };
 
 const queryStringObj = buildfire.parseQueryString();
 if (queryStringObj.dld) {
-  window.app.initDetailView(); 
+  buildfire.datastore.get(window.app.settings.placesTag, (err, results) => {
+    if (err) return console.log(err);
+    
+    window.app.state.categories = results.data.categories;
+    let deeplinkObj = JSON.parse(queryStringObj.dld);
+    
+    window.app.state.categories.map(category => {
+      if (category.id === deeplinkObj.id) {
+        window.app.state.isCategoryDeeplink = true;
+      }
+    });
+  
+    if (window.app.state.isCategoryDeeplink) {
+      window.app.state.defaultView = deeplinkObj.view;
+      window.app.state.mode = deeplinkObj.view;
+
+      window.app.initCategoryView(deeplinkObj.id);
+    } else {
+      window.app.initDetailView();
+    }
+  });
 } else {
   window.app.init(window.app.gotPlaces, window.app.gotLocation);
 }

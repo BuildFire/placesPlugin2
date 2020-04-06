@@ -24,7 +24,6 @@ class CategoriesList extends React.Component {
 
     return (
       <div className='col-xs-12'>
-        <h3>Categories</h3>
         <div className='row'>
           <form onSubmit={ (e) => this.onSubmit(e) }>
             <div className='col-xs-9'>
@@ -52,7 +51,9 @@ class CategoriesList extends React.Component {
                 handleRename={ (newValue) => this.props.handleRename(index, newValue) }
                 handleDelete={ () => this.props.handleDelete(index) }
                 category={ category }
-                key={ index } />
+                key={index}
+                copyToClipboard={ (id, defaultView) => this.props.copyToClipboard(id, defaultView)}
+                onHoverOut={ (id, defaultView) => this.props.onHoverOut(id, defaultView)} />
             )) }
           </div>
         ) : <img src='assets/img/empty-wireframe.jpg' className='empty-state'/> }
