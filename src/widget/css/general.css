@@ -256,6 +256,9 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
     max-width: 20vh;
 }
 
+#locationSummary .name.tags { color: black; }
+
+
 #locationSummary .view-more {
     font-size: 9px;
     font-weight: 300;
@@ -547,7 +550,6 @@ and (max-device-width : 1024px)
 
     #locationSummary .name.title { font-size: 22px; }
     #locationSummary .name.address { font-size: 16px; }
-    #locationSummary .name.tags { color: black; }
     #locationSummary .view-more { font-size: 16px; }
 
     .sidenav { height: 30vh; }
@@ -573,7 +575,6 @@ and (-webkit-min-device-pixel-ratio: 2) {
 
     #locationSummary .name.title { font-size: 28px; }
     #locationSummary .name.address { font-size: 20px; }
-    #locationSummary .name.tags { color: black; }
     #locationSummary .view-more { font-size: 20px; }
 
     .sidenav { height: 30vh; }
