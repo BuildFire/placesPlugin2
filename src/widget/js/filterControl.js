@@ -78,8 +78,20 @@ window.filterControl = {
         if(activeCategories.length === app.state.categories.length) return filterControl.filterCategories()
         else document.getElementById("selection").checked = false;
 
+<<<<<<< HEAD
+=======
+        let allCategoriesSelected = document.getElementById("selection").checked;
+
+        if (activeCategories.length === 0) {
+            return filterControl.filterCategories();
+        }
+
+>>>>>>> abe76a9b01a5866483b2ec7fd371e60f5752ea1d
         app.state.filteredPlaces = app.state.places.filter(place => {
             //Does the place include any of the active categories
+
+            if(place.categories.length === 0 && allCategoriesSelected) return true;
+
             let isMatch = place.categories.some(placeCategory => {
                 return activeCategories.includes(placeCategory);
             });

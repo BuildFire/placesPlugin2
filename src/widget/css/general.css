@@ -256,6 +256,9 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
     max-width: 20vh;
 }
 
+#locationSummary .name.tags { color: black; }
+
+
 #locationSummary .view-more {
     font-size: 9px;
     font-weight: 300;
