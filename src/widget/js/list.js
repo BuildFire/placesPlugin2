@@ -8,7 +8,7 @@ window.listView = {
     imageHeight: null,
     imageWidth: null,
     addPlaces: (places) => {
-        if(!places){
+        if (!places) {
             return;
         }
 
@@ -30,98 +30,103 @@ window.listView = {
             listContainer.appendChild(window.listView.listScrollingContainer);
             window.listView.initialized = true;
         }
-        if (!window.listView.initialized) { 
-           init(); 
+        if (!window.listView.initialized) {
+            init();
         }
 
-        let sortPlaces = []; 
+        let sortPlaces = [];
         sortPlaces = places.sort(window.PlacesSort[window.app.state.sortBy]);
         window.listView.sorting(sortPlaces);
+        if (window.app.state.places.length === 0)
+            document.getElementById("emptyItem").setAttribute('style', 'display: block; text-align: center;');
         window.lazyload();
     },
     sorting: (places) => {
         if (typeof (window.listView.listScrollingContainer) != undefined && window.listView.listScrollingContainer != null) {
             window.listView.listScrollingContainer.querySelectorAll('*').forEach(node => node.remove());
         }
+        const emptyItem = document.createElement('div');
+        emptyItem.id = "emptyItem";
+        emptyItem.setAttribute('style', `display: none !important;`);
 
-            const emptyItem = document.createElement('div');
-            emptyItem.id = "emptyItem";
-            emptyItem.setAttribute('style', `display: none !important;`);
+        const emptyItemImage = document.createElement('img');
+        emptyItemImage.setAttribute('src', "images/emptyItem.svg");
+        emptyItemImage.setAttribute('style', `height: auto; padding-top: 10vh;`);
+        emptyItem.appendChild(emptyItemImage);
 
-            const emptyItemImage = document.createElement('img');
-            emptyItemImage.setAttribute('src', "images/emptyItem.svg");
-            emptyItemImage.setAttribute('style', `height: auto; padding-top: 10vh;`);
-            emptyItem.appendChild(emptyItemImage);
+        const emptyItemText = document.createElement('span');
+        if (places.length === 0)
+        emptyItemText.innerHTML = "Oops! This page is empty!<br>Refine your search or change your filters to see locations";
+        else emptyItemText.innerText = "There are no places in this category";
 
-            const emptyItemText = document.createElement('span');
-            emptyItemText.innerText = "There are no places in this category";
-            emptyItemText.setAttribute('style', `display: block; font-size: 16px; padding-top: 2vh; font-weight: bold;`);
-            emptyItem.appendChild(emptyItemText);
+        emptyItemText.setAttribute('style', `display: block; font-size: 16px; 
+        padding-left: 3vh; padding-right: 3vh; padding-top: 2vh; font-weight: bold;`);
+        emptyItem.appendChild(emptyItemText);
 
-            places.forEach((place, index) => {
+        places.forEach((place, index) => {
 
-                if (!place.address || !place.address.lat || !place.address.lng) {
-                    return;
-                }
+            if (!place.address || !place.address.lat || !place.address.lng) {
+                return;
+            }
 
-                const listItem = document.createElement('div');
-                listItem.setAttribute('style', `${window.listView.imageHeight}px !important`);
-                listItem.id = (place.id) ? `id_${place.id}` : '';
-                listItem.className = 'list-item';
+            const listItem = document.createElement('div');
+            listItem.setAttribute('style', `${window.listView.imageHeight}px !important`);
+            listItem.id = (place.id) ? `id_${place.id}` : '';
+            listItem.className = 'list-item';
 
-                listItem.addEventListener('click', e => {
-                    e.preventDefault();
-                    window.app.state.selectedPlace.unshift(place);
-                    window.router.navigate(window.app.settings.viewStates.detail);
-                });
-
-                //Add Image
-                const listImage = place.image ? place.image : window.listView.defaultImage;
-                const image = document.createElement('img');
-
-                image.setAttribute('data-src', window.listView.imagePrefix + listImage);
-                image.setAttribute('width', window.listView.imageWidth);
-                image.setAttribute('height', window.listView.imageHeight);
-                image.setAttribute('style', `${window.listView.imageHeight}px !important`);
-                image.className = 'lazyload';
-
-                const infoContainer = document.createElement('div');
-                infoContainer.className = 'list-info-container';
-
-                const title = document.createElement('div');
-                title.className = 'list-title';
-                title.innerHTML = place.title;
-                infoContainer.appendChild(title);
-
-                const subtitle = document.createElement('div');
-                let subtitleText = (place.subtitle && place.subtitle.length)
-                    ? place.subtitle : '';
-
-                subtitle.className = 'list-description';
-                subtitle.innerHTML = subtitleText;
-                infoContainer.appendChild(subtitle);
-
-                const viewBtn = document.createElement('img');
-                viewBtn.className = 'list-view-btn';
-                viewBtn.src = 'images/right-arrow.png';
-                infoContainer.appendChild(viewBtn);
-
-                const address = document.createElement('div');
-                address.innerHTML = place.address;
-
-                const distance = document.createElement('div');
-                distance.setAttribute('id', `distance-${place.id}`);
-                distance.innerHTML = (place.distance) ? place.distance : '';
-                distance.className = 'list-distance';
-                infoContainer.appendChild(distance);
-
-                listItem.appendChild(image);
-                listItem.appendChild(infoContainer);
-                if (typeof (window.listView.listScrollingContainer) != undefined && window.listView.listScrollingContainer != null) {
-                    window.listView.listScrollingContainer.appendChild(listItem);
-                }
+            listItem.addEventListener('click', e => {
+                e.preventDefault();
+                window.app.state.selectedPlace.unshift(place);
+                window.router.navigate(window.app.settings.viewStates.detail);
             });
-            window.listView.listScrollingContainer.appendChild(emptyItem);
+
+            //Add Image
+            const listImage = place.image ? place.image : window.listView.defaultImage;
+            const image = document.createElement('img');
+
+            image.setAttribute('data-src', window.listView.imagePrefix + listImage);
+            image.setAttribute('width', window.listView.imageWidth);
+            image.setAttribute('height', window.listView.imageHeight);
+            image.setAttribute('style', `${window.listView.imageHeight}px !important`);
+            image.className = 'lazyload';
+
+            const infoContainer = document.createElement('div');
+            infoContainer.className = 'list-info-container';
+
+            const title = document.createElement('div');
+            title.className = 'list-title';
+            title.innerHTML = place.title;
+            infoContainer.appendChild(title);
+
+            const subtitle = document.createElement('div');
+            let subtitleText = (place.subtitle && place.subtitle.length)
+                ? place.subtitle : '';
+
+            subtitle.className = 'list-description';
+            subtitle.innerHTML = subtitleText;
+            infoContainer.appendChild(subtitle);
+
+            const viewBtn = document.createElement('img');
+            viewBtn.className = 'list-view-btn';
+            viewBtn.src = 'images/right-arrow.png';
+            infoContainer.appendChild(viewBtn);
+
+            const address = document.createElement('div');
+            address.innerHTML = place.address;
+
+            const distance = document.createElement('div');
+            distance.setAttribute('id', `distance-${place.id}`);
+            distance.innerHTML = (place.distance) ? place.distance : '';
+            distance.className = 'list-distance';
+            infoContainer.appendChild(distance);
+
+            listItem.appendChild(image);
+            listItem.appendChild(infoContainer);
+            if (typeof (window.listView.listScrollingContainer) != undefined && window.listView.listScrollingContainer != null) {
+                window.listView.listScrollingContainer.appendChild(listItem);
+            }
+        });
+        window.listView.listScrollingContainer.appendChild(emptyItem);
 
     },
     initList: (places) => {
@@ -129,7 +134,7 @@ window.listView = {
         let filterDiv = document.getElementById('filter');
         new window.FilterControl(filterDiv);
         window.listView.addPlaces(places);
-        if(window.app.state.isCategoryDeeplink) window.listView.filter(places, window.app.state.filteredPlaces)
+        if (window.app.state.isCategoryDeeplink) window.listView.filter(places, window.app.state.filteredPlaces)
     },
     updateList: (newPlaces) => {
         console.log('called updateList()');
@@ -139,14 +144,14 @@ window.listView = {
         //Hide filtered places
         placesToHide.forEach((place) => {
             let divToHide = document.getElementById(`id_${place.id}`);
-            if(divToHide)
+            if (divToHide)
                 divToHide.setAttribute('style', 'display:none !important');
         });
 
         //Show places that have been hidden
         placesToShow.forEach((place) => {
             let divToShow = document.getElementById(`id_${place.id}`);
-            if(divToShow)
+            if (divToShow)
                 divToShow.setAttribute('style', 'display:block !important');
         });
 
@@ -157,7 +162,7 @@ window.listView = {
         places.forEach((place, index) => {
             let distanceElement = document.getElementById(`distance-${place.id}`);
 
-            if(distanceElement)
+            if (distanceElement)
                 distanceElement.innerHTML = place.distance;
         });
     }
