@@ -146,6 +146,10 @@ window.mapView = {
         if (place.hasOwnProperty('categories')) place.categories.map(item => {
             categories.push(app.state.categories.filter(category => category.name.id === item).map(c => c.name.name))
         })
+        if(!place.image) {
+            let cloudImg = window.app.settings.cloudImg;
+            place.image = `${cloudImg.domain}${cloudImg.operations.cdn}/https://pluginserver.buildfire.com/styles/media/holder-16x9.png`;
+        }
         let context = {
             title: place.title,
             address: place.address.name,
