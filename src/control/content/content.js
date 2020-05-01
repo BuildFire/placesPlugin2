@@ -290,7 +290,7 @@ class Content extends React.Component {
       let insertData = {
         tag: "place-data",
         title: location.title,
-        description: location.description,
+        description: location.description.replace(/(<([^>]+)>)/ig,""),
         imageUrl: location.image,
         keywords: location.subtitle,
         data: {
@@ -341,7 +341,7 @@ class Content extends React.Component {
           id: placeToUpdate,
           title: location.title,
           imageUrl: location.image,
-          description: location.description,
+          description: location.description.replace(/(<([^>]+)>)/ig,""),
           keywords: location.subtitle,
           data: {
             placeId: location.id,
