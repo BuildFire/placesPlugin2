@@ -386,6 +386,10 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
     height: 56.25vw;
 }
 
+.list-item > img {
+  height: 100%;
+}
+
 .list-item .list-image {
     display: block;
     height: 100%;
@@ -539,11 +543,9 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
     padding-left: 15px;
 }
 
-@media only screen 
-and (min-device-width : 768px) 
-and (max-device-width : 1024px)
+@media only screen and (min-width : 768px) and (max-width : 1024px)
 { 
-    #bookmarkBtn { font-size: 4vw; }
+    #bookmarkBtn { font-size: 3.5vw; }
     
     .col-image { height: 160px; width: 160px }
     .detail-image { width: 140px; height: 140px; }
@@ -563,12 +565,9 @@ and (max-device-width : 1024px)
     .distance-indicator .arrow { height: 30px; }
 } 
 
-@media only screen 
-and (min-device-width: 1024px) 
-and (max-device-width: 1366px) 
-and (-webkit-min-device-pixel-ratio: 2) { 
+@media only screen and (min-width: 1024px) and (max-width: 1366px) and (-webkit-min-pixel-ratio: 2) { 
 
-    #bookmarkBtn { font-size: 4vw; }
+    #bookmarkBtn { font-size: 3.5vw; }
 
     .col-image { height: 180px; width: 180px }
     .detail-image { width: 160px; height: 160px; }
