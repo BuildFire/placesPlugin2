@@ -15,7 +15,7 @@ window.filterControl = {
 
         categoriesDiv.innerHTML = '';
 
-        if(app.state.categories){
+        if (app.state.categories) {
             let context = {
                 categories: app.state.categories,
                 selection: filterControl.toggleSelection
@@ -65,13 +65,18 @@ window.filterControl = {
             });
         }
         filterControl.updatedPlaces = app.state.filteredPlaces;
-    },    
+    },
     filterCategory: (categoryId) => {
         let categoryIndex = app.state.categories.findIndex(category => category.name.id === categoryId);
         //Switch the category's state
         app.state.categories[categoryIndex].isActive = (!app.state.categories[categoryIndex].isActive);
-        
+
         let activeCategories = app.state.categories.filter(category => category.isActive).map(c => c.name.id);
+
+
+
+        document.getElementById("selection").checked = !app.state.categories.some(c => !c.isActive);
+
 
         let allCategoriesSelected = document.getElementById("selection").checked;
 
@@ -82,7 +87,7 @@ window.filterControl = {
         app.state.filteredPlaces = app.state.places.filter(place => {
             //Does the place include any of the active categories
 
-            if(place.categories.length === 0 && allCategoriesSelected) return true;
+            if (place.categories.length === 0 && allCategoriesSelected) return true;
 
             let isMatch = place.categories.some(placeCategory => {
                 return activeCategories.includes(placeCategory);
@@ -98,21 +103,21 @@ window.filterControl = {
         let sideNav = document.getElementById("sideNav");
         sideNav.style.display = 'none';
 
-        if (filterControl.updatedPlaces !== null && filterControl.originalPlaces != filterControl.updatedPlaces) {
+        if (filterControl.updatedPlaces !== null && filterControl.originalPlaces != filterControl.updatedPlaces) {
             let originalPlaces = filterControl.originalPlaces,
                 updatedPlaces = filterControl.updatedPlaces;
 
-            let placesToHide = filter(originalPlaces, (preFilteredPlace) => { return !find(updatedPlaces, preFilteredPlace);});
-            let placesToShow = filter(updatedPlaces, (postFilteredPlace) => { return !find(originalPlaces, postFilteredPlace);});
+            let placesToHide = filter(originalPlaces, (preFilteredPlace) => { return !find(updatedPlaces, preFilteredPlace); });
+            let placesToShow = filter(updatedPlaces, (postFilteredPlace) => { return !find(originalPlaces, postFilteredPlace); });
 
             //Update view to reflect changes
             const wasMapInitiated = (document.getElementById("mapView").innerHTML != '');
 
-            if(wasMapInitiated){
+            if (wasMapInitiated) {
                 window.mapView.filter(placesToHide, placesToShow);
             }
-            else{
-                window.app.state.pendingMapFilter = {placesToHide, placesToShow};
+            else {
+                window.app.state.pendingMapFilter = { placesToHide, placesToShow };
             }
 
             window.listView.filter(placesToHide, placesToShow);
@@ -122,7 +127,7 @@ window.filterControl = {
         app.state.mode = (app.state.mode == app.settings.viewStates.list) ? app.settings.viewStates.map : app.settings.viewStates.list;
 
         let switchViewButton = document.getElementsByClassName("changeView");
-        Array.prototype.map.call(switchViewButton, (image)=> {
+        Array.prototype.map.call(switchViewButton, (image) => {
             image.src = (image.src.includes('map')) ? image.src.replace('map', 'list') : image.src.replace('list', 'map');
         });
 
@@ -134,18 +139,18 @@ window.filterControl = {
 
         controlDiv.appendChild(container);
 
-        buttons.forEach((button) =>{
+        buttons.forEach((button) => {
             let controlButton = document.createElement('div');
             let imageName = (button.name) ? button.name : app.state.mode;
             let changeViewClass = (imageName === 'changeView') ? 'class="changeView"' : '';
 
-            if(imageName === 'changeView'){
+            if (imageName === 'changeView') {
                 imageName = (app.state.mode === app.settings.viewStates.list) ? app.settings.viewStates.map : app.settings.viewStates.list;
             }
 
             controlButton.style.display = 'inline-block';
             controlButton.innerHTML = `<img ${changeViewClass} src="./images/${imageName}.png"></img>`;
-            if(button.action)
+            if (button.action)
                 controlButton.onclick = button.action;
             container.appendChild(controlButton);
         });
@@ -154,15 +159,15 @@ window.filterControl = {
     }
 };
 
-window.CenterControl = function(controlDiv) {
+window.CenterControl = function (controlDiv) {
     filterControl.createControl(controlDiv, [
-        { name:'center', action: mapView.centerMap }
+        { name: 'center', action: mapView.centerMap }
     ]);
 };
 
-window.FilterControl = function (controlDiv){
+window.FilterControl = function (controlDiv) {
     filterControl.createControl(controlDiv, [
-        { name:'changeView', action: filterControl.changeView },
-        { name:'filter', action: filterControl.openFilter }
+        { name: 'changeView', action: filterControl.changeView },
+        { name: 'filter', action: filterControl.openFilter }
     ]);
 };
