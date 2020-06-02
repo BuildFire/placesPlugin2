@@ -23,7 +23,7 @@ window.detailView = {
             description: place.description,
             distance: place.distance,
             address: place.address.name,
-            actionItems: (place.actionItems && place.actionItems.length > 0) || (window.app.state.chatWithLocationOwner && window.app.state.socialWall && window.app.state.socialWall.instanceId),
+            actionItems: (place.actionItems && place.actionItems.length > 0) || (window.app.state.chatWithLocationOwner && window.app.state.socialWall && window.app.state.socialWall.instanceId && place.contactPerson && place.contactPerson.id),
             lat: place.address.lat,
             lng: place.address.lng,
             bookmarked: false,
