@@ -21,6 +21,7 @@ class LocationForm extends React.Component {
       address: {},
       image: '',
       actionItems: [],
+      contactPerson: {},
       categories: [],
       carousel: [],
       deeplinkUrl: ''
@@ -272,6 +273,22 @@ class LocationForm extends React.Component {
     return false;
   }
 
+  addLocationOwner() {
+    window.buildfire.auth.showUsersSearchDialog({}, (error, response)=>{
+      if(error)
+        console.error(error);
+      if(response && response.users && response.users.length > 0){
+        const contactPerson = response.users[0];
+        contactPerson.id = response.userIds[0];
+        this.setState({contactPerson});
+      }
+    });
+  }
+
+  removeLocationOwner() {
+    this.setState({contactPerson: {}});
+  }
+
   modules = {
     imageResize: {},
     toolbar: {
@@ -291,9 +308,9 @@ class LocationForm extends React.Component {
     },
   }
 
-  render() {
-    const { title, address, description, image, categories, subtitle, deeplinkUrl, querystringUrl } = this.state;
 
+  render() {
+    const { title, address, description, image, categories, subtitle, deeplinkUrl, querystringUrl, contactPerson } = this.state;
     return (
       <form onSubmit={e => this.onSubmit(e)} onKeyPress={e => this.onAutoKeyUp(e)}>
 
@@ -395,6 +412,21 @@ class LocationForm extends React.Component {
         <div className='form-group'>
           <div id='actionItems' />
         </div>
+
+        {this.props.chatWithLocationOwner && this.props.socialWall && <div className='form-group'>
+          <div className="item clearfix row">
+            <div className="labels col-md-3 padding-right-zero pull-left">Location Owner</div>
+            <div className="main col-md-9 pull-right">
+              <div className="clearfix owner-info-container">
+                <div onClick={() => this.addLocationOwner()} className="btn btn-success">{contactPerson && contactPerson.id ? "Select" : "Add"} Location Owner</div>
+                {contactPerson && contactPerson.id && <div className="owner-info">
+                  <label>{contactPerson.displayName}</label>
+                  <span onClick={() => this.removeLocationOwner()} className="glyphicon glyphicon-remove"></span>
+                </div>}
+              </div>
+            </div>
+          </div>
+        </div>}
 
         <div className='form-group'>
           <div id='carousel' />

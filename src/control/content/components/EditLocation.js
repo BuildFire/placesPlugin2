@@ -12,6 +12,8 @@ class EditLocation extends React.Component {
 
   render() {
     return <LocationForm
+      chatWithLocationOwner={this.props.chatWithLocationOwner}
+      socialWall={this.props.socialWall}
       pointsOfInterest = { this.props.pointsOfInterest }
       categories={ this.props.categories }
       location={ this.props.location }

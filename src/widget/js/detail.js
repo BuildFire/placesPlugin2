@@ -14,6 +14,8 @@ window.detailView = {
         let context = {
             isBookmarkingAllowed: window.app.state.isBookmarkingAllowed,
             isCarouselSwitched: window.app.state.isCarouselSwitched,
+            chatWithLocationOwner: window.app.state.chatWithLocationOwner,
+            socialWall: window.app.state.socialWall,
             width: screenWidth,
             image: place.image,
             id: place.id,
@@ -21,13 +23,12 @@ window.detailView = {
             description: place.description,
             distance: place.distance,
             address: place.address.name,
-            actionItems: place.actionItems && place.actionItems.length > 0,
+            actionItems: (place.actionItems && place.actionItems.length > 0) || (window.app.state.chatWithLocationOwner && window.app.state.socialWall && window.app.state.socialWall.instanceId),
             lat: place.address.lat,
             lng: place.address.lng,
             bookmarked: false,
             categories: categories
         };
-
         let req = new XMLHttpRequest();
         req.open('GET', './templates/detail.hbs');
         req.send();
@@ -122,9 +123,25 @@ window.detailView = {
 
              function showContact() {
                 const { actionItems } = place;
-                window.buildfire.actionItems.list(actionItems, {}, (err, actionItem) => {
-                    if (err) return console.error(err);
-                    console.log(actionItem);
+                window.buildfire.auth.getCurrentUser((err, user) => {
+                    if(context.chatWithLocationOwner && context.socialWall && place.contactPerson && place.contactPerson.id) {
+                        let wid = '';
+                        if(user._id > place.contactPerson) {
+                            wid = user._id + place.contactPerson.id;
+                        } else {
+                            wid = place.contactPerson.id + user._id;
+                        }
+                        actionItems.push({
+                            action: "linkToApp", 
+                            queryString: `wid=${wid}&wTitle=${encodeURIComponent((user.displayName || "Someone") + " | " + (place.contactPerson.displayName || "Someone"))}`,
+                            instanceId: context.socialWall.instanceId,
+                            title: "Chat",
+                        });
+                    }
+                    window.buildfire.actionItems.list(actionItems, {}, (err, actionItem) => {
+                        if (err) return console.error(err);
+                        console.log(actionItem);
+                    });
                 });
             }
             if (context.isBookmarkingAllowed) {

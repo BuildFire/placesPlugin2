@@ -441,10 +441,14 @@ class Content extends React.Component {
               {addingLocation || editingLocation !== false
                 ? addingLocation
                   ? <AddLocation
+                    chatWithLocationOwner={data.chatWithLocationOwner}
+                    socialWall={data.socialWall}
                     pointsOfInterest={data.pointsOfInterest}
                     categories={data.categories}
                     onSubmit={location => this.onLocationSubmit(location)} />
                   : <EditLocation
+                    chatWithLocationOwner={data.chatWithLocationOwner}
+                    socialWall={data.socialWall}
                     pointsOfInterest={data.pointsOfInterest}
                     categories={data.categories}
                     location={data.places[editingLocation]}

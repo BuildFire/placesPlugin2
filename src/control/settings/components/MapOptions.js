@@ -3,6 +3,9 @@ import React from 'react';
 class MapOptions extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      buttonPressed: false,
+    };
   }
 
   onChange(e) {
@@ -21,6 +24,39 @@ class MapOptions extends React.Component {
 
   onCategoriesChange() {
     this.props.onCategoriesChange();
+  }
+
+  onChatWithLocationOwnerChange() {
+    this.props.onChatWithLocationOwnerChange();
+  }
+
+  openPluginDialog = () => {
+    this.setState({
+      buttonPressed: true,
+    });
+
+    window.buildfire.pluginInstance.showDialog({}, (error, response) => {
+      console.log(error, response);
+      if (response && response.length > 0) {
+        const socialWall = {
+          folderName: response[0].folderName,
+          pluginTypeId: response[0].pluginTypeId,
+          title: response[0].title,
+          instanceId: response[0].instanceId,
+          pluginTypeName: response[0].pluginTypeName,
+          iconUrl: response[0].iconUrl,
+        };
+        console.log(socialWall);
+        this.props.setSocialWall(socialWall);
+      }
+      this.setState({
+        buttonPressed: false,
+      });
+    });  }
+
+
+  removePlugin() {
+    this.props.removePlugin();
   }
 
   render() {
@@ -134,6 +170,39 @@ class MapOptions extends React.Component {
               </div>
             </div>
           </div>
+
+          <br />
+
+          <div className='row'>
+            <div className='col-xs-6'>
+              <label>Add Chat With Location Owner</label>
+            </div>
+            <div className='col-xs-6'>
+              <div className="Toggler">
+                <div className="Toggler__on" style={this.props.chatWithLocationOwner ? active : null} onClick={() => this.onChatWithLocationOwnerChange()}>On</div>
+                <div className="Toggler__off" style={!this.props.chatWithLocationOwner ? active : null} onClick={() => this.onChatWithLocationOwnerChange()}>Off</div>
+              </div>
+            </div>
+          </div>
+
+          <br />
+
+          {this.props.chatWithLocationOwner && <div className='row'>
+            <div className='col-xs-6'>
+              <label>Social Wall</label>
+            </div>
+            <div className="col-xs-6 socialwall-container">
+                <button disabled={this.state.buttonPressed} onClick={this.openPluginDialog} className="btn btn-success">Select Social Wall</button>
+                {this.props.options.socialWall && this.props.options.socialWall.instanceId && <div className="socialwall-info">
+                  <div className="socialwall-info-title">
+                    <img src={this.props.options.socialWall.iconUrl} />
+                    <label>{this.props.options.socialWall.pluginTypeName}</label>
+                  </div>
+                  <span onClick={() => this.removePlugin()} className="glyphicon glyphicon-remove"></span>
+                </div>}
+            </div>
+          </div>}
+
         </form>
       </div>
 
