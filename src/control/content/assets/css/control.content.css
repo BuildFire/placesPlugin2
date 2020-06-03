@@ -345,3 +345,14 @@ img.delete {
   margin-left: 10px;
   cursor: pointer;
 }
+
+.contact-info {
+  margin-left: 25%;
+  padding-left: 8px !important;
+}
+
+.contactinfo-close {
+  margin: -10px 0 0 15px;
+  cursor: pointer;
+  font-size: 36px;
+}

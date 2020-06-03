@@ -58,6 +58,12 @@
   margin-top: 10px;
 }
 
+.socialwall-close {
+  margin: 0 0 5px 15px;
+  cursor: pointer;
+  font-size: 36px;
+}
+
 .socialwall-info img {
   width: 42px;
 }
@@ -72,9 +78,4 @@
   padding: 10px;
   font-size: 20px;
   cursor: pointer;
-}
-
-.contact-info {
-  margin-left: 25%;
-  padding-left: 0;
 }

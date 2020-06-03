@@ -28,6 +28,7 @@ window.detailView = {
             bookmarked: false,
             categories: categories
         };
+        let isChatOpened = false;
 
         window.buildfire.auth.getCurrentUser((err, user) => {
             if(user) {
@@ -128,7 +129,7 @@ window.detailView = {
                     const { actionItems } = place;
                     window.buildfire.auth.getCurrentUser((err, user) => {
                         if(user) {
-                            if(context.chatWithLocationOwner && context.socialWall && place.contactPerson && place.contactPerson.id && (user._id !== place.contactPerson.id)) {
+                            if(context.chatWithLocationOwner && context.socialWall && place.contactPerson && place.contactPerson.id && (user._id !== place.contactPerson.id) && !isChatOpened) {
                                 let wid = '';
                                 if(user._id > place.contactPerson) {
                                     wid = user._id + place.contactPerson.id;
@@ -143,6 +144,7 @@ window.detailView = {
                                 });
                             } 
                         }
+                        isChatOpened = true;
                         window.buildfire.actionItems.list(actionItems, {}, (err, actionItem) => {
                             if (err) return console.error(err);
                             console.log(actionItem);
