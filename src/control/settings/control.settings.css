@@ -73,3 +73,8 @@
   font-size: 20px;
   cursor: pointer;
 }
+
+.contact-info {
+  margin-left: 25%;
+  padding-left: 0;
+}

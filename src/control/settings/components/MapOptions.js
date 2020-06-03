@@ -111,7 +111,7 @@ class MapOptions extends React.Component {
 
           <div className='row'>
             <div className='col-xs-6'>
-              <label>Show Points of Interest on Map</label>
+              <label>Show Points Of Interest On Map</label>
             </div>
             <div className='col-xs-6'>
               <div className='dropdown'>
@@ -132,7 +132,7 @@ class MapOptions extends React.Component {
 
           <div className='row'>
             <div className='col-xs-6'>
-              <label>Allow Users to Bookmark Places</label>
+              <label>Allow Users To Bookmark Places</label>
             </div>
             <div className='col-xs-6'>
               <div className="Toggler">
@@ -147,7 +147,7 @@ class MapOptions extends React.Component {
 
           <div className='row'>
             <div className='col-xs-6'>
-              <label>Move image Carousel to the top of the Location's details page</label>
+              <label>Move Image Carousel To The Top Of The Location's Details Page</label>
             </div>
             <div className='col-xs-6'>
               <div className="Toggler">
@@ -161,7 +161,7 @@ class MapOptions extends React.Component {
 
           <div className='row'>
             <div className='col-xs-6'>
-              <label>Show Category on Places Details Page</label>
+              <label>Show Category On Places Details Page</label>
             </div>
             <div className='col-xs-6'>
               <div className="Toggler">
@@ -192,7 +192,7 @@ class MapOptions extends React.Component {
               <label>Social Wall</label>
             </div>
             <div className="col-xs-6 socialwall-container">
-                <button disabled={this.state.buttonPressed} onClick={this.openPluginDialog} className="btn btn-success">Select Social Wall</button>
+                <button disabled={this.state.buttonPressed} onClick={this.openPluginDialog} className="btn btn-success">Select Premium Social Wall 2.0</button>
                 {this.props.options.socialWall && this.props.options.socialWall.instanceId && <div className="socialwall-info">
                   <div className="socialwall-info-title">
                     <img src={this.props.options.socialWall.iconUrl} />

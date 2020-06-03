@@ -427,6 +427,7 @@ class LocationForm extends React.Component {
             </div>
           </div>
         </div>}
+        {this.props.chatWithLocationOwner && this.props.socialWall && <p className="contact-info col-md-9 col-md-offset-3 info info-tooltip">Enter Maximum of 1 email address to add a location owner</p>}
 
         <div className='form-group'>
           <div id='carousel' />
