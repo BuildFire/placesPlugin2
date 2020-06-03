@@ -1,4 +1,4 @@
-import Buildfire, { components } from 'buildfire';
+import Buildfire, { components } from 'buildfire';
 import Handlebars from './lib/handlebars';
 
 window.detailView = {
@@ -28,6 +28,7 @@ window.detailView = {
             bookmarked: false,
             categories: categories
         };
+
         window.buildfire.auth.getCurrentUser((err, user) => {
             if(user) {
                 context.actionItems = (place.actionItems && place.actionItems.length > 0) || (window.app.state.chatWithLocationOwner && window.app.state.socialWall && window.app.state.socialWall.instanceId && (place.contactPerson && place.contactPerson.id && (place.contactPerson.id !== user._id)));
@@ -126,18 +127,6 @@ window.detailView = {
                  function showContact() {
                     const { actionItems } = place;
                     window.buildfire.auth.getCurrentUser((err, user) => {
-
-                        const modal = document.getElementById("myModal");
-                        const list = document.getElementById("links-content");
-                        modal.style.display = "flex";
-                        actionItems.forEach(actionItem => {
-                            const link = document.createElement('a');
-                            link.classList.add('d-link');
-                            link.innerHTML = actionItem.title || "";
-                            link.onclick = () => window.buildfire.actionItems.execute(actionItem, console.log);
-                            list.appendChild(link);
-                        });
-
                         if(user) {
                             if(context.chatWithLocationOwner && context.socialWall && place.contactPerson && place.contactPerson.id && (user._id !== place.contactPerson.id)) {
                                 let wid = '';
@@ -146,37 +135,18 @@ window.detailView = {
                                 } else {
                                     wid = place.contactPerson.id + user._id;
                                 }
-                                const link = document.createElement('a');
-                                link.classList.add('d-link');
-                                link.innerHTML = 'Chat';
-                                link.onclick = () => window.buildfire.navigation.navigateTo({
-                                    pluginId: context.socialWall.pluginId,
+                                actionItems.push({
+                                    action: "linkToApp", 
+                                    queryString: `wid=${wid}&wTitle=${encodeURIComponent((user.displayName || "Someone") + " | " + (place.contactPerson.displayName || "Someone"))}`,
                                     instanceId: context.socialWall.instanceId,
-                                    folderName: context.socialWall.folderName,
-                                    title: (user.displayName || "Someone") + " | " + (place.contactPerson.displayName || "Someone"),
-                                    queryString: `wid=${wid}&wTitle${encodeURIComponent((user.displayName || "Someone") + " | " + (place.contactPerson.displayName || "Someone"))}`,
+                                    title: "Chat",
                                 });
-                                list.appendChild(link);
                             } 
                         }
-
-                        const close = document.createElement('a');
-                        close.classList.add('d-link');
-                        close.innerHTML = "Done";
-                        close.onclick = () => closeModal();
-                        list.appendChild(close);
-
-                        window.onclick = function(event) {
-                            if (event.target == modal) {
-                              closeModal();
-                            }
-                        };
-
-                        function closeModal(event) {
-                            modal.style.display = "none";
-                            list.innerHTML = "";
-                        }
-
+                        window.buildfire.actionItems.list(actionItems, {}, (err, actionItem) => {
+                            if (err) return console.error(err);
+                            console.log(actionItem);
+                        });
                     });
                 }
                 if (context.isBookmarkingAllowed) {
