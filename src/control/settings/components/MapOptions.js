@@ -179,7 +179,7 @@ class MapOptions extends React.Component {
                 Add Chat With Location Owner
                 <div className="settingsTooltip social-wall">
                   <span className="tip btn-info-icon btn-primary transition-third" />
-                  <span className="settingsTooltiptext socialWall">To add a location owner to each location turn this toggle “On”, connect Premium Social Wall 2.0, and in the Location Details page of each location, add a location owner’s email address</span>
+                  <span className="settingsTooltiptext socialWall">To add a location owner to each location turn this toggle "On", connect Premium Social Wall 2.0, and in the Location Details page of each location, add a location owner's email address</span>
                 </div>
               </div>
             </div>

@@ -413,7 +413,7 @@ class LocationForm extends React.Component {
           <div id='actionItems' />
         </div>
 
-        {!(this.props.chatWithLocationOwner && this.props.socialWall) && <div className='form-group'>
+        {this.props.chatWithLocationOwner && this.props.socialWall && <div className='form-group'>
           <div className="item clearfix row">
             <div className="labels col-md-3 padding-right-zero pull-left">
               Location Owner

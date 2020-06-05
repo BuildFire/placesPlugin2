@@ -404,3 +404,7 @@ img.delete {
   border-style: solid;
   border-color: transparent #555 transparent transparent;
 }
+
+.btn-info-icon::after {
+  font-style: normal !important;
+}
