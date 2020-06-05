@@ -79,3 +79,50 @@
   font-size: 20px;
   cursor: pointer;
 }
+
+/* Tooltip container */
+.settingsTooltip {
+  position: relative;
+  display: inline-block;
+  font-family: 'Muli', sans-serif;
+  font-size: 11px;
+  font-weight: normal;
+  line-height: 1.4;
+}
+
+/* Tooltip text */
+.settingsTooltip .settingsTooltiptext {
+  visibility: hidden;
+  width: 180px;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  padding: 5px;
+  border-radius: 6px;
+  transition: opacity 0.3s;
+  left: 145%;
+ 
+  /* Position the tooltip text - see examples below! */
+  position: absolute;
+  z-index: 1;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.settingsTooltip:hover .settingsTooltiptext {
+  visibility: visible;
+}
+
+.settingsTooltip .settingsTooltiptext.socialWall {
+  top: -35px;
+}
+
+.settingsTooltip .settingsTooltiptext::after {
+  content: " ";
+  position: absolute;
+  top: 50%;
+  right: 100%; /* To the left of the tooltip */
+  margin-top: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent #555 transparent transparent;
+}

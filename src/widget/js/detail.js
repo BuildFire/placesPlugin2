@@ -138,7 +138,9 @@ window.detailView = {
                                 }
                                 actionItems.push({
                                     action: "linkToApp", 
-                                    queryString: `wid=${wid}&wTitle=${encodeURIComponent((user.displayName || "Someone") + " | " + (place.contactPerson.displayName || "Someone"))}`,
+                                    queryString: `wid=${wid}
+                                    &wTitle=${encodeURIComponent((user.displayName || "Someone") + " | " + (place.contactPerson.displayName || "Someone"))}
+                                    &targetUsers=${JSON.stringify([{ userId: user._id}, {userId: place.contactPerson.id }])}`,
                                     instanceId: context.socialWall.instanceId,
                                     title: "Chat",
                                 });

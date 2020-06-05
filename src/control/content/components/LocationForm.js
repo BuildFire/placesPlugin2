@@ -413,9 +413,15 @@ class LocationForm extends React.Component {
           <div id='actionItems' />
         </div>
 
-        {this.props.chatWithLocationOwner && this.props.socialWall && <div className='form-group'>
+        {!(this.props.chatWithLocationOwner && this.props.socialWall) && <div className='form-group'>
           <div className="item clearfix row">
-            <div className="labels col-md-3 padding-right-zero pull-left">Location Owner</div>
+            <div className="labels col-md-3 padding-right-zero pull-left">
+              Location Owner
+              <div className="settingsTooltip location-owner">
+                <span className="tip btn-info-icon btn-primary transition-third" />
+                <span className="settingsTooltiptext location-owner">To set a location owner for this location, enter a maximum of of 1 email address</span>
+              </div>
+          </div>
             <div className="main col-md-9 pull-right">
               <div className="clearfix owner-info-container">
                 <div onClick={() => this.addLocationOwner()} className="btn btn-success">{contactPerson && contactPerson.id ? "Select" : "Add"} Location Owner</div>
@@ -427,7 +433,6 @@ class LocationForm extends React.Component {
             </div>
           </div>
         </div>}
-        {this.props.chatWithLocationOwner && this.props.socialWall && <p className="contact-info col-md-9 col-md-offset-3 info info-tooltip">Enter Maximum of 1 email address to add a location owner</p>}
 
         <div className='form-group'>
           <div id='carousel' />
