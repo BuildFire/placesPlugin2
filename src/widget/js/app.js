@@ -275,20 +275,15 @@ window.app = {
         window.app.gotPieceOfData();
     },
     
-  initDetailView: () => {
+  initDetailView: (placeId) => {
       window.buildfire.appearance.titlebar.show();
       window.app.backButtonInit();
-      buildfire.deeplink.getData(function (data) {
-        buildfire.datastore.getById(data.placeId, window.app.settings.placesListTag, (err, result) => {
-          if (err) console.log(err);
-
-          let res = result.data;
-          res.id = result.id;
-
-          window.app.state.selectedPlace.unshift(res);
-          window.router.navigate(window.app.settings.viewStates.detail);
-          window.app.checkBookmarked(res.id);
-        });
+      buildfire.datastore.getById(placeId, window.app.settings.placesListTag, (err, result) => {
+        if (err) console.log(err);
+        result.data.id = result.id;
+        window.app.state.selectedPlace[0] = result.data
+        window.router.navigate(window.app.settings.viewStates.detail);
+        window.app.checkBookmarked(result.id);
       });
 
       //Check is bookmark allowed when page is open with deeplink
@@ -332,23 +327,22 @@ const queryStringObj = buildfire.parseQueryString();
 if (queryStringObj.dld) {
   buildfire.datastore.get(window.app.settings.placesTag, (err, results) => {
     if (err) return console.log(err);
-    
     window.app.state.categories = results.data.categories;
     let deeplinkObj = JSON.parse(queryStringObj.dld);
-    
-    window.app.state.categories.map(category => {
-      if (category.id === deeplinkObj.id) {
-        window.app.state.isCategoryDeeplink = true;
-      }
-    });
-  
+    if(window.app.state.categories) {
+      window.app.state.categories.map(category => {
+        if (category.id === deeplinkObj.id) {
+          window.app.state.isCategoryDeeplink = true;
+        }
+      });
+    }
     if (window.app.state.isCategoryDeeplink) {
       window.app.state.defaultView = deeplinkObj.view;
       window.app.state.mode = deeplinkObj.view;
 
       window.app.initCategoryView(deeplinkObj.id);
     } else {
-      window.app.initDetailView();
+      window.app.initDetailView(deeplinkObj.id);
     }
   });
 } else {

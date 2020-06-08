@@ -2,6 +2,7 @@
  * element that contains the map. */
 body {
     padding-bottom: 0px !important;
+    -webkit-overflow-scrolling: auto !important;
 }
 
  #mapView #listView{
@@ -16,24 +17,14 @@ body {
 }
 
 #listView {
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    overflow: hidden;
+
     background-color: #121212;
 }
 
 #listView .list-scrolling-container {
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    overflow-y: scroll;
-    overflow-x: hidden;
+
     -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
 }
 
 #detailView {
@@ -596,3 +587,20 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
     .distance-indicator .distance { font-size: 16px; color: black; }
     .distance-indicator .arrow { height: 30px; }
 }
+
+/* 1792x828px at 326ppi */
+@media only screen 
+    and (device-width: 414px) 
+    and (device-height: 896px) 
+    and (-webkit-device-pixel-ratio: 2) { }
+
+    @media only screen 
+    and (device-width: 375px) 
+    and (device-height: 812px) 
+    and (-webkit-device-pixel-ratio: 3) { }
+
+
+    @media only screen 
+    and (device-width: 414px) 
+    and (device-height: 896px) 
+    and (-webkit-device-pixel-ratio: 3) { }

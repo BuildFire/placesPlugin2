@@ -28,6 +28,7 @@ window.listView = {
             window.listView.listScrollingContainer.className = 'list-scrolling-container';
             window.listView.listScrollingContainer.id = 'list--container';
             listContainer.appendChild(window.listView.listScrollingContainer);
+ 
             window.listView.initialized = true;
         }
         if (!window.listView.initialized) {
@@ -68,6 +69,9 @@ window.listView = {
             if (!place.address || !place.address.lat || !place.address.lng) {
                 return;
             }
+
+            console.log("KLASA", document.getElementsByClassName("list-scrolling-container")[0]);
+            document.getElementsByClassName("list-scrolling-container")[0].style.height = `${window.listView.imageHeight+20}px;`;
 
             const listItem = document.createElement('div');
             listItem.setAttribute('style', `${window.listView.imageHeight}px !important`);
