@@ -131,16 +131,14 @@ window.detailView = {
                         if(user) {
                             if(context.chatWithLocationOwner && context.socialWall && place.contactPerson && place.contactPerson.id && (user._id !== place.contactPerson.id) && !isChatOpened) {
                                 let wid = '';
-                                if(user._id > place.contactPerson) {
+                                if(user._id < place.contactPerson) {
                                     wid = user._id + place.contactPerson.id;
                                 } else {
                                     wid = place.contactPerson.id + user._id;
                                 }
                                 actionItems.push({
                                     action: "linkToApp", 
-                                    queryString: `wid=${wid}
-                                    &wTitle=${encodeURIComponent((user.displayName || "Someone") + " | " + (place.contactPerson.displayName || "Someone"))}
-                                    &targetUsers=${JSON.stringify([{ userId: user._id}, {userId: place.contactPerson.id }])}`,
+                                    queryString: `wid=${wid}&wTitle=${encodeURIComponent((user.displayName || "Someone") + " | " + (place.contactPerson.displayName || "Someone"))}`,
                                     instanceId: context.socialWall.instanceId,
                                     title: "Chat",
                                 });

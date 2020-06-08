@@ -129,4 +129,5 @@
 
 .btn-info-icon::after {
   font-style: normal !important;
+  left: 0 !important;
 }

@@ -195,7 +195,7 @@ class MapOptions extends React.Component {
 
           {this.props.chatWithLocationOwner && <div className='row'>
             <div className='col-xs-6'>
-              <label>Social Wall</label>
+            <label>Select Chat</label>
             </div>
             <div className="col-xs-6 socialwall-container">
                 <button disabled={this.state.buttonPressed} onClick={this.openPluginDialog} className="btn btn-success">Select Premium Social Wall 2.0</button>
