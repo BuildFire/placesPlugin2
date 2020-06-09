@@ -28,7 +28,6 @@ window.detailView = {
             bookmarked: false,
             categories: categories
         };
-        let isChatOpened = false;
 
         window.buildfire.auth.getCurrentUser((err, user) => {
             if(user) {
@@ -128,8 +127,9 @@ window.detailView = {
                  function showContact() {
                     const { actionItems } = place;
                     window.buildfire.auth.getCurrentUser((err, user) => {
+                        const includesChat = actionItems.findIndex(item => item.customChat) >= 0;
                         if(user) {
-                            if(context.chatWithLocationOwner && context.socialWall && place.contactPerson && place.contactPerson.id && (user._id !== place.contactPerson.id) && !isChatOpened) {
+                            if(context.chatWithLocationOwner && context.socialWall && place.contactPerson && place.contactPerson.id && (user._id !== place.contactPerson.id) && !includesChat) {
                                 let wid = '';
                                 if(user._id < place.contactPerson) {
                                     wid = user._id + place.contactPerson.id;
@@ -141,10 +141,10 @@ window.detailView = {
                                     queryString: `wid=${wid}&wTitle=${encodeURIComponent((user.displayName || "Someone") + " | " + (place.contactPerson.displayName || "Someone"))}`,
                                     instanceId: context.socialWall.instanceId,
                                     title: "Chat",
+                                    customChat: true
                                 });
                             } 
                         }
-                        isChatOpened = true;
                         window.buildfire.actionItems.list(actionItems, {}, (err, actionItem) => {
                             if (err) return console.error(err);
                             console.log(actionItem);

@@ -65,11 +65,17 @@ class LocationForm extends React.Component {
     let selector = '#actionItems';
     let items = this.state.actionItems;
     this.actions = new components.actionItems.sortableList(selector, items);
-    this.actions.dialogOptions = { showIcon: false }
+    this.actions.dialogOptions = { showIcon: false };
     this.actions.onAddItems = (item) => {
-      if (item.action === "callNumber" && !('title' in item)) item.title = "Contact"; 
-      this.updateActions();
+      if (!('title' in item)) item.title = "Contact";
+      const titles = document.getElementsByClassName("title");
+      for (let titleElement of titles) {
+        if(titleElement.innerHTML === "undefined")
+        titleElement.innerHTML = "Contact";
     }
+
+      this.updateActions();
+    };
     this.actions.onDeleteItem = () => this.updateActions();
     this.actions.onItemChange = () => this.updateActions();
     this.actions.onOrderChange = () => this.updateActions();
@@ -413,13 +419,13 @@ class LocationForm extends React.Component {
           <div id='actionItems' />
         </div>
 
-        {this.props.chatWithLocationOwner && this.props.socialWall && <div className='form-group'>
+        {this.props.chatWithLocationOwner && this.props.socialWall && this.props.socialWall.instanceId && <div className='form-group'>
           <div className="item clearfix row">
             <div className="labels col-md-3 padding-right-zero pull-left">
               Location Owner
               <div className="settingsTooltip location-owner">
                 <span className="tip btn-info-icon btn-primary transition-third" />
-                <span className="settingsTooltiptext location-owner">To set a location owner for this location, enter a maximum of of 1 email address</span>
+                <span className="settingsTooltiptext location-owner">You can set a maximum of one location owner per location.</span>
               </div>
           </div>
             <div className="main col-md-9 pull-right">
@@ -449,10 +455,9 @@ class LocationForm extends React.Component {
                     onClick={() => this.showImageDialog()}>
                     {this.state.image ? null : <a>Add Image +</a>}
                   </div>
-                  <img
-                    className='delete'
-                    onClick={e => this.removeImage(e)}
-                    src='assets/img/cross.png' />
+                  <span
+                    className='delete btn-icon btn-delete-icon btn-danger transition-third'
+                    onClick={e => this.removeImage(e)} />
                 </div>
               </div>
             </div>

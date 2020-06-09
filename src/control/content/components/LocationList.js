@@ -56,10 +56,9 @@ class PlacesList extends React.Component {
           onMouseOut={() => this.props.onHoverOut(value.place.id)}>
           <span className="tooltiptext" id={`tool-tip-text--${value.place.id}`}>Copy Query String</span>
         </span>
-        <img
-          className='delete'
-          onClick={ () => this.props.handleDelete(value.index) }
-          src='assets/img/cross.png' />
+        <span
+          className='delete btn-icon btn-delete-icon btn-danger transition-third'
+          onClick={ () => this.props.handleDelete(value.index) } />
       </div>
     ));
 
