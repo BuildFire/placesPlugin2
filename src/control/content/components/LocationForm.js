@@ -432,7 +432,7 @@ class LocationForm extends React.Component {
               <div className="clearfix owner-info-container">
                 <div onClick={() => this.addLocationOwner()} className="btn btn-success">{contactPerson && contactPerson.id ? "Select" : "Add"} Location Owner</div>
                 {contactPerson && contactPerson.id && <div className="owner-info">
-                  <label>{contactPerson.displayName && contactPerson.displayName.length > 0 ? contactPerson.displayName : contactPerson.email}</label>
+                  <label>{contactPerson.displayName && contactPerson.displayName.length > 0 ? contactPerson.displayName : contactPerson.username}</label>
                   <span onClick={() => this.removeLocationOwner()} className="delete btn-icon btn-delete-icon btn-danger transition-third"></span>
                 </div>}
               </div>
