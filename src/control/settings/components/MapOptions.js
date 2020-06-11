@@ -204,7 +204,7 @@ class MapOptions extends React.Component {
                     <img src={this.props.options.socialWall.iconUrl} />
                     <label>{this.props.options.socialWall.pluginTypeName}</label>
                   </div>
-                  <h3 onClick={() => this.removePlugin()} className="text-danger socialwall-close">x</h3>
+                  <span  onClick={() => this.removePlugin()} className="socialwall-close delete btn-icon btn-delete-icon btn-danger transition-third"></span>
                 </div>}
             </div>
           </div>}
