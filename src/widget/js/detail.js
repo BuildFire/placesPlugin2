@@ -5,7 +5,7 @@ window.detailView = {
     init: (place) => {
         //Add filter control
         let categories = [];
-        if (place.hasOwnProperty('categories') && window.app.state.configCategories == true) place.categories.map(item => {
+        if (place && place.hasOwnProperty('categories') && window.app.state.configCategories == true) place.categories.map(item => {
             categories.push(app.state.categories.filter(category => category.name.id === item).map(c => c.name.name))
         });
         let view = document.getElementById('detailView');
@@ -30,8 +30,9 @@ window.detailView = {
         };
 
         window.buildfire.auth.getCurrentUser((err, user) => {
-            if(user) {
-                context.actionItems = (place.actionItems && place.actionItems.length > 0) || (window.app.state.chatWithLocationOwner && window.app.state.socialWall && window.app.state.socialWall.instanceId && (place.contactPerson && place.contactPerson.id && (place.contactPerson.id !== user._id)));
+            if(user || user == null) {
+                
+            context.actionItems = (place.actionItems && place.actionItems.length > 0) || (window.app.state.chatWithLocationOwner && window.app.state.socialWall && window.app.state.socialWall.instanceId && (place.contactPerson && place.contactPerson.id && (place.contactPerson.id !== user._id)));
        
             let req = new XMLHttpRequest();
             req.open('GET', './templates/detail.hbs');
@@ -43,7 +44,6 @@ window.detailView = {
 
                 // Add the compiled html to the page
                 view.innerHTML = theCompiledHtml;
-
                 //TODO: Move to common location
                 let mapTypeId = window.google.maps.MapTypeId.ROADMAP,
                     zoomTo = 14, //city

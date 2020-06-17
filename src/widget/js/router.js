@@ -144,7 +144,7 @@ window.initRouter = function() {
             window.buildfire.appearance.titlebar.show();
         },
         'detail': () => {
-            loadDetail(app.state.selectedPlace[0]);
+            loadDetail(app.state.selectedPlace[0] ? app.state.selectedPlace[0] : app.state.places[0]);
             app.state.mode = app.settings.viewStates.detail;
 
             if (!app.state.isBackNav) {
