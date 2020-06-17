@@ -12,14 +12,20 @@ class Settings extends React.Component {
       configBookmark: false,
       configCarousel: false,
       configCategories: false,
+      chatWithLocationOwner: false,
     };
   }
 
   componentWillMount() {
     buildfire.datastore.get('places', (err, result) => {
       if (err) return console.error(err);
-      this.setState({ data: result.data, configBookmark: result.data.isBookmarkingAllowed, 
-        configCarousel: result.data.isCarouselSwitched, configCategories: result.data.configCategories });
+      this.setState({ 
+        data: result.data,
+        configBookmark: result.data.isBookmarkingAllowed, 
+        configCarousel: result.data.isCarouselSwitched,
+        configCategories: result.data.configCategories,
+        chatWithLocationOwner: result.data.chatWithLocationOwner
+      });
     });
   }
 
@@ -82,14 +88,39 @@ class Settings extends React.Component {
     const { data } = this.state;
     this.setState({ configCategories: !this.state.configCategories }, () => {
       data.configCategories = this.state.configCategories;
-      console.log("AAA", this.state.configCategories)
 
       this.setState(data);
       this.handleSave();
     });
   }
 
+  onChatWithLocationOwnerChange = () => {
+    const { data } = this.state;
+    this.setState({ chatWithLocationOwner: !this.state.chatWithLocationOwner }, () => {
+      data.chatWithLocationOwner = this.state.chatWithLocationOwner;
+
+      this.setState(data);
+      this.handleSave();
+    });
+  }
+
+
+  setSocialWall = (socialWall) => {
+    const { data } = this.state;
+    data.socialWall = socialWall;
+    this.setState(data);
+    this.handleSave();
+  }
+
+  removePlugin = () => {
+    const { data } = this.state;
+    data.socialWall = {};
+    this.setState(data);
+    this.handleSave();
+  }
+
   render() {
+
     return (
       <div>
         <MapOptions
@@ -98,9 +129,13 @@ class Settings extends React.Component {
           onBookmarkChange={this.handleBookmarkChange}
           onCarouselChange={this.handleCarouselChange}
           onCategoriesChange={this.handleCategoriesChange}
+          onChatWithLocationOwnerChange={this.onChatWithLocationOwnerChange}
           configBookmark={this.state.configBookmark} 
           configCarousel={this.state.configCarousel} 
-          configCategories={this.state.configCategories} />
+          configCategories={this.state.configCategories}
+          chatWithLocationOwner={this.state.chatWithLocationOwner}
+          setSocialWall={this.setSocialWall}
+          removePlugin={this.removePlugin} />
       </div>
     );
   }

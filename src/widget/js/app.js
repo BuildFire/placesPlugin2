@@ -156,6 +156,8 @@ window.app = {
             window.app.state.isBookmarkingAllowed = data.isBookmarkingAllowed;
             window.app.state.isCarouselSwitched = data.isCarouselSwitched;
             window.app.state.configCategories = data.configCategories;
+            window.app.state.chatWithLocationOwner = data.chatWithLocationOwner;
+            window.app.state.socialWall = data.socialWall;
             if (data.categories && !window.app.state.isCategoryDeeplink) {
               window.app.state.categories = data.categories.map(category => {
                   return { name: category, isActive: true };

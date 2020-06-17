@@ -91,14 +91,11 @@ class CategoryListItem extends React.Component {
             </span>
         </div>
 
-          <div className='action'>
-            <span>
-              <img
-                className='delete'
+          <div className='action categoryTooltip'>
+            <span
+                className='delete btn-icon btn-delete-icon btn-danger transition-third'
                 onClick={ () => this.props.handleDelete() }
-                src='assets/img/cross.png' 
               />
-            </span>
           </div>
         </div>
       </div>

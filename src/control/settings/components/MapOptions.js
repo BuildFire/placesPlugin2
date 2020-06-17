@@ -3,6 +3,9 @@ import React from 'react';
 class MapOptions extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      buttonPressed: false,
+    };
   }
 
   onChange(e) {
@@ -21,6 +24,39 @@ class MapOptions extends React.Component {
 
   onCategoriesChange() {
     this.props.onCategoriesChange();
+  }
+
+  onChatWithLocationOwnerChange() {
+    this.props.onChatWithLocationOwnerChange();
+  }
+
+  openPluginDialog = () => {
+    this.setState({
+      buttonPressed: true,
+    });
+
+    window.buildfire.pluginInstance.showDialog({}, (error, response) => {
+      console.log(error, response);
+      if (response && response.length > 0) {
+        const socialWall = {
+          folderName: response[0].folderName,
+          pluginTypeId: response[0].pluginTypeId,
+          title: response[0].title,
+          instanceId: response[0].instanceId,
+          pluginTypeName: response[0].pluginTypeName,
+          iconUrl: response[0].iconUrl,
+        };
+        console.log(socialWall);
+        this.props.setSocialWall(socialWall);
+      }
+      this.setState({
+        buttonPressed: false,
+      });
+    });  }
+
+
+  removePlugin() {
+    this.props.removePlugin();
   }
 
   render() {
@@ -75,7 +111,7 @@ class MapOptions extends React.Component {
 
           <div className='row'>
             <div className='col-xs-6'>
-              <label>Show Points of Interest on Map</label>
+              <label>Show Points Of Interest On Map</label>
             </div>
             <div className='col-xs-6'>
               <div className='dropdown'>
@@ -96,7 +132,7 @@ class MapOptions extends React.Component {
 
           <div className='row'>
             <div className='col-xs-6'>
-              <label>Allow Users to Bookmark Places</label>
+              <label>Allow Users To Bookmark Places</label>
             </div>
             <div className='col-xs-6'>
               <div className="Toggler">
@@ -111,7 +147,7 @@ class MapOptions extends React.Component {
 
           <div className='row'>
             <div className='col-xs-6'>
-              <label>Move image Carousel to the top of the Location's details page</label>
+              <label>Move Image Carousel To The Top Of The Location's Details Page</label>
             </div>
             <div className='col-xs-6'>
               <div className="Toggler">
@@ -125,7 +161,7 @@ class MapOptions extends React.Component {
 
           <div className='row'>
             <div className='col-xs-6'>
-              <label>Show Category on Places Details Page</label>
+              <label>Show Category On Places Details Page</label>
             </div>
             <div className='col-xs-6'>
               <div className="Toggler">
@@ -134,6 +170,45 @@ class MapOptions extends React.Component {
               </div>
             </div>
           </div>
+
+          <br />
+
+          <div className='item clearfix row'>
+            <div className='col-xs-6'>
+              <div>
+                Add Chat With Location Owner
+                <div className="settingsTooltip social-wall">
+                  <span className="tip btn-info-icon btn-primary transition-third" />
+                  <span className="settingsTooltiptext socialWall">To add a location owner to each location turn this toggle "On", connect Premium Social Wall 2.0, and in the Location Details page of each location, add a location owner's email address</span>
+                </div>
+              </div>
+            </div>
+            <div className='col-xs-6'>
+              <div className="Toggler">
+                <div className="Toggler__on" style={this.props.chatWithLocationOwner ? active : null} onClick={() => this.onChatWithLocationOwnerChange()}>On</div>
+                <div className="Toggler__off" style={!this.props.chatWithLocationOwner ? active : null} onClick={() => this.onChatWithLocationOwnerChange()}>Off</div>
+              </div>
+            </div>
+          </div>
+
+          <br />
+
+          {this.props.chatWithLocationOwner && <div className='row'>
+            <div className='col-xs-6'>
+            <label>Select Chat</label>
+            </div>
+            <div className="col-xs-6 socialwall-container">
+                <button disabled={this.state.buttonPressed} onClick={this.openPluginDialog} className="btn btn-success">Select Premium Social Wall 2.0</button>
+                {this.props.options.socialWall && this.props.options.socialWall.instanceId && <div className="socialwall-info">
+                  <div className="socialwall-info-title">
+                    <img src={this.props.options.socialWall.iconUrl} />
+                    <label>{this.props.options.socialWall.pluginTypeName}</label>
+                  </div>
+                  <span  onClick={() => this.removePlugin()} className="socialwall-close delete btn-icon btn-delete-icon btn-danger transition-third"></span>
+                </div>}
+            </div>
+          </div>}
+
         </form>
       </div>
 
