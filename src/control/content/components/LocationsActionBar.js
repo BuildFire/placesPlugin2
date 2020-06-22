@@ -33,15 +33,17 @@ class LocationsActionBar extends React.Component {
           const foundCategory = allCategories.find(cat=> cat.name === catName)
           const categoryExists = categoriesToAdd.find(cat=> cat === catName)
           catName = catName.trim();
-          if (!catName.length) return;
-      
-          let category = {
-            id: uuidv4(),
-            name: catName
-          };
-      
-          if(!foundCategory && !categoryExists)
-          categoriesToAdd.push(category);
+          if (!catName.length) return;          
+          if(!foundCategory && !categoryExists) {
+            let category = {
+              id: uuidv4(),
+              name: catName
+            };
+            selectedCategory.push(category.id);
+            categoriesToAdd.push(category);
+          } else  {
+            selectedCategory.push(foundCategory.id);
+          }
         })
         // if a row is missing latitude or longitude
         // use google maps api to fetch them async
@@ -59,7 +61,7 @@ class LocationsActionBar extends React.Component {
                 resolve({
                   title: typeof title === 'number' ? title.toString() : title || 'Untitled Location',
                   subtitle,
-                  categories: categoryArr,
+                  categories: selectedCategory,
                   address: {
                     name,
                     lat,
@@ -76,7 +78,7 @@ class LocationsActionBar extends React.Component {
           return {
             title: typeof title === 'number' ? title.toString() : title || 'Untitled Location',
             subtitle,
-            categories: categoryArr,
+            categories: selectedCategory,
             address: {
               name,
               lat: parseFloat(address_lat),
