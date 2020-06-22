@@ -89,7 +89,7 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
 }
 
 .sidenav {
-    position: absolute;
+    position: fixed;
     height: 82vh;
     left: 5px;
     right: 5px;

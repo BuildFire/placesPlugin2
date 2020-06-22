@@ -1,6 +1,7 @@
 import React from 'react';
 import csv from 'csv-js';
 import CSVjs from 'comma-separated-values';
+import uuidv4 from '../lib/uuidv4';
 
 class LocationsActionBar extends React.Component {
 
@@ -20,16 +21,30 @@ class LocationsActionBar extends React.Component {
       const { places } = this.props;
       const allCategories = Array.isArray(this.props.categories) ? this.props.categories : [];
       const promises = [];
+      const categoriesToAdd = [];
       // loop through the csv rows
       const locations = rows.map((row, i) => {
         const [title, subtitle, categories, name, address_lat, address_lng, description, image] = row;
         const selectedCategory = [];
         
-        allCategories.forEach(cat => {
-            if (categories === cat.name) {
-              selectedCategory.push(cat.id);
-            }
-        });
+        const cat = Number.isInteger(categories) ? categories.toString().replace(/, /g, ',') : categories.replace(/, /g, ',');
+        const categoryArr = cat.split(",");
+        categoryArr.some(catName => {
+          const foundCategory = allCategories.find(cat=> cat.name === catName)
+          const categoryExists = categoriesToAdd.find(cat=> cat === catName)
+          catName = catName.trim();
+          if (!catName.length) return;          
+          if(!foundCategory && !categoryExists) {
+            let category = {
+              id: uuidv4(),
+              name: catName
+            };
+            selectedCategory.push(category.id);
+            categoriesToAdd.push(category);
+          } else  {
+            selectedCategory.push(foundCategory.id);
+          }
+        })
         // if a row is missing latitude or longitude
         // use google maps api to fetch them async
         // otherwise just return the location
@@ -78,6 +93,9 @@ class LocationsActionBar extends React.Component {
       // if no places were fetched async, submit
       // otherwise, wait for complete and merge
       // the results
+      if(categoriesToAdd.length) {
+        this.props.onAddCategories(categoriesToAdd);
+      } 
       if (!promises.length) {
         while(locations.length){
           let paginatedLocations = locations.splice(0, 500);
@@ -119,19 +137,19 @@ class LocationsActionBar extends React.Component {
       let catNames = names.replace(/,/g, ', ');
 
       rows.push({
-          title: place.title,
-          subtitle: place.subtitle || '',
-          categories: catNames || '',
-          address: place.address.name,
-          lat: place.address.lat,
-          lng: place.address.lng,
-          description: place.description || '',
-          image: place.image || ''
-        });   
+        title: place.title,
+        subtitle: place.subtitle || '',
+        categories: catNames || '',
+        address: place.address.name,
+        lat: place.address.lat,
+        lng: place.address.lng,
+        description: place.description || '',
+        image: place.image || ''
+      });
     });
 
     let csvContent = 'data:text/csv;charset=utf-8,';
-    let encoded = new CSVjs(rows, { header: true }).encode();
+    let encoded = new CSVjs(rows, {header: true }).encode();
     csvContent += encoded;
 
 
@@ -157,7 +175,7 @@ class LocationsActionBar extends React.Component {
   }
 
   render() {
-    const { addingLocation } = this.props;
+    const { addingLocation } = this.props;
 
     return (
       <div>
@@ -171,12 +189,12 @@ class LocationsActionBar extends React.Component {
                   Cancel
                 </button>
               ) : (
-                <button
-                  className='btn btn-success'
-                  onClick={ () => this.onAddLocation() }>
-                  Add Location
-                </button>
-              ) }
+                  <button
+                    className='btn btn-success'
+                    onClick={ () => this.onAddLocation() }>
+                    Add Location
+                  </button>
+                ) }
             </div>
           </div>
           <div className='col-xs-8'>
