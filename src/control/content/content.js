@@ -30,7 +30,7 @@ class Content extends React.Component {
   componentWillMount() {
     buildfire.datastore.get('places', (err, result) => {
       if (err) return console.error(err);
-  
+
         result.data.itemsOrder = result.data.itemsOrder || [];
         result.data.isBookmarkingAllowed = result.data.isBookmarkingAllowed || false;
         result.data.pointsOfInterest = result.data.pointsOfInterest || "on";
@@ -373,6 +373,14 @@ class Content extends React.Component {
     // this.handleSave();
   }
 
+  onAddCategories(categories) {
+    const { data } = this.state;
+    data.categories = data.categories || [];
+    data.categories = [...categories, ...data.categories]
+    this.setState({ data });
+    this.handleSave();
+  }
+
   /**
    * Handle category submission
    *
@@ -436,6 +444,7 @@ class Content extends React.Component {
                 addingLocation={addingLocation || editingLocation !== false}
                 onAddLocation={() => this.onAddLocation()}
                 onAddLocationCancel={() => this.onAddLocationCancel()}
+                onAddCategories= {(categories) => this.onAddCategories(categories)}
                 onMultipleSubmit={(locations) => this.onMultipleLocationSubmit(locations)} />
 
               {addingLocation || editingLocation !== false

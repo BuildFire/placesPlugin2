@@ -70,7 +70,6 @@ window.listView = {
                 return;
             }
 
-            console.log("KLASA", document.getElementsByClassName("list-scrolling-container")[0]);
             document.getElementsByClassName("list-scrolling-container")[0].style.height = `${window.listView.imageHeight+20}px;`;
 
             const listItem = document.createElement('div');
