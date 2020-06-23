@@ -280,45 +280,46 @@ window.app = {
   initDetailView: (placeId) => {
       window.buildfire.appearance.titlebar.show();
       window.app.backButtonInit();
-      buildfire.datastore.getById(placeId, window.app.settings.placesListTag, (err, result) => {
-        if (err) console.log(err);
+      buildfire.datastore.getById(placeId, window.app.settings.placesListTag, (error, result) => {
+        if (error) console.log(error);
         result.data.id = result.id;
-        window.app.state.selectedPlace[0] = result.data
-        window.router.navigate(window.app.settings.viewStates.detail);
-        window.app.checkBookmarked(result.id);
-      });
-
-      //Check is bookmark allowed when page is open with deeplink
-      buildfire.datastore.get(window.app.settings.placesTag, function(err, results){
-        if (err) {
-          console.log(err);
-          return false;
-        } 
-
-        let data = results.data;
+        window.app.state.selectedPlace[0] = result.data;
         
-        if (data) {
-          window.app.state.sortBy = data.sortBy;
-          window.app.state.itemsOrder = data.itemsOrder;
-          window.app.state.actionItems = data.actionItems || [];
-          if (!window.app.state.isCategoryDeeplink) {
-            window.app.state.defaultView = data.defaultView;
-            window.app.state.mode = data.defaultView;
+
+        //Check is bookmark allowed when page is open with deeplink
+        buildfire.datastore.get(window.app.settings.placesTag, function(err, results){
+          if (err) {
+            console.log(err);
+            return false;
+          } 
+
+          let data = results.data;
+
+          if (data) {
+            window.app.state.sortBy = data.sortBy;
+            window.app.state.itemsOrder = data.itemsOrder;
+            window.app.state.actionItems = data.actionItems || [];
+            if (!window.app.state.isCategoryDeeplink) {
+              window.app.state.defaultView = data.defaultView;
+              window.app.state.mode = data.defaultView;
+            }
+            window.app.state.isBookmarkingAllowed = data.isBookmarkingAllowed;
+            window.app.state.isCarouselSwitched = data.isCarouselSwitched;
+            window.app.state.configCategories = data.configCategories;
+            window.app.state.chatWithLocationOwner = data.chatWithLocationOwner;
+            window.app.state.socialWall = data.socialWall;
+            if (data.categories && !window.app.state.isCategoryDeeplink) {
+              window.app.state.categories = data.categories.map(category => {
+                  return { name: category, isActive: true };
+              });
+            }
+            if (data.pointsOfInterest) {
+              window.app.state.pointsOfInterest = data.pointsOfInterest;
+            }
           }
-          window.app.state.isBookmarkingAllowed = data.isBookmarkingAllowed;
-          window.app.state.isCarouselSwitched = data.isCarouselSwitched;
-          window.app.state.configCategories = data.configCategories;
-          window.app.state.chatWithLocationOwner = data.chatWithLocationOwner;
-          window.app.state.socialWall = data.socialWall;
-          if (data.categories && !window.app.state.isCategoryDeeplink) {
-            window.app.state.categories = data.categories.map(category => {
-                return { name: category, isActive: true };
-            });
-          }
-          if (data.pointsOfInterest) {
-            window.app.state.pointsOfInterest = data.pointsOfInterest;
-          }
-        }
+          window.router.navigate(window.app.settings.viewStates.detail);
+          window.app.checkBookmarked(result.id);
+        });
       });
     },
     
