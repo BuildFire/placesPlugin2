@@ -29,10 +29,8 @@ window.detailView = {
             categories: categories
         };
 
-        window.buildfire.auth.getCurrentUser((err, user) => {
-            if(user || user == null) {
-                
-            context.actionItems = (place.actionItems && place.actionItems.length > 0) || (window.app.state.chatWithLocationOwner && window.app.state.socialWall && window.app.state.socialWall.instanceId && (place.contactPerson && place.contactPerson.id && (place.contactPerson.id !== user._id)));
+        window.buildfire.auth.getCurrentUser((err, user) => {                
+            context.actionItems = (place.actionItems && place.actionItems.length > 0) || (window.app.state.chatWithLocationOwner && window.app.state.socialWall && window.app.state.socialWall.instanceId && (place.contactPerson && place.contactPerson.id && user && (place.contactPerson.id !== user._id)));
        
             let req = new XMLHttpRequest();
             req.open('GET', './templates/detail.hbs');
@@ -215,7 +213,7 @@ window.detailView = {
                     });
                 } else {
                     let targetNode = document.getElementById('carouselView');
-                    targetNode.setAttribute('style', 'display: none;')
+                    targetNode.setAttribute('style', 'display: none;');
                 }
 
                 /**
@@ -241,7 +239,6 @@ window.detailView = {
                     icon
                 });
             };
-        }
     }); 
     },
 };
