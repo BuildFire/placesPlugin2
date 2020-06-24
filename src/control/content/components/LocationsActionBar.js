@@ -31,7 +31,7 @@ class LocationsActionBar extends React.Component {
         const categoryArr = cat.split(",");
         categoryArr.some(catName => {
           const foundCategory = allCategories.find(cat=> cat.name === catName)
-          const categoryExists = categoriesToAdd.find(cat=> cat === catName)
+          const categoryExists = categoriesToAdd.find(cat=> cat.name === catName)
           catName = catName.trim();
           if (!catName.length) return;          
           if(!foundCategory && !categoryExists) {
@@ -42,7 +42,7 @@ class LocationsActionBar extends React.Component {
             selectedCategory.push(category.id);
             categoriesToAdd.push(category);
           } else  {
-            selectedCategory.push(foundCategory.id);
+            if(foundCategory) selectedCategory.push(foundCategory.id);
           }
         })
         // if a row is missing latitude or longitude
