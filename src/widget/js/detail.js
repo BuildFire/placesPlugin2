@@ -134,9 +134,10 @@ window.detailView = {
                                 } else {
                                     wid = place.contactPerson.id + user._id;
                                 }
+                                const sendPNTo = JSON.stringify([place.contactPerson.id, user._id]);
                                 actionItems.push({
                                     action: "linkToApp", 
-                                    queryString: `wid=${wid}&wTitle=${encodeURIComponent((user.displayName || "Someone") + " | " + (place.contactPerson.displayName || "Someone"))}`,
+                                    queryString: `wid=${wid}&wTitle=${encodeURIComponent((user.displayName || "Someone") + " | " + (place.contactPerson.displayName || "Someone"))}&sendPNTo=${sendPNTo}`,
                                     instanceId: context.socialWall.instanceId,
                                     title: "Chat",
                                     customChat: true
