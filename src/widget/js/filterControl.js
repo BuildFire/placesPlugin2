@@ -56,9 +56,9 @@ window.filterControl = {
                     return true;
                 }
 
-                //Does the place include any of the active categories
+                //Does the place include any of the active categories. Also, if a location has category, but category is deleted, we will still show location when categories filter "All" is selected.
                 let isMatch = place.categories.some(placeCategory => {
-                    return activeCategories.includes(placeCategory);
+                    return activeCategories.includes(placeCategory) || (app.state.categories.length === activeCategories.length);
                 });
 
                 return isMatch;
