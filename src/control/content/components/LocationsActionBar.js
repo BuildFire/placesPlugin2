@@ -119,20 +119,20 @@ class LocationsActionBar extends React.Component {
   }
 
   handleDataExport() {
-    const rows = [];
+    const rows = [];  
     this.props.places.forEach(place => {
-
+      place.address.name = place.address.name.replace('#', '')
       let categories = [];
       if (this.props.categories && Array.isArray(this.props.categories)) {
         this.props.categories.forEach(category => place.categories.forEach(cat => {
-          if (category.id === cat) {
-            categories.push(category);
-          }
+           if (category.id === cat) {
+             categories.push(category);
+           }
         }));
       }
-      let categoryNames = [];
+     let categoryNames = [];
       categories.forEach(cat => categoryNames.push(cat.name));
-
+      
       let names = categoryNames.toString();
       let catNames = names.replace(/,/g, ', ');
 
