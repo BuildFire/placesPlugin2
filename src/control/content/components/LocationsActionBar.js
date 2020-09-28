@@ -124,11 +124,13 @@ class LocationsActionBar extends React.Component {
       place.address.name = place.address.name.replace('#', '')
       let categories = [];
       if (this.props.categories && Array.isArray(this.props.categories)) {
-        this.props.categories.forEach(category => place.categories.forEach(cat => {
+        this.props.categories.forEach(category => { 
+        if(!place.categories)place.categories=[];
+        place.categories.forEach(cat => {
            if (category.id === cat) {
              categories.push(category);
            }
-        }));
+        })});
       }
      let categoryNames = [];
       categories.forEach(cat => categoryNames.push(cat.name));
@@ -153,7 +155,7 @@ class LocationsActionBar extends React.Component {
     csvContent += encoded;
 
 
-    const encodedURI = encodeURI(csvContent);
+    const encodedURI = encodeURI(csvContent).replace(/#/g, '%23');
     const link = document.createElement('a');
     link.setAttribute('href', encodedURI);
     link.setAttribute('download', 'places_export.csv');
