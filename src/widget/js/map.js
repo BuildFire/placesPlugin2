@@ -20,17 +20,39 @@ window.mapView = {
         //Create the map first (Don't wait for location)
         mapView.createMap();
 
+        var myImg = document.getElementById('mapCenter').getElementsByTagName("img")[0];
+        if(buildfire.isWeb()){
+            buildfire.spinner.show();
+            myImg.style.filter="invert(90%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%)";
+            if (typeof(Storage) !== "undefined" ) {
+                var userLocation = localStorage.getItem('user_location');
+                if (userLocation) {
+                    mapView.lastKnownLocation = JSON.parse(userLocation);
+                    mapView.addMarker(map, { address: mapView.lastKnownLocation }, mapView.settings.images.currentLocation);
+                    window.map.setCenter(mapView.lastKnownLocation);
+                    myImg.style.filter="";
+                    buildfire.spinner.hide();
+                }
+            }
+        }
+
         //Center map once location is obtained
+        console.log("start");
         buildfire.geo.getCurrentPosition({}, (err, position) => {
             if(!err && position && position.coords){
+                console.log("end");
                 mapView.lastKnownLocation = {lat: position.coords.latitude, lng: position.coords.longitude};
 
-                //window.map.setCenter(mapView.lastKnownLocation);
-                //window.map.setZoom(mapView.settings.zoomLevel.city);
-
                 mapView.addMarker(map, { address: mapView.lastKnownLocation }, mapView.settings.images.currentLocation);
+                window.map.setCenter(mapView.lastKnownLocation) ;
+                if(buildfire.isWeb())
+                {
+                    myImg.style.filter="";
+                    localStorage.setItem('user_location', JSON.stringify(mapView.lastKnownLocation));
+                    buildfire.spinner.hide();
+                }
             }
-        });
+        }); 
 
         //TODO: If there is only one entry, it returns an object (not an array)
         if(places && places.length){
@@ -111,7 +133,11 @@ window.mapView = {
         });
 
     },
-    centerMap: () => { window.map.setCenter(mapView.lastKnownLocation) },
+    centerMap: () => { 
+        if(mapView.lastKnownLocation.lat==window.defaultLocation.lat&&mapView.lastKnownLocation.lng==window.defaultLocation.lng)
+        console.log("waiting for coords");
+        else window.map.setCenter(mapView.lastKnownLocation);
+    },
     addMarker: (map, place, iconType) => {
         let marker = new google.maps.Marker({
             position: place.address,
