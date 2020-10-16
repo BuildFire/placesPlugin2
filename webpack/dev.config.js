@@ -1,7 +1,7 @@
-const path = require('path');
-const webpack = require('webpack');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
+const path = require("path");
+const webpack = require("webpack");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 const WebpackConfig = {
   // Source map type
@@ -21,6 +21,10 @@ const WebpackConfig = {
     "control/settings/settings": [
       "webpack-hot-middleware/client",
       path.join(__dirname, "../src/control/settings/index.js"),
+    ],
+    "control/strings/strings": [
+      "webpack-hot-middleware/client",
+      path.join(__dirname, "../src/control/strings/index.js"),
     ],
     "widget/widget": [
       "webpack-hot-middleware/client",
@@ -125,18 +129,6 @@ const WebpackConfig = {
       {
         from: path.join(__dirname, "../../../fonticons"),
         to: path.join(__dirname, "../fonticons"),
-      },
-      {
-        from: path.join(__dirname, "../src/widget/js/shared/stringsConfig.js"),
-        to: path.join(__dirname, "/dist/widget/js/shared/stringsConfig.js"),
-      },
-      {
-        from: path.join(__dirname, "../src/widget/js/shared/strings.js"),
-        to: path.join(__dirname, "/dist/widget/js/shared/strings.js"),
-      },
-      {
-        from: path.join(__dirname, "../src/control/strings/js/stringsUI.js"),
-        to: path.join(__dirname, "/dist/control/strings/js/stringsUI.js"),
       },
     ]),
   ],

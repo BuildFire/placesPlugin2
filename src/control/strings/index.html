@@ -1,119 +1,39 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <script src="../../../../scripts/buildfire.min.js"></script>
-  <link rel="stylesheet" type="text/css" href="./style.css">
+    <script src="../../../../scripts/buildfire.min.js"></script>
 
     <style>
-        .subTitle{
+        .subTitle {
             margin-bottom: 25px;
             font-style: italic;
         }
-        textarea:invalid,input:invalid{
-            background-color:lightpink;
+
+        textarea:invalid,
+        input:invalid {
+            background-color: lightpink;
         }
-        .hidden{
+
+        .hidden {
             display: none;
         }
-        #deleteButton{
+
+        #deleteButton {
             padding-right: 25px;
             margin-top: 5px;
         }
     </style>
-
-
-    <!--
-        Add more string here
-        ../../widget/js/shared/stringsConfig.js  <=========================== README
-        this file is shared with the widget.
-    -->
-
-    <!-- build:bundleSharedJSFiles  -->
-    <script src="../../widget/js/shared/stringsConfig.js"></script>
-    <script src="../../widget/js/shared/strings.js"></script>
-    <!-- endbuild -->
-
-    <!-- build:bundleJSFiles  -->
-    <script src="./js/stringsUI.js"></script>
-    <!-- endbuild -->
-
-    <script src="../../../../scripts/tinymce/tinymce.min.js"></script>
-
-
 </head>
+
 <body>
-
-    <div class="form-group" style="display: none" class="languagePicker" id="languagePicker">
-        <label>Select Language: </label>
-        <select id="langOptions" class="form-control" onchange="loadLanguage(this.value)">
-            <option value="en-us">English - US</option>
-            <!-- <option value="es-mx">Spanish - MX</option> -->
-        </select>
-    </div>
-    <button id="createButton" style="display: none" class="btn btn-success hidden" onclick="createLanguage(langOptions.value)">Start supporting this language</button>
-
+    
     <div id="stringsContainer" class="hidden">
         loading...
     </div>
-    <a id="saveButton" class="btn btn-success pull-right hidden" onclick="save()">Save</a>
-    <a id="deleteButton" style="display: none" class="text-danger pull-right hidden" onclick="deleteLanguage(strings.id)">Delete</a>
-
-    <script>
-		let strings;
-		function loadLanguage(lang){
-			stringsContainer.classList.add("hidden");
-            strings = new buildfire.services.Strings(lang,stringsConfig);
-			stringsUI.init("stringsContainer",strings,stringsConfig);            
-			strings.init().then(()=>{
-				showNewLanguageState( strings.id );
-				strings.inject();
-			});
-		}
-		loadLanguage("en-us");
-		function showNewLanguageState(show){
-			if(show) {
-				deleteButton.classList.remove("hidden");
-				saveButton.classList.remove("hidden");
-				stringsContainer.classList.remove("hidden");
-                createButton.classList.add("hidden");
-                languagePicker.classList.add("hidden");
-			}
-			else{
-				deleteButton.classList.add("hidden");
-				saveButton.classList.add("hidden");
-				stringsContainer.classList.add("hidden");
-                createButton.classList.remove("hidden");
-                languagePicker.classList.remove("hidden");
-                createLanguage("en-us");
-            }
-        }
-		function createLanguage(language){
-			stringsContainer.disabled=true;
-			strings.createLanguage(language,()=>{
-				stringsContainer.disabled=false;
-            });
-			showNewLanguageState(true);
-			return false;
-        }
-		function deleteLanguage(){
-			buildfire.notifications.confirm({message:"Are you sure you want to remove support fo this language?",confirmButton:{type:"danger"}},(e,r)=>{
-				if(r.selectedButton.key =="confirm") {
-					strings.deleteLanguage(() => {
-                        // loadLanguage(langOptions.value);
-                        showNewLanguageState();
-                    });
-				}
-            })
-        }
-        function save(){
-			strings.save(()=>{
-				buildfire.messaging.sendMessageToWidget({cmd:"refresh"})
-            });
-        }
-    </script>
-
-
+    <a id="saveButton" class="btn btn-success pull-right hidden" >Save</a>
 </body>
+
 </html>

@@ -8,25 +8,37 @@ const ZipWebpackPlugin = require('zip-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 const WebpackConfig = {
-
   // Disable source maps on production builds
   devtool: false,
 
   entry: {
     // Plugin entry points
-    'control/content/content': path.join(__dirname, '../src/control/content/index.js'),
-    'control/design/design': path.join(__dirname, '../src/control/design/design.js'),
-    'control/settings/settings': path.join(__dirname, '../src/control/settings/index.js'),
-    'widget/widget': path.join(__dirname, '../src/widget/js/app.js')
+    "control/content/content": path.join(
+      __dirname,
+      "../src/control/content/index.js"
+    ),
+    "control/design/design": path.join(
+      __dirname,
+      "../src/control/design/design.js"
+    ),
+    "control/settings/settings": path.join(
+      __dirname,
+      "../src/control/settings/index.js"
+    ),
+    "control/strings/strings": path.join(
+      __dirname,
+      "../src/control/strings/index.js"
+    ),
+    "widget/widget": path.join(__dirname, "../src/widget/js/app.js"),
   },
 
   output: {
-    path: path.join(__dirname, '../dist'),
-    filename: '[name].[hash].js'
+    path: path.join(__dirname, "../dist"),
+    filename: "[name].[hash].js",
   },
 
   externals: {
-    buildfire: 'buildfire'
+    buildfire: "buildfire",
   },
 
   module: {
@@ -34,79 +46,92 @@ const WebpackConfig = {
       {
         test: /\.js$/,
         exclude: /(node_modules|bower_components)/,
-        use: { loader: 'babel-loader' }
+        use: { loader: "babel-loader" },
       },
       {
-          test: /\.css$/,
-          use: ExtractTextPlugin.extract({
-              fallback: 'style-loader',
-              use: {loader: 'css-loader', options: {minimize: true}}
-          })
-      }
-    ]
+        test: /\.css$/,
+        use: ExtractTextPlugin.extract({
+          fallback: "style-loader",
+          use: { loader: "css-loader", options: { minimize: true } },
+        }),
+      },
+    ],
   },
 
   plugins: [
     new webpack.ProvidePlugin({
-        'window.Quill': 'quill/dist/quill.js',
-        'Quill': 'quill/dist/quill.js',
+      "window.Quill": "quill/dist/quill.js",
+      Quill: "quill/dist/quill.js",
     }),
-    new CleanWebpackPlugin(['dist'], {
-      root: path.join(__dirname, '../'),
-      verbose: false
+    new CleanWebpackPlugin(["dist"], {
+      root: path.join(__dirname, "../"),
+      verbose: false,
     }),
-    new webpack.optimize.UglifyJsPlugin({'uglifyOptions': {'mangle': false}}),
+    new webpack.optimize.UglifyJsPlugin({ uglifyOptions: { mangle: false } }),
     new HtmlWebpackPlugin({
-      filename: 'control/content/index.html',
+      filename: "control/content/index.html",
       inject: true,
       minify: { removeComments: true, collapseWhitespace: true },
-      template: path.join(__dirname, '../src/control/content/index.html'),
-      chunks: ['control/content/content']
+      template: path.join(__dirname, "../src/control/content/index.html"),
+      chunks: ["control/content/content"],
     }),
     new HtmlWebpackPlugin({
-      filename: 'control/design/index.html',
+      filename: "control/design/index.html",
       inject: true,
       minify: { removeComments: true, collapseWhitespace: true },
-      template: path.join(__dirname, '../src/control/design/index.html'),
-      chunks: ['control/design/design']
+      template: path.join(__dirname, "../src/control/design/index.html"),
+      chunks: ["control/design/design"],
     }),
     new HtmlWebpackPlugin({
-      filename: 'control/settings/index.html',
+      filename: "control/settings/index.html",
       inject: true,
       minify: { removeComments: true, collapseWhitespace: true },
-      template: path.join(__dirname, '../src/control/settings/index.html'),
-      chunks: ['control/settings/settings']
+      template: path.join(__dirname, "../src/control/settings/index.html"),
+      chunks: ["control/settings/settings"],
     }),
     new HtmlWebpackPlugin({
-      filename: 'widget/index.html',
+      filename: "control/strings/index.html",
       inject: true,
       minify: { removeComments: true, collapseWhitespace: true },
-      template: path.join(__dirname, '../src/widget/index.html'),
-      chunks: ['widget/widget']
+      template: path.join(__dirname, "../src/control/strings/index.html"),
+      chunks: ["control/strings/strings"],
     }),
-    new CopyWebpackPlugin([{
-      from: path.join(__dirname, '../src/control'),
-      to: path.join(__dirname, '../dist/control'),
-    }, {
-      from: path.join(__dirname, '../src/widget'),
-      to: path.join(__dirname, '../dist/widget'),
-    }, {
-      from: path.join(__dirname, '../src/resources'),
-      to: path.join(__dirname, '../dist/resources'),
-    }, {
-      from: path.join(__dirname, '../plugin.json'),
-      to: path.join(__dirname, '../dist/plugin.json'),
-    }
-    ], {
-      ignore: ['*.js', 'index.html', '*.md']
+    new HtmlWebpackPlugin({
+      filename: "widget/index.html",
+      inject: true,
+      minify: { removeComments: true, collapseWhitespace: true },
+      template: path.join(__dirname, "../src/widget/index.html"),
+      chunks: ["widget/widget"],
     }),
-    new ExtractTextPlugin('[name].[hash].css'),
+    new CopyWebpackPlugin(
+      [
+        {
+          from: path.join(__dirname, "../src/control"),
+          to: path.join(__dirname, "../dist/control"),
+        },
+        {
+          from: path.join(__dirname, "../src/widget"),
+          to: path.join(__dirname, "../dist/widget"),
+        },
+        {
+          from: path.join(__dirname, "../src/resources"),
+          to: path.join(__dirname, "../dist/resources"),
+        },
+        {
+          from: path.join(__dirname, "../plugin.json"),
+          to: path.join(__dirname, "../dist/plugin.json"),
+        },
+      ],
+      {
+        ignore: ["*.js", "index.html", "*.md"],
+      }
+    ),
+    new ExtractTextPlugin("[name].[hash].css"),
     new ZipWebpackPlugin({
-      path: path.join(__dirname, '../'),
-      filename: `plugin.zip`
-    })
-  ]
-
+      path: path.join(__dirname, "../"),
+      filename: `plugin.zip`,
+    }),
+  ],
 };
 
 module.exports = WebpackConfig;
