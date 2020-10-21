@@ -19,6 +19,17 @@ window.filterControl = {
     window.filterControl.originalPlaces = app.state.filteredPlaces;
     let sideNav = document.getElementById("sideNav");
     let categoriesDiv = sideNav.querySelector("#categories");
+    let menuTitle = strings.get("Home.filterMenuTitle").length
+      ? strings.get("Home.filterMenuTitle").length > 14
+        ? strings.get("Home.filterMenuTitle").substring(0, 14).trim() + "..."
+        : strings.get("Home.filterMenuTitle")
+      : "Categories";
+    let toggleBtnText = strings.get("Home.toggleCategoriesTitle").length
+      ? strings.get("Home.toggleCategoriesTitle").length > 20
+        ? strings.get("Home.toggleCategoriesTitle").substring(0, 20).trim() +
+          "..."
+        : strings.get("Home.toggleCategoriesTitle")
+      : "All Categories";
 
     categoriesDiv.innerHTML = "";
 
@@ -39,12 +50,8 @@ window.filterControl = {
 
         // Add the compiled html to the page
         document.getElementById("categories").innerHTML = theCompiledHtml;
-        document.getElementById("title").innerHTML =
-          strings.get("Home.filterMenuTitle").substring(0, 20) + "..." ||
-          "Categories";
-        document.getElementById("toggleBtn").innerHTML =
-          strings.get("Home.toggleCategoriesTitle").substring(0, 20) + "..." ||
-          "All Categories";
+        document.getElementById("title").innerHTML = menuTitle;
+        document.getElementById("toggleBtn").innerHTML = toggleBtnText;
         sideNav.className += " showing";
         document.getElementById("selection").checked = context.selection;
         sideNav.style.display = " block";

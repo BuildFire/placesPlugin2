@@ -3,13 +3,13 @@ export const stringsConfig = {
     title: "Filter Menu",
     labels: {
       filterMenuTitle: {
-        title: "Filter Menu title",
+        title: "Filter Menu Title",
         placeholder: "Categories",
         maxLength: 30,
         defaultValue: "Categories",
       },
       toggleCategoriesTitle: {
-        title: "Toggle All Categories on/off button text",
+        title: "Toggle All Categories On/Off Button Text",
         placeholder: "All Categories",
         maxLength: 30,
         defaultValue: "All Categories",
@@ -17,10 +17,10 @@ export const stringsConfig = {
     },
   },
   ActionButtons: {
-    title: "Action Buttons Text",
+    title: "Location Details Screen",
     labels: {
       directionsButton: {
-        title: "Directions Button",
+        title: "Get Directions Button",
         placeholder: "Get Directions",
         maxLength: 30,
         defaultValue: "Get Directions",
@@ -30,6 +30,17 @@ export const stringsConfig = {
         placeholder: "Contact",
         maxLength: 30,
         defaultValue: "Contact",
+      },
+    },
+  },
+  LocationSummary: {
+    title: "Location Summary",
+    labels: {
+      locationSummaryLink: {
+        title: "Location Summary Link",
+        placeholder: "View More",
+        maxLength: 30,
+        defaultValue: "View More",
       },
     },
   },

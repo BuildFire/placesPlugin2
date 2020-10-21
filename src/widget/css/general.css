@@ -237,7 +237,7 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
 }
 
 #locationSummary .name.address {
-    font-size: 11px;
+    font-size: 14px;
     line-height: 1.27;
     margin: 0;
     color: #000;
@@ -251,7 +251,7 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
 
 
 #locationSummary .view-more {
-    font-size: 9px;
+    font-size: 14px;
     font-weight: 300;
 }
 
@@ -348,7 +348,7 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
     height: 90px;
 }
 .col-title {
-    width: 52%;
+    width: 46%;
 }
 .detail-image{
     border-radius: 100%;
@@ -366,6 +366,7 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
 }
 .arrow{
     vertical-align: middle;
+    margin-top: 3px;
 }
 .distance{
     font-size: 13px;

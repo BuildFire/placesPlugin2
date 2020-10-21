@@ -16,7 +16,10 @@ window.detailView = {
         });
         let view = document.getElementById('detailView');
         let screenWidth = window.innerWidth;
-        const title = place.title;
+        const title =
+          place.title.length && place.title.length > 25
+            ? place.title.substring(0, 25).trim() + "..."
+            : place.title;
         let context = {
           isBookmarkingAllowed: window.app.state.isBookmarkingAllowed,
           isCarouselSwitched: window.app.state.isCarouselSwitched,
@@ -33,12 +36,22 @@ window.detailView = {
           lng: place.address.lng,
           bookmarked: false,
           categories: categories,
-          dirBtnText:
-            strings.get("ActionButtons.directionsButton").substring(0, 14) +
-              "..." || "Get Directions",
-          contactBtnText:
-            strings.get("ActionButtons.contactButton").substring(0, 14) +
-              "..." || "Contact",
+          dirBtnText: strings.get("ActionButtons.directionsButton").length
+            ? strings.get("ActionButtons.directionsButton").length > 14
+              ? strings
+                  .get("ActionButtons.directionsButton")
+                  .substring(0, 14)
+                  .trim() + "..."
+              : strings.get("ActionButtons.directionsButton")
+            : "Get Directions",
+          contactBtnText: strings.get("ActionButtons.contactButton").length
+            ? strings.get("ActionButtons.contactButton").length > 14
+              ? strings
+                  .get("ActionButtons.contactButton")
+                  .substring(0, 14)
+                  .trim() + "..."
+              : strings.get("ActionButtons.contactButton")
+            : "Contact",
         };
 
         console.log(context.dirBtnText);
