@@ -454,105 +454,110 @@ class LocationForm extends React.Component {
         <div className="form-group">
           <div id="map" ref={(n) => (this.map = n)} />
         </div>
-
-        <div className="form-group">
-          <label htmlFor="description">Description*</label>
-          <div className="editor" style={{ height: "220px"}}>
-            <textarea name="content"></textarea>
+        <div
+          className="formContainer"
+          style={{ display: "flex", flexDirection: "column", overflow:    "auto"    }}
+        >
+          <div className="form-group">
+            <label htmlFor="description">Description*</label>
+            <div className="editor" style={{    position: "relative"    }}>
+              <textarea name="content"></textarea>
+            </div>
           </div>
-        </div>
 
-        <br />
+          <br />
 
-        <div className="form-group">
-          <div id="actionItems" />
-        </div>
+          <div className="form-group">
+            <div id="actionItems" />
+          </div>
 
-        {this.props.chatWithLocationOwner &&
-          this.props.socialWall &&
-          this.props.socialWall.instanceId && (
-            <div className="form-group">
-              <div className="item clearfix row">
-                <div className="labels col-md-3 padding-right-zero pull-left">
-                  Location Owner
-                  <div className="settingsTooltip location-owner">
-                    <span className="tip btn-info-icon btn-primary transition-third" />
-                    <span className="settingsTooltiptext location-owner">
-                      You can set a maximum of one location owner per location.
-                    </span>
-                  </div>
-                </div>
-                <div className="main col-md-9 pull-right">
-                  <div className="clearfix owner-info-container">
-                    <div
-                      onClick={() => this.addLocationOwner()}
-                      className="btn btn-success"
-                    >
-                      {contactPerson && contactPerson.id ? "Select" : "Add"}{" "}
-                      Location Owner
+          {this.props.chatWithLocationOwner &&
+            this.props.socialWall &&
+            this.props.socialWall.instanceId && (
+              <div className="form-group">
+                <div className="item clearfix row">
+                  <div className="labels col-md-3 padding-right-zero pull-left">
+                    Location Owner
+                    <div className="settingsTooltip location-owner">
+                      <span className="tip btn-info-icon btn-primary transition-third" />
+                      <span className="settingsTooltiptext location-owner">
+                        You can set a maximum of one location owner per
+                        location.
+                      </span>
                     </div>
-                    {contactPerson && contactPerson.id && (
-                      <div className="owner-info">
-                        <label>
-                          {contactPerson.displayName &&
-                          contactPerson.displayName.length > 0
-                            ? contactPerson.displayName
-                            : contactPerson.username}
-                        </label>
-                        <span
-                          onClick={() => this.removeLocationOwner()}
-                          className="delete btn-icon btn-delete-icon btn-danger transition-third"
-                        ></span>
+                  </div>
+                  <div className="main col-md-9 pull-right">
+                    <div className="clearfix owner-info-container">
+                      <div
+                        onClick={() => this.addLocationOwner()}
+                        className="btn btn-success"
+                      >
+                        {contactPerson && contactPerson.id ? "Select" : "Add"}{" "}
+                        Location Owner
                       </div>
-                    )}
+                      {contactPerson && contactPerson.id && (
+                        <div className="owner-info">
+                          <label>
+                            {contactPerson.displayName &&
+                            contactPerson.displayName.length > 0
+                              ? contactPerson.displayName
+                              : contactPerson.username}
+                          </label>
+                          <span
+                            onClick={() => this.removeLocationOwner()}
+                            className="delete btn-icon btn-delete-icon btn-danger transition-third"
+                          ></span>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          )}
+            )}
 
-        <div className="form-group">
-          <div id="carousel" />
-        </div>
+          <div className="form-group">
+            <div id="carousel" />
+          </div>
 
-        <div className="item clearfix row">
-          <span className="labels col-md-3 padding-right-zero pull-left">
-            List Image
-          </span>
-          <div className="main col-md-9 pull-right">
-            <div className="clearfix">
-              <div className="list-image-holder">
-                <div
-                  style={{ backgroundImage: image ? `url(${image})` : "" }}
-                  className="image-dialog"
-                  onClick={() => this.showImageDialog()}
-                >
-                  {this.state.image ? null : <a>Add Image +</a>}
+          <div className="item clearfix row">
+            <span className="labels col-md-3 padding-right-zero pull-left">
+              List Image
+            </span>
+            <div className="main col-md-9 pull-right">
+              <div className="clearfix">
+                <div className="list-image-holder">
+                  <div
+                    style={{ backgroundImage: image ? `url(${image})` : "" }}
+                    className="image-dialog"
+                    onClick={() => this.showImageDialog()}
+                  >
+                    {this.state.image ? null : <a>Add Image +</a>}
+                  </div>
+                  <span
+                    className="delete btn-icon btn-delete-icon btn-danger transition-third"
+                    onClick={(e) => this.removeImage(e)}
+                  />
                 </div>
-                <span
-                  className="delete btn-icon btn-delete-icon btn-danger transition-third"
-                  onClick={(e) => this.removeImage(e)}
-                />
               </div>
             </div>
           </div>
-        </div>
 
-        <div className="form-group">
-          <button
-            disabled={
-              !title.length ||
-              description.replace(/(&nbsp;|<(?!img|\/img).*?>)/gi, "")
-                .length === 0 ||
-              !address ||
-              !address.lat ||
-              !address.lng
-            }
-            type="submit"
-            className="btn btn-success"
-          >
-            {this.props.location ? "Save Location" : "Save Location"}
-          </button>
+          <div className="form-group">
+            <button
+              disabled={
+                !title.length ||
+                description.replace(/(&nbsp;|<(?!img|\/img).*?>)/gi, "")
+                  .length === 0 ||
+                !address ||
+                !address.lat ||
+                !address.lng
+              }
+              type="submit"
+              className="btn btn-success"
+            >
+              {this.props.location ? "Save Location" : "Save Location"}
+            </button>
+          </div>
         </div>
       </form>
     );

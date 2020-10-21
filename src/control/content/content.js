@@ -436,39 +436,53 @@ class Content extends React.Component {
         );
       case 1:
         return (
-          <div className='row'>
-            <div className='col-xs-12'>
+          <div className="row category-box">
+            <div className="col-xs-12">
               <LocationsActionBar
                 categories={data.categories}
                 places={data.places}
                 addingLocation={addingLocation || editingLocation !== false}
                 onAddLocation={() => this.onAddLocation()}
                 onAddLocationCancel={() => this.onAddLocationCancel()}
-                onAddCategories= {(categories) => this.onAddCategories(categories)}
-                onMultipleSubmit={(locations) => this.onMultipleLocationSubmit(locations)} />
+                onAddCategories={(categories) =>
+                  this.onAddCategories(categories)
+                }
+                onMultipleSubmit={(locations) =>
+                  this.onMultipleLocationSubmit(locations)
+                }
+              />
 
-              {addingLocation || editingLocation !== false
-                ? addingLocation
-                  ? <AddLocation
+              {addingLocation || editingLocation !== false ? (
+                addingLocation ? (
+                  <AddLocation
                     chatWithLocationOwner={data.chatWithLocationOwner}
                     socialWall={data.socialWall}
                     pointsOfInterest={data.pointsOfInterest}
                     categories={data.categories}
-                    onSubmit={location => this.onLocationSubmit(location)} />
-                  : <EditLocation
+                    onSubmit={(location) => this.onLocationSubmit(location)}
+                  />
+                ) : (
+                  <EditLocation
                     chatWithLocationOwner={data.chatWithLocationOwner}
                     socialWall={data.socialWall}
                     pointsOfInterest={data.pointsOfInterest}
                     categories={data.categories}
                     location={data.places[editingLocation]}
-                    onSubmit={location => this.onLocationEdit(location, editingLocation)} />
-                : <LocationList
+                    onSubmit={(location) =>
+                      this.onLocationEdit(location, editingLocation)
+                    }
+                  />
+                )
+              ) : (
+                <LocationList
                   places={data.places}
                   updateSort={(list) => this.updateSort(list)}
                   handleEdit={(index) => this.handleLocationEdit(index)}
                   handleDelete={(index) => this.handleLocationDelete(index)}
                   copyToClipboard={(id) => this.copyToClipboard(id)}
-                  onHoverOut={(id) => this.onHoverOut(id)} />}
+                  onHoverOut={(id) => this.onHoverOut(id)}
+                />
+              )}
             </div>
           </div>
         );
@@ -485,19 +499,19 @@ class Content extends React.Component {
   renderNav() {
     const { activeTab } = this.state;
     return (
-      <ul id="contentTabs" className="nav nav-tabs">
+      <ul className="nav nav-tabs">
         {tabs.map((tab, ind) => (
           <li
             key={tab}
-            className={activeTab == ind ? 'active' : null}
+            className={activeTab == ind ? "active" : null}
             onClick={() => this.switchTab(ind)}
-            type='button'
+            type="button"
           >
-            <a href='#'>{tab}</a>
+            <a href="#">{tab}</a>
           </li>
         ))}
       </ul>
-    )
+    );
   }
 
   render() {
