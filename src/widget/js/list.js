@@ -99,8 +99,8 @@ window.listView = {
             const title = document.createElement('div');
             title.className = 'list-title';
             let placeTitle =
-              place.title.length && place.title.length > 25
-                ? place.title.substring(0, 25).trim() + "..."
+              place.title.length && place.title.length > 18
+                ? place.title.substring(0, 18).trim() + "..."
                 : place.title;
             title.innerHTML = placeTitle;
             infoContainer.appendChild(title);

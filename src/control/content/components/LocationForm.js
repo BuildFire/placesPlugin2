@@ -367,7 +367,6 @@ class LocationForm extends React.Component {
         <div className="form-group">
           <label htmlFor="name">Title*</label>
           <input
-            maxLength={60}
             onChange={(e) => this.onInputChange(e)}
             value={title}
             name="title"
@@ -456,11 +455,11 @@ class LocationForm extends React.Component {
         </div>
         <div
           className="formContainer"
-          style={{ display: "flex", flexDirection: "column", overflow:    "auto"    }}
+          style={{ display: "flex", flexDirection: "column", overflow: "auto" }}
         >
           <div className="form-group">
             <label htmlFor="description">Description*</label>
-            <div className="editor" style={{    position: "relative"    }}>
+            <div className="editor" style={{ position: "relative" }}>
               <textarea name="content"></textarea>
             </div>
           </div>
