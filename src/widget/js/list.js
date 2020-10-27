@@ -98,12 +98,19 @@ window.listView = {
 
             const title = document.createElement('div');
             title.className = 'list-title';
-            title.innerHTML = place.title;
+            let placeTitle =
+              place.title.length && place.title.length > 18
+                ? place.title.substring(0, 18).trim() + "..."
+                : place.title;
+            title.innerHTML = placeTitle;
             infoContainer.appendChild(title);
 
             const subtitle = document.createElement('div');
-            let subtitleText = (place.subtitle && place.subtitle.length)
-                ? place.subtitle : '';
+            let subtitleText = place.subtitle.length
+              ? place.subtitle.length > 25
+                ? place.subtitle.substring(0, 25).trim() + "..."
+                : place.subtitle
+              : "";
 
             subtitle.className = 'list-description';
             subtitle.innerHTML = subtitleText;

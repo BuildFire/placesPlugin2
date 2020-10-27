@@ -424,7 +424,7 @@ class Content extends React.Component {
     switch (activeTab) {
       case 0:
         return (
-          <div className='row category-box'>
+          <div className='row category-box' style={{height:"80vh"}}>
             <CategoriesList
               categories={data.categories}
               handleRename={(index, newName) => this.handleCategoryRename(index, newName)}
@@ -436,7 +436,7 @@ class Content extends React.Component {
         );
       case 1:
         return (
-          <div className='row'>
+          <div className='row category-box' style={{height:"80vh"}}>
             <div className='col-xs-12'>
               <LocationsActionBar
                 categories={data.categories}

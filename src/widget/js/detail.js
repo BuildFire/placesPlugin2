@@ -1,5 +1,11 @@
 import Buildfire, { components } from 'buildfire';
 import Handlebars from './lib/handlebars';
+import { stringsConfig } from "../js/shared/stringsConfig";
+import "../js/shared/strings";
+
+let strings = new buildfire.services.Strings("en-us", stringsConfig);
+
+strings.init();
 
 window.detailView = {
     init: (place) => {
@@ -10,24 +16,46 @@ window.detailView = {
         });
         let view = document.getElementById('detailView');
         let screenWidth = window.innerWidth;
-        const title = place.title;
+        const title =
+          place.title.length && place.title.length > 18
+            ? place.title.substring(0, 18).trim() + "..."
+            : place.title;
         let context = {
-            isBookmarkingAllowed: window.app.state.isBookmarkingAllowed,
-            isCarouselSwitched: window.app.state.isCarouselSwitched,
-            chatWithLocationOwner: window.app.state.chatWithLocationOwner,
-            socialWall: window.app.state.socialWall,
-            width: screenWidth,
-            image: place.image,
-            id: place.id,
-            title: title,
-            description: place.description,
-            distance: place.distance,
-            address: place.address.name,
-            lat: place.address.lat,
-            lng: place.address.lng,
-            bookmarked: false,
-            categories: categories
+          isBookmarkingAllowed: window.app.state.isBookmarkingAllowed,
+          isCarouselSwitched: window.app.state.isCarouselSwitched,
+          chatWithLocationOwner: window.app.state.chatWithLocationOwner,
+          socialWall: window.app.state.socialWall,
+          width: screenWidth,
+          image: place.image,
+          id: place.id,
+          title: title,
+          description: place.description,
+          distance: place.distance,
+          address: place.address.name,
+          lat: place.address.lat,
+          lng: place.address.lng,
+          bookmarked: false,
+          categories: categories,
+          dirBtnText: strings.get("ActionButtons.directionsButton").length
+            ? strings.get("ActionButtons.directionsButton").length > 14
+              ? strings
+                  .get("ActionButtons.directionsButton")
+                  .substring(0, 14)
+                  .trim() + "..."
+              : strings.get("ActionButtons.directionsButton")
+            : "Get Directions",
+          contactBtnText: strings.get("ActionButtons.contactButton").length
+            ? strings.get("ActionButtons.contactButton").length > 14
+              ? strings
+                  .get("ActionButtons.contactButton")
+                  .substring(0, 14)
+                  .trim() + "..."
+              : strings.get("ActionButtons.contactButton")
+            : "Contact",
         };
+
+        console.log(context.dirBtnText);
+        console.log(context.contactBtnText);
 
         window.buildfire.auth.getCurrentUser((err, user) => {                
             context.actionItems = (place.actionItems && place.actionItems.length > 0) || (window.app.state.chatWithLocationOwner && window.app.state.socialWall && window.app.state.socialWall.instanceId && (place.contactPerson && place.contactPerson.id && user && (place.contactPerson.id !== user._id)));
