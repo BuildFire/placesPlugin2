@@ -9,6 +9,8 @@ import AddLocation from './components/AddLocation';
 import EditLocation from './components/EditLocation';
 import SearchEngine from './components/SearchEngine';
 
+
+
 const tabs = [
   'Categories',
   'Locations',
@@ -22,7 +24,9 @@ class Content extends React.Component {
       addingLocation: false,
       editingLocation: false,
       activeTab: 0,
-      breadcrumb: ''
+      breadcrumb: '',
+      totalUpdated: 0,
+      totalInserted: 0
     };
     this.handleBreadcrumb = this.handleBreadcrumb.bind(this);
   }
@@ -361,16 +365,26 @@ class Content extends React.Component {
    */
   onMultipleLocationSubmit(locations) {
     locations = locations.filter(location => typeof location === 'object');
-    buildfire.datastore.bulkInsert(locations, 'places-list', (err, result) => {
-      if (err) return console.error(err);
-      this.getPlacesList();
-      this.handleSave();
+    let locationsForInsert = locations.filter(location => !location.id)
+    let locationsForUpdate = locations.filter((location) => location.id);
+    this.setState({
+      totalInserted: locationsForInsert.length,
+      totalUpdated: locationsForUpdate.length,
     });
-
-    // data.places = data.places || [];
-    // locations.forEach(location => data.places.push(location));
-    // this.setState({ data, addingLocation: false });
-    // this.handleSave();
+    console.log("total new inserts", locationsForInsert.length);
+    console.log("total updated", locationsForUpdate.length);
+    buildfire.datastore.bulkInsert(locationsForInsert, 'places-list', (err, result) => {
+      if (err) return console.error(err);
+      
+    });
+    locationsForUpdate.forEach(location=>{buildfire.datastore.update(location.id, location, 'places-list', (err, result) => {
+      if (err) return console.error(err);
+    })
+    
+    // this.getPlacesList();
+    // this.handleSave();;
+  })
+    
   }
 
   onAddCategories(categories) {
@@ -436,39 +450,56 @@ class Content extends React.Component {
         );
       case 1:
         return (
-          <div className='row category-box' style={{height:"80vh"}}>
-            <div className='col-xs-12'>
+          <div className="row category-box" style={{ height: "80vh" }}>
+            <div className="col-xs-12">
               <LocationsActionBar
                 categories={data.categories}
                 places={data.places}
                 addingLocation={addingLocation || editingLocation !== false}
                 onAddLocation={() => this.onAddLocation()}
                 onAddLocationCancel={() => this.onAddLocationCancel()}
-                onAddCategories= {(categories) => this.onAddCategories(categories)}
-                onMultipleSubmit={(locations) => this.onMultipleLocationSubmit(locations)} />
-
-              {addingLocation || editingLocation !== false
-                ? addingLocation
-                  ? <AddLocation
+                onAddCategories={(categories) =>
+                  this.onAddCategories(categories)
+                }
+                onMultipleSubmit={(locations) => {
+                  this.onMultipleLocationSubmit(locations);
+                }}
+                getList={this.getPlacesList}
+                handleSave={this.handleSave}
+                totalUpdated={this.state.totalUpdated}
+                totalInserted={this.state.totalInserted}
+              />
+              {addingLocation || editingLocation !== false ? (
+                addingLocation ? (
+                  <AddLocation
                     chatWithLocationOwner={data.chatWithLocationOwner}
                     socialWall={data.socialWall}
                     pointsOfInterest={data.pointsOfInterest}
                     categories={data.categories}
-                    onSubmit={location => this.onLocationSubmit(location)} />
-                  : <EditLocation
+                    onSubmit={(location) => this.onLocationSubmit(location)}
+                  />
+                ) : (
+                  <EditLocation
                     chatWithLocationOwner={data.chatWithLocationOwner}
                     socialWall={data.socialWall}
                     pointsOfInterest={data.pointsOfInterest}
                     categories={data.categories}
                     location={data.places[editingLocation]}
-                    onSubmit={location => this.onLocationEdit(location, editingLocation)} />
-                : <LocationList
+                    onSubmit={(location) =>
+                      this.onLocationEdit(location, editingLocation)
+                    }
+                  />
+                )
+              ) : (
+                <LocationList
                   places={data.places}
                   updateSort={(list) => this.updateSort(list)}
                   handleEdit={(index) => this.handleLocationEdit(index)}
                   handleDelete={(index) => this.handleLocationDelete(index)}
                   copyToClipboard={(id) => this.copyToClipboard(id)}
-                  onHoverOut={(id) => this.onHoverOut(id)} />}
+                  onHoverOut={(id) => this.onHoverOut(id)}
+                />
+              )}
             </div>
           </div>
         );
