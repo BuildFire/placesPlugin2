@@ -381,7 +381,6 @@ class Content extends React.Component {
    */
   onMultipleLocationSubmit(locations) {
     locations = locations.filter((location) => typeof location === "object");
-    console.log(locations)
     let locationsForInsert = locations.filter((location) => !location.id);
     let locationsForUpdate = locations.filter((location) => location.id);
     
