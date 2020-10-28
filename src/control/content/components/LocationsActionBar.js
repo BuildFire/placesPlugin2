@@ -160,20 +160,21 @@ class LocationsActionBar extends React.Component {
             
             buildfire.notifications.showDialog(
               {
-                title: "Success!",
+                title: "CSV Import Report",
                 message: `
-              <div style='display:flex; flex-direction: column; align-items: center; height: 40px;'>
-                <p>Total Places Inserted: ${this.props.totalInserted}<p/>
-              
-                <p>Total Places Updated: ${this.props.totalUpdated}<p/>
+              <div style='display:flex; flex-direction: column; align-items: center; height: height: 110px;'>
+                <p>Number Of Total Locations From The CSV: ${this.props.totalLocations}</p>
+                <p></p>
+                <p>Number Of New Locations Added: ${this.props.totalInserted}<p/>
+                <p>Number Of Existing Locations Updated: ${this.props.totalUpdated}<p/>
+                <p>Number Of Errors:${this.props.totalLocations-(this.props.totalUpdated+this.props.totalInserted)}</p>
               </div>`,
-              size: 'md',
-                buttons: [{text: 'OK', key:'small', type: 'default'}],
+                size: "md",
+                buttons: [{ text: "OK", key: "small", type: "default" }],
               },
               (e, res) => {
                 if (e) return console.error(e);
-
-                if (res.selectedButton.key == "small") {
+                if (!res || res.selectedButton.key == "small") {
                   document.getElementById("progressbar").style.display = "none";
                   window.location.reload();
                 }

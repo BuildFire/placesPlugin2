@@ -6,10 +6,13 @@ const ProgressBar = (props) => {
   let containerStyles = completed
     ? {
         height: 30,
-        width: "80%",
+        width: "90%",
         backgroundColor: "#e0e0de",
         borderRadius: 50,
-        margin: 50,
+        marginTop: "50px",
+        margiBottom: "50px",
+        marginLeft: "5vw",
+        marginBottom: "30px",
       }
     : {
         visibility: "hidden",

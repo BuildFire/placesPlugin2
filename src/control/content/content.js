@@ -10,6 +10,8 @@ import EditLocation from "./components/EditLocation";
 import SearchEngine from "./components/SearchEngine";
 
 const tabs = ["Categories", "Locations"];
+let updateErrCount = 0
+let insertErrCount = 0
 
 class Content extends React.Component {
   constructor(props) {
@@ -22,6 +24,7 @@ class Content extends React.Component {
       breadcrumb: "",
       totalUpdated: 0,
       totalInserted: 0,
+      totalLocations: 0,
     };
     this.handleBreadcrumb = this.handleBreadcrumb.bind(this);
   }
@@ -378,19 +381,24 @@ class Content extends React.Component {
    */
   onMultipleLocationSubmit(locations) {
     locations = locations.filter((location) => typeof location === "object");
+    console.log(locations)
     let locationsForInsert = locations.filter((location) => !location.id);
     let locationsForUpdate = locations.filter((location) => location.id);
+    
     this.setState({
       totalInserted: locationsForInsert.length,
       totalUpdated: locationsForUpdate.length,
+      totalLocations: locations.length
     });
-    console.log("total new inserts", locationsForInsert.length);
-    console.log("total updated", locationsForUpdate.length);
     buildfire.datastore.bulkInsert(
       locationsForInsert,
       "places-list",
       (err, result) => {
-        if (err) return console.error(err);
+        if (err) {
+           insertErrCount = insertErrCount + 1
+           console.log(insertErrCount)
+          this.setState({totalUpdated: locationsForUpdate.length - insertErrCount})
+            console.error(err)}
       }
     );
     locationsForUpdate.forEach((location) => {
@@ -399,7 +407,11 @@ class Content extends React.Component {
         location,
         "places-list",
         (err, result) => {
-          if (err) return console.error(err);
+          if (err) {
+           updateErrCount = updateErrCount + 1
+           console.log(updateErrCount)
+          this.setState({totalUpdated: locationsForUpdate.length - updateErrCount})
+            console.error(err)}
         }
       );
 
@@ -494,6 +506,7 @@ class Content extends React.Component {
                 handleSave={this.handleSave}
                 totalUpdated={this.state.totalUpdated}
                 totalInserted={this.state.totalInserted}
+                totalLocations={this.state.totalLocations}
               />
               {addingLocation || editingLocation !== false ? (
                 addingLocation ? (
