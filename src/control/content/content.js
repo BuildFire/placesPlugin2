@@ -32,11 +32,11 @@ class Content extends React.Component {
   componentWillMount() {
     buildfire.datastore.get("places", (err, result) => {
       if (err) return console.error(err);
-
       result.data.itemsOrder = result.data.itemsOrder || [];
       result.data.isBookmarkingAllowed =
         result.data.isBookmarkingAllowed || false;
       result.data.pointsOfInterest = result.data.pointsOfInterest || "on";
+
 
       // we migrate old storage format to new one if needed
       if (result.data.places && result.data.places.length) {
@@ -50,6 +50,7 @@ class Content extends React.Component {
     });
 
     window.$state = this.state;
+    console.log(window.$state)
   }
 
   migrate(places) {
@@ -395,7 +396,6 @@ class Content extends React.Component {
       (err, result) => {
         if (err) {
            insertErrCount = insertErrCount + 1
-           console.log(insertErrCount)
           this.setState({totalUpdated: locationsForUpdate.length - insertErrCount})
             console.error(err)}
       }
@@ -408,7 +408,6 @@ class Content extends React.Component {
         (err, result) => {
           if (err) {
            updateErrCount = updateErrCount + 1
-           console.log(updateErrCount)
           this.setState({totalUpdated: locationsForUpdate.length - updateErrCount})
             console.error(err)}
         }

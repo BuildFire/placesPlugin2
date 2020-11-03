@@ -52,8 +52,9 @@ window.app = {
         bookmarked: false,
         isBookmarkingAllowed: true,
         pointsOfInterest: "on",
-        isCategoryDeeplink: false
+        isCategoryDeeplink: false,
     },
+    
     backButtonInit: () => {
         window.app.goBack = window.buildfire.navigation.onBackButtonClick;
 
@@ -88,13 +89,14 @@ window.app = {
         window.buildfire.appearance.titlebar.show();
         window.app.backButtonInit();
         let places = [];
-
+      
         function getPlacesList() {
           const pageSize = 50;
           let page = 0;
 
           const loadPage = () => {
             console.log('Places - Loading Page', page);
+
             buildfire.datastore.search({ page, pageSize, sort: (window.app.state.sortBy ? ({
                 title: (window.app.state.sortBy === 'alphaDesc' ? -1 : 1)
               }) : null)
@@ -157,6 +159,10 @@ window.app = {
             window.app.state.isCarouselSwitched = data.isCarouselSwitched;
             window.app.state.configCategories = data.configCategories;
             window.app.state.chatWithLocationOwner = data.chatWithLocationOwner;
+            window.app.state.allowContact = data.allowContact;
+            window.app.state.allowDirections = data.allowDirections;
+
+
             window.app.state.socialWall = data.socialWall;
             if (data.categories && !window.app.state.isCategoryDeeplink) {
               window.app.state.categories = data.categories.map(category => {
@@ -167,7 +173,8 @@ window.app = {
               window.app.state.pointsOfInterest = data.pointsOfInterest;
             }
           }
-
+          console.log('here in app',window.app.state)
+          console.log('data', data)
           getPlacesList();
         });
 
@@ -308,6 +315,8 @@ window.app = {
             window.app.state.configCategories = data.configCategories;
             window.app.state.chatWithLocationOwner = data.chatWithLocationOwner;
             window.app.state.socialWall = data.socialWall;
+            window.app.state.allowContact = data.allowContact;
+            window.app.state.allowDirections = data.allowDirections;
             if (data.categories && !window.app.state.isCategoryDeeplink) {
               window.app.state.categories = data.categories.map(category => {
                   return { name: category, isActive: true };

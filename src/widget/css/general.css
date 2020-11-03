@@ -464,11 +464,14 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
 }
 
 .buttonHolder {
-    display: block;
+    display: flex;
     width: 95%;
+    flex-direction: row;
     margin: 0 auto;
     height: 60px;
     box-sizing: border-box;
+    align-items: center;
+    justify-content: center;
 }
 
 .buttonItem {
