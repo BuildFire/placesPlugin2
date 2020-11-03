@@ -518,6 +518,13 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
     cursor: pointer;
 }
 
+#text {
+        word-break: break-word;
+      }
+.padded {
+    padding: 15px
+}
+
 .description {
   padding-top: 0;
 }
