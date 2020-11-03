@@ -566,7 +566,6 @@ class LocationForm extends React.Component {
               {this.props.location ? "Save Location" : "Save Location"}
             </button>
           </div>
-        </div>
       </form>
     );
   }
