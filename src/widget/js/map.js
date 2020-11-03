@@ -1,5 +1,12 @@
 import Handlebars from "./lib/handlebars"
 
+import { stringsConfig } from "../js/shared/stringsConfig";
+import "../js/shared/strings";
+
+let strings = new buildfire.services.Strings("en-us", stringsConfig);
+
+strings.init();
+
 window.usa = {lat: 37.09024, lng: -95.712891};
 window.defaultLocation = usa;
 window.originalHeight;
@@ -177,11 +184,27 @@ window.mapView = {
             place.image = `${cloudImg.domain}${cloudImg.operations.cdn}/https://pluginserver.buildfire.com/styles/media/holder-16x9.png`;
         }
         let context = {
-            title: place.title,
-            address: place.address.name,
-            categories: categories,
-            distance: place.distance,
-            image: place.image
+          title:
+            place.title.length && place.title.length > 25
+              ? place.title.substring(0, 25).trim() + "..."
+              : place.title,
+          address: place.address.name,
+          categories: categories,
+          distance: place.distance,
+          image: place.image,
+          viewMoreLinkText: strings.get("LocationSummary.locationSummaryLink")
+            
+            .length
+                  ? strings.get("LocationSummary.locationSummaryLink").length > 14
+                    ? strings
+                  
+                  .get("LocationSummary.locationSummaryLink")
+                  
+                  .substring(0, 14)
+                  
+                  .trim() + "..."
+                    : strings.get("LocationSummary.locationSummaryLink")
+                  : "View More",
         };
 
         let req = new XMLHttpRequest();

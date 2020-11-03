@@ -47,6 +47,7 @@
     "quill-render": "^1.0.5",
     "react": "^16.4.0",
     "react-dom": "^16.4.0",
+    "react-papaparse": "^3.9.0",
     "react-quill": "^1.2.3",
     "react-sortable-hoc": "^0.6.8"
   }

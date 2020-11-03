@@ -237,7 +237,7 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
 }
 
 #locationSummary .name.address {
-    font-size: 11px;
+    font-size: 14px;
     line-height: 1.27;
     margin: 0;
     color: #000;
@@ -251,7 +251,7 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
 
 
 #locationSummary .view-more {
-    font-size: 9px;
+    font-size: 14px;
     font-weight: 300;
 }
 
@@ -348,7 +348,7 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
     height: 90px;
 }
 .col-title {
-    width: 52%;
+    width: 46%;
 }
 .detail-image{
     border-radius: 100%;
@@ -366,6 +366,8 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
 }
 .arrow{
     vertical-align: middle;
+    margin-top: 3px;
+    height: 15px;
 }
 .distance{
     font-size: 13px;
@@ -386,7 +388,7 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
 }
 
 .list-item > img {
-  height: 100%;
+  height: auto;
 }
 
 .list-item .list-image {
@@ -462,11 +464,14 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
 }
 
 .buttonHolder {
-    display: block;
+    display: flex;
     width: 95%;
+    flex-direction: row;
     margin: 0 auto;
     height: 60px;
     box-sizing: border-box;
+    align-items: center;
+    justify-content: center;
 }
 
 .buttonItem {
@@ -516,6 +521,13 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
     cursor: pointer;
 }
 
+#text {
+        word-break: break-word;
+      }
+.padded {
+    padding: 15px
+}
+
 .description {
   padding-top: 0;
 }
@@ -540,6 +552,7 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
     overflow: hidden;
     text-overflow: ellipsis;
     padding-left: 15px;
+    margin-bottom: 15px;
 }
 
 @media only screen and (min-width : 768px) and (max-width : 1024px)

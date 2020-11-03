@@ -42,6 +42,23 @@ class LocationForm extends React.Component {
    * - Carousel
    */
   componentDidMount() {
+    tinymce.init({
+      selector: "textarea",
+      init_instance_callback: (editor) => {
+        editor.on("Change", (e) => {
+          this.setState({
+            description: editor.getContent(),
+          });
+        });
+      },
+      setup:  (editor) => {
+        editor.on("init",  (e) => {
+          console.log("Editor was initialized.", this.state.description);
+          editor.setContent(this.state.description);
+        });
+      },
+    });
+
     // Mount google map autocomplete
     const { maps } = window.google;
     this.autocomplete = new maps.places.Autocomplete(this.addressInput);
@@ -52,6 +69,7 @@ class LocationForm extends React.Component {
       container.style.top = "10px";
       container.style.left = "10px";
     }, 400);
+
 
     // Mount carousel
     this.editor = new components.carousel.editor("#carousel");
@@ -146,11 +164,16 @@ class LocationForm extends React.Component {
   }
 
   componentWillUpdate(nextProps, nextState) {
-    const { address } = nextState;
+    const { address, description } = nextState;
 
     if (address.lat && address.lng && !this.mapInstance) {
       this.mountMap(address);
     }
+  }
+
+  componentWillUnmount() {
+    console.log("REMOVE");
+    tinymce.activeEditor.remove();
   }
 
   updateActions() {
@@ -165,6 +188,7 @@ class LocationForm extends React.Component {
 
   onDescriptionChange(description) {
     this.setState({ description });
+    tinymce.activeEditor.setContent(description);
   }
 
   onCategoryChange(e) {
@@ -347,7 +371,6 @@ class LocationForm extends React.Component {
         <div className="form-group">
           <label htmlFor="name">Title*</label>
           <input
-            maxLength={60}
             onChange={(e) => this.onInputChange(e)}
             value={title}
             name="title"
@@ -434,102 +457,89 @@ class LocationForm extends React.Component {
         <div className="form-group">
           <div id="map" ref={(n) => (this.map = n)} />
         </div>
-
-        <div className="form-group">
-          <label htmlFor="description">Description*</label>
-          <div className="editor" style={{ height: "200px" }}>
-            {/* <ReactQuill
-              ref={(n) => (this.quillRef = n)}
-              modules={this.modules}
-              onChange={(value) => this.onDescriptionChange(value)}
-              defaultValue={description}
-            /> */}
-            <Editor
-              initialValue="<p>This is the initial content of the editor</p>"
-              init={{
-                height: 500,
-                menubar: false,
-                plugins: [
-                  "advlist autolink lists link image charmap print preview anchor",
-                  "searchreplace visualblocks code fullscreen",
-                  "insertdatetime media table paste code help wordcount",
-                ],
-                toolbar:
-                  "undo redo | formatselect | bold italic backcolor | \
-             alignleft aligncenter alignright alignjustify | \
-             bullist numlist outdent indent | removeformat | help",
-              }}
-              onEditorChange={this.handleEditorChange}
-            />
+        <div
+          className="formContainer"
+          style={{ display: "flex", flexDirection: "column", overflow: "auto" }}
+        >
+          <div className="form-group">
+            <label htmlFor="description">Description*</label>
+            <div className="editor" style={{ position: "relative" }}>
+              <textarea name="content"></textarea>
+            </div>
           </div>
-        </div>
 
-        <br />
+          <br />
 
-        <div className="form-group">
-          <div id="actionItems" />
-        </div>
+          <div className="form-group">
+            <div id="actionItems" />
+          </div>
 
-        {this.props.chatWithLocationOwner &&
-          this.props.socialWall &&
-          this.props.socialWall.instanceId && (
-            <div className="form-group">
-              <div className="item clearfix row">
-                <div className="labels col-md-3 padding-right-zero pull-left">
-                  Location Owner
-                  <div className="settingsTooltip location-owner">
-                    <span className="tip btn-info-icon btn-primary transition-third" />
-                    <span className="settingsTooltiptext location-owner">
-                      You can set a maximum of one location owner per location.
-                    </span>
-                  </div>
-                </div>
-                <div className="main col-md-9 pull-right">
-                  <div className="clearfix owner-info-container">
-                    <div
-                      onClick={() => this.addLocationOwner()}
-                      className="btn btn-success"
-                    >
-                      {contactPerson && contactPerson.id ? "Select" : "Add"}{" "}
-                      Location Owner
+          {this.props.chatWithLocationOwner &&
+            this.props.socialWall &&
+            this.props.socialWall.instanceId && (
+              <div className="form-group">
+                <div className="item clearfix row">
+                  <div className="labels col-md-3 padding-right-zero pull-left">
+                    Location Owner
+                    <div className="settingsTooltip location-owner">
+                      <span className="tip btn-info-icon btn-primary transition-third" />
+                      <span className="settingsTooltiptext location-owner">
+                        You can set a maximum of one location owner per
+                        location.
+                      </span>
                     </div>
-                    {contactPerson && contactPerson.id && (
-                      <div className="owner-info">
-                        <label>
-                          {contactPerson.displayName &&
-                          contactPerson.displayName.length > 0
-                            ? contactPerson.displayName
-                            : contactPerson.username}
-                        </label>
-                        <span
-                          onClick={() => this.removeLocationOwner()}
-                          className="delete btn-icon btn-delete-icon btn-danger transition-third"
-                        ></span>
+                  </div>
+                  <div className="main col-md-9 pull-right">
+                    <div className="clearfix owner-info-container">
+                      <div
+                        onClick={() => this.addLocationOwner()}
+                        className="btn btn-success"
+                      >
+                        {contactPerson && contactPerson.id ? "Select" : "Add"}{" "}
+                        Location Owner
                       </div>
-                    )}
+                      {contactPerson && contactPerson.id && (
+                        <div className="owner-info">
+                          <label>
+                            {contactPerson.displayName &&
+                            contactPerson.displayName.length > 0
+                              ? contactPerson.displayName
+                              : contactPerson.username}
+                          </label>
+                          <span
+                            onClick={() => this.removeLocationOwner()}
+                            className="delete btn-icon btn-delete-icon btn-danger transition-third"
+                          ></span>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          )}
+            )}
 
-        <div className="form-group">
-          <div id="carousel" />
-        </div>
+          <div className="form-group">
+            <div id="carousel" />
+          </div>
 
-        <div className="item clearfix row">
-          <span className="labels col-md-3 padding-right-zero pull-left">
-            List Image
-          </span>
-          <div className="main col-md-9 pull-right">
-            <div className="clearfix">
-              <div className="list-image-holder">
-                <div
-                  style={{ backgroundImage: image ? `url(${image})` : "" }}
-                  className="image-dialog"
-                  onClick={() => this.showImageDialog()}
-                >
-                  {this.state.image ? null : <a>Add Image +</a>}
+          <div className="item clearfix row">
+            <span className="labels col-md-3 padding-right-zero pull-left">
+              List Image
+            </span>
+            <div className="main col-md-9 pull-right">
+              <div className="clearfix">
+                <div className="list-image-holder">
+                  <div
+                    style={{ backgroundImage: image ? `url(${image})` : "" }}
+                    className="image-dialog"
+                    onClick={() => this.showImageDialog()}
+                  >
+                    {this.state.image ? null : <a>Add Image +</a>}
+                  </div>
+                  <span
+                    className="delete btn-icon btn-delete-icon btn-danger transition-third"
+                    onClick={(e) => this.removeImage(e)}
+                  />
                 </div>
                 <span
                   className="delete btn-icon btn-delete-icon btn-danger transition-third"
@@ -540,21 +550,22 @@ class LocationForm extends React.Component {
           </div>
         </div>
 
-        <div className="form-group">
-          <button
-            disabled={
-              !title.length ||
-              description.replace(/(&nbsp;|<(?!img|\/img).*?>)/gi, "")
-                .length === 0 ||
-              !address ||
-              !address.lat ||
-              !address.lng
-            }
-            type="submit"
-            className="btn btn-success"
-          >
-            {this.props.location ? "Save Location" : "Save Location"}
-          </button>
+          <div className="form-group">
+            <button
+              disabled={
+                !title.length ||
+                description.replace(/(&nbsp;|<(?!img|\/img).*?>)/gi, "")
+                  .length === 0 ||
+                !address ||
+                !address.lat ||
+                !address.lng
+              }
+              type="submit"
+              className="btn btn-success"
+            >
+              {this.props.location ? "Save Location" : "Save Location"}
+            </button>
+          </div>
         </div>
       </form>
     );

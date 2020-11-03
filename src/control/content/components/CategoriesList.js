@@ -10,7 +10,12 @@ class CategoriesList extends React.Component {
   }
 
   onChange(e) {
-    this.setState({ name: e.target.value });
+    this.setState({
+      name:
+        e.target.value.length >= 20
+          ? e.target.value.substring(0, 20) + "..."
+          : e.target.value,
+    });
   }
 
   onSubmit(e) {
@@ -23,40 +28,55 @@ class CategoriesList extends React.Component {
     const { categories } = this.props;
 
     return (
-      <div className='col-xs-12'>
-        <div className='row'>
-          <form onSubmit={ (e) => this.onSubmit(e) }>
-            <div className='col-xs-9'>
-              <div className='control-group'>
+      <div className="col-xs-12">
+        <div className="row">
+          <form onSubmit={(e) => this.onSubmit(e)}>
+            <div className="col-xs-9">
+              <div className="control-group">
                 <input
-                  onChange={ (e) => this.onChange(e) }
-                  type='text'
-                  value={ this.state.name }
-                  className='form-control'
-                  placeholder='Category Name' />
+                  onChange={(e) => this.onChange(e)}
+                  type="text"
+                  // maxLength="30"
+                  value={this.state.name}
+                  className="form-control"
+                  placeholder="Category Name"
+                />
               </div>
             </div>
-            <div className='col-xs-3'>
-              <button href='#' className='btn btn-block btn-success' type='submit'>
+            <div className="col-xs-3">
+              <button
+                href="#"
+                className="btn btn-block btn-success"
+                type="submit"
+              >
                 Add Category
               </button>
             </div>
           </form>
         </div>
         <br />
-        { categories && categories.length ? (
-          <div className='__strippedTable'>
-            { categories.map((category, index) => (
+        {categories && categories.length ? (
+          <div className="__strippedTable">
+            {categories.map((category, index) => (
               <CategoryListItem
-                handleRename={ (newValue) => this.props.handleRename(index, newValue) }
-                handleDelete={ () => this.props.handleDelete(index) }
-                category={ category }
+                handleRename={(newValue) =>
+                  this.props.handleRename(index, newValue)
+                }
+                handleDelete={() => this.props.handleDelete(index)}
+                category={category}
                 key={index}
-                copyToClipboard={ (id, defaultView) => this.props.copyToClipboard(id, defaultView)}
-                onHoverOut={ (id, defaultView) => this.props.onHoverOut(id, defaultView)} />
-            )) }
+                copyToClipboard={(id, defaultView) =>
+                  this.props.copyToClipboard(id, defaultView)
+                }
+                onHoverOut={(id, defaultView) =>
+                  this.props.onHoverOut(id, defaultView)
+                }
+              />
+            ))}
           </div>
-        ) : <img src='assets/img/empty-wireframe.jpg' className='empty-state'/> }
+        ) : (
+          <img src="assets/img/empty-wireframe.jpg" className="empty-state" />
+        )}
       </div>
     );
   }
