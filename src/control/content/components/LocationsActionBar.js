@@ -83,7 +83,6 @@ class LocationsActionBar extends React.Component {
                 .then((response) => response.json())
                 .then((data) => {
                   const match = data.results[0];
-                  console.log(match);
                   if (!match) return reject("invalid CSV row!", { name });
                   const { lat, lng } = match.geometry.location;
                   resolve({
@@ -258,7 +257,6 @@ class LocationsActionBar extends React.Component {
   }
 
   render() {
-    console.log(this.props)
     const { addingLocation } = this.props;
     
     return (

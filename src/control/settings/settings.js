@@ -28,8 +28,6 @@ class Settings extends React.Component {
         allowContact: result.data.allowContact,
         allowDirections: result.data.allowDirections
       });
-      console.log('state in settings tab',this.state)
-      console.log('datastore',this.state.data)
     });
   }
 
@@ -37,8 +35,6 @@ class Settings extends React.Component {
    * Handle state saving to the datastore
    */
   handleSave = debounce(() => {
-    console.log("SAVING TO DATASTORE")
-    console.log(this.state.data)
     buildfire.datastore.save(this.state.data, 'places', (err) => {
       if (err) console.error(err);
     });
@@ -104,7 +100,6 @@ class Settings extends React.Component {
     const { data } = this.state;
     this.setState({ allowContact: !this.state.allowContact }, () => {
       data.allowContact = this.state.allowContact;
-      console.log(data.allowContact)
       this.setState(data);
       this.handleSave();
     });
@@ -146,7 +141,6 @@ class Settings extends React.Component {
   }
 
   render() {
-    console.log(11, this.state.data)
     return (
       <div>
         <MapOptions

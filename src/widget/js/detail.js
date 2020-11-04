@@ -56,13 +56,10 @@ window.detailView = {
             : "Contact",
         };
 
-        console.log('konetkst', context)
-        console.log(window.app.state)
-
         window.buildfire.auth.getCurrentUser((err, user) => {                
             context.actionItems = (place.actionItems && place.actionItems.length > 0) || (window.app.state.chatWithLocationOwner && window.app.state.socialWall && window.app.state.socialWall.instanceId && (place.contactPerson && place.contactPerson.id && user && (place.contactPerson.id !== user._id)));
             context.showDirectionsButton = window.app.state.allowDirections !== false;
-            context.showContactButton = window.app.state.allowContact !== false;
+            context.showContactButton = window.app.state.allowContact !== false && context.actionItems;
 
             let req = new XMLHttpRequest();
             req.open('GET', './templates/detail.hbs');
@@ -147,6 +144,12 @@ window.detailView = {
                  let btnHolder = document.querySelector('.buttonHolder');
                  if(!directionsButton && !contactButton){
                      btnHolder.style.display = 'none'
+                 }
+
+                 if(directionsButton && !contactButton){
+                     document.querySelector('.buttonItem').style.width = "100%"
+                 } else if(contactButton && !directionsButton){
+                     document.querySelector('.buttonItem').style.width = "100%"
                  }
 
                  function getDirections() {

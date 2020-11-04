@@ -173,8 +173,6 @@ window.app = {
               window.app.state.pointsOfInterest = data.pointsOfInterest;
             }
           }
-          console.log('here in app',window.app.state)
-          console.log('data', data)
           getPlacesList();
         });
 

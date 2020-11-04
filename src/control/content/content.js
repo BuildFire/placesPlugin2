@@ -54,7 +54,6 @@ class Content extends React.Component {
     });
 
     window.$state = this.state;
-    console.log(window.$state)
   }
 
   migrate(places) {
@@ -293,7 +292,6 @@ class Content extends React.Component {
    */
   handleCategoryRename(index, newName) {
     let { data } = this.state;
-    console.log(data.categories, index, newName);
     data.categories[index].name = newName;
     this.setState({ data });
     this.handleSave();
@@ -400,7 +398,6 @@ class Content extends React.Component {
       (err, result) => {
         if (err) {
            insertErrCount = insertErrCount + 1
-           console.log(insertErrCount)
           this.setState({totalUpdated: locationsForUpdate.length - insertErrCount})
             console.error(err)}
       }
@@ -413,7 +410,6 @@ class Content extends React.Component {
         (err, result) => {
           if (err) {
            updateErrCount = updateErrCount + 1
-           console.log(updateErrCount)
           this.setState({totalUpdated: locationsForUpdate.length - updateErrCount})
             console.error(err)}
         }
@@ -454,7 +450,6 @@ class Content extends React.Component {
 
     let categoryDeeplink = buildfire.deeplink.createLink(category.id);
     this.setState({ categoryDeeplink });
-    console.log("categoryDeeplink > ", categoryDeeplink);
   }
 
   onAddLocation() {

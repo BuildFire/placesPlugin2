@@ -2,10 +2,8 @@ import Buildfire, { components } from 'buildfire';
 import React from 'react';
 import cloneDeep from 'lodash/cloneDeep';
 import ReactQuill from 'react-quill';
-// import ImageResize from 'quill-image-resize-module';
 import { Editor } from "@tinymce/tinymce-react";
 
-// ReactQuill.Quill.register('modules/imageResize', ImageResize);
 
 class LocationForm extends React.Component {
   constructor(props) {
@@ -53,7 +51,6 @@ class LocationForm extends React.Component {
       },
       setup:  (editor) => {
         editor.on("init",  (e) => {
-          console.log("Editor was initialized.", this.state.description);
           editor.setContent(this.state.description);
         });
       },
@@ -172,7 +169,6 @@ class LocationForm extends React.Component {
   }
 
   componentWillUnmount() {
-    console.log("REMOVE");
     tinymce.activeEditor.remove();
   }
 
@@ -541,10 +537,6 @@ class LocationForm extends React.Component {
                     onClick={(e) => this.removeImage(e)}
                   />
                 </div>
-                <span
-                  className="delete btn-icon btn-delete-icon btn-danger transition-third"
-                  onClick={(e) => this.removeImage(e)}
-                />
               </div>
             </div>
           </div>

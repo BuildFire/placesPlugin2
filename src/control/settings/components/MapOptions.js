@@ -44,7 +44,6 @@ class MapOptions extends React.Component {
     });
 
     window.buildfire.pluginInstance.showDialog({}, (error, response) => {
-      console.log(error, response);
       if (response && response.length > 0) {
         const socialWall = {
           folderName: response[0].folderName,
@@ -54,7 +53,6 @@ class MapOptions extends React.Component {
           pluginTypeName: response[0].pluginTypeName,
           iconUrl: response[0].iconUrl,
         };
-        console.log(socialWall);
         this.props.setSocialWall(socialWall);
       }
       this.setState({
@@ -69,7 +67,6 @@ class MapOptions extends React.Component {
 
   render() {
     const active = { backgroundColor: '#00a1f1', color: '#ffffff', border: 'none' };
-    console.log('props map options',this.props.options)
     return (
       <div className="col-xs-12">
         <form>
