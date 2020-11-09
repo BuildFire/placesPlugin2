@@ -12,6 +12,8 @@ import SearchEngine from "./components/SearchEngine";
 const tabs = ["Categories", "Locations"];
 let updateErrCount = 0
 let insertErrCount = 0
+let rowsWithError = []
+let locationsWithError = []
 
 class Content extends React.Component {
   constructor(props) {
@@ -25,6 +27,7 @@ class Content extends React.Component {
       totalUpdated: 0,
       totalInserted: 0,
       totalLocations: 0,
+      
     };
     this.handleBreadcrumb = this.handleBreadcrumb.bind(this);
   }
@@ -386,7 +389,10 @@ class Content extends React.Component {
     locations = locations.filter((location) => typeof location === "object");
     let locationsForInsert = locations.filter((location) => !location.id);
     let locationsForUpdate = locations.filter((location) => location.id);
-    
+
+    console.log(locationsForUpdate)
+
+       
     this.setState({
       totalInserted: locationsForInsert.length,
       totalUpdated: locationsForUpdate.length,
@@ -409,12 +415,16 @@ class Content extends React.Component {
         "places-list",
         (err, result) => {
           if (err) {
-           updateErrCount = updateErrCount + 1
-          this.setState({totalUpdated: locationsForUpdate.length - updateErrCount})
-            console.error(err)}
+            let rowWithError = location.indexForError
+            updateErrCount = updateErrCount + 1;
+            rowsWithError.push(rowWithError + 2)
+            locationsWithError.push(location)
+            this.setState({
+              totalUpdated: locationsForUpdate.length - updateErrCount,
+            });
+          }
         }
       );
-
       // this.getPlacesList();
       // this.handleSave();;
     });
@@ -506,6 +516,8 @@ class Content extends React.Component {
                 totalUpdated={this.state.totalUpdated}
                 totalInserted={this.state.totalInserted}
                 totalLocations={this.state.totalLocations}
+                rowsWithError={rowsWithError}
+                locationsWithError={locationsWithError}
               />
               {addingLocation || editingLocation !== false ? (
                 addingLocation ? (

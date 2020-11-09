@@ -9,6 +9,7 @@ import buildfire from 'buildfire';
 let percent;
 
 class LocationsActionBar extends React.Component {
+
   onAddLocation() {
     this.props.onAddLocation();
   }
@@ -101,6 +102,7 @@ class LocationsActionBar extends React.Component {
                     description,
                     image,
                     index: i + places.length,
+                    indexForError: i
                   });
                 });
             }).catch(() => undefined)
@@ -122,6 +124,7 @@ class LocationsActionBar extends React.Component {
             description,
             image,
             index: i + places.length,
+            indexForError: i
           };
         }
       });
@@ -160,23 +163,33 @@ class LocationsActionBar extends React.Component {
             buildfire.notifications.showDialog(
               {
                 title: "CSV Import Report",
-                message: `
+                message: this.props.rowsWithError.length ? `
               <div style='display:flex; flex-direction: column; align-items: center; height: height: 110px;'>
                 <p>Number Of Total Locations From The CSV: ${this.props.totalLocations}</p>
                 <p></p>
                 <p>Number Of New Locations Added: ${this.props.totalInserted}<p/>
                 <p>Number Of Existing Locations Updated: ${this.props.totalUpdated}<p/>
-                <p>Number Of Errors:${this.props.totalLocations-(this.props.totalUpdated+this.props.totalInserted)}</p>
+                <p style='color:red'>Number Of Errors: ${this.props.totalLocations-(this.props.totalUpdated+this.props.totalInserted)}</p>
+                <p style='color:red'>Error(s) On Row(s): ${this.props.rowsWithError}</p>
+                
+              </div>` : `
+              <div style='display:flex; flex-direction: column; align-items: center; height: height: 110px;'>
+                <p>Number Of Total Locations From The CSV: ${this.props.totalLocations}</p>
+                <p></p>
+                <p>Number Of New Locations Added: ${this.props.totalInserted}<p/>
+                <p>Number Of Existing Locations Updated: ${this.props.totalUpdated}<p/>
               </div>`,
                 size: "md",
-                buttons: [{ text: "OK", key: "small", type: "default" }],
+                buttons: [{ text: "OK", key: "small", type: "default" }, {text: "Error Report", key: "error", type: "danger"}],
               },
               (e, res) => {
                 if (e) return console.error(e);
                 if (!res || res.selectedButton.key == "small") {
                   document.getElementById("progressbar").style.display = "none";
                   window.location.reload();
-                }
+                } else if (res.selectedButton.key == 'error')
+                {this.handleErrorExport();
+                window.location.reload()}
               }
             );
           }, 5000);
@@ -229,6 +242,67 @@ class LocationsActionBar extends React.Component {
     link.setAttribute("download", "places_export.csv");
     document.body.appendChild(link);
     link.click();
+    buildfire.notifications.alert({
+        title:"Data Downloaded",
+        message:`
+              <div style='display:flex; flex-direction: column; align-items: center; height: height: 110px;'>
+                <p>Your CSV file has been downladed,</p>
+                <p>please check your downloads folder!</p>
+              </div>`,
+              okButton: {text:'OK'}
+        },
+        function(e,data){
+             if(e) console.error(e); 
+             if(data) console.log(data);
+        }
+    );    
+  }
+
+  handleErrorExport() {
+    const rows = [];
+    this.props.locationsWithError.forEach((place) => {
+      place.address.name = place.address.name.replace("#", "");
+      let categories = [];
+      if (this.props.categories && Array.isArray(this.props.categories)) {
+        this.props.categories.forEach((category) => {
+          if (!place.categories) place.categories = [];
+          place.categories.forEach((cat) => {
+            if (category.id === cat) {
+              categories.push(category);
+            }
+          });
+        });
+      }
+      let categoryNames = [];
+      categories.forEach((cat) => categoryNames.push(cat.name));
+
+      let names = categoryNames.toString();
+      let catNames = names.replace(/,/g, ", ");
+
+      rows.push({
+        id: place.id,
+        title: place.title,
+        subtitle: place.subtitle || "",
+        categories: catNames || "",
+        address: place.address.name,
+        lat: place.address.lat,
+        lng: place.address.lng,
+        description: place.description || "",
+        image: place.image || "",
+        error: "Invalid ID"
+      });
+    });
+
+    let csvContent = "data:text/csv;charset=utf-8,";
+    let encoded = new CSVjs(rows, { header: true }).encode();
+    csvContent += encoded;
+
+    const encodedURI = encodeURI(csvContent).replace(/#/g, "%23");
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedURI);
+    link.setAttribute("download", "places_error_export.csv");
+    document.body.appendChild(link);
+    link.click();
   }
 
   handleTemplateDownload() {
@@ -258,7 +332,7 @@ class LocationsActionBar extends React.Component {
 
   render() {
     const { addingLocation } = this.props;
-    
+    console.log(this.props)
     return (
       <div>
         <div className="row">
