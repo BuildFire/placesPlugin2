@@ -189,7 +189,9 @@ class LocationsActionBar extends React.Component {
                   window.location.reload();
                 } else if (res.selectedButton.key == 'error')
                 {this.handleErrorExport();
-                window.location.reload()}
+                  document.getElementById("progressbar").style.display = "none";
+                // window.location.reload()
+              }
               }
             );
           }, 5000);
