@@ -137,27 +137,8 @@ class LocationsActionBar extends React.Component {
                     indexForError: i
                   });
                 });
-            }).catch(() => undefined)
+            })
           );
-
-          // return {
-          //   id,
-          //   title:
-          //     typeof title === "number"
-          //       ? title.toString()
-          //       : title || "Untitled Location",
-          //   subtitle,
-          //   categories: selectedCategory,
-          //   address: {
-          //     name,
-          //     lat: parseFloat(address_lat),
-          //     lng: parseFloat(address_lng),
-          //   },
-          //   description,
-          //   image,
-          //   index: i + places.length,
-          //   indexForError: i
-          // };
         }
       });
       // if no places were fetched async, submit
