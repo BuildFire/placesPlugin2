@@ -108,24 +108,56 @@ class LocationsActionBar extends React.Component {
             }).catch(() => undefined)
           );
         } else {
-          return {
-            id,
-            title:
-              typeof title === "number"
-                ? title.toString()
-                : title || "Untitled Location",
-            subtitle,
-            categories: selectedCategory,
-            address: {
-              name,
-              lat: parseFloat(address_lat),
-              lng: parseFloat(address_lng),
-            },
-            description,
-            image,
-            index: i + places.length,
-            indexForError: i
-          };
+        promises.push(
+            new Promise((resolve, reject) => {
+          let lat = address_lat;
+          let lng = address_lng;
+          let addressUrl = `https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyBOp1GltsWARlkHhF1H_cb6xtdR1pvNDAk&latlng=${lat},${lng}`
+              // get geodata from google api
+              fetch(addressUrl)
+                .then((response) => response.json())
+                .then((data) => {
+                  const name = data.results[0].formatted_address
+                  resolve({
+                    id,
+                    title:
+                      typeof title === "number"
+                        ? title.toString()
+                        : title || "Untitled Location",
+                    subtitle,
+                    categories: selectedCategory,
+                    address: {
+                      name,
+                      lat,
+                      lng,
+                    },
+                    description,
+                    image,
+                    index: i + places.length,
+                    indexForError: i
+                  });
+                });
+            }).catch(() => undefined)
+          );
+
+          // return {
+          //   id,
+          //   title:
+          //     typeof title === "number"
+          //       ? title.toString()
+          //       : title || "Untitled Location",
+          //   subtitle,
+          //   categories: selectedCategory,
+          //   address: {
+          //     name,
+          //     lat: parseFloat(address_lat),
+          //     lng: parseFloat(address_lng),
+          //   },
+          //   description,
+          //   image,
+          //   index: i + places.length,
+          //   indexForError: i
+          // };
         }
       });
       // if no places were fetched async, submit
@@ -170,7 +202,6 @@ class LocationsActionBar extends React.Component {
                 <p>Number Of New Locations Added: ${this.props.totalInserted}<p/>
                 <p>Number Of Existing Locations Updated: ${this.props.totalUpdated}<p/>
                 <p style='color:red'>Number Of Errors: ${this.props.totalLocations-(this.props.totalUpdated+this.props.totalInserted)}</p>
-                <p style='color:red'>Error(s) On Row(s): ${this.props.rowsWithError}</p>
                 
               </div>` : `
               <div style='display:flex; flex-direction: column; align-items: center; height: height: 110px;'>
@@ -179,8 +210,8 @@ class LocationsActionBar extends React.Component {
                 <p>Number Of New Locations Added: ${this.props.totalInserted}<p/>
                 <p>Number Of Existing Locations Updated: ${this.props.totalUpdated}<p/>
               </div>`,
-                size: "md",
-                buttons: [{ text: "OK", key: "small", type: "default" }, {text: "Error Report", key: "error", type: "danger"}],
+                size: "lg",
+                buttons: [{ text: "OK", key: "small", type: "default" }, {text: "Export Errors", key: "error", type: "danger"}],
               },
               (e, res) => {
                 if (e) return console.error(e);
@@ -190,7 +221,7 @@ class LocationsActionBar extends React.Component {
                 } else if (res.selectedButton.key == 'error')
                 {this.handleErrorExport();
                   document.getElementById("progressbar").style.display = "none";
-                // window.location.reload()
+                  window.location.reload()
               }
               }
             );
@@ -245,7 +276,7 @@ class LocationsActionBar extends React.Component {
     document.body.appendChild(link);
     link.click();
     buildfire.notifications.alert({
-        title:"Data Downloaded",
+        title:"CSV Downloaded",
         message:`
               <div style='display:flex; flex-direction: column; align-items: center; height: height: 110px;'>
                 <p>Your CSV file has been downladed,</p>
@@ -305,6 +336,20 @@ class LocationsActionBar extends React.Component {
     link.setAttribute("download", "places_error_export.csv");
     document.body.appendChild(link);
     link.click();
+    buildfire.notifications.alert({
+        title:"Error Report Downloaded",
+        message:`
+              <div style='display:flex; flex-direction: column; align-items: center; height: height: 110px;'>
+                <p>Your error report has been downladed,</p>
+                <p>please check your downloads folder!</p>
+              </div>`,
+              okButton: {text:'OK'}
+        },
+        function(e,data){
+             if(e) console.error(e); 
+             if(data) console.log(data);
+        }
+    );    
   }
 
   handleTemplateDownload() {
