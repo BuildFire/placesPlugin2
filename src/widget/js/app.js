@@ -256,7 +256,11 @@ window.app = {
         if (currentSortOrder === 'distance') {
           window.app.state.places = window.app.state.places.sort(window.PlacesSort.distance);
           window.listView.sorting(window.app.state.places);
-          window.lazyload();
+          window.lazyload(null, null, {
+            root: document.querySelector('.list-scrolling-container'),
+            rootMargin: "0px",
+            threshold: [0]
+          });
         }
       }
     },
