@@ -92,7 +92,7 @@
 
             let self = this;
             let observerConfig = {
-                root: null,
+                root: document.querySelector('.list-scrolling-container'),
                 rootMargin: "0px",
                 threshold: [0]
             };
