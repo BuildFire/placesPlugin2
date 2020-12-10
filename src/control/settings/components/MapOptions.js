@@ -197,7 +197,7 @@ class MapOptions extends React.Component {
 
           <div className="row">
             <div className="col-xs-6">
-              <label>Show Category On Places Location's Page</label>
+              <label>Show Category On Places Details Page</label>
             </div>
             <div className="col-xs-6">
               <div className="Toggler">
@@ -212,58 +212,6 @@ class MapOptions extends React.Component {
                   className="Toggler__off"
                   style={!this.props.configCategories ? active : null}
                   onClick={() => this.onCategoriesChange()}
-                >
-                  Off
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <br />
-
-          <div className="row">
-            <div className="col-xs-6">
-              <label>Show "Get Directions" Button On Location Details Page</label>
-            </div>
-            <div className="col-xs-6">
-              <div className="Toggler">
-                <div
-                  className="Toggler__on"
-                  style={this.props.options.allowDirections != false ? active : null}
-                  onClick={() => this.onAllowDirectionsChange()}
-                >
-                  On
-                </div>
-                <div
-                  className="Toggler__off"
-                  style={this.props.options.allowDirections == false ? active : null}
-                  onClick={() => this.onAllowDirectionsChange()}
-                >
-                  Off
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <br />
-
-          <div className="row">
-            <div className="col-xs-6">
-              <label>Show "Contact" Button On Location Details Page</label>
-            </div>
-            <div className="col-xs-6">
-              <div className="Toggler">
-                <div
-                  className="Toggler__on"
-                  style={this.props.options.allowContact != false ? active : null}
-                  onClick={() => this.onAllowContactChange()}
-                >
-                  On
-                </div>
-                <div
-                  className="Toggler__off"
-                  style={this.props.options.allowContact == false ? active : null}
-                  onClick={() => this.onAllowContactChange()}
                 >
                   Off
                 </div>
