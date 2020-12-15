@@ -414,8 +414,10 @@ class Content extends React.Component {
         "places-list",
         (err, result) => {
           if (err) {
+            let rowWithError = location.indexForError;
             updateErrCount = updateErrCount + 1;
-            console.log(updateErrCount);
+            rowsWithError.push(rowWithError + 2);
+            locationsWithError.push(location);
             this.setState({
               totalUpdated: locationsForUpdate.length - updateErrCount,
             });
@@ -571,14 +573,14 @@ class Content extends React.Component {
     return (
       <h2 id="contentTabs" >
         {tabs.map((tab, ind) => (
-          <span
+          <button
             key={tab}
             className={activeTab == ind ? "active" : null}
             onClick={() => this.switchTab(ind)}
             type="button"
           >
-            <a href="#">{tab}</a>
-          </span>
+            <button>{tab}</button>
+          </button>
         ))}
       </h2>
     );
@@ -588,7 +590,6 @@ class Content extends React.Component {
     const { breadcrumb } = this.state;
     return (
       <div style={{ width: "95%" }}>
-        <h4>{breadcrumb}</h4>
         {this.renderNav()}
         <h4 style={{marginLeft: "0.3rem"}}>{breadcrumb}</h4>
         {this.renderTab()}

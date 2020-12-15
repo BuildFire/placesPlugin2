@@ -18,6 +18,11 @@ table td.action-large a {
   padding: 0 6px;
 }
 
+a {
+  color: inherit;
+  text-decoration: inherit;
+}
+
 .sortable-item {
   position: relative;
   background-color: #ffffff;
@@ -286,14 +291,22 @@ img.delete {
   width: 40px !important;
 }
 
-#contentTabs {     
-    border: none !important;
-    display: flex;
-    justify-content: space-between;
-    width: 40%;
-    height: 4vh;
+#contentTabs {
+  display: flex;
+  justify-content: space-between;
+  width: 25%;
+}
 
-  }
+#contentTabs button {
+  background-color: transparent;
+  border: none;
+  font-size: 12pt;
+  padding: 10px 0;
+}
+#contentTabs button.active {
+  font-weight: 600;
+  border-bottom: 4px solid #00a5ec;
+}
 
 .nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus, .nav-tabs > li > a.active, .nav-tabs > li > a.active:hover, .nav-tabs > li > a.active:focus {
   border-bottom: 4px solid #09a3ee !important;
