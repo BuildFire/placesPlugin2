@@ -1,15 +1,13 @@
-import React from 'react';
-import csv from 'csv-js';
-import CSVjs from 'comma-separated-values';
-import uuidv4 from '../lib/uuidv4';
+import React from "react";
+import csv from "csv-js";
+import CSVjs from "comma-separated-values";
+import uuidv4 from "../lib/uuidv4";
 import ProgressBar from "./ProgressBar";
-import buildfire from 'buildfire';
-
+import buildfire from "buildfire";
 
 let percent;
 
 class LocationsActionBar extends React.Component {
-
   onAddLocation() {
     this.props.onAddLocation();
   }
@@ -102,22 +100,22 @@ class LocationsActionBar extends React.Component {
                     description,
                     image,
                     index: i + places.length,
-                    indexForError: i
+                    indexForError: i,
                   });
                 });
             }).catch(() => undefined)
           );
         } else {
-        promises.push(
+          promises.push(
             new Promise((resolve, reject) => {
-          let lat = address_lat;
-          let lng = address_lng;
-          let addressUrl = `https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyBOp1GltsWARlkHhF1H_cb6xtdR1pvNDAk&latlng=${lat},${lng}`
+              let lat = address_lat;
+              let lng = address_lng;
+              let addressUrl = `https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyBOp1GltsWARlkHhF1H_cb6xtdR1pvNDAk&latlng=${lat},${lng}`;
               // get geodata from google api
               fetch(addressUrl)
                 .then((response) => response.json())
                 .then((data) => {
-                  const name = data.results[0].formatted_address
+                  const name = data.results[0].formatted_address;
                   resolve({
                     id,
                     title:
@@ -134,7 +132,7 @@ class LocationsActionBar extends React.Component {
                     description,
                     image,
                     index: i + places.length,
-                    indexForError: i
+                    indexForError: i,
                   });
                 });
             })
@@ -168,44 +166,69 @@ class LocationsActionBar extends React.Component {
     reader.readAsText(file, "UTF-8");
 
     reader.addEventListener("progress", (event) => {
+      console.log(
+        this.props.totalLocations -
+          (this.props.totalUpdated + this.props.totalInserted)
+      );
       if (event.loaded && event.total) {
         percent = (event.loaded / event.total) * 100;
-        if  (percent === 100) {
+        if (percent === 100) {
           setTimeout(() => {
-            
-            buildfire.notifications.showDialog(
-              {
-                title: "CSV Import Report",
-                message: this.props.rowsWithError.length ? `
+            if (this.props.locationsWithError.length > 0) {
+              buildfire.notifications.showDialog(
+                {
+                  title: "CSV Import Report",
+                  message: `
               <div style='display:flex; flex-direction: column; align-items: center; height: height: 110px;'>
                 <p>Number Of Total Locations From The CSV: ${this.props.totalLocations}</p>
                 <p></p>
                 <p>Number Of New Locations Added: ${this.props.totalInserted}<p/>
                 <p>Number Of Existing Locations Updated: ${this.props.totalUpdated}<p/>
-                <p style='color:red'>Number Of Errors: ${this.props.totalLocations-(this.props.totalUpdated+this.props.totalInserted)}</p>
+                <p style='color:red'>Number Of Errors: ${this.props.locationsWithError.length}</p>
                 
-              </div>` : `
-              <div style='display:flex; flex-direction: column; align-items: center; height: height: 110px;'>
-                <p>Number Of Total Locations From The CSV: ${this.props.totalLocations}</p>
-                <p></p>
-                <p>Number Of New Locations Added: ${this.props.totalInserted}<p/>
-                <p>Number Of Existing Locations Updated: ${this.props.totalUpdated}<p/>
               </div>`,
-                size: "lg",
-                buttons: [{ text: "OK", key: "small", type: "default" }, {text: "Export Errors", key: "error", type: "danger"}],
-              },
-              (e, res) => {
-                if (e) return console.error(e);
-                if (!res || res.selectedButton.key == "small") {
-                  document.getElementById("progressbar").style.display = "none";
-                  window.location.reload();
-                } else if (res.selectedButton.key == 'error')
-                {this.handleErrorExport();
-                  document.getElementById("progressbar").style.display = "none";
-                  window.location.reload()
-              }
-              }
-            );
+                  size: "lg",
+                  buttons: [
+                    { text: "OK", key: "small", type: "default" },
+                    { text: "Export Errors", key: "error", type: "danger" },
+                  ],
+                },
+                (e, res) => {
+                  if (e) return console.error(e);
+                  if (!res || res.selectedButton.key == "small") {
+                    document.getElementById("progressbar").style.display =
+                      "none";
+                    window.location.reload();
+                  } else if (res.selectedButton.key == "error") {
+                    this.handleErrorExport();
+                    document.getElementById("progressbar").style.display =
+                      "none";
+                    window.location.reload();
+                  }
+                }
+              );
+            } else {
+              buildfire.notifications.alert(
+                {
+                  title: "CSV Import Report",
+                  message: `<div style='display:flex; flex-direction: column; align-items: center; height: height: 110px;'>
+                            <p>Number Of Total Locations From The CSV: ${this.props.totalLocations}</p>
+                            <p></p>
+                            <p>Number Of New Locations Added: ${this.props.totalInserted}<p/>
+                            <p>Number Of Existing Locations Updated: ${this.props.totalUpdated}<p/>
+                        </div>`,
+                  okButton: { text: "OK" },
+                },
+                (e, res) => {
+                  if (e) return console.error(e);
+                  if (!res || res.selectedButton.key == "ok") {
+                    window.location.reload();
+                  }
+                }
+              );
+            }
+
+            document.getElementById("progressbar").style.display = "none";
           }, 5000);
         }
       }
@@ -256,20 +279,21 @@ class LocationsActionBar extends React.Component {
     link.setAttribute("download", "places_export.csv");
     document.body.appendChild(link);
     link.click();
-    buildfire.notifications.alert({
-        title:"CSV Downloaded",
-        message:`
+    buildfire.notifications.alert(
+      {
+        title: "CSV Downloaded",
+        message: `
               <div style='display:flex; flex-direction: column; align-items: center; height: height: 110px;'>
                 <p>Your CSV file has been downladed,</p>
                 <p>please check your downloads folder!</p>
               </div>`,
-              okButton: {text:'OK'}
-        },
-        function(e,data){
-             if(e) console.error(e); 
-             if(data) console.log(data);
-        }
-    );    
+        okButton: { text: "OK" },
+      },
+      function (e, data) {
+        if (e) console.error(e);
+        if (data) console.log(data);
+      }
+    );
   }
 
   handleErrorExport() {
@@ -303,7 +327,7 @@ class LocationsActionBar extends React.Component {
         lng: place.address.lng,
         description: place.description || "",
         image: place.image || "",
-        error: "Invalid ID"
+        error: "Invalid ID",
       });
     });
 
@@ -317,20 +341,21 @@ class LocationsActionBar extends React.Component {
     link.setAttribute("download", "places_error_export.csv");
     document.body.appendChild(link);
     link.click();
-    buildfire.notifications.alert({
-        title:"Error Report Downloaded",
-        message:`
+    buildfire.notifications.alert(
+      {
+        title: "Error Report Downloaded",
+        message: `
               <div style='display:flex; flex-direction: column; align-items: center; height: height: 110px;'>
                 <p>Your error report has been downladed,</p>
                 <p>please check your downloads folder!</p>
               </div>`,
-              okButton: {text:'OK'}
-        },
-        function(e,data){
-             if(e) console.error(e); 
-             if(data) console.log(data);
-        }
-    );    
+        okButton: { text: "OK" },
+      },
+      function (e, data) {
+        if (e) console.error(e);
+        if (data) console.log(data);
+      }
+    );
   }
 
   handleTemplateDownload() {
@@ -360,7 +385,7 @@ class LocationsActionBar extends React.Component {
 
   render() {
     const { addingLocation } = this.props;
-    console.log(this.props)
+    console.log(this.props);
     return (
       <div>
         <div className="row">

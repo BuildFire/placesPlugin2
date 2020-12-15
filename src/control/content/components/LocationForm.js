@@ -455,7 +455,7 @@ class LocationForm extends React.Component {
         </div>
         <div
           className="formContainer"
-          style={{ display: "flex", flexDirection: "column", overflow: "auto" }}
+          style={{ display: "flex", flexDirection: "column", overflow: "hidden" }}
         >
           <div className="form-group">
             <label htmlFor="description">Description*</label>

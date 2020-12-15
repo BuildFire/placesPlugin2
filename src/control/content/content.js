@@ -10,10 +10,10 @@ import EditLocation from "./components/EditLocation";
 import SearchEngine from "./components/SearchEngine";
 
 const tabs = ["Categories", "Locations"];
-let updateErrCount = 0
-let insertErrCount = 0
-let rowsWithError = []
-let locationsWithError = []
+let updateErrCount = 0;
+let insertErrCount = 0;
+let rowsWithError = [];
+let locationsWithError = [];
 
 class Content extends React.Component {
   constructor(props) {
@@ -27,7 +27,6 @@ class Content extends React.Component {
       totalUpdated: 0,
       totalInserted: 0,
       totalLocations: 0,
-      
     };
     this.handleBreadcrumb = this.handleBreadcrumb.bind(this);
   }
@@ -390,22 +389,24 @@ class Content extends React.Component {
     let locationsForInsert = locations.filter((location) => !location.id);
     let locationsForUpdate = locations.filter((location) => location.id);
 
-    console.log(locationsForUpdate)
+    console.log(locations);
 
-       
     this.setState({
       totalInserted: locationsForInsert.length,
       totalUpdated: locationsForUpdate.length,
-      totalLocations: locations.length
+      totalLocations: locations.length,
     });
     buildfire.datastore.bulkInsert(
       locationsForInsert,
       "places-list",
       (err, result) => {
         if (err) {
-           insertErrCount = insertErrCount + 1
-          this.setState({totalUpdated: locationsForUpdate.length - insertErrCount})
-            console.error(err)}
+          insertErrCount = insertErrCount + 1;
+          this.setState({
+            totalUpdated: locationsForUpdate.length - insertErrCount,
+          });
+          console.error(err);
+        }
       }
     );
     locationsForUpdate.forEach((location) => {
@@ -415,10 +416,10 @@ class Content extends React.Component {
         "places-list",
         (err, result) => {
           if (err) {
-            let rowWithError = location.indexForError
+            let rowWithError = location.indexForError;
             updateErrCount = updateErrCount + 1;
-            rowsWithError.push(rowWithError + 2)
-            locationsWithError.push(location)
+            rowsWithError.push(rowWithError + 2);
+            locationsWithError.push(location);
             this.setState({
               totalUpdated: locationsForUpdate.length - updateErrCount,
             });
