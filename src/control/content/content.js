@@ -10,8 +10,8 @@ import EditLocation from "./components/EditLocation";
 import SearchEngine from "./components/SearchEngine";
 
 const tabs = ["Categories", "Locations"];
-let updateErrCount = 0
-let insertErrCount = 0
+let updateErrCount = 0;
+let insertErrCount = 0;
 
 class Content extends React.Component {
   constructor(props) {
@@ -383,21 +383,24 @@ class Content extends React.Component {
     locations = locations.filter((location) => typeof location === "object");
     let locationsForInsert = locations.filter((location) => !location.id);
     let locationsForUpdate = locations.filter((location) => location.id);
-    
+
     this.setState({
       totalInserted: locationsForInsert.length,
       totalUpdated: locationsForUpdate.length,
-      totalLocations: locations.length
+      totalLocations: locations.length,
     });
     buildfire.datastore.bulkInsert(
       locationsForInsert,
       "places-list",
       (err, result) => {
         if (err) {
-           insertErrCount = insertErrCount + 1
-           console.log(insertErrCount)
-          this.setState({totalUpdated: locationsForUpdate.length - insertErrCount})
-            console.error(err)}
+          insertErrCount = insertErrCount + 1;
+          console.log(insertErrCount);
+          this.setState({
+            totalUpdated: locationsForUpdate.length - insertErrCount,
+          });
+          console.error(err);
+        }
       }
     );
     locationsForUpdate.forEach((location) => {
@@ -407,10 +410,13 @@ class Content extends React.Component {
         "places-list",
         (err, result) => {
           if (err) {
-           updateErrCount = updateErrCount + 1
-           console.log(updateErrCount)
-          this.setState({totalUpdated: locationsForUpdate.length - updateErrCount})
-            console.error(err)}
+            updateErrCount = updateErrCount + 1;
+            console.log(updateErrCount);
+            this.setState({
+              totalUpdated: locationsForUpdate.length - updateErrCount,
+            });
+            console.error(err);
+          }
         }
       );
 
@@ -577,7 +583,7 @@ class Content extends React.Component {
   render() {
     const { breadcrumb } = this.state;
     return (
-      <div>
+      <div style={{ width: "95%" }}>
         <h4>{breadcrumb}</h4>
         {this.renderNav()}
         {this.renderTab()}
