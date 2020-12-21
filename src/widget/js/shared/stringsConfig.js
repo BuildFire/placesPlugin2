@@ -31,6 +31,12 @@ export const stringsConfig = {
         maxLength: 30,
         defaultValue: "Contact",
       },
+      chatText: {
+        title: "Chat With Location Owner Modal Text",
+        placeholder: "Chat",
+        maxLength: 15,
+        defaultValue: "Chat",
+      },
     },
   },
   LocationSummary: {

@@ -572,18 +572,18 @@ class Content extends React.Component {
   renderNav() {
     const { activeTab } = this.state;
     return (
-      <ul id="contentTabs" className="nav nav-tabs">
+      <h2 id="contentTabs" >
         {tabs.map((tab, ind) => (
-          <li
+          <span
             key={tab}
             className={activeTab == ind ? "active" : null}
             onClick={() => this.switchTab(ind)}
             type="button"
           >
             <a href="#">{tab}</a>
-          </li>
+          </span>
         ))}
-      </ul>
+      </h2>
     );
   }
 
@@ -591,8 +591,8 @@ class Content extends React.Component {
     const { breadcrumb } = this.state;
     return (
       <div>
-        <h4>{breadcrumb}</h4>
         {this.renderNav()}
+        <h4 style={{marginLeft: "0.3rem"}}>{breadcrumb}</h4>
         {this.renderTab()}
       </div>
     );

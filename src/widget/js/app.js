@@ -60,7 +60,6 @@ window.app = {
 
         buildfire.navigation.onBackButtonClick = function() {
             const isLauncher = window.location.href.includes('launcherPlugin');
-
             if (window.app.state.navHistory.length > 1) {
 
                 //Remove the current state
@@ -75,7 +74,6 @@ window.app = {
 
                 //Navigate to the previous state
                 let lastNavState = window.app.state.navHistory[window.app.state.navHistory.length-1];
-
                 window.app.state.isBackNav = true;
 
                 window.router.navigate(lastNavState);

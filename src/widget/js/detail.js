@@ -177,7 +177,7 @@ window.detailView = {
                                     action: "linkToApp", 
                                     queryString: `wid=${wid}&wTitle=${encodeURIComponent((user.displayName || "Someone") + " | " + (place.contactPerson.displayName || "Someone"))}&sendPNTo=${sendPNTo}`,
                                     instanceId: context.socialWall.instanceId,
-                                    title: "Chat",
+                                    title: strings.get("ActionButtons.chatText"),
                                     customChat: true
                                 });
                             } 

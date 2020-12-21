@@ -51,7 +51,7 @@ class PlacesList extends React.Component {
             : ""}
         </span>
         <span className="edit">
-          <a onClick={() => this.onEditDidClick(value.index)}>Edit</a>
+          <a onClick={() => this.onEditDidClick(value.index)}><span class="glyphicon glyphicon-pencil"></span></a>
         </span>
         <span
           className="copy btn-icon btn-link-icon btn-primary"
