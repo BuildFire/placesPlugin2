@@ -12,6 +12,8 @@ import SearchEngine from "./components/SearchEngine";
 const tabs = ["Categories", "Locations"];
 let updateErrCount = 0;
 let insertErrCount = 0;
+let rowsWithError = [];
+let locationsWithError = [];
 
 class Content extends React.Component {
   constructor(props) {

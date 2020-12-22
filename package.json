@@ -36,7 +36,6 @@
     "zip-webpack-plugin": "^2.0.0"
   },
   "dependencies": {
-    "@tinymce/tinymce-react": "^3.8.0",
     "comma-separated-values": "^3.6.4",
     "csv-js": "^1.0.0",
     "handlebars": "^4.0.11",
