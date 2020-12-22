@@ -1,9 +1,10 @@
-import Buildfire, { components } from 'buildfire';
-import React from 'react';
-import cloneDeep from 'lodash/cloneDeep';
-import ReactQuill from 'react-quill';
-import { Editor } from "@tinymce/tinymce-react";
+import Buildfire, { components } from "buildfire";
+import React from "react";
+import cloneDeep from "lodash/cloneDeep";
+import ReactQuill from "react-quill";
+import ImageResize from "quill-image-resize-module";
 
+ReactQuill.Quill.register("modules/imageResize", ImageResize);
 
 class LocationForm extends React.Component {
   constructor(props) {
@@ -49,8 +50,9 @@ class LocationForm extends React.Component {
           });
         });
       },
-      setup:  (editor) => {
-        editor.on("init",  (e) => {
+      setup: (editor) => {
+        editor.on("init", (e) => {
+          console.log("Editor was initialized.", this.state.description);
           editor.setContent(this.state.description);
         });
       },
@@ -66,7 +68,6 @@ class LocationForm extends React.Component {
       container.style.top = "10px";
       container.style.left = "10px";
     }, 400);
-
 
     // Mount carousel
     this.editor = new components.carousel.editor("#carousel");
@@ -455,7 +456,7 @@ class LocationForm extends React.Component {
         </div>
         <div
           className="formContainer"
-          style={{ display: "flex", flexDirection: "column", overflow: "hidden" }}
+          style={{ display: "flex", flexDirection: "column" }}
         >
           <div className="form-group">
             <label htmlFor="description">Description*</label>

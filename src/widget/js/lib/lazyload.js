@@ -74,10 +74,11 @@
         return extended;
     };
 
-    function LazyLoad(images, options) {
+    function LazyLoad(images, options, intersectionObserverConfig) {
         this.settings = extend(defaults, options || {});
         this.images = images || document.querySelectorAll(this.settings.selector);
         this.observer = null;
+        this.intersectionObserverConfig = intersectionObserverConfig;
         this.init();
     }
 
@@ -115,7 +116,7 @@
                         }
                     }
                 });
-            }, observerConfig);
+            }, this.intersectionObserverConfig ? this.intersectionObserverConfig : observerConfig);
 
             this.images.forEach(function (image) {
                 self.observer.observe(image);
@@ -155,8 +156,8 @@
         }
     };
 
-    root.lazyload = function(images, options) {
-        return new LazyLoad(images, options);
+    root.lazyload = function(images, options, intersectionObserverConfig) {
+        return new LazyLoad(images, options, intersectionObserverConfig);
     };
 
     if (root.jQuery) {

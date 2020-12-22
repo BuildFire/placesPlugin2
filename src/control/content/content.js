@@ -12,8 +12,6 @@ import SearchEngine from "./components/SearchEngine";
 const tabs = ["Categories", "Locations"];
 let updateErrCount = 0;
 let insertErrCount = 0;
-let rowsWithError = [];
-let locationsWithError = [];
 
 class Content extends React.Component {
   constructor(props) {
@@ -389,8 +387,6 @@ class Content extends React.Component {
     let locationsForInsert = locations.filter((location) => !location.id);
     let locationsForUpdate = locations.filter((location) => location.id);
 
-    console.log(locations);
-
     this.setState({
       totalInserted: locationsForInsert.length,
       totalUpdated: locationsForUpdate.length,
@@ -416,13 +412,12 @@ class Content extends React.Component {
         "places-list",
         (err, result) => {
           if (err) {
-            let rowWithError = location.indexForError;
             updateErrCount = updateErrCount + 1;
-            rowsWithError.push(rowWithError + 2);
-            locationsWithError.push(location);
+            console.log(updateErrCount);
             this.setState({
               totalUpdated: locationsForUpdate.length - updateErrCount,
             });
+            console.error(err);
           }
         }
       );
@@ -590,7 +585,8 @@ class Content extends React.Component {
   render() {
     const { breadcrumb } = this.state;
     return (
-      <div>
+      <div style={{ width: "95%" }}>
+        <h4>{breadcrumb}</h4>
         {this.renderNav()}
         <h4 style={{marginLeft: "0.3rem"}}>{breadcrumb}</h4>
         {this.renderTab()}

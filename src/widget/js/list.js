@@ -40,7 +40,11 @@ window.listView = {
         window.listView.sorting(sortPlaces);
         if (window.app.state.places.length === 0)
             document.getElementById("emptyItem").setAttribute('style', 'display: block; text-align: center;');
-        window.lazyload();
+        window.lazyload(null, null, {
+          root: document.querySelector('.list-scrolling-container'),
+          rootMargin: "0px",
+          threshold: [0]
+        });
     },
     sorting: (places) => {
         if (typeof (window.listView.listScrollingContainer) != undefined && window.listView.listScrollingContainer != null) {
