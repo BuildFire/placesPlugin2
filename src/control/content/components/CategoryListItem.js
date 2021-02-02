@@ -74,7 +74,7 @@ class CategoryListItem extends React.Component {
                 <a onClick={() => this.cancelEditing()}>Cancel</a>
               </span>
             ) : (
-              <a onClick={() => this.toggleEditing()}><span class="glyphicon glyphicon-pencil"></span></a>
+              <a onClick={() => this.toggleEditing()}><span className="glyphicon glyphicon-pencil"></span></a>
             )}
           </div>
           <div className="categoryTooltip">

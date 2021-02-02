@@ -13,20 +13,37 @@ class Settings extends React.Component {
       configCarousel: false,
       configCategories: false,
       chatWithLocationOwner: false,
+      allowContact: true,
+      allowDirections: true,
     };
   }
 
   componentWillMount() {
     buildfire.datastore.get('places', (err, result) => {
       if (err) return console.error(err);
-      this.setState({ 
+      result.data = result.data || {};
+      result.data.isBookmarkingAllowed =
+        result.data.isBookmarkingAllowed || false;
+      result.data.isCarouselSwitched = result.data.isCarouselSwitched || false;
+      result.data.configCategories = result.data.configCategories || false;
+      result.data.chatWithLocationOwner =
+        result.data.chatWithLocationOwner || false;
+      result.data.allowContact =
+        typeof result.data.allowContact == "boolean"
+          ? result.data.allowContact
+          : true;
+      result.data.allowDirections =
+        typeof result.data.allowDirections == "boolean"
+          ? result.data.allowDirections
+          : true;
+      this.setState({
         data: result.data,
-        configBookmark: result.data.isBookmarkingAllowed, 
+        configBookmark: result.data.isBookmarkingAllowed,
         configCarousel: result.data.isCarouselSwitched,
         configCategories: result.data.configCategories,
         chatWithLocationOwner: result.data.chatWithLocationOwner,
         allowContact: result.data.allowContact,
-        allowDirections: result.data.allowDirections
+        allowDirections: result.data.allowDirections,
       });
     });
   }
@@ -102,6 +119,7 @@ class Settings extends React.Component {
       data.allowContact = this.state.allowContact;
       this.setState(data);
       this.handleSave();
+      console.log("here", this.state.data);
     });
   }
 
@@ -109,7 +127,6 @@ class Settings extends React.Component {
     const { data } = this.state;
     this.setState({ allowDirections: !this.state.allowDirections }, () => {
       data.allowDirections = this.state.allowDirections;
-
       this.setState(data);
       this.handleSave();
     });

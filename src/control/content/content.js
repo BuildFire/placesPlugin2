@@ -579,7 +579,7 @@ class Content extends React.Component {
             onClick={() => this.switchTab(ind)}
             type="button"
           >
-            <button>{tab}</button>
+            <div>{tab}</div>
           </button>
         ))}
       </h2>

@@ -42,6 +42,25 @@
     width: 100%;
 }
 
+#loadingState {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-left: 10vw;
+    justify-content: space-evenly;
+    height: 60vh;
+    width: 80vw;
+    padding: 10vh;
+    margin-top: 20vh;
+    border:rgba(0, 0, 0, 0.5) 1px solid;
+    border-radius: 10%;
+    box-shadow: -8px 3px 25px 1px rgba(0,0,0,0.75);
+}
+#loadingState h4 {
+    text-align: center;
+    font-weight: 400;
+}
+
 .animated {
   animation-duration: 400ms;
   animation-fill-mode: both;
@@ -627,3 +646,28 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
     and (device-width: 414px) 
     and (device-height: 896px) 
     and (-webkit-device-pixel-ratio: 3) { }
+
+    .glyphicon {
+        -webkit-animation: spin 5s infinite linear;
+        -moz-animation: spin 5s infinite linear;
+        -o-animation: spin 5s infinite linear;
+    }
+
+    .glyphicon:before {
+        -moz-animation: spin 5s infinite linear;
+        -o-animation: spin 5s infinite linear;
+        font-size: 9em;
+    }
+
+    @-moz-keyframes spin {
+    from { -moz-transform: rotate(0deg); }
+    to { -moz-transform: rotate(360deg); }
+    }
+    @-webkit-keyframes spin {
+        from { -webkit-transform: rotate(0deg); }
+        to { -webkit-transform: rotate(360deg); }
+    }
+    @keyframes spin {
+        from {transform:rotate(0deg);}
+        to {transform:rotate(360deg);}
+    }

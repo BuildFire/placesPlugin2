@@ -8,6 +8,7 @@ class MapOptions extends React.Component {
     };
   }
 
+
   onChange(e) {
     this.props.onChange({
       name: e.target.name,
@@ -43,6 +44,7 @@ class MapOptions extends React.Component {
       buttonPressed: true,
     });
 
+
     window.buildfire.pluginInstance.showDialog({}, (error, response) => {
       if (response && response.length > 0) {
         const socialWall = {
@@ -58,7 +60,8 @@ class MapOptions extends React.Component {
       this.setState({
         buttonPressed: false,
       });
-    });  }
+    });  
+  }
 
 
   removePlugin() {
@@ -67,6 +70,7 @@ class MapOptions extends React.Component {
 
   render() {
     const active = { backgroundColor: '#00a1f1', color: '#ffffff', border: 'none' };
+    console.log("options",this.props.options)
     return (
       <div className="col-xs-12">
         <form>
@@ -220,20 +224,27 @@ class MapOptions extends React.Component {
 
           <div className="row">
             <div className="col-xs-6">
-              <label>Show "Get Directions" Button On Location Details Page</label>
+              <label>
+                Show "Get Directions" Button On Location Details Page
+              </label>
             </div>
             <div className="col-xs-6">
               <div className="Toggler">
                 <div
                   className="Toggler__on"
-                  style={this.props.options.allowDirections != false ? active : null}
+                  style={
+                    this.props.options.allowDirections ? active
+                      : null
+                  }
                   onClick={() => this.onAllowDirectionsChange()}
                 >
                   On
                 </div>
                 <div
                   className="Toggler__off"
-                  style={this.props.options.allowDirections == false ? active : null}
+                  style={
+                    this.props.options.allowDirections == false ? active : null
+                  }
                   onClick={() => this.onAllowDirectionsChange()}
                 >
                   Off
@@ -252,14 +263,20 @@ class MapOptions extends React.Component {
               <div className="Toggler">
                 <div
                   className="Toggler__on"
-                  style={this.props.options.allowContact != false ? active : null}
+                  style={
+                    this.props.options.allowContact
+                      ? active
+                      : null
+                  }
                   onClick={() => this.onAllowContactChange()}
                 >
                   On
                 </div>
                 <div
                   className="Toggler__off"
-                  style={this.props.options.allowContact == false ? active : null}
+                  style={
+                    this.props.options.allowContact == false ? active : null
+                  }
                   onClick={() => this.onAllowContactChange()}
                 >
                   Off
