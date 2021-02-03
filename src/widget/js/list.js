@@ -14,6 +14,9 @@ window.listView = {
 
         function init() {
             console.log('Initializing list view !!!');
+            if (document.getElementById("mapView")) {
+              document.getElementById("mapView").style.display = "none";
+            }
             // Crop image to 16:9 aspect ratio
             window.listView.imageWidth = Math.floor(window.innerWidth);
             window.listView.imageHeight = Math.floor(window.innerWidth / 16 * 9);
@@ -36,7 +39,10 @@ window.listView = {
         }
 
         let sortPlaces = [];
-        sortPlaces = places.sort(window.PlacesSort[window.app.state.sortBy]);
+        if (!window.app.state.sortBy) {
+          sortPlaces = places.sort(window.PlacesSort["alpha"]);
+        } else
+          sortPlaces = places.sort(window.PlacesSort[window.app.state.sortBy]);
         console.log('ovo je sort', window.PlacesSort[window.app.state.sortBy])
         window.listView.sorting(sortPlaces);
         if (window.app.state.places.length === 0)

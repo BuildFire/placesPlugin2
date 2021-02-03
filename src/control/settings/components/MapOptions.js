@@ -232,10 +232,7 @@ class MapOptions extends React.Component {
               <div className="Toggler">
                 <div
                   className="Toggler__on"
-                  style={
-                    this.props.options.allowDirections ? active
-                      : null
-                  }
+                  style={this.props.options.allowDirections ? active : null}
                   onClick={() => this.onAllowDirectionsChange()}
                 >
                   On
@@ -263,11 +260,7 @@ class MapOptions extends React.Component {
               <div className="Toggler">
                 <div
                   className="Toggler__on"
-                  style={
-                    this.props.options.allowContact
-                      ? active
-                      : null
-                  }
+                  style={this.props.options.allowContact ? active : null}
                   onClick={() => this.onAllowContactChange()}
                 >
                   On
@@ -286,75 +279,77 @@ class MapOptions extends React.Component {
           </div>
 
           <br />
-
-          <div className="item clearfix row">
-            <div className="col-xs-6">
-              <div>
-                Add Chat With Location Owner
-                <div className="settingsTooltip social-wall">
-                  <span className="tip btn-info-icon btn-primary transition-third" />
-                  <span className="settingsTooltiptext socialWall">
-                    To add a location owner to each location turn this toggle
-                    "On", connect Premium Social Wall 2.0, and in the Location
-                    Details page of each location, add a location owner's email
-                    address
-                  </span>
-                </div>
-              </div>
-            </div>
-            <div className="col-xs-6">
-              <div className="Toggler">
-                <div
-                  className="Toggler__on"
-                  style={this.props.chatWithLocationOwner ? active : null}
-                  onClick={() => this.onChatWithLocationOwnerChange()}
-                >
-                  On
-                </div>
-                <div
-                  className="Toggler__off"
-                  style={!this.props.chatWithLocationOwner ? active : null}
-                  onClick={() => this.onChatWithLocationOwnerChange()}
-                >
-                  Off
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <br />
-
-          {this.props.chatWithLocationOwner && (
-            <div className="row">
+          {this.props.options.allowContact && (
+            <div className="item clearfix row">
               <div className="col-xs-6">
-                <label>Select Chat</label>
+                <div>
+                  Add Chat With Location Owner
+                  <div className="settingsTooltip social-wall">
+                    <span className="tip btn-info-icon btn-primary transition-third" />
+                    <span className="settingsTooltiptext socialWall">
+                      To add a location owner to each location turn this toggle
+                      "On", connect Premium Social Wall 2.0, and in the Location
+                      Details page of each location, add a location owner's
+                      email address
+                    </span>
+                  </div>
+                </div>
               </div>
-              <div className="col-xs-6 socialwall-container">
-                <button
-                  disabled={this.state.buttonPressed}
-                  onClick={this.openPluginDialog}
-                  className="btn btn-success"
-                >
-                  Connect Social Wall
-                </button>
-                {this.props.options.socialWall &&
-                  this.props.options.socialWall.instanceId && (
-                    <div className="socialwall-info">
-                      <div className="socialwall-info-title">
-                        <img src={this.props.options.socialWall.iconUrl} />
-                        <label>
-                          {this.props.options.socialWall.pluginTypeName}
-                        </label>
-                      </div>
-                      <span
-                        onClick={() => this.removePlugin()}
-                        className="socialwall-close delete btn-icon btn-delete-icon btn-danger transition-third"
-                      ></span>
-                    </div>
-                  )}
+              <div className="col-xs-6">
+                <div className="Toggler">
+                  <div
+                    className="Toggler__on"
+                    style={this.props.chatWithLocationOwner ? active : null}
+                    onClick={() => this.onChatWithLocationOwnerChange()}
+                  >
+                    On
+                  </div>
+                  <div
+                    className="Toggler__off"
+                    style={!this.props.chatWithLocationOwner ? active : null}
+                    onClick={() => this.onChatWithLocationOwnerChange()}
+                  >
+                    Off
+                  </div>
+                </div>
               </div>
             </div>
           )}
+
+          <br />
+
+          {this.props.chatWithLocationOwner &&
+            this.props.options.allowContact && (
+              <div className="row">
+                <div className="col-xs-6">
+                  <label>Select Chat</label>
+                </div>
+                <div className="col-xs-6 socialwall-container">
+                  <button
+                    disabled={this.state.buttonPressed}
+                    onClick={this.openPluginDialog}
+                    className="btn btn-success"
+                  >
+                    Connect Social Wall
+                  </button>
+                  {this.props.options.socialWall &&
+                    this.props.options.socialWall.instanceId && (
+                      <div className="socialwall-info">
+                        <div className="socialwall-info-title">
+                          <img src={this.props.options.socialWall.iconUrl} />
+                          <label>
+                            {this.props.options.socialWall.pluginTypeName}
+                          </label>
+                        </div>
+                        <span
+                          onClick={() => this.removePlugin()}
+                          className="socialwall-close delete btn-icon btn-delete-icon btn-danger transition-third"
+                        ></span>
+                      </div>
+                    )}
+                </div>
+              </div>
+            )}
         </form>
       </div>
     );
