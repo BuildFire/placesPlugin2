@@ -649,13 +649,13 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
     and (device-height: 896px) 
     and (-webkit-device-pixel-ratio: 3) { }
 
-    .glyphicon {
+    .glyphicon-globe {
         -webkit-animation: spin 5s infinite linear;
         -moz-animation: spin 5s infinite linear;
         -o-animation: spin 5s infinite linear;
     }
 
-    .glyphicon:before {
+    .glyphicon-globe:before {
         -moz-animation: spin 5s infinite linear;
         -o-animation: spin 5s infinite linear;
         font-size: 9em;
