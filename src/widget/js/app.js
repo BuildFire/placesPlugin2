@@ -149,7 +149,7 @@ window.app = {
               placesCallback(null, places);
             }
             if (result.length !== pageSize) {
-              document.getElementById('loadingState').style.display = 'none';
+              document.getElementById("loadingState").style.display = "none";
             }
           }
         );
@@ -170,8 +170,6 @@ window.app = {
         }
 
         let data = results.data;
-
-        console.log('here',results.data);;
 
         if (data) {
           places = data.places || [];

@@ -119,7 +119,6 @@ class Settings extends React.Component {
       data.allowContact = this.state.allowContact;
       this.setState(data);
       this.handleSave();
-      console.log("here", this.state.data);
     });
   }
 

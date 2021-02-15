@@ -14,7 +14,8 @@ window.listView = {
 
         function init() {
             console.log('Initializing list view !!!');
-            if (document.getElementById("mapView")) {
+            
+            if (window.listView.initialized === true) {
               document.getElementById("mapView").style.display = "none";
             }
             // Crop image to 16:9 aspect ratio
