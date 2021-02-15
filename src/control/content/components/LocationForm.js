@@ -170,7 +170,6 @@ class LocationForm extends React.Component {
   }
 
   componentWillUnmount() {
-    console.log("REMOVE");
     tinymce.activeEditor.remove();
   }
 
@@ -326,9 +325,12 @@ class LocationForm extends React.Component {
   removeLocationOwner() {
     this.setState({ contactPerson: {} });
   }
+  handleEditorChange = (content, editor) => {
+    console.log("Content was updated:", content);
+  };
 
   modules = {
-    imageResize: {},
+    // imageResize: {},
     toolbar: {
       container: [
         [{ header: [1, 2, 3, false] }],
@@ -454,7 +456,7 @@ class LocationForm extends React.Component {
         </div>
         <div
           className="formContainer"
-          style={{ display: "flex", flexDirection: "column" }}
+          style={{ display: "flex", flexDirection: "column", overflow: "hidden" }}
         >
           <div className="form-group">
             <label htmlFor="description">Description*</label>
@@ -539,6 +541,7 @@ class LocationForm extends React.Component {
               </div>
             </div>
           </div>
+        </div>
 
           <div className="form-group">
             <button
@@ -556,8 +559,7 @@ class LocationForm extends React.Component {
               {this.props.location ? "Save Location" : "Save Location"}
             </button>
           </div>
-        </div>
-      </form>
+       </form>
     );
   }
 }

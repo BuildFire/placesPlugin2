@@ -1,5 +1,5 @@
-import filter from 'lodash/filter';
-import find from 'lodash/find';
+import filter from "lodash/filter";
+import find from "lodash/find";
 import Handlebars from "./lib/handlebars";
 
 import { stringsConfig } from "../js/shared/stringsConfig";
@@ -12,8 +12,7 @@ strings.init();
 window.filterControl = {
   originalPlaces: null,
   updatedPlaces: null,
-  toggleSelection: false,
-  
+  toggleSelection: true,
 
   openFilter: () => {
     window.filterControl.originalPlaces = app.state.filteredPlaces;
@@ -202,15 +201,15 @@ window.filterControl = {
   },
 };
 
-window.CenterControl = function(controlDiv) {
-    filterControl.createControl(controlDiv, [
-        { name:'center', action: mapView.centerMap }
-    ]);
+window.CenterControl = function (controlDiv) {
+  filterControl.createControl(controlDiv, [
+    { name: "center", action: mapView.centerMap },
+  ]);
 };
 
-window.FilterControl = function (controlDiv){
-    filterControl.createControl(controlDiv, [
-        { name:'changeView', action: filterControl.changeView },
-        { name:'filter', action: filterControl.openFilter }
-    ]);
+window.FilterControl = function (controlDiv) {
+  filterControl.createControl(controlDiv, [
+    { name: "changeView", action: filterControl.changeView },
+    { name: "filter", action: filterControl.openFilter },
+  ]);
 };

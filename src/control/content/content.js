@@ -12,6 +12,8 @@ import SearchEngine from "./components/SearchEngine";
 const tabs = ["Categories", "Locations"];
 let updateErrCount = 0;
 let insertErrCount = 0;
+let rowsWithError = [];
+let locationsWithError = [];
 
 class Content extends React.Component {
   constructor(props) {
@@ -32,6 +34,10 @@ class Content extends React.Component {
   componentWillMount() {
     buildfire.datastore.get("places", (err, result) => {
       if (err) return console.error(err);
+      result.data.itemsOrder = result.data.itemsOrder || [];
+      result.data.isBookmarkingAllowed =
+        result.data.isBookmarkingAllowed || false;
+      result.data.pointsOfInterest = result.data.pointsOfInterest || "on";
 
       result.data.itemsOrder = result.data.itemsOrder || [];
       result.data.isBookmarkingAllowed =
@@ -288,7 +294,6 @@ class Content extends React.Component {
    */
   handleCategoryRename(index, newName) {
     let { data } = this.state;
-    console.log(data.categories, index, newName);
     data.categories[index].name = newName;
     this.setState({ data });
     this.handleSave();
@@ -395,7 +400,6 @@ class Content extends React.Component {
       (err, result) => {
         if (err) {
           insertErrCount = insertErrCount + 1;
-          console.log(insertErrCount);
           this.setState({
             totalUpdated: locationsForUpdate.length - insertErrCount,
           });
@@ -410,8 +414,10 @@ class Content extends React.Component {
         "places-list",
         (err, result) => {
           if (err) {
+            let rowWithError = location.indexForError;
             updateErrCount = updateErrCount + 1;
-            console.log(updateErrCount);
+            rowsWithError.push(rowWithError + 2);
+            locationsWithError.push(location);
             this.setState({
               totalUpdated: locationsForUpdate.length - updateErrCount,
             });
@@ -419,7 +425,6 @@ class Content extends React.Component {
           }
         }
       );
-
       // this.getPlacesList();
       // this.handleSave();;
     });
@@ -455,7 +460,6 @@ class Content extends React.Component {
 
     let categoryDeeplink = buildfire.deeplink.createLink(category.id);
     this.setState({ categoryDeeplink });
-    console.log("categoryDeeplink > ", categoryDeeplink);
   }
 
   onAddLocation() {
@@ -512,6 +516,8 @@ class Content extends React.Component {
                 totalUpdated={this.state.totalUpdated}
                 totalInserted={this.state.totalInserted}
                 totalLocations={this.state.totalLocations}
+                rowsWithError={rowsWithError}
+                locationsWithError={locationsWithError}
               />
               {addingLocation || editingLocation !== false ? (
                 addingLocation ? (
@@ -565,18 +571,18 @@ class Content extends React.Component {
   renderNav() {
     const { activeTab } = this.state;
     return (
-      <ul id="contentTabs" className="nav nav-tabs">
+      <h2 id="contentTabs" >
         {tabs.map((tab, ind) => (
-          <li
+          <button
             key={tab}
             className={activeTab == ind ? "active" : null}
             onClick={() => this.switchTab(ind)}
             type="button"
           >
-            <a href="#">{tab}</a>
-          </li>
+            <div>{tab}</div>
+          </button>
         ))}
-      </ul>
+      </h2>
     );
   }
 
@@ -584,8 +590,8 @@ class Content extends React.Component {
     const { breadcrumb } = this.state;
     return (
       <div style={{ width: "95%" }}>
-        <h4>{breadcrumb}</h4>
         {this.renderNav()}
+        <h4 style={{marginLeft: "0.3rem"}}>{breadcrumb}</h4>
         {this.renderTab()}
       </div>
     );

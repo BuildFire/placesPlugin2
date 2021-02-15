@@ -33,6 +33,8 @@ window.detailView = {
           lng: place.address.lng,
           bookmarked: false,
           categories: categories,
+          allowDirections: window.app.state.allowDirections,
+          allowContact: window.app.state.allowContact,
           dirBtnText: strings.get("ActionButtons.directionsButton").length
             ? strings.get("ActionButtons.directionsButton").length > 14
               ? strings
@@ -51,12 +53,11 @@ window.detailView = {
             : "Contact",
         };
 
-        console.log(context.dirBtnText);
-        console.log(context.contactBtnText);
-
         window.buildfire.auth.getCurrentUser((err, user) => {                
             context.actionItems = (place.actionItems && place.actionItems.length > 0) || (window.app.state.chatWithLocationOwner && window.app.state.socialWall && window.app.state.socialWall.instanceId && (place.contactPerson && place.contactPerson.id && user && (place.contactPerson.id !== user._id)));
-       
+            context.showDirectionsButton = window.app.state.allowDirections !== false;
+            context.showContactButton = window.app.state.allowContact !== false && context.actionItems;
+
             let req = new XMLHttpRequest();
             req.open('GET', './templates/detail.hbs');
             req.send();
@@ -127,13 +128,25 @@ window.detailView = {
                  * Get Directions
                  */
                  let directionsButton = document.getElementById('directionsBtn');
+                 if(directionsButton) {
                  directionsButton.className = 'btn btn-primary';
                 directionsButton.addEventListener('click', getDirections);
-
+                }
                  let contactButton = document.getElementById('contactBtn');
                  if (contactButton) {
                     contactButton.className = 'btn btn-success';
                     contactButton.addEventListener('click', showContact);
+                 }
+
+                 let btnHolder = document.querySelector('.buttonHolder');
+                 if(!directionsButton && !contactButton){
+                     btnHolder.style.display = 'none'
+                 }
+
+                 if(directionsButton && !contactButton){
+                     document.querySelector('.buttonItem').style.width = "100%"
+                 } else if(contactButton && !directionsButton){
+                     document.querySelector('.buttonItem').style.width = "100%"
                  }
 
                  function getDirections() {
@@ -164,7 +177,7 @@ window.detailView = {
                                     action: "linkToApp", 
                                     queryString: `wid=${wid}&wTitle=${encodeURIComponent((user.displayName || "Someone") + " | " + (place.contactPerson.displayName || "Someone"))}&sendPNTo=${sendPNTo}`,
                                     instanceId: context.socialWall.instanceId,
-                                    title: "Chat",
+                                    title: strings.get("ActionButtons.chatText"),
                                     customChat: true
                                 });
                             } 

@@ -13,18 +13,37 @@ class Settings extends React.Component {
       configCarousel: false,
       configCategories: false,
       chatWithLocationOwner: false,
+      allowContact: true,
+      allowDirections: true,
     };
   }
 
   componentWillMount() {
     buildfire.datastore.get('places', (err, result) => {
       if (err) return console.error(err);
-      this.setState({ 
+      result.data = result.data || {};
+      result.data.isBookmarkingAllowed =
+        result.data.isBookmarkingAllowed || false;
+      result.data.isCarouselSwitched = result.data.isCarouselSwitched || false;
+      result.data.configCategories = result.data.configCategories || false;
+      result.data.chatWithLocationOwner =
+        result.data.chatWithLocationOwner || false;
+      result.data.allowContact =
+        typeof result.data.allowContact == "boolean"
+          ? result.data.allowContact
+          : true;
+      result.data.allowDirections =
+        typeof result.data.allowDirections == "boolean"
+          ? result.data.allowDirections
+          : true;
+      this.setState({
         data: result.data,
-        configBookmark: result.data.isBookmarkingAllowed, 
+        configBookmark: result.data.isBookmarkingAllowed,
         configCarousel: result.data.isCarouselSwitched,
         configCategories: result.data.configCategories,
-        chatWithLocationOwner: result.data.chatWithLocationOwner
+        chatWithLocationOwner: result.data.chatWithLocationOwner,
+        allowContact: result.data.allowContact,
+        allowDirections: result.data.allowDirections,
       });
     });
   }
@@ -94,6 +113,24 @@ class Settings extends React.Component {
     });
   }
 
+  handleAllowContact = () => {
+    const { data } = this.state;
+    this.setState({ allowContact: !this.state.allowContact }, () => {
+      data.allowContact = this.state.allowContact;
+      this.setState(data);
+      this.handleSave();
+    });
+  }
+
+  handleAllowDirections = () => {
+    const { data } = this.state;
+    this.setState({ allowDirections: !this.state.allowDirections }, () => {
+      data.allowDirections = this.state.allowDirections;
+      this.setState(data);
+      this.handleSave();
+    });
+  }
+
   onChatWithLocationOwnerChange = () => {
     const { data } = this.state;
     this.setState({ chatWithLocationOwner: !this.state.chatWithLocationOwner }, () => {
@@ -120,7 +157,6 @@ class Settings extends React.Component {
   }
 
   render() {
-
     return (
       <div>
         <MapOptions
@@ -130,12 +166,17 @@ class Settings extends React.Component {
           onCarouselChange={this.handleCarouselChange}
           onCategoriesChange={this.handleCategoriesChange}
           onChatWithLocationOwnerChange={this.onChatWithLocationOwnerChange}
+          onAllowContactChange={this.handleAllowContact}
+          onAllowDirectionsChange={this.handleAllowDirections}
           configBookmark={this.state.configBookmark} 
           configCarousel={this.state.configCarousel} 
           configCategories={this.state.configCategories}
           chatWithLocationOwner={this.state.chatWithLocationOwner}
+          allowContact={this.state.allowContact}
+          allowDirections={this.state.allowDirections}
           setSocialWall={this.setSocialWall}
-          removePlugin={this.removePlugin} />
+          removePlugin={this.removePlugin}
+          />
       </div>
     );
   }

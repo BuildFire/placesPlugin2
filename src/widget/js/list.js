@@ -14,6 +14,10 @@ window.listView = {
 
         function init() {
             console.log('Initializing list view !!!');
+            
+            if (window.listView.initialized === true) {
+              document.getElementById("mapView").style.display = "none";
+            }
             // Crop image to 16:9 aspect ratio
             window.listView.imageWidth = Math.floor(window.innerWidth);
             window.listView.imageHeight = Math.floor(window.innerWidth / 16 * 9);
@@ -36,10 +40,14 @@ window.listView = {
         }
 
         let sortPlaces = [];
-        sortPlaces = places.sort(window.PlacesSort[window.app.state.sortBy]);
+        if (!window.app.state.sortBy) {
+          sortPlaces = places.sort(window.PlacesSort["alpha"]);
+        } else
+          sortPlaces = places.sort(window.PlacesSort[window.app.state.sortBy]);
+        console.log('ovo je sort', window.PlacesSort[window.app.state.sortBy])
         window.listView.sorting(sortPlaces);
         if (window.app.state.places.length === 0)
-            document.getElementById("emptyItem").setAttribute('style', 'display: block; text-align: center;');
+            document.getElementById("emptyItem").setAttribute('style', 'display: block; text-align: center; height: 100vh');
         window.lazyload(null, null, {
           root: document.querySelector('.list-scrolling-container'),
           rootMargin: "0px",
@@ -140,11 +148,11 @@ window.listView = {
         window.listView.listScrollingContainer.appendChild(emptyItem);
 
     },
-    initList: (places) => {
+    initList: (sortPlaces) => {
         //Add filter control
         let filterDiv = document.getElementById('filter');
         new window.FilterControl(filterDiv);
-        window.listView.addPlaces(places);
+        window.listView.addPlaces(sortPlaces);
         if (window.app.state.isCategoryDeeplink) window.listView.filter(places, window.app.state.filteredPlaces)
     },
     updateList: (newPlaces) => {
@@ -166,7 +174,7 @@ window.listView = {
                 divToShow.setAttribute('style', 'display:block !important');
         });
 
-        if (!window.app.state.filteredPlaces.length) document.getElementById("emptyItem").setAttribute('style', 'display: block; text-align: center;');
+        if (!window.app.state.filteredPlaces.length) document.getElementById("emptyItem").setAttribute('style', 'display: block; text-align: center; height: 100vh');
         else document.getElementById("emptyItem").setAttribute('style', 'display: none !important;');
     },
     updateDistances: (places) => {
