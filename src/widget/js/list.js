@@ -99,6 +99,7 @@ window.listView = {
 
             const infoContainer = document.createElement('div');
             infoContainer.className = 'list-info-container';
+            infoContainer.setAttribute("id", "list-info-container");
 
             const title = document.createElement('div');
             title.className = 'list-title';

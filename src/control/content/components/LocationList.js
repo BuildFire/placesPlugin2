@@ -18,6 +18,7 @@ class PlacesList extends React.Component {
 
   render() {
     if (!this.props.places) return null;
+    console.log(this.props.places);
     this.props.places.forEach((place, index) => {
       if (!place.address || !place.address.lat || !place.address.lng) {
         this.props.places.splice(index, 1);

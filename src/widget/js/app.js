@@ -1,6 +1,6 @@
-import buildfire from 'buildfire';
-import filter from 'lodash/filter';
-import find from 'lodash/find';
+import buildfire from "buildfire";
+import filter from "lodash/filter";
+import find from "lodash/find";
 import "./lib/markercluster.js";
 
 import "../css/general.css";
@@ -229,21 +229,24 @@ window.app = {
           //Do comparison to see what's changed
           let updatedPlaces = filter(newPlaces, (newPlace) => { return !find(currentPlaces, newPlace);});
 
-          if(window.app.state.mode === window.app.settings.viewStates.map){
-              window.mapView.updateMap(updatedPlaces);
-          }else{
-              //Load new items
-              window.listView.updateList(updatedPlaces);
-          }
-        });
-    },
-    gotPieceOfData() {
-      if (window.app.state.places && window.app.state.location) {
-        let { location } = window.app.state;
-        let destinations = [];
-        window.app.state.places.forEach(place => {
-          destinations.push(new window.google.maps.LatLng(place.address.lat, place.address.lng));
-        });
+      if (window.app.state.mode === window.app.settings.viewStates.map) {
+        window.mapView.updateMap(updatedPlaces);
+      } else {
+        //Load new items
+        window.listView.updateList(updatedPlaces);
+        document.getElementById("mapView").style.display = "none";
+      }
+    });
+  },
+  gotPieceOfData() {
+    if (window.app.state.places && window.app.state.location) {
+      let { location } = window.app.state;
+      let destinations = [];
+      window.app.state.places.forEach((place) => {
+        destinations.push(
+          new window.google.maps.LatLng(place.address.lat, place.address.lng)
+        );
+      });
 
         let origin = {latitude: location.latitude, longitude: location.longitude};
 
