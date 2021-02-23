@@ -365,9 +365,10 @@ if (queryStringObj.dld) {
     if (err) return console.log(err);
     window.app.state.categories = results.data.categories;
     let deeplinkObj = JSON.parse(queryStringObj.dld);
+    const deepLinkId = deeplinkObj.id ? deeplinkObj.id : deeplinkObj.placeId ? deeplinkObj.placeId : null;
     if(window.app.state.categories) {
       window.app.state.categories.map(category => {
-        if (category.id === deeplinkObj.id) {
+        if (category.id === deepLinkId) {
           window.app.state.isCategoryDeeplink = true;
         }
       });
@@ -375,9 +376,9 @@ if (queryStringObj.dld) {
     if (window.app.state.isCategoryDeeplink) {
       window.app.state.defaultView = deeplinkObj.view;
       window.app.state.mode = deeplinkObj.view;
-      window.app.initCategoryView(deeplinkObj.id);
+      window.app.initCategoryView(deepLinkId);
     } else {
-      window.app.initDetailView(deeplinkObj.id);
+      window.app.initDetailView(deepLinkId);
     }
   });
 } else {

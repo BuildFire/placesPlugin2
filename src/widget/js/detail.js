@@ -16,10 +16,7 @@ window.detailView = {
         });
         let view = document.getElementById('detailView');
         let screenWidth = window.innerWidth;
-        const title =
-          place.title.length && place.title.length > 18
-            ? place.title.substring(0, 18).trim() + "..."
-            : place.title;
+        const title = place.title;
         let context = {
           isBookmarkingAllowed: window.app.state.isBookmarkingAllowed,
           isCarouselSwitched: window.app.state.isCarouselSwitched,
