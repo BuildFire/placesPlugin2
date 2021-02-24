@@ -548,22 +548,21 @@ class LocationForm extends React.Component {
           </div>
         </div>
 
-          <div className="form-group">
-            <button
-              disabled={
-                !title.length ||
-                description.replace(/(&nbsp;|<(?!img|\/img).*?>)/gi, "")
-                  .length === 0 ||
-                !address ||
-                !address.lat ||
-                !address.lng
-              }
-              type="submit"
-              className="btn btn-success"
-            >
-              {this.props.location ? "Save Location" : "Save Location"}
-            </button>
-          </div>
+        <div className="form-group">
+          <button
+            disabled={
+              !title.length ||
+              description.replace(/(&nbsp;|<(?!img|\/img).*?>)/gi, "")
+                .length === 0 ||
+              !address ||
+              !address.lat ||
+              !address.lng
+            }
+            type="submit"
+            className="btn btn-success"
+          >
+            {this.props.location ? "Save Location" : "Save Location"}
+          </button>
         </div>
       </form>
     );

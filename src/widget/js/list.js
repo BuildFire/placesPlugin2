@@ -36,7 +36,10 @@ window.listView = {
         }
 
         let sortPlaces = [];
-        sortPlaces = places.sort(window.PlacesSort[window.app.state.sortBy]);
+        if (!window.app.state.sortBy) {
+          sortPlaces = places.sort(window.PlacesSort["alpha"]);
+        } else
+          sortPlaces = places.sort(window.PlacesSort[window.app.state.sortBy]);
         window.listView.sorting(sortPlaces);
         if (window.app.state.places.length === 0)
             document.getElementById("emptyItem").setAttribute('style', 'display: block; text-align: center;');

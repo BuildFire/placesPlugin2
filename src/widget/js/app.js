@@ -234,6 +234,7 @@ window.app = {
           }else{
               //Load new items
               window.listView.updateList(updatedPlaces);
+              document.getElementById("mapView").style.display = "none";
           }
         });
     },
