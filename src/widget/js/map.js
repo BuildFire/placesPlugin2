@@ -29,18 +29,22 @@ window.mapView = {
 
         var myImg = document.getElementById('mapCenter').getElementsByTagName("img")[0];
         if(buildfire.isWeb()){
-            buildfire.spinner.show();
-            myImg.style.filter="invert(90%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%)";
-            if (typeof(Storage) !== "undefined" ) {
-                var userLocation = localStorage.getItem('user_location');
-                if (userLocation) {
-                    mapView.lastKnownLocation = JSON.parse(userLocation);
-                    mapView.addMarker(map, { address: mapView.lastKnownLocation }, mapView.settings.images.currentLocation);
-                    window.map.setCenter(mapView.lastKnownLocation);
-                    myImg.style.filter="";
-                    buildfire.spinner.hide();
-                }
+          buildfire.spinner.show();
+          // myImg.style.filter="invert(90%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%)";
+          if (typeof Storage !== "undefined") {
+            var userLocation = localStorage.getItem("user_location");
+            if (userLocation) {
+              mapView.lastKnownLocation = JSON.parse(userLocation);
+              mapView.addMarker(
+                map,
+                { address: mapView.lastKnownLocation },
+                mapView.settings.images.currentLocation
+              );
+              window.map.setCenter(mapView.lastKnownLocation);
+              myImg.style.filter = "";
+              buildfire.spinner.hide();
             }
+          }
         }
 
         //Center map once location is obtained
