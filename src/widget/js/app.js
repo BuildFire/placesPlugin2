@@ -1,6 +1,6 @@
-import buildfire from 'buildfire';
-import filter from 'lodash/filter';
-import find from 'lodash/find';
+import buildfire from "buildfire";
+import filter from "lodash/filter";
+import find from "lodash/find";
 import "./lib/markercluster.js";
 
 import "../css/general.css";
@@ -41,7 +41,6 @@ window.app = {
     sideNav: document.getElementById("sideNav"),
   },
   state: {
-    loading: false,
     mapInitiated: false,
     mode: null,
     activeView: null,
@@ -59,13 +58,15 @@ window.app = {
     isBookmarkingAllowed: true,
     pointsOfInterest: "on",
     isCategoryDeeplink: false,
+    page: 0,
+    pageSize: 50,
   },
-
   backButtonInit: () => {
     window.app.goBack = window.buildfire.navigation.onBackButtonClick;
 
     buildfire.navigation.onBackButtonClick = function () {
       const isLauncher = window.location.href.includes("launcherPlugin");
+
       if (window.app.state.navHistory.length > 1) {
         //Remove the current state
         if (
@@ -82,6 +83,7 @@ window.app = {
         //Navigate to the previous state
         let lastNavState =
           window.app.state.navHistory[window.app.state.navHistory.length - 1];
+
         window.app.state.isBackNav = true;
 
         window.router.navigate(lastNavState);
@@ -90,26 +92,75 @@ window.app = {
       }
     };
   },
+  loadPage: (page, pageSize, callback) => {
+    let places = [];
+    console.log("Places - Loading Page", window.app.state.page);
+    buildfire.datastore.search(
+      {
+        page,
+        pageSize,
+        sort: window.app.state.sortBy
+          ? {
+              title: window.app.state.sortBy === "alphaDesc" ? -1 : 1,
+            }
+          : null,
+      },
+      window.app.settings.placesListTag,
+      (err, result) => {
+        console.log("RESULT", result);
+        places.push(
+          ...result
+            .map((place) => {
+              place.data.id = place.id;
+              place.data.sort = window.app.state.itemsOrder
+                ? window.app.state.itemsOrder.indexOf(place.id)
+                : 0;
+              return place.data;
+            })
+            .filter((place) => place.title)
+        );
+        if (!window.app.state.isCategoryDeeplink) {
+          window.app.state.places = window.app.state.places.concat(places);
+          window.app.state.filteredPlaces = window.app.state.places.concat(
+            places
+          );
+        } else {
+          window.app.state.places = places;
+          window.app.state.categories.map((category) => {
+            category.isActive
+              ? places.map((place) => {
+                  if (place.categories.includes(category.name.id)) {
+                    window.app.state.filteredPlaces.push(place);
+                  }
+                })
+              : null;
+          });
+        }
+        console.log("Places - Done loading places - Got", places.length);
+        callback(err, places);
+      }
+    );
+  },
   init: (placesCallback, positionCallback) => {
     window.buildfire.appearance.titlebar.show();
     window.app.backButtonInit();
     let places = [];
 
     function getPlacesList() {
-      window.app.state.loading = true;
-      const pageSize = 50;
-      let page = 0;
-
+      const pageSize = window.app.state.pageSize;
+      let page = window.app.state.page;
+      console.log(page, pageSize);
       const loadPage = () => {
         console.log("Places - Loading Page", page);
-        window.app.state.loading = true;
         buildfire.datastore.search(
           {
             page,
             pageSize,
-            // sort: (window.app.state.sortBy ? ({
-            //   title: (window.app.state.sortBy === 'alphaDesc' ? -1 : 1)
-            // }) : null)
+            sort: window.app.state.sortBy
+              ? {
+                  title: window.app.state.sortBy === "alphaDesc" ? -1 : 1,
+                }
+              : null,
           },
           window.app.settings.placesListTag,
           (err, result) => {
@@ -139,26 +190,11 @@ window.app = {
                   : null;
               });
             }
-
-            // If we have more pages we keep going
-            if (result.length === pageSize) {
-              page++;
-              loadPage();
-            } else {
-              console.log("Places - Done loading places - Got", places.length);
-              placesCallback(null, places);
-            }
-            if (result.length !== pageSize) {
-              document.getElementById("loadingState").style.display = "none";
-            }
+            console.log("Places - Done loading places - Got", places.length);
+            placesCallback(null, places);
           }
         );
       };
-      if (window.app.state.loading === true && app.state.mode === "list") {
-        document
-          .getElementById("loadingState")
-          .setAttribute("style", "display: flex");
-      }
       loadPage();
     }
     buildfire.datastore.get(
@@ -184,9 +220,6 @@ window.app = {
           window.app.state.isCarouselSwitched = data.isCarouselSwitched;
           window.app.state.configCategories = data.configCategories;
           window.app.state.chatWithLocationOwner = data.chatWithLocationOwner;
-          window.app.state.allowContact = data.allowContact;
-          window.app.state.allowDirections = data.allowDirections;
-
           window.app.state.socialWall = data.socialWall;
           if (data.categories && !window.app.state.isCategoryDeeplink) {
             window.app.state.categories = data.categories.map((category) => {
@@ -197,6 +230,7 @@ window.app = {
             window.app.state.pointsOfInterest = data.pointsOfInterest;
           }
         }
+
         getPlacesList();
       }
     );
@@ -241,7 +275,8 @@ window.app = {
         window.app.state.places.sort(sortBy);
 
         if (window.app.state.mode === window.app.settings.viewStates.list)
-          window.loadList(window.app.state.places);
+          document.getElementById("mapView").style.display = "none";
+        window.loadList(window.app.state.places);
 
         return;
       }
@@ -271,8 +306,10 @@ window.app = {
     });
   },
   gotPieceOfData() {
+    console.log("here");
     if (window.app.state.places && window.app.state.location) {
       let { location } = window.app.state;
+      console.log(location);
       let destinations = [];
       window.app.state.places.forEach((place) => {
         destinations.push(
@@ -285,11 +322,15 @@ window.app = {
         longitude: location.longitude,
       };
 
+      console.log("tu sam", origin);
+
+
       destinations.forEach((item, index) => {
         var destination = { latitude: item.lat(), longitude: item.lng() };
         var distance = buildfire.geo.calculateDistance(origin, destination, {
           decimalPlaces: 5,
         });
+        console.log("udaljenost", distance);
         if (distance < 0.5) {
           window.app.state.places[index].distance =
             Math.round(distance * 5280).toLocaleString() + " ft";
@@ -374,8 +415,6 @@ window.app = {
               window.app.state.chatWithLocationOwner =
                 data.chatWithLocationOwner;
               window.app.state.socialWall = data.socialWall;
-              window.app.state.allowContact = data.allowContact;
-              window.app.state.allowDirections = data.allowDirections;
               if (data.categories && !window.app.state.isCategoryDeeplink) {
                 window.app.state.categories = data.categories.map(
                   (category) => {
