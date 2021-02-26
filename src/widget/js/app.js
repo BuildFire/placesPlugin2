@@ -14,26 +14,24 @@ import "./router.js";
 import PlacesSort from "./PlacesSort.js";
 
 window.app = {
-    goBack: null,
-    settings: {
-        viewStates: {map: 'map', list: 'list', detail: 'detail'},
-        sortOptions: {alpha: 'alpha', alphaDesc: 'alphaDesc', manual: 'manual', distance: 'distance'},
-        placesTag: 'places',
-        placesListTag: 'places-list',
-        cloudImg: {
-            domain:'https://czi3m2qn.cloudimg.io',
-            operations: {
-                cdn: '/cdn/n/n',
-                width: '/s/width',
-                crop: '/s/crop'
-            }
-        }
+  goBack: null,
+  settings: {
+    viewStates: { map: "map", list: "list", detail: "detail" },
+    sortOptions: {
+      alpha: "alpha",
+      alphaDesc: "alphaDesc",
+      manual: "manual",
+      distance: "distance",
     },
-    views: {
-        listView: document.getElementById('listView'),
-        mapView: document.getElementById('mapView'),
-        detailView: document.getElementById('detailView'),
-        sideNav: document.getElementById('sideNav'),
+    placesTag: "places",
+    placesListTag: "places-list",
+    cloudImg: {
+      domain: "https://czi3m2qn.cloudimg.io",
+      operations: {
+        cdn: "/cdn/n/n",
+        width: "/s/width",
+        crop: "/s/crop",
+      },
     },
   },
   views: {
@@ -61,7 +59,7 @@ window.app = {
     pointsOfInterest: "on",
     isCategoryDeeplink: false,
     page: 0,
-    pageSize: 50,
+    pageSize: 10,
   },
   backButtonInit: () => {
     window.app.goBack = window.buildfire.navigation.onBackButtonClick;
@@ -207,8 +205,7 @@ window.app = {
           return;
         }
 
-          getPlacesList();
-        });
+        let data = results.data;
 
         if (data) {
           places = data.places || [];
@@ -238,10 +235,11 @@ window.app = {
       }
     );
 
-        buildfire.geo.getCurrentPosition({}, (err, position) => {
-            if (err) return; console.warn('getCurrentPosition', err);
-            if (position && position.coords) positionCallback(null, position.coords);
-        });
+    buildfire.geo.getCurrentPosition({}, (err, position) => {
+      if (err) return;
+      console.warn("getCurrentPosition", err);
+      if (position && position.coords) positionCallback(null, position.coords);
+    });
 
     buildfire.datastore.onUpdate(function (event) {
       if (app.state.mode === "detail") {
@@ -277,25 +275,26 @@ window.app = {
         window.app.state.places.sort(sortBy);
 
         if (window.app.state.mode === window.app.settings.viewStates.list)
-          document.getElementById("mapView").style.display = "none";
-        window.loadList(window.app.state.places);
+          window.loadList(window.app.state.places);
 
         return;
       }
 
-          let defaultViewChanged = currentDefaultView !== newDefaultView;
-          let notInDefaultView = newDefaultView !== window.app.state.mode;
+      let defaultViewChanged = currentDefaultView !== newDefaultView;
+      let notInDefaultView = newDefaultView !== window.app.state.mode;
 
-          // We want to update the widget to reflect the new default view if the setting
-          // was changed and the user is not in that view already
-          if (defaultViewChanged && notInDefaultView) {
-            window.router.navigate(newViewState);
-            window.app.state.mode = newViewState;
-            return;
-          }
+      // We want to update the widget to reflect the new default view if the setting
+      // was changed and the user is not in that view already
+      if (defaultViewChanged && notInDefaultView) {
+        window.router.navigate(newViewState);
+        window.app.state.mode = newViewState;
+        return;
+      }
 
-          //Do comparison to see what's changed
-          let updatedPlaces = filter(newPlaces, (newPlace) => { return !find(currentPlaces, newPlace);});
+      //Do comparison to see what's changed
+      let updatedPlaces = filter(newPlaces, (newPlace) => {
+        return !find(currentPlaces, newPlace);
+      });
 
       if (window.app.state.mode === window.app.settings.viewStates.map) {
         window.mapView.updateMap(updatedPlaces);
@@ -306,10 +305,8 @@ window.app = {
     });
   },
   gotPieceOfData() {
-    console.log("here");
     if (window.app.state.places && window.app.state.location) {
       let { location } = window.app.state;
-      console.log(location);
       let destinations = [];
       window.app.state.places.forEach((place) => {
         destinations.push(
@@ -317,20 +314,16 @@ window.app = {
         );
       });
 
-        let origin = {latitude: location.latitude, longitude: location.longitude};
-
-      console.log("tu sam", origin);
-
-
-      console.log("tu sam", origin);
-
+      let origin = {
+        latitude: location.latitude,
+        longitude: location.longitude,
+      };
 
       destinations.forEach((item, index) => {
         var destination = { latitude: item.lat(), longitude: item.lng() };
         var distance = buildfire.geo.calculateDistance(origin, destination, {
           decimalPlaces: 5,
         });
-        console.log("udaljenost", distance);
         if (distance < 0.5) {
           window.app.state.places[index].distance =
             Math.round(distance * 5280).toLocaleString() + " ft";
@@ -338,50 +331,65 @@ window.app = {
           window.app.state.places[index].distance =
             Math.round(distance).toLocaleString() + " mi";
         }
-      }
-    },
-    gotPlaces(err, places) {
-      if (window.app.state.mode === window.app.settings.viewStates.list) {
-        window.app.state.isCategoryDeeplink ? window.initList(window.app.state.places, true) : window.initList(places, true);
-        //We can not pre-init the map, as it needs to be visible
-      } else {
-        window.app.state.isCategoryDeeplink ? window.initMap(window.app.state.places, true) : window.initMap(places, true);
-        window.app.state.isCategoryDeeplink ? window.initList(window.app.state.places) : window.initList(places);
-          
-        window.app.gotPieceOfData();
-      }
-    },
+      });
+      window.listView.updateDistances(window.app.state.filteredPlaces);
 
-    gotLocation(err, location) {
-        window.app.state.location = location;
-        window.app.gotPieceOfData();
-    },
-    
+      let currentSortOrder = window.app.state.sortBy;
+
+      if (currentSortOrder === "distance") {
+        window.app.state.places = window.app.state.places.sort(
+          window.PlacesSort.distance
+        );
+        window.listView.sorting(window.app.state.places);
+        window.lazyload(null, null, {
+          root: document.querySelector(".list-scrolling-container"),
+          rootMargin: "0px",
+          threshold: [0],
+        });
+      }
+    }
+  },
+  gotPlaces(err, places) {
+    if (window.app.state.mode === window.app.settings.viewStates.list) {
+      window.app.state.isCategoryDeeplink
+        ? window.initList(window.app.state.places, true)
+        : window.initList(places, true);
+      //We can not pre-init the map, as it needs to be visible
+    } else {
+      window.app.state.isCategoryDeeplink
+        ? window.initMap(window.app.state.places, true)
+        : window.initMap(places, true);
+      window.app.state.isCategoryDeeplink
+        ? window.initList(window.app.state.places)
+        : window.initList(places);
+
+      window.app.gotPieceOfData();
+    }
+  },
+
+  gotLocation(err, location) {
+    window.app.state.location = location;
+    window.app.gotPieceOfData();
+  },
+
   initDetailView: (placeId) => {
-      window.buildfire.appearance.titlebar.show();
-      window.app.backButtonInit();
-      buildfire.datastore.getById(placeId, window.app.settings.placesListTag, (error, result) => {
+    window.buildfire.appearance.titlebar.show();
+    window.app.backButtonInit();
+    buildfire.datastore.getById(
+      placeId,
+      window.app.settings.placesListTag,
+      (error, result) => {
         if (error) console.log(error);
         result.data.id = result.id;
         window.app.state.selectedPlace[0] = result.data;
-        
 
         //Check is bookmark allowed when page is open with deeplink
-        buildfire.datastore.get(window.app.settings.placesTag, function(err, results){
-          if (err) {
-            console.log(err);
-            return false;
-          } 
-
-          let data = results.data;
-
-          if (data) {
-            window.app.state.sortBy = data.sortBy;
-            window.app.state.itemsOrder = data.itemsOrder;
-            window.app.state.actionItems = data.actionItems || [];
-            if (!window.app.state.isCategoryDeeplink) {
-              window.app.state.defaultView = data.defaultView;
-              window.app.state.mode = data.defaultView;
+        buildfire.datastore.get(
+          window.app.settings.placesTag,
+          function (err, results) {
+            if (err) {
+              console.log(err);
+              return false;
             }
 
             let data = results.data;
@@ -411,34 +419,37 @@ window.app = {
                 window.app.state.pointsOfInterest = data.pointsOfInterest;
               }
             }
+            window.router.navigate(window.app.settings.viewStates.detail);
+            window.app.checkBookmarked(result.id);
           }
-          window.router.navigate(window.app.settings.viewStates.detail);
-          window.app.checkBookmarked(result.id);
-        });
-      });
-    },
-    
-    checkBookmarked(id) {
-      window.buildfire.bookmarks.getAll(function (err, bookmarks) {
-        if (err) {
-          console.log(err);
-          return false;
-        } 
-        let bookmark = bookmarks.filter(bookmark => bookmark.id === id);
-        window.app.state.bookmarked = bookmark.length > 0;
-        });
-    },
+        );
+      }
+    );
+  },
+
+  checkBookmarked(id) {
+    window.buildfire.bookmarks.getAll(function (err, bookmarks) {
+      if (err) {
+        console.log(err);
+        return false;
+      }
+      let bookmark = bookmarks.filter((bookmark) => bookmark.id === id);
+      window.app.state.bookmarked = bookmark.length > 0;
+    });
+  },
 
   initCategoryView: (categoryId) => {
-      window.app.state.categories = window.app.state.categories.map(category => {
+    window.app.state.categories = window.app.state.categories.map(
+      (category) => {
         if (category.id === categoryId) {
           return { name: category, isActive: true };
         } else {
           return { name: category, isActive: false };
         }
-      });
-      window.app.init(window.app.gotPlaces, window.app.gotLocation);
-    }
+      }
+    );
+    window.app.init(window.app.gotPlaces, window.app.gotLocation);
+  },
 };
 
 const queryStringObj = buildfire.parseQueryString();
@@ -447,9 +458,13 @@ if (queryStringObj.dld) {
     if (err) return console.log(err);
     window.app.state.categories = results.data.categories;
     let deeplinkObj = JSON.parse(queryStringObj.dld);
-    const deepLinkId = deeplinkObj.id ? deeplinkObj.id : deeplinkObj.placeId ? deeplinkObj.placeId : null;
-    if(window.app.state.categories) {
-      window.app.state.categories.map(category => {
+    const deepLinkId = deeplinkObj.id
+      ? deeplinkObj.id
+      : deeplinkObj.placeId
+      ? deeplinkObj.placeId
+      : null;
+    if (window.app.state.categories) {
+      window.app.state.categories.map((category) => {
         if (category.id === deepLinkId) {
           window.app.state.isCategoryDeeplink = true;
         }
