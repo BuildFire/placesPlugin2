@@ -322,6 +322,9 @@ window.app = {
       console.log("tu sam", origin);
 
 
+      console.log("tu sam", origin);
+
+
       destinations.forEach((item, index) => {
         var destination = { latitude: item.lat(), longitude: item.lng() };
         var distance = buildfire.geo.calculateDistance(origin, destination, {
