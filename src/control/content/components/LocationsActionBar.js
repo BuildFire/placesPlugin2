@@ -83,7 +83,6 @@ class LocationsActionBar extends React.Component {
                 .then((response) => response.json())
                 .then((data) => {
                   const match = data.results[0];
-                  console.log(match);
                   if (!match) return reject("invalid CSV row!", { name });
                   const { lat, lng } = match.geometry.location;
                   resolve({
@@ -155,19 +154,27 @@ class LocationsActionBar extends React.Component {
     reader.addEventListener("progress", (event) => {
       if (event.loaded && event.total) {
         percent = (event.loaded / event.total) * 100;
-        if  (percent === 100) {
+        if (percent === 100) {
           setTimeout(() => {
-            
             buildfire.notifications.showDialog(
               {
                 title: "CSV Import Report",
                 message: `
               <div style='display:flex; flex-direction: column; align-items: center; height: height: 110px;'>
-                <p>Number Of Total Locations From The CSV: ${this.props.totalLocations}</p>
+                <p>Number Of Total Locations From The CSV: ${
+                  this.props.totalLocations
+                }</p>
                 <p></p>
-                <p>Number Of New Locations Added: ${this.props.totalInserted}<p/>
-                <p>Number Of Existing Locations Updated: ${this.props.totalUpdated}<p/>
-                <p>Number Of Errors:${this.props.totalLocations-(this.props.totalUpdated+this.props.totalInserted)}</p>
+                <p>Number Of New Locations Added: ${
+                  this.props.totalInserted
+                }<p/>
+                <p>Number Of Existing Locations Updated: ${
+                  this.props.totalUpdated
+                }<p/>
+                <p>Number Of Errors:${
+                  this.props.totalLocations -
+                  (this.props.totalUpdated + this.props.totalInserted)
+                }</p>
               </div>`,
                 size: "md",
                 buttons: [{ text: "OK", key: "small", type: "default" }],
@@ -258,9 +265,8 @@ class LocationsActionBar extends React.Component {
   }
 
   render() {
-    console.log(this.props)
     const { addingLocation } = this.props;
-    
+
     return (
       <div>
         <div className="row">

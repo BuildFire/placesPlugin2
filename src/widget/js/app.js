@@ -107,7 +107,6 @@ window.app = {
       },
       window.app.settings.placesListTag,
       (err, result) => {
-        console.log("RESULT", result);
         places.push(
           ...result
             .map((place) => {
@@ -149,7 +148,6 @@ window.app = {
     function getPlacesList() {
       const pageSize = window.app.state.pageSize;
       let page = window.app.state.page;
-      console.log(page, pageSize);
       const loadPage = () => {
         console.log("Places - Loading Page", page);
         buildfire.datastore.search(
