@@ -125,7 +125,7 @@ window.app = {
             places
           );
         } else {
-          window.app.state.places = places;
+          window.app.state.places = window.app.state.places.concat(places);
           window.app.state.categories.map((category) => {
             category.isActive
               ? places.map((place) => {
