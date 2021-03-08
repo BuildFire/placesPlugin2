@@ -177,6 +177,7 @@ class Content extends React.Component {
           buildfire.datastore.delete(place.id, "places-list", (err) => {
             if (err) return console.error(err);
 
+            Deeplink.deleteById(place.id);
             if (place.searchData) {
               let placeToDelete = place.searchData.id;
               let deleteData = {
@@ -185,7 +186,6 @@ class Content extends React.Component {
               };
 
               SearchEngine.delete(deleteData);
-              Deeplink.deleteById(place.id);
             }
           });
         }
