@@ -300,17 +300,50 @@ class Content extends React.Component {
     this.setState({ data });
     this.handleSave();
 
+    const proceed = () => {
+      Deeplink.getById(targetCategory.mapViewDeeplinkId, (err, mapViewDeeplink) => {
+        if (!err && mapViewDeeplink) {
+          mapViewDeeplink.name = `Category | ${newName} | Map View`;
+          mapViewDeeplink.save();
+        } else if (!err && !mapViewDeeplink) {
+          const newMapViewDeeplink = new Deeplink({
+            deeplinkId: `${targetCategory.id}-mapView`,
+            name: `Category | ${newName} | Map View`,
+            deeplinkData: {
+              id: targetCategory.id,
+              view: 'map'
+            }
+          });
+          newMapViewDeeplink.save((err, newMapViewDeeplinkData) => {
+            if (!err && newMapViewDeeplinkData && newMapViewDeeplinkData.deeplinkId) {
+              data.categories[index].mapViewDeeplinkId = newMapViewDeeplinkData.deeplinkId;
+            }
+            this.setState({ data });
+            this.handleSave();
+          });
+        }
+      });
+    }
+
     Deeplink.getById(targetCategory.listViewDeeplinkId, (err, listViewDeeplink) => {
       if (!err && listViewDeeplink) {
         listViewDeeplink.name = `Category | ${newName} | List View`;
-        listViewDeeplink.save();
-      }
-    });
-
-    Deeplink.getById(targetCategory.mapViewDeeplinkId, (err, mapViewDeeplink) => {
-      if (!err && mapViewDeeplink) {
-        mapViewDeeplink.name = `Category | ${newName} | Map View`;
-        mapViewDeeplink.save();
+        listViewDeeplink.save(() => proceed());
+      } else if (!err && !listViewDeeplink && targetCategory.id) {
+        const newListViewDeeplink = new Deeplink({
+          deeplinkId: `${targetCategory.id}-listView`,
+          name: `Category | ${newName} | List View`,
+          deeplinkData: {
+            id: targetCategory.id,
+            view: 'list'
+          }
+        });
+        newListViewDeeplink.save((err, newListViewDeeplinkData) => {
+          if (!err && newListViewDeeplinkData && newListViewDeeplinkData.deeplinkId) {
+            data.categories[index].listViewDeeplinkId = newListViewDeeplinkData.deeplinkId;
+          }
+          proceed();
+        });
       }
     });
 
@@ -407,6 +440,14 @@ class Content extends React.Component {
         if (!err && locationDeeplink) {
           locationDeeplink.name = `Location | ${location.title ? location.title : ''}`;
           locationDeeplink.imageUrl = location.image ? location.image : null;
+          locationDeeplink.save();
+        } else if (!err && !locationDeeplink) {
+          const locationDeeplink = new Deeplink({
+            deeplinkId: location.id,
+            name: `Location | ${location.title ? location.title : ''}`,
+            deeplinkData: { id: location.id },
+            imageUrl: location.image ? location.image : null
+          });
           locationDeeplink.save();
         }
       });

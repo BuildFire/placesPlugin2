@@ -44,4 +44,21 @@ export const stringsConfig = {
       },
     },
   },
+  deeplink: {
+    title: "Deep link",
+    labels: {
+      deeplinkLocationNotFound: {
+        title: "Deep link to location that does not exist",
+        placeholder: "Location does not exist",
+        maxLength: 50,
+        defaultValue: "Location does not exist",
+      },
+      deeplinkCategoryNotFound: {
+        title: "Deep link to category that does not exist",
+        placeholder: "Category does not exist",
+        maxLength: 50,
+        defaultValue: "Category does not exist",
+      },
+    },
+  },
 };
