@@ -303,7 +303,7 @@ class Content extends React.Component {
     const proceed = () => {
       Deeplink.getById(targetCategory.mapViewDeeplinkId, (err, mapViewDeeplink) => {
         if (!err && mapViewDeeplink) {
-          mapViewDeeplink.name = `Category | ${newName} | Map View`;
+          mapViewDeeplink.name = `${newName} - Map View`;
           mapViewDeeplink.save();
         } else if (!err && !mapViewDeeplink) {
           const newMapViewDeeplink = new Deeplink({
@@ -327,7 +327,7 @@ class Content extends React.Component {
 
     Deeplink.getById(targetCategory.listViewDeeplinkId, (err, listViewDeeplink) => {
       if (!err && listViewDeeplink) {
-        listViewDeeplink.name = `Category | ${newName} | List View`;
+        listViewDeeplink.name = `${newName} - List View`;
         listViewDeeplink.save(() => proceed());
       } else if (!err && !listViewDeeplink && targetCategory.id) {
         const newListViewDeeplink = new Deeplink({
@@ -438,7 +438,7 @@ class Content extends React.Component {
 
       Deeplink.getById(location.id, (err, locationDeeplink) => {
         if (!err && locationDeeplink) {
-          locationDeeplink.name = `Location | ${location.title ? location.title : ''}`;
+          locationDeeplink.name = location.title ? location.title : '';
           locationDeeplink.imageUrl = location.image ? location.image : null;
           locationDeeplink.save();
         } else if (!err && !locationDeeplink) {
@@ -489,7 +489,7 @@ class Content extends React.Component {
               innerResult.forEach(item => {
                 Deeplink.getById(item.id, (err, locationDeeplink) => {
                   if (!err && locationDeeplink) {
-                    locationDeeplink.name = `Location | ${item.data.title ? item.data.title : ''}`;
+                    locationDeeplink.name = item.data.title ? item.data.title : '';
                     locationDeeplink.imageUrl = item.data.image ? item.data.image : null;
                     locationDeeplink.save();
                   } else {
@@ -521,7 +521,7 @@ class Content extends React.Component {
             });
             Deeplink.getById(location.id, (err, locationDeeplink) => {
               if (!err && locationDeeplink) {
-                locationDeeplink.name = `Location | ${location.data.title ? location.data.title : ''}`;
+                locationDeeplink.name = location.data.title ? location.data.title : '';
                 locationDeeplink.imageUrl = location.data.image ? location.data.image : null;
                 locationDeeplink.save();
               }
