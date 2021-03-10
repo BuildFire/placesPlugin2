@@ -308,7 +308,7 @@ class Content extends React.Component {
         } else if (!err && !mapViewDeeplink) {
           const newMapViewDeeplink = new Deeplink({
             deeplinkId: `${targetCategory.id}-mapView`,
-            name: `Category | ${newName} | Map View`,
+            name: `${newName} - Map View`,
             deeplinkData: {
               id: targetCategory.id,
               view: 'map'
@@ -332,7 +332,7 @@ class Content extends React.Component {
       } else if (!err && !listViewDeeplink && targetCategory.id) {
         const newListViewDeeplink = new Deeplink({
           deeplinkId: `${targetCategory.id}-listView`,
-          name: `Category | ${newName} | List View`,
+          name: `${newName} - List View`,
           deeplinkData: {
             id: targetCategory.id,
             view: 'list'
@@ -386,7 +386,7 @@ class Content extends React.Component {
 
         const locationDeeplink = new Deeplink({
           deeplinkId: result.id,
-          name: `Location | ${location.title ? location.title : ''}`,
+          name: location.title ? location.title : '',
           deeplinkData: { id: result.id },
           imageUrl: location.image ? location.image : null
         });
@@ -444,7 +444,7 @@ class Content extends React.Component {
         } else if (!err && !locationDeeplink) {
           const locationDeeplink = new Deeplink({
             deeplinkId: location.id,
-            name: `Location | ${location.title ? location.title : ''}`,
+            name: location.title ? location.title : '',
             deeplinkData: { id: location.id },
             imageUrl: location.image ? location.image : null
           });
@@ -495,7 +495,7 @@ class Content extends React.Component {
                   } else {
                     const newLocationDeeplink = new Deeplink({
                       deeplinkId: item.id,
-                      name: `Location | ${item.data.title ? item.data.title : ''}`,
+                      name: item.data.title ? item.data.title : '',
                       deeplinkData: { id: item.id },
                       imageUrl: item.data.image ? item.data.image : null
                     });
@@ -556,7 +556,7 @@ class Content extends React.Component {
 
     const listViewDeeplink = new Deeplink({
       deeplinkId: `${id}-listView`,
-      name: `Category | ${categoryName} | List View`,
+      name: `${categoryName} - List View`,
       deeplinkData: {
         id,
         view: 'list'
@@ -565,7 +565,7 @@ class Content extends React.Component {
 
     const mapViewDeeplink = new Deeplink({
       deeplinkId: `${id}-mapView`,
-      name: `Category | ${categoryName} | Map View`,
+      name: `${categoryName} - Map View`,
       deeplinkData: {
         id,
         view: 'map'
