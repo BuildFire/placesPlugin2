@@ -24,6 +24,10 @@ window.mapView = {
     lastKnownLocation: defaultLocation,
     initMap: (places) => {
 
+        const comingFromDeeplink = window.app.state.isCategoryDeeplink && window.app.state.filteredPlaces && window.app.state.filteredPlaces ? true : false;
+
+        if (comingFromDeeplink) places = window.app.state.filteredPlaces;
+
         //Create the map first (Don't wait for location)
         mapView.createMap();
 
@@ -67,7 +71,8 @@ window.mapView = {
 
         //TODO: If there is only one entry, it returns an object (not an array)
         if(places && places.length){
-            places.forEach((place) => {                
+            const placesMarkerContainer = window.app.state.places && window.app.state.places.length ? [...window.app.state.places ] : [ ...places ];
+            placesMarkerContainer.forEach((place) => {                
                 if (place.address && place.address.lat && place.address.lng) {
                     mapView.addMarker(map, place, mapView.settings.images.place);
                 }
@@ -90,6 +95,16 @@ window.mapView = {
 
             window.mapView.filter(placesToHide, placesToShow);
             window.app.state.pendingMapFilter = null;
+        } else {
+          if (comingFromDeeplink && window.app.state.places && window.app.state.places.length) {
+            window.mapView.filter(
+              window.app.state.places.filter(place => {
+                const placeIndex = places.map(item => item.id).indexOf(place.id);
+                if (placeIndex === -1) return place;
+              }), 
+              []
+            );
+          }
         }
     },
     addMarkerCluster: () =>{
