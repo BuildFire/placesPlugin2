@@ -159,10 +159,12 @@ window.filterControl = {
     }
   },
   changeView: () => {
-    app.state.mode =
-      app.state.mode == app.settings.viewStates.list
-        ? app.settings.viewStates.map
-        : app.settings.viewStates.list;
+    if (app.state.mode === app.settings.viewStates.list) {
+      app.state.mode = app.settings.viewStates.map;
+    } else {
+      app.state.mode = app.settings.viewStates.list;
+    }
+   
 
     let switchViewButton = document.getElementsByClassName("changeView");
     Array.prototype.map.call(switchViewButton, (image) => {
@@ -170,8 +172,8 @@ window.filterControl = {
         ? image.src.replace("map", "list")
         : image.src.replace("list", "map");
     });
-
     router.navigate(`/${app.state.mode}`);
+    console.log(app.state.mode);
   },
   createControl: (controlDiv, buttons) => {
     let container = document.createElement("div");

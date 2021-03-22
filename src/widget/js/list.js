@@ -1,3 +1,4 @@
+import { result } from "lodash";
 import "./lib/lazyload";
 
 window.listView = {
@@ -13,9 +14,9 @@ window.listView = {
     }
 
     function init() {
-       if (window.listView.initialized === true) {
-         document.getElementById("mapView").style.display = "none";
-       }
+      if (window.listView.initialized === true) {
+        document.getElementById("mapView").style.display = "none";
+      }
       console.log("Initializing list view !!!");
       // Crop image to 16:9 aspect ratio
       window.listView.imageWidth = Math.floor(window.innerWidth);
@@ -33,24 +34,27 @@ window.listView = {
       window.listView.listScrollingContainer.id = "list--container";
       //window.listView.listScrollingContainer.addEventListener('scroll', window.listView.handleScroll());
       listContainer.appendChild(window.listView.listScrollingContainer);
+
       document.querySelectorAll("*").forEach((element) =>
         element.addEventListener("scroll", ({ target }) => {
           const bottom =
-            target.scrollHeight - target.scrollTop === target.clientHeight;
-
+            target.scrollHeight - target.scrollTop === target.clientHeight ||
+            target.clientHeight - 0.5;
           if (
             bottom &&
             window.app.state.mode === window.app.settings.viewStates.list
           ) {
             window.app.state.page++;
-            window.app.loadPage(
-              window.app.state.page,
-              window.app.state.pageSize,
-              (err, newPlaces) => {
-                console.log(err, newPlaces);
-                window.listView.addPlaces(window.app.state.places);
-              }
-            );
+            setTimeout(() => {
+              window.app.loadPage(
+                window.app.state.page,
+                window.app.state.pageSize,
+                (err, newPlaces) => {
+                  console.log(err, newPlaces);
+                  window.listView.addPlaces(window.app.state.places);
+                }
+              );
+            }, 500);
           }
         })
       );
@@ -113,9 +117,11 @@ window.listView = {
         return;
       }
 
-      document.getElementsByClassName(
-        "list-scrolling-container"
-      )[0].style.height = `${window.listView.imageHeight + 20}px;`;
+      if (document.getElementsByClassName("list-scrolling-container").length) {
+        document.getElementsByClassName(
+          "list-scrolling-container"
+        )[0].style.height = `${window.listView.imageHeight + 20}px;`;
+      }
 
       const listItem = document.createElement("div");
       listItem.setAttribute(

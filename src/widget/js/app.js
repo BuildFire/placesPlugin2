@@ -13,6 +13,11 @@ import "./detail.js";
 import "./router.js";
 import PlacesSort from "./PlacesSort.js";
 
+import { stringsConfig } from "../js/shared/stringsConfig";
+import "../js/shared/strings";
+
+window.strings = new buildfire.services.Strings("en-us", stringsConfig);
+
 window.app = {
   goBack: null,
   settings: {
@@ -42,7 +47,7 @@ window.app = {
   },
   state: {
     mapInitiated: false,
-    mode: null,
+    mode: "map",
     activeView: null,
     actionItems: [],
     places: [],
@@ -59,7 +64,8 @@ window.app = {
     pointsOfInterest: "on",
     isCategoryDeeplink: false,
     page: 0,
-    pageSize: 10,
+    pageSize: 50,
+    loading: true,
   },
   backButtonInit: () => {
     window.app.goBack = window.buildfire.navigation.onBackButtonClick;
@@ -108,6 +114,7 @@ window.app = {
       window.app.settings.placesListTag,
       (err, result) => {
         console.log("RESULT", result);
+        if(result.length === 0) return;
         places.push(
           ...result
             .map((place) => {
@@ -125,7 +132,7 @@ window.app = {
             places
           );
         } else {
-          window.app.state.places = places;
+          window.app.state.places = window.app.state.places.concat(places);
           window.app.state.categories.map((category) => {
             category.isActive
               ? places.map((place) => {
@@ -137,7 +144,7 @@ window.app = {
           });
         }
         console.log("Places - Done loading places - Got", places.length);
-        callback(err, places);
+          callback(err, places);
       }
     );
   },
@@ -145,11 +152,9 @@ window.app = {
     window.buildfire.appearance.titlebar.show();
     window.app.backButtonInit();
     let places = [];
-
     function getPlacesList() {
       const pageSize = window.app.state.pageSize;
       let page = window.app.state.page;
-      console.log(page, pageSize);
       const loadPage = () => {
         console.log("Places - Loading Page", page);
         buildfire.datastore.search(
@@ -190,12 +195,24 @@ window.app = {
                   : null;
               });
             }
-            console.log("Places - Done loading places - Got", places.length);
-            placesCallback(null, places);
+            if (result.length === pageSize) {
+              page++;
+              loadPage();
+            } else {
+              console.log("Places - Done loading places - Got", places.length);
+              placesCallback(null, places);
+            }
+            // console.log("Places - Done loading places - Got", places.length);
+            // console.log(places);
+            // placesCallback(null, places);            
           }
         );
       };
-      loadPage();
+      loadPage(window.app.state.page, window.app.state.pageSize, (err) => {
+        if (err) {
+          console.error(err);
+        }
+      });
     }
     buildfire.datastore.get(
       window.app.settings.placesTag,
@@ -358,10 +375,10 @@ window.app = {
     } else {
       window.app.state.isCategoryDeeplink
         ? window.initMap(window.app.state.places, true)
-        : window.initMap(places, true);
+        : window.initMap(window.app.state.places, true);
       window.app.state.isCategoryDeeplink
         ? window.initList(window.app.state.places)
-        : window.initList(places);
+        : window.initList(window.app.state.places);
 
       window.app.gotPieceOfData();
     }
@@ -374,12 +391,16 @@ window.app = {
 
   initDetailView: (placeId) => {
     window.buildfire.appearance.titlebar.show();
-    window.app.backButtonInit();
     buildfire.datastore.getById(
       placeId,
       window.app.settings.placesListTag,
       (error, result) => {
-        if (error) console.log(error);
+        if (error || !result || (result && !result.id) || (result && result.data && !result.data.title)) {
+          const text = strings.get("deeplink.deeplinkLocationNotFound") ? strings.get("deeplink.deeplinkLocationNotFound") : "Location does not exist";
+          window.app.initCategoryView();
+          return buildfire.components.toast.showToastMessage({ text }, () => {});
+        }
+        window.app.backButtonInit();
         result.data.id = result.id;
         window.app.state.selectedPlace[0] = result.data;
 
@@ -452,33 +473,40 @@ window.app = {
   },
 };
 
-const queryStringObj = buildfire.parseQueryString();
-if (queryStringObj.dld) {
-  buildfire.datastore.get(window.app.settings.placesTag, (err, results) => {
-    if (err) return console.log(err);
-    window.app.state.categories = results.data.categories;
-    let deeplinkObj = JSON.parse(queryStringObj.dld);
-    const deepLinkId = deeplinkObj.id
-      ? deeplinkObj.id
-      : deeplinkObj.placeId
-      ? deeplinkObj.placeId
-      : null;
-    if (window.app.state.categories) {
-      window.app.state.categories.map((category) => {
-        if (category.id === deepLinkId) {
-          window.app.state.isCategoryDeeplink = true;
+strings.init().then(() => {
+  const queryStringObj = buildfire.parseQueryString();
+  if (queryStringObj.dld) {
+    buildfire.datastore.get(window.app.settings.placesTag, (err, results) => {
+      if (err) return console.log(err);
+      window.app.state.categories = results.data.categories;
+      let deeplinkObj = JSON.parse(queryStringObj.dld);
+      const deepLinkId = deeplinkObj.id
+        ? deeplinkObj.id
+        : deeplinkObj.placeId
+        ? deeplinkObj.placeId
+        : null;
+      if (window.app.state.categories) {
+        window.app.state.categories.map((category) => {
+          if (category.id === deepLinkId) {
+            window.app.state.isCategoryDeeplink = true;
+          }
+        });
+      }
+      if (window.app.state.isCategoryDeeplink) {
+        window.app.state.defaultView = deeplinkObj.view;
+        window.app.state.mode = deeplinkObj.view;
+        window.app.initCategoryView(deepLinkId);
+      } else {
+        if (deeplinkObj.view) {
+          const text = strings.get("deeplink.deeplinkCategoryNotFound") ? strings.get("deeplink.deeplinkCategoryNotFound") : "Category does not exist";
+          buildfire.components.toast.showToastMessage({ text }, () => {});
+          return window.app.initCategoryView();
         }
-      });
-    }
-    if (window.app.state.isCategoryDeeplink) {
-      window.app.state.defaultView = deeplinkObj.view;
-      window.app.state.mode = deeplinkObj.view;
-      window.app.initCategoryView(deepLinkId);
-    } else {
-      window.app.initDetailView(deepLinkId);
-    }
-  });
-} else {
-  window.app.init(window.app.gotPlaces, window.app.gotLocation);
-}
-window.initRouter();
+        window.app.initDetailView(deepLinkId);
+      }
+    });
+  } else {
+    window.app.init(window.app.gotPlaces, window.app.gotLocation);
+  }
+  window.initRouter();
+});

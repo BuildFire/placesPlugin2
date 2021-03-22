@@ -1,11 +1,5 @@
 import Buildfire, { components } from 'buildfire';
 import Handlebars from './lib/handlebars';
-import { stringsConfig } from "../js/shared/stringsConfig";
-import "../js/shared/strings";
-
-let strings = new buildfire.services.Strings("en-us", stringsConfig);
-
-strings.init();
 
 window.detailView = {
     init: (place) => {
