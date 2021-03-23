@@ -172,6 +172,64 @@ window.filterControl = {
         ? image.src.replace("map", "list")
         : image.src.replace("list", "map");
     });
+
+    if (app.state.mode === app.settings.viewStates.map) {
+      const pageSize = window.app.state.pageSize;
+      let page = window.app.state.page;
+      let places = [];
+      const loadPage = () => {
+        console.log("Places - Loading Page", page);
+        buildfire.datastore.search(
+          {
+            page,
+            pageSize,
+            sort: window.app.state.sortBy
+              ? {
+                  title: window.app.state.sortBy === "alphaDesc" ? -1 : 1,
+                }
+              : null,
+          },
+          window.app.settings.placesListTag,
+          (err, result) => {
+            places.push(
+              ...result
+                .map((place) => {
+                  place.data.id = place.id;
+                  place.data.sort = window.app.state.itemsOrder
+                    ? window.app.state.itemsOrder.indexOf(place.id)
+                    : 0;
+                  return place.data;
+                })
+                .filter((place) => place.title)
+            );
+            if (!window.app.state.isCategoryDeeplink) {
+              window.app.state.places = places;
+              window.app.state.filteredPlaces = places;
+            } else {
+              window.app.state.places = places;
+              window.app.state.categories.map((category) => {
+                category.isActive
+                  ? places.map((place) => {
+                      if (place.categories.includes(category.name.id)) {
+                        window.app.state.filteredPlaces.push(place);
+                      }
+                    })
+                  : null;
+              });
+            }
+            if (result.length === pageSize) {
+              page++;
+              loadPage();
+            } else {
+              console.log("Places - Done loading places - Got", places.length);
+              window.initMap(places);
+            }
+          }
+        );
+      };
+      loadPage();
+    }
+
     router.navigate(`/${app.state.mode}`);
     console.log(app.state.mode);
   },

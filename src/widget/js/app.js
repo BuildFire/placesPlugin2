@@ -63,8 +63,9 @@ window.app = {
     isBookmarkingAllowed: true,
     pointsOfInterest: "on",
     isCategoryDeeplink: false,
+    defaultView: "map",
     page: 0,
-    pageSize: 50,
+    pageSize: 10,
     loading: true,
   },
   backButtonInit: () => {
@@ -113,8 +114,6 @@ window.app = {
       },
       window.app.settings.placesListTag,
       (err, result) => {
-        console.log("RESULT", result);
-        if(result.length === 0) return;
         places.push(
           ...result
             .map((place) => {
@@ -144,7 +143,7 @@ window.app = {
           });
         }
         console.log("Places - Done loading places - Got", places.length);
-          callback(err, places);
+        callback(err, places);
       }
     );
   },
@@ -195,16 +194,13 @@ window.app = {
                   : null;
               });
             }
-            if (result.length === pageSize) {
+            if(window.app.state.defaultView === 'map' && result.length === pageSize){
               page++;
-              loadPage();
-            } else {
-              console.log("Places - Done loading places - Got", places.length);
-              placesCallback(null, places);
-            }
-            // console.log("Places - Done loading places - Got", places.length);
-            // console.log(places);
-            // placesCallback(null, places);            
+              loadPage()
+            } else
+
+            console.log("Places - Done loading places - Got", places.length);
+            placesCallback(null, places);
           }
         );
       };
@@ -247,7 +243,6 @@ window.app = {
             window.app.state.pointsOfInterest = data.pointsOfInterest;
           }
         }
-
         getPlacesList();
       }
     );

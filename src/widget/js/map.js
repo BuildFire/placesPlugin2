@@ -462,5 +462,4 @@ window.mapView = {
       ? app.views.mapView.getBoundingClientRect().height
       : 0;
   },
-
 };
