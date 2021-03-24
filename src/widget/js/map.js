@@ -270,7 +270,8 @@ window.mapView = {
       mapView.lastKnownLocation.lat == window.defaultLocation.lat &&
       mapView.lastKnownLocation.lng == window.defaultLocation.lng
     )
-      
+   console.log("waiting for coords");
+
     else window.map.setCenter(mapView.lastKnownLocation);
   },
   addMarker: (map, place, iconType) => {
