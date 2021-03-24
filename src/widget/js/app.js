@@ -101,7 +101,7 @@ window.app = {
   },
   loadPage: (page, pageSize, callback) => {
     let places = [];
-    console.log("Places - Loading Page", window.app.state.page);
+    
     buildfire.datastore.search(
       {
         page,
@@ -142,7 +142,7 @@ window.app = {
               : null;
           });
         }
-        console.log("Places - Done loading places - Got", places.length);
+        
         callback(err, places);
       }
     );
@@ -155,7 +155,7 @@ window.app = {
       const pageSize = window.app.state.pageSize;
       let page = window.app.state.page;
       const loadPage = () => {
-        console.log("Places - Loading Page", page);
+        
         buildfire.datastore.search(
           {
             page,
@@ -199,7 +199,7 @@ window.app = {
               loadPage()
             } else
 
-            console.log("Places - Done loading places - Got", places.length);
+            
             placesCallback(null, places);
           }
         );
@@ -369,10 +369,10 @@ window.app = {
       //We can not pre-init the map, as it needs to be visible
     } else {
       window.app.state.isCategoryDeeplink
-        ? window.initMap(window.app.state.places, true)
+        ? window.initMap(places, true)
         : window.initMap(window.app.state.places, true);
       window.app.state.isCategoryDeeplink
-        ? window.initList(window.app.state.places)
+        ? window.initList(places)
         : window.initList(window.app.state.places);
 
       window.app.gotPieceOfData();
