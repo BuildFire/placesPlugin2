@@ -17,7 +17,7 @@ window.listView = {
       if (window.listView.initialized === true) {
         document.getElementById("mapView").style.display = "none";
       }
-      console.log("Initializing list view !!!");
+
       // Crop image to 16:9 aspect ratio
       window.listView.imageWidth = Math.floor(window.innerWidth);
       window.listView.imageHeight = Math.floor((window.innerWidth / 16) * 9);
@@ -206,7 +206,6 @@ window.listView = {
       window.listView.filter(places, window.app.state.filteredPlaces);
   },
   updateList: (newPlaces) => {
-    console.log("called updateList()");
     window.listView.addPlaces(newPlaces);
   },
   filter(placesToHide, placesToShow) {

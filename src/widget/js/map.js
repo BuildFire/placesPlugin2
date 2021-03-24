@@ -52,10 +52,10 @@ window.mapView = {
         }
 
         //Center map once location is obtained
-        console.log("start");
+        
         buildfire.geo.getCurrentPosition({}, (err, position) => {
             if(!err && position && position.coords){
-                console.log("end");
+                
                 mapView.lastKnownLocation = {lat: position.coords.latitude, lng: position.coords.longitude};
 
                 mapView.addMarker(map, { address: mapView.lastKnownLocation }, mapView.settings.images.currentLocation);
@@ -157,10 +157,10 @@ window.mapView = {
     }
 
     //Center map once location is obtained
-    console.log("start");
+    
     buildfire.geo.getCurrentPosition({}, (err, position) => {
       if (!err && position && position.coords) {
-        console.log("end");
+        
         mapView.lastKnownLocation = {
           lat: position.coords.latitude,
           lng: position.coords.longitude,
@@ -270,7 +270,7 @@ window.mapView = {
       mapView.lastKnownLocation.lat == window.defaultLocation.lat &&
       mapView.lastKnownLocation.lng == window.defaultLocation.lng
     )
-      console.log("waiting for coords");
+      
     else window.map.setCenter(mapView.lastKnownLocation);
   },
   addMarker: (map, place, iconType) => {

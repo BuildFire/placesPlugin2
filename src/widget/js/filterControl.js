@@ -178,7 +178,7 @@ window.filterControl = {
       let page = window.app.state.page;
       let places = [];
       const loadPage = () => {
-        console.log("Places - Loading Page", page);
+        
         buildfire.datastore.search(
           {
             page,
@@ -221,7 +221,7 @@ window.filterControl = {
               page++;
               loadPage();
             } else {
-              console.log("Places - Done loading places - Got", places.length);
+              
               window.initMap(places);
             }
           }
@@ -231,7 +231,7 @@ window.filterControl = {
     }
 
     router.navigate(`/${app.state.mode}`);
-    console.log(app.state.mode);
+    
   },
   createControl: (controlDiv, buttons) => {
     let container = document.createElement("div");
