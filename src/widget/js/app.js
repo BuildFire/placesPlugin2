@@ -112,6 +112,7 @@ window.app = {
       },
       window.app.settings.placesListTag,
       (err, result) => {
+        if (result && !result.length) return;
         console.log("RESULT", result);
         places.push(
           ...result

@@ -29,19 +29,14 @@ window.listView = {
 
       window.listView.listScrollingContainer = document.createElement("div");
       window.listView.listScrollingContainer.className =
-        "list-scrolling-container";
+        "list-scrolling-container list-scrolling-container-pagination-trigger-element";
       window.listView.listScrollingContainer.id = "list--container";
       //window.listView.listScrollingContainer.addEventListener('scroll', window.listView.handleScroll());
       listContainer.appendChild(window.listView.listScrollingContainer);
-      document.querySelectorAll("*").forEach((element) =>
-        element.addEventListener("scroll", ({ target }) => {
-          const bottom =
-            target.scrollHeight - target.scrollTop === target.clientHeight;
-
-          if (
-            bottom &&
-            window.app.state.mode === window.app.settings.viewStates.list
-          ) {
+      const triggerElement = document.querySelector(".list-scrolling-container-pagination-trigger-element");
+      if (triggerElement) {
+        triggerElement.addEventListener('scroll', ({ target }) => {
+          if (window.app.state.mode === window.app.settings.viewStates.list &&  ((target.scrollHeight - target.scrollTop - 50) <= document.body.clientHeight)) {
             window.app.state.page++;
             window.app.loadPage(
               window.app.state.page,
@@ -52,8 +47,8 @@ window.listView = {
               }
             );
           }
-        })
-      );
+        });
+      }
 
       window.listView.initialized = true;
     }
