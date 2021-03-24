@@ -47,7 +47,7 @@ window.app = {
   },
   state: {
     mapInitiated: false,
-    mode: null,
+    mode: "map",
     activeView: null,
     actionItems: [],
     places: [],
@@ -63,8 +63,10 @@ window.app = {
     isBookmarkingAllowed: true,
     pointsOfInterest: "on",
     isCategoryDeeplink: false,
+    defaultView: "map",
     page: 0,
     pageSize: 10,
+    loading: true,
   },
   backButtonInit: () => {
     window.app.goBack = window.buildfire.navigation.onBackButtonClick;
@@ -99,7 +101,7 @@ window.app = {
   },
   loadPage: (page, pageSize, callback) => {
     let places = [];
-    console.log("Places - Loading Page", window.app.state.page);
+    
     buildfire.datastore.search(
       {
         page,
@@ -112,7 +114,6 @@ window.app = {
       },
       window.app.settings.placesListTag,
       (err, result) => {
-        console.log("RESULT", result);
         places.push(
           ...result
             .map((place) => {
@@ -141,7 +142,7 @@ window.app = {
               : null;
           });
         }
-        console.log("Places - Done loading places - Got", places.length);
+        
         callback(err, places);
       }
     );
@@ -150,13 +151,11 @@ window.app = {
     window.buildfire.appearance.titlebar.show();
     window.app.backButtonInit();
     let places = [];
-
     function getPlacesList() {
       const pageSize = window.app.state.pageSize;
       let page = window.app.state.page;
-      console.log(page, pageSize);
       const loadPage = () => {
-        console.log("Places - Loading Page", page);
+        
         buildfire.datastore.search(
           {
             page,
@@ -195,12 +194,21 @@ window.app = {
                   : null;
               });
             }
-            console.log("Places - Done loading places - Got", places.length);
+            if(window.app.state.defaultView === 'map' && result.length === pageSize){
+              page++;
+              loadPage()
+            } else
+
+            
             placesCallback(null, places);
           }
         );
       };
-      loadPage();
+      loadPage(window.app.state.page, window.app.state.pageSize, (err) => {
+        if (err) {
+          console.error(err);
+        }
+      });
     }
     buildfire.datastore.get(
       window.app.settings.placesTag,
@@ -235,7 +243,6 @@ window.app = {
             window.app.state.pointsOfInterest = data.pointsOfInterest;
           }
         }
-
         getPlacesList();
       }
     );
@@ -362,11 +369,11 @@ window.app = {
       //We can not pre-init the map, as it needs to be visible
     } else {
       window.app.state.isCategoryDeeplink
-        ? window.initMap(window.app.state.places, true)
-        : window.initMap(places, true);
+        ? window.initMap(places, true)
+        : window.initMap(window.app.state.places, true);
       window.app.state.isCategoryDeeplink
-        ? window.initList(window.app.state.places)
-        : window.initList(places);
+        ? window.initList(places)
+        : window.initList(window.app.state.places);
 
       window.app.gotPieceOfData();
     }

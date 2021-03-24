@@ -123,7 +123,6 @@ buildfire.services.Strings = class {
   }
 
   save(callback) {
-	buildfire.datastore.save(this._data, this.collectionName, callback);
-	console.log('savedata', this._data)
+    buildfire.datastore.save(this._data, this.collectionName, callback);
   }
 };
