@@ -165,6 +165,15 @@ window.mapView = {
         else window.map.setCenter(mapView.lastKnownLocation);
     },
     addMarker: (map, place, iconType) => {
+        // Prevent duplicated markers for single location in case if there is some of them to avoid marker clustering bug. (cluster showing up wrong number)
+        if (
+          app && 
+          app.state && 
+          app.state.markers &&
+          place &&
+          place.id &&
+          app.state.markers.find(marker => marker && marker.markerData && marker.markerData.id === place.id)
+        ) return;
         let marker = new google.maps.Marker({
             position: place.address,
             markerData: place,

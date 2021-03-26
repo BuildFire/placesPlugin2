@@ -65,6 +65,7 @@ window.app = {
     isCategoryDeeplink: false,
     page: 0,
     pageSize: 10,
+    paginationRequestBusy: false
   },
   backButtonInit: () => {
     window.app.goBack = window.buildfire.navigation.onBackButtonClick;
