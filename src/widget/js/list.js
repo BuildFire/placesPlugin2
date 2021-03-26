@@ -46,6 +46,12 @@ window.listView = {
                 window.app.state.paginationRequestBusy = false;
                 window.listView.addPlaces(window.app.state.places);
                 window.mapView.updateMap(window.app.state.places);
+                //Reset cluster markers.
+                app.state.markers.forEach(marker =>{
+                  mapView.settings.markerClusterer.removeMarker(marker);
+                  marker.setVisible(true);
+                  mapView.settings.markerClusterer.addMarker(marker);
+                });
               }
             );
           }
