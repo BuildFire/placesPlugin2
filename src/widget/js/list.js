@@ -36,14 +36,22 @@ window.listView = {
       const triggerElement = document.querySelector(".list-scrolling-container-pagination-trigger-element");
       if (triggerElement) {
         triggerElement.addEventListener('scroll', ({ target }) => {
-          if (window.app.state.mode === window.app.settings.viewStates.list &&  ((target.scrollHeight - target.scrollTop - 50) <= document.body.clientHeight)) {
+          if (window.app.state.mode === window.app.settings.viewStates.list &&  ((target.scrollHeight - target.scrollTop - 50) <= document.body.clientHeight) && !window.app.state.paginationRequestBusy) {
+            window.app.state.paginationRequestBusy = true;
             window.app.state.page++;
             window.app.loadPage(
               window.app.state.page,
               window.app.state.pageSize,
-              (err, newPlaces) => {
-                console.log(err, newPlaces);
+              () => {
+                window.app.state.paginationRequestBusy = false;
                 window.listView.addPlaces(window.app.state.places);
+                window.mapView.updateMap(window.app.state.places);
+                //Reset cluster markers.
+                app.state.markers.forEach(marker =>{
+                  mapView.settings.markerClusterer.removeMarker(marker);
+                  marker.setVisible(true);
+                  mapView.settings.markerClusterer.addMarker(marker);
+                });
               }
             );
           }
