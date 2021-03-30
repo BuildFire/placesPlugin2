@@ -64,7 +64,7 @@ window.app = {
     pointsOfInterest: "on",
     isCategoryDeeplink: false,
     page: 0,
-    pageSize: 10,
+    pageSize: 50,
     paginationRequestBusy: false
   },
   backButtonInit: () => {
