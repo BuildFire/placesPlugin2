@@ -14,6 +14,11 @@ class MapOptions extends React.Component {
       value: e.target.value
     });
   }
+
+  onDistanceChange() {
+    this.props.onDistanceChange();
+  }
+
   onBookmarkChange() {
     this.props.onBookmarkChange();
   }
@@ -124,6 +129,32 @@ class MapOptions extends React.Component {
                   <option value="on">On</option>
                   <option value="off">Off</option>
                 </select>
+              </div>
+            </div>
+          </div>
+
+          <br />
+
+          <div className="row">
+            <div className="col-xs-6">
+              <label>Distance Unit Conversion</label>
+            </div>
+            <div className="col-xs-6">
+              <div className="Toggler">
+                <div
+                  className="Toggler__on"
+                  style={this.props.distanceUnit ? active : null}
+                  onClick={() => this.onDistanceChange()}
+                >
+                  Metric
+                </div>
+                <div
+                  className="Toggler__off"
+                  style={!this.props.distanceUnit ? active : null}
+                  onClick={() => this.onDistanceChange()}
+                >
+                  Imperial
+                </div>
               </div>
             </div>
           </div>

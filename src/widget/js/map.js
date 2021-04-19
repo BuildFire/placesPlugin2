@@ -53,7 +53,7 @@ window.mapView = {
 
         //Center map once location is obtained
         console.log("start");
-        buildfire.geo.getCurrentPosition({}, (err, position) => {
+        buildfire.geo.getCurrentPosition({enableHighAccuracy:true}, (err, position) => {
             if(!err && position && position.coords){
                 console.log("end");
                 mapView.lastKnownLocation = {lat: position.coords.latitude, lng: position.coords.longitude};
