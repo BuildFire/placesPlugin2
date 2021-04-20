@@ -274,8 +274,18 @@ class Content extends React.Component {
         if (res.selectedButton.key == "yes") {
           let { data } = this.state;
           data.categories = data.categories || [];
-          const mapViewDeeplinkId = data.categories && data.categories[index] && data.categories[index].mapViewDeeplinkId ? data.categories[index].mapViewDeeplinkId : null;
-          const listViewDeeplinkId = data.categories && data.categories[index] && data.categories[index].listViewDeeplinkId ? data.categories[index].listViewDeeplinkId : null;
+          const mapViewDeeplinkId =
+            data.categories &&
+            data.categories[index] &&
+            data.categories[index].mapViewDeeplinkId
+              ? data.categories[index].mapViewDeeplinkId
+              : null;
+          const listViewDeeplinkId =
+            data.categories &&
+            data.categories[index] &&
+            data.categories[index].listViewDeeplinkId
+              ? data.categories[index].listViewDeeplinkId
+              : null;
           data.categories.splice(index, 1);
           this.setState({ data });
           this.handleSave();
@@ -294,59 +304,77 @@ class Content extends React.Component {
    */
   handleCategoryRename(index, newName) {
     let { data } = this.state;
-    const targetCategory = data && data.categories && data.categories[index] ? data.categories[index] : null;
+    const targetCategory =
+      data && data.categories && data.categories[index]
+        ? data.categories[index]
+        : null;
     if (!targetCategory) return;
     data.categories[index].name = newName;
     this.setState({ data });
     this.handleSave();
 
     const proceed = () => {
-      Deeplink.getById(targetCategory.mapViewDeeplinkId, (err, mapViewDeeplink) => {
-        if (!err && mapViewDeeplink) {
-          mapViewDeeplink.name = `${newName} - Map View`;
-          mapViewDeeplink.save();
-        } else if (!err && !mapViewDeeplink) {
-          const newMapViewDeeplink = new Deeplink({
-            deeplinkId: `${targetCategory.id}-mapView`,
-            name: `${newName} - Map View`,
+      Deeplink.getById(
+        targetCategory.mapViewDeeplinkId,
+        (err, mapViewDeeplink) => {
+          if (!err && mapViewDeeplink) {
+            mapViewDeeplink.name = `${newName} - Map View`;
+            mapViewDeeplink.save();
+          } else if (!err && !mapViewDeeplink) {
+            const newMapViewDeeplink = new Deeplink({
+              deeplinkId: `${targetCategory.id}-mapView`,
+              name: `${newName} - Map View`,
+              deeplinkData: {
+                id: targetCategory.id,
+                view: "map",
+              },
+            });
+            newMapViewDeeplink.save((err, newMapViewDeeplinkData) => {
+              if (
+                !err &&
+                newMapViewDeeplinkData &&
+                newMapViewDeeplinkData.deeplinkId
+              ) {
+                data.categories[index].mapViewDeeplinkId =
+                  newMapViewDeeplinkData.deeplinkId;
+              }
+              this.setState({ data });
+              this.handleSave();
+            });
+          }
+        }
+      );
+    };
+
+    Deeplink.getById(
+      targetCategory.listViewDeeplinkId,
+      (err, listViewDeeplink) => {
+        if (!err && listViewDeeplink) {
+          listViewDeeplink.name = `${newName} - List View`;
+          listViewDeeplink.save(() => proceed());
+        } else if (!err && !listViewDeeplink && targetCategory.id) {
+          const newListViewDeeplink = new Deeplink({
+            deeplinkId: `${targetCategory.id}-listView`,
+            name: `${newName} - List View`,
             deeplinkData: {
               id: targetCategory.id,
-              view: 'map'
-            }
+              view: "list",
+            },
           });
-          newMapViewDeeplink.save((err, newMapViewDeeplinkData) => {
-            if (!err && newMapViewDeeplinkData && newMapViewDeeplinkData.deeplinkId) {
-              data.categories[index].mapViewDeeplinkId = newMapViewDeeplinkData.deeplinkId;
+          newListViewDeeplink.save((err, newListViewDeeplinkData) => {
+            if (
+              !err &&
+              newListViewDeeplinkData &&
+              newListViewDeeplinkData.deeplinkId
+            ) {
+              data.categories[index].listViewDeeplinkId =
+                newListViewDeeplinkData.deeplinkId;
             }
-            this.setState({ data });
-            this.handleSave();
+            proceed();
           });
         }
-      });
-    }
-
-    Deeplink.getById(targetCategory.listViewDeeplinkId, (err, listViewDeeplink) => {
-      if (!err && listViewDeeplink) {
-        listViewDeeplink.name = `${newName} - List View`;
-        listViewDeeplink.save(() => proceed());
-      } else if (!err && !listViewDeeplink && targetCategory.id) {
-        const newListViewDeeplink = new Deeplink({
-          deeplinkId: `${targetCategory.id}-listView`,
-          name: `${newName} - List View`,
-          deeplinkData: {
-            id: targetCategory.id,
-            view: 'list'
-          }
-        });
-        newListViewDeeplink.save((err, newListViewDeeplinkData) => {
-          if (!err && newListViewDeeplinkData && newListViewDeeplinkData.deeplinkId) {
-            data.categories[index].listViewDeeplinkId = newListViewDeeplinkData.deeplinkId;
-          }
-          proceed();
-        });
       }
-    });
-
+    );
   }
 
   /**
@@ -386,11 +414,11 @@ class Content extends React.Component {
 
         const locationDeeplink = new Deeplink({
           deeplinkId: result.id,
-          name: location.title ? location.title : '',
+          name: location.title ? location.title : "",
           deeplinkData: { id: result.id },
-          imageUrl: location.image ? location.image : null
+          imageUrl: location.image ? location.image : null,
         });
-  
+
         locationDeeplink.save();
 
         this.setState({ data }, () => {
@@ -438,15 +466,15 @@ class Content extends React.Component {
 
       Deeplink.getById(location.id, (err, locationDeeplink) => {
         if (!err && locationDeeplink) {
-          locationDeeplink.name = location.title ? location.title : '';
+          locationDeeplink.name = location.title ? location.title : "";
           locationDeeplink.imageUrl = location.image ? location.image : null;
           locationDeeplink.save();
         } else if (!err && !locationDeeplink) {
           const locationDeeplink = new Deeplink({
             deeplinkId: location.id,
-            name: location.title ? location.title : '',
+            name: location.title ? location.title : "",
             deeplinkData: { id: location.id },
-            imageUrl: location.image ? location.image : null
+            imageUrl: location.image ? location.image : null,
           });
           locationDeeplink.save();
         }
@@ -463,8 +491,17 @@ class Content extends React.Component {
    */
   onMultipleLocationSubmit(locations) {
     locations = locations.filter((location) => typeof location === "object");
-    let locationsForInsert = locations.filter((location) => !location.id);
-    let locationsForUpdate = locations.filter((location) => location.id);
+    let locationsForUpdate = [];
+    let locationsForInsert = [];
+    let ids = this.state.data.itemsOrder;
+    for (let i = 0; i < locations.length; i++) {
+      let loc = locations[i];
+      if (ids.some((id) => id == loc.id)) {
+        locationsForUpdate.push(loc);
+      } else {
+        locationsForInsert.push(loc);
+      }
+    }
 
     this.setState({
       totalInserted: locationsForInsert.length,
@@ -484,26 +521,34 @@ class Content extends React.Component {
         } else if (result && result.data && result.data.length) {
           const newDataCount = result.data.length;
           for (let skip = 0; skip < newDataCount; skip += 50) {
-            buildfire.datastore.search({filter: {}, skip, limit: 50}, 'places-list', (err, innerResult) => {
-              if (err) return;
-              innerResult.forEach(item => {
-                Deeplink.getById(item.id, (err, locationDeeplink) => {
-                  if (!err && locationDeeplink) {
-                    locationDeeplink.name = item.data.title ? item.data.title : '';
-                    locationDeeplink.imageUrl = item.data.image ? item.data.image : null;
-                    locationDeeplink.save();
-                  } else {
-                    const newLocationDeeplink = new Deeplink({
-                      deeplinkId: item.id,
-                      name: item.data.title ? item.data.title : '',
-                      deeplinkData: { id: item.id },
-                      imageUrl: item.data.image ? item.data.image : null
-                    });
-                    newLocationDeeplink.save();
-                  }
+            buildfire.datastore.search(
+              { filter: {}, skip, limit: 50 },
+              "places-list",
+              (err, innerResult) => {
+                if (err) return;
+                innerResult.forEach((item) => {
+                  Deeplink.getById(item.id, (err, locationDeeplink) => {
+                    if (!err && locationDeeplink) {
+                      locationDeeplink.name = item.data.title
+                        ? item.data.title
+                        : "";
+                      locationDeeplink.imageUrl = item.data.image
+                        ? item.data.image
+                        : null;
+                      locationDeeplink.save();
+                    } else {
+                      const newLocationDeeplink = new Deeplink({
+                        deeplinkId: item.id,
+                        name: item.data.title ? item.data.title : "",
+                        deeplinkData: { id: item.id },
+                        imageUrl: item.data.image ? item.data.image : null,
+                      });
+                      newLocationDeeplink.save();
+                    }
+                  });
                 });
-              });
-            });
+              }
+            );
           }
         }
       }
@@ -521,8 +566,12 @@ class Content extends React.Component {
             });
             Deeplink.getById(location.id, (err, locationDeeplink) => {
               if (!err && locationDeeplink) {
-                locationDeeplink.name = location.data.title ? location.data.title : '';
-                locationDeeplink.imageUrl = location.data.image ? location.data.image : null;
+                locationDeeplink.name = location.data.title
+                  ? location.data.title
+                  : "";
+                locationDeeplink.imageUrl = location.data.image
+                  ? location.data.image
+                  : null;
                 locationDeeplink.save();
               }
             });
@@ -559,8 +608,8 @@ class Content extends React.Component {
       name: `${categoryName} - List View`,
       deeplinkData: {
         id,
-        view: 'list'
-      }
+        view: "list",
+      },
     });
 
     const mapViewDeeplink = new Deeplink({
@@ -568,36 +617,36 @@ class Content extends React.Component {
       name: `${categoryName} - Map View`,
       deeplinkData: {
         id,
-        view: 'map'
-      }
+        view: "map",
+      },
     });
 
     listViewDeeplink.save((err, listViewDeeplinkData) => {
       const showError = () => {
         buildfire.dialog.alert({
-          message: 'Error while adding category.'
+          message: "Error while adding category.",
         });
-      }
-      if (err || !listViewDeeplinkData || !listViewDeeplinkData.deeplinkId) return showError();
+      };
+      if (err || !listViewDeeplinkData || !listViewDeeplinkData.deeplinkId)
+        return showError();
       mapViewDeeplink.save((err, mapViewDeeplinkData) => {
-        if (err || !mapViewDeeplinkData || !mapViewDeeplinkData.deeplinkId) return showError();
+        if (err || !mapViewDeeplinkData || !mapViewDeeplinkData.deeplinkId)
+          return showError();
 
         const category = {
           id,
           name: categoryName,
           mapViewDeeplinkId: mapViewDeeplinkData.deeplinkId,
-          listViewDeeplinkId: listViewDeeplinkData.deeplinkId
+          listViewDeeplinkId: listViewDeeplinkData.deeplinkId,
         };
-    
+
         const { data } = this.state;
         data.categories = data.categories || [];
         data.categories.push(category);
         this.setState({ data });
         this.handleSave();
-
       });
     });
-
   }
 
   onAddLocation() {
