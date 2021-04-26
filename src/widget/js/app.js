@@ -61,6 +61,7 @@ window.app = {
     isBackNav: false,
     bookmarked: false,
     isBookmarkingAllowed: true,
+    distanceUnit: false,
     pointsOfInterest: "on",
     isCategoryDeeplink: false,
     page: 0,
@@ -228,6 +229,7 @@ window.app = {
           window.app.state.configCategories = data.configCategories;
           window.app.state.chatWithLocationOwner = data.chatWithLocationOwner;
           window.app.state.socialWall = data.socialWall;
+          window.app.state.distanceUnit = data.distanceUnit;
           if (data.categories && !window.app.state.isCategoryDeeplink) {
             window.app.state.categories = data.categories.map((category) => {
               return { name: category, isActive: true };
@@ -242,7 +244,7 @@ window.app = {
       }
     );
 
-    buildfire.geo.getCurrentPosition({}, (err, position) => {
+    buildfire.geo.getCurrentPosition({enableHighAccuracy:true}, (err, position) => {
       if (err) return;
       console.warn("getCurrentPosition", err);
       if (position && position.coords) positionCallback(null, position.coords);
@@ -335,8 +337,14 @@ window.app = {
           window.app.state.places[index].distance =
             Math.round(distance * 5280).toLocaleString() + " ft";
         } else {
-          window.app.state.places[index].distance =
+          if(window.app.state.distanceUnit) {
+            window.app.state.places[index].distance =
+            Math.round(distance*1.60934).toLocaleString() + " km";
+          } else {
+            window.app.state.places[index].distance =
             Math.round(distance).toLocaleString() + " mi";
+          }
+
         }
       });
       window.listView.updateDistances(window.app.state.filteredPlaces);
@@ -419,6 +427,7 @@ window.app = {
               window.app.state.chatWithLocationOwner =
                 data.chatWithLocationOwner;
               window.app.state.socialWall = data.socialWall;
+              window.app.state.distanceUnit = data.distanceUnit;
               if (data.categories && !window.app.state.isCategoryDeeplink) {
                 window.app.state.categories = data.categories.map(
                   (category) => {

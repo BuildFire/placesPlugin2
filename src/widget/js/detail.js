@@ -80,7 +80,7 @@ window.detailView = {
                 function getDistance(place) {
                     let destinations = [];
                     destinations.push(new window.google.maps.LatLng(place.lat, place.lng));
-                    window.buildfire.geo.getCurrentPosition(null, (err, position) => {
+                    window.buildfire.geo.getCurrentPosition({enableHighAccuracy:true}, (err, position) => {
                         if (err) {
                             console.log(err);
                             return false;
@@ -94,8 +94,12 @@ window.detailView = {
                                 if (distance < 0.5) {
                                     place.distance = (Math.round(distance * 5280)).toLocaleString() + ' ft';
                                 } else {
-                                    place.distance = (Math.round(distance)).toLocaleString() + ' mi';
-                                }
+                                    if(window.app.state.distanceUnit) {
+                                        place.distance = Math.round(distance*1.60934).toLocaleString() + " km";
+                                      } else {
+                                        place.distance = (Math.round(distance)).toLocaleString() + ' mi';
+                                      }
+                                }                       
                             });
                             let distanceHolder = document.getElementById('distance-holder');
                             let distanceEl = document.createElement('span');

@@ -13,6 +13,7 @@ class Settings extends React.Component {
       configCarousel: false,
       configCategories: false,
       chatWithLocationOwner: false,
+      distanceUnit: true
     };
   }
 
@@ -24,7 +25,8 @@ class Settings extends React.Component {
         configBookmark: result.data.isBookmarkingAllowed, 
         configCarousel: result.data.isCarouselSwitched,
         configCategories: result.data.configCategories,
-        chatWithLocationOwner: result.data.chatWithLocationOwner
+        chatWithLocationOwner: result.data.chatWithLocationOwner,
+        distanceUnit: result.data.distanceUnit ? result.data.distanceUnit : false
       });
     });
   }
@@ -64,6 +66,15 @@ class Settings extends React.Component {
 
     this.setState(data);
     this.handleSave();
+  }
+
+  handleDistanceChange = () => {
+    const { data } = this.state;
+    this.setState({ distanceUnit: !this.state.distanceUnit }, () => {
+      data.distanceUnit = this.state.distanceUnit;
+      this.setState(data);
+      this.handleSave();
+    });
   }
 
   handleBookmarkChange = () => {
@@ -129,10 +140,12 @@ class Settings extends React.Component {
           onBookmarkChange={this.handleBookmarkChange}
           onCarouselChange={this.handleCarouselChange}
           onCategoriesChange={this.handleCategoriesChange}
+          onDistanceChange={this.handleDistanceChange}
           onChatWithLocationOwnerChange={this.onChatWithLocationOwnerChange}
           configBookmark={this.state.configBookmark} 
           configCarousel={this.state.configCarousel} 
           configCategories={this.state.configCategories}
+          distanceUnit={this.state.distanceUnit}
           chatWithLocationOwner={this.state.chatWithLocationOwner}
           setSocialWall={this.setSocialWall}
           removePlugin={this.removePlugin} />
