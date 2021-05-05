@@ -216,10 +216,10 @@ window.mapView = {
           app.state.markers.forEach((existingMarker, index) => {
             if (existingMarker && existingMarker.markerData && existingMarker.markerData.id === place.id) skip = true;
             if (existingMarker && existingMarker.icon && existingMarker.icon.url === window.mapView.settings.images.currentLocation) {
-              marker.setVisible(true);
-              marker.setMap(null);
+              existingMarker.setVisible(true);
+              existingMarker.setMap(null);
               if (mapView.settings.markerClusterer && mapView.settings.markerClusterer.removeMarker) {
-                mapView.settings.markerClusterer.removeMarker(marker);
+                mapView.settings.markerClusterer.removeMarker(existingMarker);
               }
               app.state.markers.splice(index, 1);
             }
