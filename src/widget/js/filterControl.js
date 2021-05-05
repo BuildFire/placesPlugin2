@@ -170,7 +170,11 @@ window.filterControl = {
         ? image.src.replace("map", "list")
         : image.src.replace("list", "map");
     });
-
+    if ((app.state.mode === 'map' || !app.state.mode) && window.app.state.mapViewFetchIntervalActive) {
+      window.mapView.mapViewFetchInterval();
+    } else {
+      if (window.mapViewFetchTimeout) clearTimeout(window.mapViewFetchTimeout);
+    }
     router.navigate(`/${app.state.mode}`);
   },
   createControl: (controlDiv, buttons) => {
