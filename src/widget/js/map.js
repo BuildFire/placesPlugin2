@@ -87,9 +87,9 @@ window.mapView = {
                 mapView.lastKnownLocation = {lat: position.coords.latitude, lng: position.coords.longitude};
                 mapView.addMarker(map, { address: mapView.lastKnownLocation }, mapView.settings.images.currentLocation);
                 window.map.setCenter(mapView.lastKnownLocation) ;
-                window.map.setZoom(22);
+                window.map.setZoom(19);
                 window.setTimeout(() => {
-                  window.map.addListener('zoom_changed', () => {
+                  window.map.addListener('bounds_changed', () => {
                     if (!window.app.state.mapViewFetchIntervalActive) {
                       window.app.state.mapViewFetchIntervalActive = true;
                       window.mapView.mapViewFetchInterval();
