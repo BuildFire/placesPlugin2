@@ -32,7 +32,7 @@ window.mapView = {
             window.app.state.page,
             window.app.state.pageSize,
             err => {
-              window.mapViewFetchTimeout = window.setTimeout(proceedFetch, 2000);
+              window.mapViewFetchTimeout = window.setTimeout(proceedFetch, 1000);
               if (err) return;
               window.app.state.paginationRequestBusy = false;
               window.listView.addPlaces(window.app.state.places);
