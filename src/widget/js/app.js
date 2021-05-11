@@ -66,7 +66,8 @@ window.app = {
     isCategoryDeeplink: false,
     page: 0,
     pageSize: 50,
-    paginationRequestBusy: false
+    paginationRequestBusy: false,
+    mapViewFetchIntervalActive: false
   },
   backButtonInit: () => {
     window.app.goBack = window.buildfire.navigation.onBackButtonClick;
@@ -113,8 +114,11 @@ window.app = {
           : null,
       },
       window.app.settings.placesListTag,
-      (err, result) => {
-        if (result && !result.length) return;
+      (err, result = []) => {
+        if (!err && result && !result.length) {
+          if (window.mapViewFetchTimeout) clearTimeout(window.mapViewFetchTimeout);
+          return;
+        }
         console.log("RESULT", result);
         places.push(
           ...result

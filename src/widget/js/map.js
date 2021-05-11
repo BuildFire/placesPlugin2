@@ -22,6 +22,33 @@ window.mapView = {
         }
     },
     lastKnownLocation: defaultLocation,
+    mapViewFetchInterval: () => {
+      if (window.mapViewFetchTimeout) clearTimeout(window.mapViewFetchTimeout);
+      const proceedFetch = () => {
+        if ((window.app.state.mode === 'map' || !window.app.state.mode) && !window.app.state.paginationRequestBusy) {
+          window.app.state.paginationRequestBusy = true;
+          window.app.state.page++;
+          window.app.loadPage(
+            window.app.state.page,
+            window.app.state.pageSize,
+            err => {
+              window.mapViewFetchTimeout = window.setTimeout(proceedFetch, 1000);
+              if (err) return;
+              window.app.state.paginationRequestBusy = false;
+              window.listView.addPlaces(window.app.state.places);
+              window.mapView.updateMap(window.app.state.places);
+              //Reset cluster markers.
+              app.state.markers.forEach(marker =>{
+                mapView.settings.markerClusterer.removeMarker(marker);
+                marker.setVisible(true);
+                mapView.settings.markerClusterer.addMarker(marker);
+              });
+            }
+          );
+        }
+      };
+      proceedFetch();
+    },
     initMap: (places) => {
 
         const comingFromDeeplink = window.app.state.isCategoryDeeplink && window.app.state.filteredPlaces && window.app.state.filteredPlaces ? true : false;
@@ -52,20 +79,38 @@ window.mapView = {
         }
 
         //Center map once location is obtained
-        console.log("start");
-        buildfire.geo.getCurrentPosition({enableHighAccuracy:true}, (err, position) => {
+        buildfire.geo.getCurrentPosition({
+          enableHighAccuracy: true,
+          timeout: 10000
+        }, (err, position) => {
             if(!err && position && position.coords){
-                console.log("end");
                 mapView.lastKnownLocation = {lat: position.coords.latitude, lng: position.coords.longitude};
-
                 mapView.addMarker(map, { address: mapView.lastKnownLocation }, mapView.settings.images.currentLocation);
                 window.map.setCenter(mapView.lastKnownLocation) ;
+                window.map.setZoom(19);
+                window.setTimeout(() => {
+                  window.map.addListener('bounds_changed', () => {
+                    if (!window.app.state.mapViewFetchIntervalActive) {
+                      window.app.state.mapViewFetchIntervalActive = true;
+                      window.mapView.mapViewFetchInterval();
+                    }
+                  });
+                }, 1000); //Wait for animation to finish.
                 if(buildfire.isWeb())
                 {
                     myImg.style.filter="";
                     localStorage.setItem('user_location', JSON.stringify(mapView.lastKnownLocation));
                     buildfire.spinner.hide();
                 }
+            } else {
+              window.setTimeout(() => {
+                window.map.addListener('bounds_changed', () => {
+                  if (!window.app.state.mapViewFetchIntervalActive) {
+                    window.app.state.mapViewFetchIntervalActive = true;
+                    window.mapView.mapViewFetchInterval();
+                  }
+                });
+              }, 0);
             }
         }); 
 
@@ -165,15 +210,22 @@ window.mapView = {
         else window.map.setCenter(mapView.lastKnownLocation);
     },
     addMarker: (map, place, iconType) => {
-        // Prevent duplicated markers for single location in case if there is some of them to avoid marker clustering bug. (cluster showing up wrong number)
-        if (
-          app && 
-          app.state && 
-          app.state.markers &&
-          place &&
-          place.id &&
-          app.state.markers.find(marker => marker && marker.markerData && marker.markerData.id === place.id)
-        ) return;
+        // Prevent duplicated markers for single location in case if there is some of them to avoid marker clustering bug. (cluster showing up wrong number). Also, remove previous current user location if we are passing a new one.
+        let skip = false;
+        if (app && app.state && app.state.markers && place) {
+          app.state.markers.forEach((existingMarker, index) => {
+            if (existingMarker && existingMarker.markerData && existingMarker.markerData.id === place.id) skip = true;
+            if (existingMarker && existingMarker.icon && existingMarker.icon.url === window.mapView.settings.images.currentLocation) {
+              existingMarker.setVisible(true);
+              existingMarker.setMap(null);
+              if (mapView.settings.markerClusterer && mapView.settings.markerClusterer.removeMarker) {
+                mapView.settings.markerClusterer.removeMarker(existingMarker);
+              }
+              app.state.markers.splice(index, 1);
+            }
+          });
+        } 
+        if (skip) return;
         let marker = new google.maps.Marker({
             position: place.address,
             markerData: place,
