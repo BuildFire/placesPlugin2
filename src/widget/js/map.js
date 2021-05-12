@@ -35,7 +35,7 @@ window.mapView = {
               window.mapViewFetchTimeout = window.setTimeout(proceedFetch, 1000);
               if (err) return;
               window.app.state.paginationRequestBusy = false;
-              window.listView.addPlaces(places);
+              window.listView.addPlaces(window.app.state.places);
               window.mapView.updateMap(places);
             }
           );
