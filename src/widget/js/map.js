@@ -31,18 +31,12 @@ window.mapView = {
           window.app.loadPage(
             window.app.state.page,
             window.app.state.pageSize,
-            err => {
+            (err, places) => {
               window.mapViewFetchTimeout = window.setTimeout(proceedFetch, 1000);
               if (err) return;
               window.app.state.paginationRequestBusy = false;
-              window.listView.addPlaces(window.app.state.places);
-              window.mapView.updateMap(window.app.state.places);
-              //Reset cluster markers.
-              app.state.markers.forEach(marker =>{
-                mapView.settings.markerClusterer.removeMarker(marker);
-                marker.setVisible(true);
-                mapView.settings.markerClusterer.addMarker(marker);
-              });
+              window.listView.addPlaces(places);
+              window.mapView.updateMap(places);
             }
           );
         }
@@ -239,6 +233,7 @@ window.mapView = {
 
             app.state.markers.push(marker);
             app.state.bounds.extend({lat, lng});
+            if (mapView.settings.markerClusterer) mapView.settings.markerClusterer.addMarker(marker);
 
             marker.addListener('click', () => {mapView.markerClick(place, marker)});
         }
