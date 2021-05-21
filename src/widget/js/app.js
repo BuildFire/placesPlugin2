@@ -67,7 +67,17 @@ window.app = {
     page: 0,
     pageSize: 50,
     paginationRequestBusy: false,
-    mapViewFetchIntervalActive: false
+    mapViewFetchIntervalActive: false,
+    location: buildfire.geo.getCurrentPosition(
+      { enableHighAccuracy: true },
+      (err, position) => {
+        if (err) return console.error(err);
+        return {
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+        };
+      }
+    ),
   },
   backButtonInit: () => {
     window.app.goBack = window.buildfire.navigation.onBackButtonClick;
@@ -116,7 +126,8 @@ window.app = {
       window.app.settings.placesListTag,
       (err, result = []) => {
         if (!err && result && !result.length) {
-          if (window.mapViewFetchTimeout) clearTimeout(window.mapViewFetchTimeout);
+          if (window.mapViewFetchTimeout)
+            clearTimeout(window.mapViewFetchTimeout);
           return;
         }
         console.log("RESULT", result);
@@ -133,9 +144,8 @@ window.app = {
         );
         if (!window.app.state.isCategoryDeeplink) {
           window.app.state.places = window.app.state.places.concat(places);
-          window.app.state.filteredPlaces = window.app.state.places.concat(
-            places
-          );
+          window.app.state.filteredPlaces =
+            window.app.state.places.concat(places);
         } else {
           window.app.state.places = window.app.state.places.concat(places);
           window.app.state.categories.map((category) => {
@@ -248,11 +258,15 @@ window.app = {
       }
     );
 
-    buildfire.geo.getCurrentPosition({enableHighAccuracy:true}, (err, position) => {
-      if (err) return;
-      console.warn("getCurrentPosition", err);
-      if (position && position.coords) positionCallback(null, position.coords);
-    });
+    buildfire.geo.getCurrentPosition(
+      { enableHighAccuracy: true },
+      (err, position) => {
+        if (err) return;
+        console.warn("getCurrentPosition", err);
+        if (position && position.coords)
+          positionCallback(null, position.coords);
+      }
+    );
 
     buildfire.datastore.onUpdate(function (event) {
       if (app.state.mode === "detail") {
@@ -341,14 +355,13 @@ window.app = {
           window.app.state.places[index].distance =
             Math.round(distance * 5280).toLocaleString() + " ft";
         } else {
-          if(window.app.state.distanceUnit) {
+          if (window.app.state.distanceUnit) {
             window.app.state.places[index].distance =
-            Math.round(distance*1.60934).toLocaleString() + " km";
+              Math.round(distance * 1.60934).toLocaleString() + " km";
           } else {
             window.app.state.places[index].distance =
-            Math.round(distance).toLocaleString() + " mi";
+              Math.round(distance).toLocaleString() + " mi";
           }
-
         }
       });
       window.listView.updateDistances(window.app.state.filteredPlaces);
@@ -397,10 +410,20 @@ window.app = {
       placeId,
       window.app.settings.placesListTag,
       (error, result) => {
-        if (error || !result || (result && !result.id) || (result && result.data && !result.data.title)) {
-          const text = strings.get("deeplink.deeplinkLocationNotFound") ? strings.get("deeplink.deeplinkLocationNotFound") : "Location does not exist";
+        if (
+          error ||
+          !result ||
+          (result && !result.id) ||
+          (result && result.data && !result.data.title)
+        ) {
+          const text = strings.get("deeplink.deeplinkLocationNotFound")
+            ? strings.get("deeplink.deeplinkLocationNotFound")
+            : "Location does not exist";
           window.app.initCategoryView();
-          return buildfire.components.toast.showToastMessage({ text }, () => {});
+          return buildfire.components.toast.showToastMessage(
+            { text },
+            () => {}
+          );
         }
         window.app.backButtonInit();
         result.data.id = result.id;
@@ -501,7 +524,9 @@ strings.init().then(() => {
         window.app.initCategoryView(deepLinkId);
       } else {
         if (deeplinkObj.view) {
-          const text = strings.get("deeplink.deeplinkCategoryNotFound") ? strings.get("deeplink.deeplinkCategoryNotFound") : "Category does not exist";
+          const text = strings.get("deeplink.deeplinkCategoryNotFound")
+            ? strings.get("deeplink.deeplinkCategoryNotFound")
+            : "Category does not exist";
           buildfire.components.toast.showToastMessage({ text }, () => {});
           return window.app.initCategoryView();
         }
