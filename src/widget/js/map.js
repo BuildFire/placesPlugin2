@@ -68,7 +68,7 @@ window.mapView = {
               window.map.setCenter(mapView.lastKnownLocation);
               myImg.style.filter = "";
               buildfire.spinner.hide();
-            }
+            } else buildfire.spinner.hide();
           }
         }
 
