@@ -68,16 +68,6 @@ window.app = {
     pageSize: 50,
     paginationRequestBusy: false,
     mapViewFetchIntervalActive: false,
-    location: buildfire.geo.getCurrentPosition(
-      { enableHighAccuracy: true },
-      (err, position) => {
-        if (err) return console.error(err);
-        return {
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-        };
-      }
-    ),
   },
   backButtonInit: () => {
     window.app.goBack = window.buildfire.navigation.onBackButtonClick;
@@ -119,8 +109,8 @@ window.app = {
         pageSize,
         sort: window.app.state.sortBy
           ? {
-              title: window.app.state.sortBy === "alphaDesc" ? -1 : 1,
-            }
+            title: window.app.state.sortBy === "alphaDesc" ? -1 : 1,
+          }
           : null,
       },
       window.app.settings.placesListTag,
@@ -138,6 +128,16 @@ window.app = {
               place.data.sort = window.app.state.itemsOrder
                 ? window.app.state.itemsOrder.indexOf(place.id)
                 : 0;
+              let origin = {
+                latitude: window.app.state.location.lat,
+                longitude: window.app.state.location.lng,
+              };
+
+              let destination = {
+                latitude: place.data.address.lat,
+                longitude: place.data.address.lng
+              };
+              place.data.distance = window.app.calculateDistance(origin, destination)
               return place.data;
             })
             .filter((place) => place.title)
@@ -151,10 +151,10 @@ window.app = {
           window.app.state.categories.map((category) => {
             category.isActive
               ? places.map((place) => {
-                  if (place.categories.includes(category.name.id)) {
-                    window.app.state.filteredPlaces.push(place);
-                  }
-                })
+                if (place.categories.includes(category.name.id)) {
+                  window.app.state.filteredPlaces.push(place);
+                }
+              })
               : null;
           });
         }
@@ -163,62 +163,26 @@ window.app = {
       }
     );
   },
-  init: (placesCallback, positionCallback) => {
-    window.buildfire.appearance.titlebar.show();
-    window.app.backButtonInit();
-    let places = [];
-
-    function getPlacesList() {
-      const pageSize = window.app.state.pageSize;
-      let page = window.app.state.page;
-      console.log(page, pageSize);
-      const loadPage = () => {
-        console.log("Places - Loading Page", page);
-        buildfire.datastore.search(
-          {
-            page,
-            pageSize,
-            sort: window.app.state.sortBy
-              ? {
-                  title: window.app.state.sortBy === "alphaDesc" ? -1 : 1,
-                }
-              : null,
-          },
-          window.app.settings.placesListTag,
-          (err, result) => {
-            places.push(
-              ...result
-                .map((place) => {
-                  place.data.id = place.id;
-                  place.data.sort = window.app.state.itemsOrder
-                    ? window.app.state.itemsOrder.indexOf(place.id)
-                    : 0;
-                  return place.data;
-                })
-                .filter((place) => place.title)
-            );
-            if (!window.app.state.isCategoryDeeplink) {
-              window.app.state.places = places;
-              window.app.state.filteredPlaces = places;
-            } else {
-              window.app.state.places = places;
-              window.app.state.categories.map((category) => {
-                category.isActive
-                  ? places.map((place) => {
-                      if (place.categories.includes(category.name.id)) {
-                        window.app.state.filteredPlaces.push(place);
-                      }
-                    })
-                  : null;
-              });
-            }
-            console.log("Places - Done loading places - Got", places.length);
-            placesCallback(null, places);
-          }
-        );
-      };
-      loadPage();
+  calculateDistance(origin, destination) {
+    let distance = buildfire.geo.calculateDistance(origin, destination, {
+      decimalPlaces: 5,
+    });
+    let str = null;
+    if (distance < 0.5) {
+      str = Math.round(distance * 5280).toLocaleString() + " ft";
     }
+    else {
+      if (window.app.state.distanceUnit) {
+        str = Math.round(distance * 1.60934).toLocaleString() + " km";
+      } else {
+        str = Math.round(distance).toLocaleString() + " mi";
+      }
+    }
+    return str;
+  },
+  init: (placesCallback, positionCallback) => {
+
+    let userLocation = JSON.parse(localStorage.getItem("user_location"));
     buildfire.datastore.get(
       window.app.settings.placesTag,
       function (err, results) {
@@ -254,81 +218,99 @@ window.app = {
           }
         }
 
-        getPlacesList();
+        if (!userLocation)
+          buildfire.geo.getCurrentPosition({ enableHighAccuracy: true }, (err, position) => {
+            if (position && position.coords) {
+              window.app.state.location = {
+                lat: position.coords.latitude,
+                lng: position.coords.longitude
+              }
+              localStorage.setItem('user_location', JSON.stringify(window.app.state.location))
+              getPlacesList()
+            }
+          });
+        else {
+          window.app.state.location = userLocation, getPlacesList()
+        }
       }
     );
 
-    buildfire.geo.getCurrentPosition(
-      { enableHighAccuracy: true },
-      (err, position) => {
-        if (err) return;
-        console.warn("getCurrentPosition", err);
-        if (position && position.coords)
-          positionCallback(null, position.coords);
-      }
-    );
+    window.buildfire.appearance.titlebar.show();
+    window.app.backButtonInit();
+    let places = [];
+
+    function getPlacesList() {
+      const pageSize = window.app.state.pageSize;
+      let page = window.app.state.page;
+      console.log(page, pageSize);
+      const loadPage = () => {
+        console.log("Places - Loading Page", page);
+        buildfire.datastore.search(
+          {
+            page,
+            pageSize,
+            sort: window.app.state.sortBy
+              ? {
+                title: window.app.state.sortBy === "alphaDesc" ? -1 : 1,
+              }
+              : null,
+          },
+          window.app.settings.placesListTag,
+          (err, result) => {
+            places.push(
+              ...result
+                .map((place) => {
+                  place.data.id = place.id;
+                  place.data.sort = window.app.state.itemsOrder
+                    ? window.app.state.itemsOrder.indexOf(place.id)
+                    : 0;
+                  let origin = {
+                    latitude: window.app.state.location.lat,
+                    longitude: window.app.state.location.lng,
+                  };
+
+                  let destination = {
+                    latitude: place.data.address.lat,
+                    longitude: place.data.address.lng
+                  };
+                  place.data.distance = window.app.calculateDistance(origin, destination)
+                  return place.data;
+                })
+                .filter((place) => place.title)
+            );
+            if (!window.app.state.isCategoryDeeplink) {
+              window.app.state.places = places;
+              window.app.state.filteredPlaces = places;
+            } else {
+              window.app.state.places = places;
+              window.app.state.categories.map((category) => {
+                category.isActive
+                  ? places.map((place) => {
+                    if (place.categories.includes(category.name.id)) {
+                      window.app.state.filteredPlaces.push(place);
+                    }
+                  })
+                  : null;
+              });
+            }
+            console.log("Places - Done loading places - Got", places.length);
+            placesCallback(null, places);
+          }
+        );
+      };
+      loadPage();
+    }
+
+    //UPDATE USER LOCATION
+    buildfire.geo.getCurrentPosition({ enableHighAccuracy: true }, (err, position) => {
+        if (position && position.coords) positionCallback(null, position.coords);
+    });
 
     buildfire.datastore.onUpdate(function (event) {
       if (app.state.mode === "detail") {
         window.router.navigate(window.app.settings.viewStates.map);
       }
-      setTimeout(() => {
-        location.reload(); // TEMPORARY SOLUTION FOR THE DEMO
-      }, 100);
-      let currentPlaces = window.app.state.places;
-      let newPlaces =
-        event.data && event.data.places ? event.data.places : currentPlaces;
-
-      let currentSortOrder = window.app.state.sortBy;
-      let newSortOrder =
-        event.data && event.data.sortBy ? event.data.sortBy : currentSortOrder;
-
-      let currentDefaultView = window.app.state.defaultView;
-      let newViewState =
-        event.data && event.data.defaultView
-          ? event.data.defaultView
-          : currentDefaultView;
-      let newDefaultView =
-        event.data && event.data.defaultView
-          ? event.data.defaultView
-          : currentDefaultView;
-
-      /**
-       * SORT ORDER
-       */
-      if (currentSortOrder != newSortOrder) {
-        window.app.state.sortBy = newSortOrder;
-        let sortBy = PlacesSort[window.app.state.sortBy];
-        window.app.state.places.sort(sortBy);
-
-        if (window.app.state.mode === window.app.settings.viewStates.list)
-          window.loadList(window.app.state.places);
-
-        return;
-      }
-
-      let defaultViewChanged = currentDefaultView !== newDefaultView;
-      let notInDefaultView = newDefaultView !== window.app.state.mode;
-
-      // We want to update the widget to reflect the new default view if the setting
-      // was changed and the user is not in that view already
-      if (defaultViewChanged && notInDefaultView) {
-        window.router.navigate(newViewState);
-        window.app.state.mode = newViewState;
-        return;
-      }
-
-      //Do comparison to see what's changed
-      let updatedPlaces = filter(newPlaces, (newPlace) => {
-        return !find(currentPlaces, newPlace);
-      });
-
-      if (window.app.state.mode === window.app.settings.viewStates.map) {
-        window.mapView.updateMap(updatedPlaces);
-      } else {
-        //Load new items
-        window.listView.updateList(updatedPlaces);
-      }
+      location.reload();
     });
   },
   gotPieceOfData() {
@@ -341,29 +323,6 @@ window.app = {
         );
       });
 
-      let origin = {
-        latitude: location.latitude,
-        longitude: location.longitude,
-      };
-
-      destinations.forEach((item, index) => {
-        var destination = { latitude: item.lat(), longitude: item.lng() };
-        var distance = buildfire.geo.calculateDistance(origin, destination, {
-          decimalPlaces: 5,
-        });
-        if (distance < 0.5) {
-          window.app.state.places[index].distance =
-            Math.round(distance * 5280).toLocaleString() + " ft";
-        } else {
-          if (window.app.state.distanceUnit) {
-            window.app.state.places[index].distance =
-              Math.round(distance * 1.60934).toLocaleString() + " km";
-          } else {
-            window.app.state.places[index].distance =
-              Math.round(distance).toLocaleString() + " mi";
-          }
-        }
-      });
       window.listView.updateDistances(window.app.state.filteredPlaces);
 
       let currentSortOrder = window.app.state.sortBy;
@@ -400,6 +359,7 @@ window.app = {
   },
 
   gotLocation(err, location) {
+    localStorage.setItem('user_location', JSON.stringify(location))
     window.app.state.location = location;
     window.app.gotPieceOfData();
   },
@@ -422,7 +382,7 @@ window.app = {
           window.app.initCategoryView();
           return buildfire.components.toast.showToastMessage(
             { text },
-            () => {}
+            () => { }
           );
         }
         window.app.backButtonInit();
@@ -509,8 +469,8 @@ strings.init().then(() => {
       const deepLinkId = deeplinkObj.id
         ? deeplinkObj.id
         : deeplinkObj.placeId
-        ? deeplinkObj.placeId
-        : null;
+          ? deeplinkObj.placeId
+          : null;
       if (window.app.state.categories) {
         window.app.state.categories.map((category) => {
           if (category.id === deepLinkId) {
@@ -527,7 +487,7 @@ strings.init().then(() => {
           const text = strings.get("deeplink.deeplinkCategoryNotFound")
             ? strings.get("deeplink.deeplinkCategoryNotFound")
             : "Category does not exist";
-          buildfire.components.toast.showToastMessage({ text }, () => {});
+          buildfire.components.toast.showToastMessage({ text }, () => { });
           return window.app.initCategoryView();
         }
         window.app.initDetailView(deepLinkId);
