@@ -306,7 +306,10 @@ window.app = {
 
     //UPDATE USER LOCATION
     buildfire.geo.getCurrentPosition({ enableHighAccuracy: true }, (err, position) => {
-        if (position && position.coords) positionCallback(null, position.coords);
+        if (position && position.coords) positionCallback(null, {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        });
     });
 
     buildfire.datastore.onUpdate(function (event) {
