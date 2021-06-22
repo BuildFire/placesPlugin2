@@ -218,7 +218,8 @@ window.app = {
           }
         }
 
-        if (!userLocation)
+        if (!userLocation) {
+          buildfire.spinner.show();
           buildfire.geo.getCurrentPosition({ enableHighAccuracy: true }, (err, position) => {
             if (position && position.coords) {
               window.app.state.location = {
@@ -226,9 +227,11 @@ window.app = {
                 lng: position.coords.longitude
               }
               localStorage.setItem('user_location', JSON.stringify(window.app.state.location))
+              buildfire.spinner.hide();
               getPlacesList()
             }
           });
+        }
         else {
           window.app.state.location = userLocation, getPlacesList()
         }
