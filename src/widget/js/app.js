@@ -128,16 +128,8 @@ window.app = {
               place.data.sort = window.app.state.itemsOrder
                 ? window.app.state.itemsOrder.indexOf(place.id)
                 : 0;
-              let origin = {
-                latitude: window.app.state.location.lat,
-                longitude: window.app.state.location.lng,
-              };
 
-              let destination = {
-                latitude: place.data.address.lat,
-                longitude: place.data.address.lng
-              };
-              place.data.distance = window.app.calculateDistance(origin, destination)
+              place.data.distance = window.app.calculateDistance(place.data.address)
               return place.data;
             })
             .filter((place) => place.title)
@@ -163,22 +155,33 @@ window.app = {
       }
     );
   },
-  calculateDistance(origin, destination) {
-    let distance = buildfire.geo.calculateDistance(origin, destination, {
-      decimalPlaces: 5,
-    });
-    let str = null;
-    if (distance < 0.5) {
-      str = Math.round(distance * 5280).toLocaleString() + " ft";
-    }
-    else {
-      if (window.app.state.distanceUnit) {
-        str = Math.round(distance * 1.60934).toLocaleString() + " km";
-      } else {
-        str = Math.round(distance).toLocaleString() + " mi";
+  calculateDistance(address) {
+    if(window.app.state.location) {
+      let origin = {
+        latitude: window.app.state.location.lat,
+        longitude: window.app.state.location.lng,
+      };
+  
+      let destination = {
+        latitude: address.lat,
+        longitude: address.lng
+      };
+      let distance = buildfire.geo.calculateDistance(origin, destination, {
+        decimalPlaces: 5,
+      });
+      let str = null;
+      if (distance < 0.5) {
+        str = Math.round(distance * 5280).toLocaleString() + " ft";
       }
+      else {
+        if (window.app.state.distanceUnit) {
+          str = Math.round(distance * 1.60934).toLocaleString() + " km";
+        } else {
+          str = Math.round(distance).toLocaleString() + " mi";
+        }
+      }
+      return str;
     }
-    return str;
   },
   init: (placesCallback, positionCallback) => {
 
@@ -221,7 +224,11 @@ window.app = {
         if (!userLocation) {
           buildfire.spinner.show();
           buildfire.geo.getCurrentPosition({ enableHighAccuracy: true }, (err, position) => {
-            if (position && position.coords) {
+            if(err) {
+              buildfire.spinner.hide();
+              return getPlacesList();
+            }
+            else if (position && position.coords) {
               window.app.state.location = {
                 lat: position.coords.latitude,
                 lng: position.coords.longitude
@@ -267,16 +274,8 @@ window.app = {
                   place.data.sort = window.app.state.itemsOrder
                     ? window.app.state.itemsOrder.indexOf(place.id)
                     : 0;
-                  let origin = {
-                    latitude: window.app.state.location.lat,
-                    longitude: window.app.state.location.lng,
-                  };
 
-                  let destination = {
-                    latitude: place.data.address.lat,
-                    longitude: place.data.address.lng
-                  };
-                  place.data.distance = window.app.calculateDistance(origin, destination)
+                  place.data.distance = window.app.calculateDistance(place.data.address)
                   return place.data;
                 })
                 .filter((place) => place.title)
