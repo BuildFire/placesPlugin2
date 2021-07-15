@@ -100,13 +100,40 @@ window.app = {
       }
     };
   },
+  loadWithFilter:(originalPlaces)=>{
+    var activeOnes=[];
+    for (let i = 0; i < window.app.state.categories.length; i++) {
+      const element = window.app.state.categories[i];
+      if(element.isActive){
+        activeOnes.push(element.name.id)
+      }
+    }
+    window.app.state.myFilter=activeOnes;
+    window.app.state.places=[];
+    window.app.state.pageSize=50;
+    window.app.state.page=0;
+     window.app.loadPage(0,50,(err,places)=>{
+      window.listView.setItems(places);
+      window.app.state.places=places;
+    }); 
+  },
   loadPage: (page, pageSize, callback) => {
     let places = [];
     console.log("Places - Loading Page", window.app.state.page);
+    var myFilter={};
+    if(window.app.state.myFilter && window.app.state.myFilter.length>0){
+      myFilter={
+        "$json.categories":{
+          "$in":window.app.state.myFilter
+        }
+      };
+    }
     buildfire.datastore.search(
       {
         page,
         pageSize,
+        filter:myFilter,
+        recordCount:true,
         sort: window.app.state.sortBy
           ? {
             title: window.app.state.sortBy === "alphaDesc" ? -1 : 1,
@@ -114,7 +141,9 @@ window.app = {
           : null,
       },
       window.app.settings.placesListTag,
-      (err, result = []) => {
+      (err, obj) => {
+        window.app.recordCount=obj.totalRecord;
+        var result=obj.result;
         if (!err && result && !result.length) {
           if (window.mapViewFetchTimeout)
             clearTimeout(window.mapViewFetchTimeout);
@@ -255,10 +284,19 @@ window.app = {
       console.log(page, pageSize);
       const loadPage = () => {
         console.log("Places - Loading Page", page);
+        var myFilter={};
+        if(window.app.state.myFilter && window.app.state.myFilter.length>0){
+          myFilter={
+            "$json.categories":{
+              "$in":window.app.state.myFilter
+            }
+          };
+        }
         buildfire.datastore.search(
           {
             page,
             pageSize,
+            filter:myFilter,
             sort: window.app.state.sortBy
               ? {
                 title: window.app.state.sortBy === "alphaDesc" ? -1 : 1,

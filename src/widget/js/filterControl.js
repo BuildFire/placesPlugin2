@@ -155,7 +155,10 @@ window.filterControl = {
         window.app.state.pendingMapFilter = { placesToHide, placesToShow };
       }
 
-      window.listView.filter(placesToHide, placesToShow);
+      if(window.app.state.places.length==window.app.recordCount)
+        window.listView.filter(placesToHide, placesToShow);
+      else 
+        window.app.loadWithFilter(originalPlaces);
     }
   },
   changeView: () => {

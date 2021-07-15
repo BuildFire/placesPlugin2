@@ -206,6 +206,11 @@ window.listView = {
     console.log("called updateList()");
     window.listView.addPlaces(newPlaces);
   },
+  setItems(places){
+    window.listView.listScrollingContainer.remove();
+    window.listView.initialized=false;
+    window.listView.addPlaces(places);
+  },
   filter(placesToHide, placesToShow) {
     //Hide filtered places
     placesToHide.forEach((place) => {
