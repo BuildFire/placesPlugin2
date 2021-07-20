@@ -171,10 +171,11 @@ function MarkerClusterer(map, opt_markers, opt_options) {
         // Determines map type and prevent illegal zoom levels
         var zoom = that.map_.getZoom();
         var minZoom = that.map_.minZoom || 0;
-        var maxZoom = Math.min(that.map_.maxZoom || 100,
-            that.map_.mapTypes[that.map_.getMapTypeId()].maxZoom);
-        zoom = Math.min(Math.max(zoom,minZoom),maxZoom);
-
+        if(that.map_ && that.map_.getMapTypeId() && that.map_.mapTypes[that.map_.getMapTypeId()]){
+            var maxZoom = Math.min(that.map_.maxZoom || 100,
+                that.map_.mapTypes[that.map_.getMapTypeId()].maxZoom);
+            zoom = Math.min(Math.max(zoom,minZoom),maxZoom);
+        }
         if (that.prevZoom_ != zoom) {
             that.prevZoom_ = zoom;
             that.resetViewport();
