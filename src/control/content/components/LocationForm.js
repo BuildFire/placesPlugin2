@@ -25,6 +25,7 @@ class LocationForm extends React.Component {
       categories: [],
       carousel: [],
       deeplinkUrl: "",
+      querystringUrl: "",
     };
     let state = Object.assign(model, cloneDeep(this.props.location) || {});
     this.setState(state);
