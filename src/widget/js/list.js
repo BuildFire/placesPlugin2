@@ -115,10 +115,12 @@ window.listView = {
       if (!place.address || !place.address.lat || !place.address.lng) {
         return;
       }
-
-      document.getElementsByClassName(
-        "list-scrolling-container"
-      )[0].style.height = `${window.listView.imageHeight + 20}px;`;
+      //to handle style of undefined
+      let listScrollingContainer = document.getElementsByClassName("list-scrolling-container")[0];
+      if(!listScrollingContainer) {
+        return;
+      }
+      listScrollingContainer.style.height = `${window.listView.imageHeight + 20}px;`;
 
       const listItem = document.createElement("div");
       listItem.setAttribute(
@@ -192,7 +194,9 @@ window.listView = {
         window.listView.listScrollingContainer.appendChild(listItem);
       }
     });
-    window.listView.listScrollingContainer.appendChild(emptyItem);
+    if (window.listView.listScrollingContainer) {
+      window.listView.listScrollingContainer.appendChild(emptyItem);
+    }
   },
   initList: (places) => {
     //Add filter control

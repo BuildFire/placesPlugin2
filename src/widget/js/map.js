@@ -69,6 +69,8 @@ window.mapView = {
               myImg.style.filter = "";
               buildfire.spinner.hide();
             } else buildfire.spinner.hide();
+          } else {
+            buildfire.spinner.hide();
           }
         }
 

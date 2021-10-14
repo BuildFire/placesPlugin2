@@ -150,6 +150,9 @@ window.app = {
           return;
         }
         console.log("RESULT", result);
+        if (!result) {
+          return;
+        }
         places.push(
           ...result
             .map((place) => {
@@ -185,31 +188,33 @@ window.app = {
     );
   },
   calculateDistance(address) {
-    if(window.app.state.location) {
-      let origin = {
-        latitude: window.app.state.location.lat,
-        longitude: window.app.state.location.lng,
-      };
-  
-      let destination = {
-        latitude: address.lat,
-        longitude: address.lng
-      };
-      let distance = buildfire.geo.calculateDistance(origin, destination, {
-        decimalPlaces: 5,
-      });
-      let str = null;
-      if (distance < 0.5) {
-        str = Math.round(distance * 5280).toLocaleString() + " ft";
-      }
-      else {
-        if (window.app.state.distanceUnit) {
-          str = Math.round(distance * 1.60934).toLocaleString() + " km";
-        } else {
-          str = Math.round(distance).toLocaleString() + " mi";
+    if (address) {
+      if(window.app.state.location) {
+        let origin = {
+          latitude: window.app.state.location.lat,
+          longitude: window.app.state.location.lng,
+        };
+    
+        let destination = {
+          latitude: address.lat,
+          longitude: address.lng
+        };
+        let distance = buildfire.geo.calculateDistance(origin, destination, {
+          decimalPlaces: 5,
+        });
+        let str = null;
+        if (distance < 0.5) {
+          str = Math.round(distance * 5280).toLocaleString() + " ft";
         }
+        else {
+          if (window.app.state.distanceUnit) {
+            str = Math.round(distance * 1.60934).toLocaleString() + " km";
+          } else {
+            str = Math.round(distance).toLocaleString() + " mi";
+          }
+        }
+        return str;
       }
-      return str;
     }
   },
   init: (placesCallback, positionCallback) => {
@@ -265,6 +270,8 @@ window.app = {
               localStorage.setItem('user_location', JSON.stringify(window.app.state.location))
               buildfire.spinner.hide();
               getPlacesList()
+            } else {
+              buildfire.spinner.hide();
             }
           });
         }
