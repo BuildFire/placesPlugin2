@@ -204,7 +204,11 @@ window.app = {
         });
         let str = null;
         if (distance < 0.5) {
-          str = Math.round(distance * 5280).toLocaleString() + " ft";
+          if (window.app.state.distanceUnit) {
+            str = Math.round(distance * 1609.34).toLocaleString() + " m";
+          } else {
+            str = Math.round(distance * 5280).toLocaleString() + " ft";
+          }
         }
         else {
           if (window.app.state.distanceUnit) {

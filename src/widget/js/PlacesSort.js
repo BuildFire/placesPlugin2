@@ -30,18 +30,22 @@ window.PlacesSort = {
         var aDistance = 0;
         var bDistance = 0;
         if (a.distance && b.distance) {
-            const aDist = a.distance.split(' ')[0];
-            const bDist = b.distance.split(' ')[0];
-            if (aDist.includes('.')) {
-                aDistance = parseInt(a.distance.split(' ')[0].replace('.', ''));
+            const aDist = a.distance.split(' ');
+            const bDist = b.distance.split(' ');
+            if (aDist[0].includes('.')) {
+                aDistance = parseInt(aDist[0].replace('.', ''));
             } else {
-                aDistance = parseInt(a.distance.split(' ')[0].replace(',', ''));
+                aDistance = parseInt(aDist[0].replace(',', ''));
             }
-            if (bDist.includes('.')) {
-                bDistance = parseInt(b.distance.split(' ')[0].replace('.', ''));
+            aDistance = aDist[1] === 'ft' ? aDistance / 5280 : aDistance;
+            aDistance = aDist[1] === 'm' ? aDistance / 1000 : aDistance;
+            if (bDist[0].includes('.')) {
+                bDistance = parseInt(bDist[0].replace('.', ''));
             } else {
-                bDistance = parseInt(b.distance.split(' ')[0].replace(',', ''));
+                bDistance = parseInt(bDist[0].replace(',', ''));
             }
+            bDistance = bDist[1] === 'ft' ? bDistance / 5280 : bDistance;
+            bDistance = bDist[1] === 'm' ? bDistance / 1000 : bDistance;
 
             if (aDistance < bDistance) {
                 return -1;
