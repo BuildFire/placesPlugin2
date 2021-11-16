@@ -289,6 +289,7 @@ class LocationsActionBar extends React.Component {
               )}
             </div>
           </div>
+
           <div className="col-xs-8">
             <input
               onChange={() => this.onFileChange()}

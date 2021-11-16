@@ -1,5 +1,4 @@
 import Handlebars from "./lib/handlebars"
-
 import { stringsConfig } from "../js/shared/stringsConfig";
 import "../js/shared/strings";
 
@@ -166,6 +165,7 @@ window.mapView = {
         };        
 
         // Add a marker clusterer to manage the markers.
+        console.log("is error from here");
         mapView.settings.markerClusterer = new MarkerClusterer(map, app.state.markers, clusterOptions);
 
     },
@@ -222,22 +222,24 @@ window.mapView = {
           });
         } 
         if (skip) return;
-        let marker = new google.maps.Marker({
-            position: place.address,
-            markerData: place,
-            map: map,
-            icon: mapView.createMarker(iconType)
-        });
-
-        if(place.address){
-            let lat = place.address.lat,
-                lng = place.address.lng;
-
-            app.state.markers.push(marker);
-            app.state.bounds.extend({lat, lng});
-            if (mapView.settings.markerClusterer) mapView.settings.markerClusterer.addMarker(marker);
-
-            marker.addListener('click', () => {mapView.markerClick(place, marker)});
+        if(place && place.address && place.address.lat && place.address.lng){
+            let marker = new google.maps.Marker({
+                position: place.address,
+                markerData: place,
+                map: map,
+                icon: mapView.createMarker(iconType)
+            });
+    
+            if(place.address){
+                let lat = place.address.lat,
+                    lng = place.address.lng;
+    
+                app.state.markers.push(marker);
+                app.state.bounds.extend({lat, lng});
+                if (mapView.settings.markerClusterer) mapView.settings.markerClusterer.addMarker(marker);
+    
+                marker.addListener('click', () => {mapView.markerClick(place, marker)});
+            }
         }
     },
     markerClick: (place, marker) => {
@@ -389,5 +391,6 @@ window.mapView = {
 
         window.originalHeight = (app.views.mapView) ? app.views.mapView.getBoundingClientRect().height: 0;
 
-    }
+    },
+
 };
