@@ -24,7 +24,6 @@ export default class Deeplink {
         console.error(err, '<<< ERROR WHILE REGISTERING DEEP LINK.');
         return callback(err);
       }
-
       callback(null, { 
         deeplinkId: result && result.data && result.data.deeplinkId ? result.data.deeplinkId : null,
         deeplinkData: new Deeplink(result && result.data ? result.data : null)

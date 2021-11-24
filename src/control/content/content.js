@@ -490,6 +490,7 @@ class Content extends React.Component {
    * @param   {Object} locations Locations array
    */
   onMultipleLocationSubmit(locations) {
+
     locations = locations.filter((location) => typeof location === "object");
     let locationsForUpdate = [];
     let locationsForInsert = [];
@@ -520,13 +521,46 @@ class Content extends React.Component {
           console.error(err);
         } else if (result && result.data && result.data.length) {
           const newDataCount = result.data.length;
+
           for (let skip = 0; skip < newDataCount; skip += 50) {
             buildfire.datastore.search(
-              { filter: {}, skip, limit: 50 },
+              { filter: {}, skip, limit: 50, sort:{createdOn : -1} },
               "places-list",
               (err, innerResult) => {
                 if (err) return;
+
                 innerResult.forEach((item) => {
+                  console.log("GOING TO ADD TO SEARCH ENGINE");
+                  if(item && item.id && item.data.title){
+                    let insertData = {
+                      tag: "place-data",
+                      title: item.data.title,
+                      description: item.data.description ? item.data.description.replace(/(<([^>]+)>)/gi, "") : "",
+                      imageUrl: item.data.image ? item.data.image : "",
+                      keywords: item.data.subtitle ? item.data.subtitle : "",
+                      data: {
+                        placeId: item.id,
+                      },
+                    };
+  
+              
+                    SearchEngine.insert(insertData, (callbackData) => {
+                      console.log(callbackData);
+                    });
+                    
+
+                  }
+
+                  
+                  
+                  
+                  
+                  
+                  
+                  
+                  
+                  
+                  
                   Deeplink.getById(item.id, (err, locationDeeplink) => {
                     if (!err && locationDeeplink) {
                       locationDeeplink.name = item.data.title

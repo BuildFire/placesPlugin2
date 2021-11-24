@@ -20,7 +20,7 @@ class LocationsActionBar extends React.Component {
   onFileChange() {
     const file = this.fileInput.files[0];
     const reader = new FileReader();
-
+    console.log(file);
     reader.onload = (e) => {
       const rows = csv.parse(e.target.result).slice(1);
       const { places } = this.props;
@@ -42,6 +42,7 @@ class LocationsActionBar extends React.Component {
           description,
           image,
         ] = row;
+        console.log(locations);
         const selectedCategory = [];
 
         const cat = Number.isInteger(categories)
@@ -134,6 +135,8 @@ class LocationsActionBar extends React.Component {
       if (!promises.length) {
         while (locations.length) {
           let paginatedLocations = locations.splice(0, 500);
+          console.log("paginated locations");
+          console.log(paginatedLocations[0]);
           this.props.onMultipleSubmit(paginatedLocations);
         }
       } else {
@@ -143,6 +146,8 @@ class LocationsActionBar extends React.Component {
           window.locs = locs;
           while (locs.length) {
             let paginatedLocations = locs.splice(0, 500);
+            console.log("paginated locations");
+            console.log(paginatedLocations);
             this.props.onMultipleSubmit(paginatedLocations);
           }
         });
@@ -289,6 +294,7 @@ class LocationsActionBar extends React.Component {
               )}
             </div>
           </div>
+
           <div className="col-xs-8">
             <input
               onChange={() => this.onFileChange()}
