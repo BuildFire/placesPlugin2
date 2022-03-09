@@ -572,10 +572,12 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
     margin-bottom: 15px;
 }
 
-@media only screen and (min-width : 768px) and (max-width : 1024px)
-{ 
+@media only screen and (min-width : 768px){
     #bookmarkBtn { font-size: 32px; }
-    
+}
+
+@media only screen and (min-width : 768px) and (max-width : 1024px)
+{   
     .col-image { height: 160px; width: 160px }
     .detail-image { width: 140px; height: 140px; }
 
@@ -592,8 +594,6 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
 } 
 
 @media only screen and (min-width: 1024px) and (max-width: 1366px) and (-webkit-min-pixel-ratio: 2) {
-
-    #bookmarkBtn { font-size: 32px; }
 
     .col-image { height: 180px; width: 180px }
     .detail-image { width: 160px; height: 160px; }
