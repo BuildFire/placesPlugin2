@@ -229,8 +229,6 @@ window.detailView = {
                  */
                 if (place.carousel && place.carousel.length) {
                     let targetNode = document.getElementById('carouselView');
-                    // Set carousel's height to a 16:9 aspect ratio
-                    targetNode.style.height = `${window.innerWidth / 16 * 9}px`;
                     new components.carousel.view({
                         selector: targetNode,
                         items: place.carousel

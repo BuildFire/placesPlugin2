@@ -6,14 +6,14 @@
             <div class="detail-info">
                 <div class="title">{{title}}</div>
                 <div class="address">{{address}}</div>
-            </div>
-            <div id="distance-holder">
-                {{#if distance }}<img class="arrow" src="./images/arrow.png"> <span
-                    class="distance">{{distance}}</span>{{/if}}
+                <div id="distance-holder">
+                    {{#if distance }}<img class="arrow" src="./images/arrow.png"> <span
+                        class="distance">{{distance}}</span>{{/if}}
+                </div>              
             </div>
             {{#if isBookmarkingAllowed}}
             <div id="bookmarkBtn" class="glyphicon glyphicon-star"></div>
-            {{/if}}
+            {{/if}}  
         </div>
     </div>
 </div>
@@ -59,10 +59,10 @@
         <div class="detail-info">
             <div class="title">{{title}}</div>
             <div class="address">{{address}}</div>
-        </div>
-        <div id="distance-holder">
-            {{#if distance }}<img class="arrow" src="./images/arrow.png"> <span
-                class="distance">{{distance}}</span>{{/if}}
+            <div id="distance-holder">
+                {{#if distance }}<img class="arrow" src="./images/arrow.png"> <span
+                    class="distance">{{distance}}</span>{{/if}}
+            </div>
         </div>
         {{#if isBookmarkingAllowed}}
         <div id="bookmarkBtn" class="glyphicon glyphicon-star"></div>
