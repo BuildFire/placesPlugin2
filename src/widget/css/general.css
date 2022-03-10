@@ -48,6 +48,8 @@
     -webkit-overflow-scrolling: touch;
 }
 
+#carouselView { height: 56.25vw !important; }
+
 #carouselView img {
     width: 100%;
 }
@@ -283,7 +285,6 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
 
 .detail-info {
     width: 65%;
-    padding-left: 3%;
 }
 
 .map-holder {
@@ -330,7 +331,7 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
 
 .map-details .address {
     font-weight: 300;
-    font-size: 11px;
+    font-size: 12px;
     line-height: 1.3;
     color: #121212 !important;
 }
@@ -512,15 +513,13 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
     border: none;
     color: #fff;
     font-size: 15px;
-    border-radius: 100px;
+    border-radius: 4px;
     padding: 10px 0;
     float: left;
     cursor: pointer;
 }
 #bookmarkBtn {
-    font-size: 7vw;
-    margin: auto;
-    left: 2%;
+    font-size: 24px;
 }
 #distance-holder {
     min-width: 14%;
@@ -533,7 +532,7 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
     border: none;
     color: #fff;
     font-size: 15px;
-    border-radius: 100px;
+    border-radius: 4px;
     padding: 10px 0;
     float: left;
     cursor: pointer;
@@ -573,10 +572,12 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
     margin-bottom: 15px;
 }
 
+@media only screen and (min-width : 768px){
+    #bookmarkBtn { font-size: 32px; }
+}
+
 @media only screen and (min-width : 768px) and (max-width : 1024px)
-{ 
-    #bookmarkBtn { font-size: 3.5vw; }
-    
+{   
     .col-image { height: 160px; width: 160px }
     .detail-image { width: 140px; height: 140px; }
 
@@ -588,16 +589,11 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
     .slideInDown { height: 155px; }
     .map-holder { height: 400px; }
 
-    #carouselView { height: 400px !important; }
-    #carouselView img { height: 100%; }
-
     .distance-indicator .distance { font-size: 16px; color: black; }
     .distance-indicator .arrow { height: 30px; }
 } 
 
 @media only screen and (min-width: 1024px) and (max-width: 1366px) and (-webkit-min-pixel-ratio: 2) {
-
-    #bookmarkBtn { font-size: 3.5vw; }
 
     .col-image { height: 180px; width: 180px }
     .detail-image { width: 160px; height: 160px; }
@@ -608,9 +604,6 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
 
     .sidenav { height: 30vh; }
     .map-holder { height: 400px; }
-
-    #carouselView { height: 400px !important; }
-    #carouselView img { height: 100%; }
 
     .slideInDown { height: 175px; }
     .loryFrame { height: inherit; }
