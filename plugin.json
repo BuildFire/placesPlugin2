@@ -29,5 +29,8 @@
 
   "features": [{ "name": "Geo" }],
   "languages": ["en"],
+  "usesApiKeys": [
+    { "name": "googleMapKey" }
+  ],
   "webpack": 8080
 }
