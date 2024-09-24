@@ -18,6 +18,32 @@ import "../js/shared/strings";
 
 window.strings = new buildfire.services.Strings("en-us", stringsConfig);
 
+const initGoogleMapsSDK = () => {
+  const { apiKeys } = buildfire.getContext();
+  const { googleMapKey } = apiKeys;
+  const script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src = `https://maps.googleapis.com/maps/api/js?key=${
+    googleMapKey
+  }&sensor=false`;
+  script.onload = () => {
+    console.info("Successfully loaded Google's Maps SDK.");
+  };
+  script.onerror = () => {
+    buildfire.dialog.alert({
+      title: 'Error',
+      message: 'Failed to load Google Maps API.',
+    });
+  };
+  window.gm_authFailure = () => {
+    buildfire.dialog.alert({
+      title: 'Error',
+      message: 'Failed to load Google Maps API.',
+    });
+  };
+  document.head.appendChild(script);
+};
+
 window.app = {
   goBack: null,
   settings: {
@@ -115,7 +141,7 @@ window.app = {
      window.app.loadPage(0,50,(err,places)=>{
       window.listView.setItems(places);
       window.app.state.places=places;
-    }); 
+    });
   },
   loadPage: (page, pageSize, callback) => {
     let places = [];
@@ -194,7 +220,7 @@ window.app = {
           latitude: window.app.state.location.lat,
           longitude: window.app.state.location.lng,
         };
-    
+
         let destination = {
           latitude: address.lat,
           longitude: address.lng
@@ -223,6 +249,7 @@ window.app = {
   },
   init: (placesCallback, positionCallback) => {
 
+    initGoogleMapsSDK();
     let userLocation = JSON.parse(localStorage.getItem("user_location"));
     buildfire.datastore.get(
       window.app.settings.placesTag,

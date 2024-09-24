@@ -73,12 +73,14 @@ class LocationsActionBar extends React.Component {
         // use google maps api to fetch them async
         // otherwise just return the location
         if (!address_lat || !address_lng) {
+          const { apiKeys } = buildfire.getContext();
+          const { googleMapKey } = apiKeys;
           promises.push(
             new Promise((resolve, reject) => {
               const formattedAddress = name
                 .replace(/,/g, "")
                 .replace(/ /g, "+");
-              const url = `https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyBOp1GltsWARlkHhF1H_cb6xtdR1pvNDAk&address=${formattedAddress}`;
+              const url = `https://maps.googleapis.com/maps/api/geocode/json?key=${googleMapKey}&address=${formattedAddress}`;
               // get geodata from google api
               fetch(url)
                 .then((response) => response.json())
