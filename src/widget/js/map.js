@@ -155,7 +155,7 @@ window.mapView = {
             styles: [
                 {
                     textColor: 'white',
-                    url: resizeImage('https://app.buildfire.com/app/media/google_marker_blue_icon2.png', 's'),
+                    url: resizeImage('https://app.buildfire.com/app/media/google_marker_blue_icon2.png', { width: 53, height: 53 }),
                     height: 53,
                     width: 53
                 }
@@ -258,7 +258,7 @@ window.mapView = {
             categories.push(app.state.categories.filter(category => category.name.id === item).map(c => c.name.name))
         })
         if(!place.image) {
-            place.image = resizeImage('https://pluginserver.buildfire.com/styles/media/holder-16x9.png', 'full_width')
+            place.image = resizeImage('https://pluginserver.buildfire.com/styles/media/holder-16x9.png', { idth: window.listView.imageWidth, height: window.listView.imageHeight })
         }
         let context = {
           title:
@@ -268,7 +268,7 @@ window.mapView = {
           address: place.address.name,
           categories: categories,
           distance: place.distance,
-          image: resizeImage(place.image),
+          image: resizeImage(place.image, { width: 200, height: 200 }),
           viewMoreLinkText: strings.get("LocationSummary.locationSummaryLink")
             
             .length
@@ -323,7 +323,7 @@ window.mapView = {
         const iconBaseUrl = 'https://app.buildfire.com/app/media/';
 
         return {
-            url: resizeImage(`${iconBaseUrl}${imageType}`, 's'),
+            url: resizeImage(`${iconBaseUrl}${imageType}`, {width: 20, height: 20}),
             // This marker is 20 pixels wide by 20 pixels high.
             scaledSize: new google.maps.Size(20, 20),
             // The origin for this image is (0, 0).

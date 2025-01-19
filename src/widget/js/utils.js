@@ -1,3 +1,5 @@
-export const resizeImage = (imageUrl, size, aspect = '1:1') => buildfire.imageLib.resizeImage(
-    imageUrl, { size, aspect }
-  );
+export const resizeImage = (imageUrl, options) => {
+  console.log(options ,'options');
+  return buildfire.imageLib.resizeImage(
+    imageUrl, options)
+}
