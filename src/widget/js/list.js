@@ -21,7 +21,7 @@ window.listView = {
       window.listView.imageWidth = Math.floor(window.innerWidth);
       window.listView.imageHeight = Math.floor((window.innerWidth / 16) * 9);
 
-      window.listView.defaultImage = resizeImage('/https://pluginserver.buildfire.com/styles/media/holder-16x9.png', { width: window.listView.imageWidth, height: window.listView.imageHeight })
+      window.listView.defaultImage = resizeImage('https://pluginserver.buildfire.com/styles/media/holder-16x9.png', { width: window.listView.imageWidth, height: window.listView.imageHeight })
 
       const listContainer = document.getElementById("listView");
 
