@@ -56,14 +56,6 @@ window.app = {
     },
     placesTag: "places",
     placesListTag: "places-list",
-    cloudImg: {
-      domain: "https://czi3m2qn.cloudimg.io",
-      operations: {
-        cdn: "/cdn/n/n",
-        width: "/s/width",
-        crop: "/s/crop",
-      },
-    },
   },
   views: {
     listView: document.getElementById("listView"),
