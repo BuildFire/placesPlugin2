@@ -1,8 +1,8 @@
 import "./lib/lazyload";
+import { resizeImage } from "./utils"
 
 window.listView = {
   initialized: false,
-  imagePrefix: null,
   defaultImage: null,
   listScrollingContainer: null,
   imageHeight: null,
@@ -21,9 +21,7 @@ window.listView = {
       window.listView.imageWidth = Math.floor(window.innerWidth);
       window.listView.imageHeight = Math.floor((window.innerWidth / 16) * 9);
 
-      const cloudImg = window.app.settings.cloudImg;
-      window.listView.imagePrefix = `${cloudImg.domain}${cloudImg.operations.crop}/${window.listView.imageWidth}x${window.listView.imageHeight}/`;
-      window.listView.defaultImage = `${cloudImg.domain}${cloudImg.operations.cdn}/https://pluginserver.buildfire.com/styles/media/holder-16x9.png`;
+      window.listView.defaultImage = resizeImage('https://pluginserver.buildfire.com/styles/media/holder-16x9.png', { width: window.listView.imageWidth, height: window.listView.imageHeight })
 
       const listContainer = document.getElementById("listView");
 
@@ -142,7 +140,7 @@ window.listView = {
         : window.listView.defaultImage;
       const image = document.createElement("img");
 
-      image.setAttribute("data-src", window.listView.imagePrefix + listImage);
+      image.setAttribute("data-src", resizeImage(listImage, { width: window.listView.imageWidth, height: window.listView.imageHeight }));
       image.setAttribute("width", window.listView.imageWidth);
       image.setAttribute("height", window.listView.imageHeight);
       image.setAttribute(

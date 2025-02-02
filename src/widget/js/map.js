@@ -1,7 +1,7 @@
 import Handlebars from "./lib/handlebars"
 import { stringsConfig } from "../js/shared/stringsConfig";
 import "../js/shared/strings";
-
+import { resizeImage } from "./utils"
 let strings = new buildfire.services.Strings("en-us", stringsConfig);
 
 strings.init();
@@ -148,7 +148,6 @@ window.mapView = {
         }
     },
     addMarkerCluster: () =>{
-        const cloudImg = window.app.settings.cloudImg;
         if (!map) return;
 
         let clusterOptions = {
@@ -156,7 +155,7 @@ window.mapView = {
             styles: [
                 {
                     textColor: 'white',
-                    url: `${cloudImg.domain}${cloudImg.operations.width}/53/https://app.buildfire.com/app/media/google_marker_blue_icon2.png`,
+                    url: resizeImage('https://app.buildfire.com/app/media/google_marker_blue_icon2.png', { width: 53, height: 53 }),
                     height: 53,
                     width: 53
                 }
@@ -259,8 +258,7 @@ window.mapView = {
             categories.push(app.state.categories.filter(category => category.name.id === item).map(c => c.name.name))
         })
         if(!place.image) {
-            let cloudImg = window.app.settings.cloudImg;
-            place.image = `${cloudImg.domain}${cloudImg.operations.cdn}/https://pluginserver.buildfire.com/styles/media/holder-16x9.png`;
+            place.image = resizeImage('https://pluginserver.buildfire.com/styles/media/holder-16x9.png', { idth: window.listView.imageWidth, height: window.listView.imageHeight })
         }
         let context = {
           title:
@@ -270,7 +268,7 @@ window.mapView = {
           address: place.address.name,
           categories: categories,
           distance: place.distance,
-          image: place.image,
+          image: resizeImage(place.image, { width: 200, height: 200 }),
           viewMoreLinkText: strings.get("LocationSummary.locationSummaryLink")
             
             .length
@@ -322,11 +320,10 @@ window.mapView = {
         };
     },
     createMarker:(imageType) => {
-        const cloudImg = window.app.settings.cloudImg;
         const iconBaseUrl = 'https://app.buildfire.com/app/media/';
 
         return {
-            url: `${cloudImg.domain}${cloudImg.operations.cdn}/${iconBaseUrl}${imageType}`,
+            url: resizeImage(`${iconBaseUrl}${imageType}`, {width: 20, height: 20}),
             // This marker is 20 pixels wide by 20 pixels high.
             scaledSize: new google.maps.Size(20, 20),
             // The origin for this image is (0, 0).
